@@ -1,0 +1,21 @@
+name: Docs Preview & Link Check
+on:
+  push:
+    paths:
+      - 'docs/**'
+      - 'README.md'
+jobs:
+  spellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: rojopolis/spellcheck-github-action@v1
+        with:
+          locale: en_US
+  linkcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          pip install linkchecker
+          linkchecker README.md docs/
