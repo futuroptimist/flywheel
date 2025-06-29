@@ -18,6 +18,10 @@ This project uses several lightweight LLM assistants to keep the flywheel spinni
 - **When:** multiple repos evolve
 - **Does:** detect duplicate utilities and propose extraction into a shared package
 
+## Release Drafter Bot
+- **When:** commits land on `main`
+- **Does:** update release notes automatically
+
 ---
 
 For personalization, run `./scripts/setup.sh YOURNAME YOURREPO` after cloning.

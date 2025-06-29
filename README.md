@@ -18,7 +18,7 @@
 - CI workflows for linting, tests, and docs
 - Style guides for Python and JavaScript
 - Example code and templates
-- AGENTS.md detailing included LLM assistants
+- [AGENTS.md](AGENTS.md) detailing included LLM assistants
 
 ## Getting Started
 
