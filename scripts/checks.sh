@@ -2,28 +2,23 @@
 set -e
 
 # python checks
-if command -v flake8 >/dev/null 2>&1; then
-  flake8 .
-fi
-if command -v isort >/dev/null 2>&1; then
-  isort --check-only .
-fi
-if command -v black >/dev/null 2>&1; then
-  black --check .
-fi
+flake8 .
+isort --check-only .
+black --check .
 
 # js checks
 if [ -f package.json ]; then
+  npm ci
   npm run lint
   npm run format:check
+  npm test -- --coverage
 fi
 
-# run tests if pytest available
-if command -v pytest >/dev/null 2>&1; then
-  pytest -q
-fi
+# run tests
+pytest -q
 
-# docs link check if linkchecker installed
-if command -v linkchecker >/dev/null 2>&1; then
-  linkchecker README.md docs/ || true
+# docs checks
+if command -v pyspelling >/dev/null 2>&1 && [ -f spellcheck.yaml ]; then
+  pyspelling -c spellcheck.yaml || true
 fi
+linkchecker README.md docs/ || true

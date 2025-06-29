@@ -1,0 +1,9 @@
+spellchecker: aspell
+matrix:
+  - name: markdown
+    sources:
+      - README.md
+      - docs/**/*.md
+    aspell:
+      lang: en
+      d: en_US

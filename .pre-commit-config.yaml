@@ -10,5 +10,11 @@ repos:
       - id: run-checks
         name: run project checks
         entry: bash scripts/checks.sh
-        language: system
+        language: python
+        additional_dependencies:
+          - flake8
+          - isort
+          - black
+          - pytest
+          - linkchecker
         pass_filenames: false
