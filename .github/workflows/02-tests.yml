@@ -1,0 +1,31 @@
+name: Test Suite
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        language: [python, javascript]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Python Tests
+        if: matrix.language == 'python'
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - if: matrix.language == 'python'
+        run: |
+          pip install pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pytest --maxfail=1 --disable-warnings -q
+
+      - name: JavaScript Tests
+        if: matrix.language == 'javascript'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - if: matrix.language == 'javascript' && hashFiles('package.json') != ''
+        run: |
+          npm install --no-audit --no-fund
+          npm test -- --coverage
