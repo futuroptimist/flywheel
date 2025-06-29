@@ -33,4 +33,11 @@ cd NEWREPO
 # Commit
 git add .
 git commit -m "chore: initialize flywheel"
+
+# Install pre-commit hooks
+pip install pre-commit
+pre-commit install
+
+# Run checks before committing
+pre-commit run --all-files
 ```

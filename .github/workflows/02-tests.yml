@@ -16,15 +16,15 @@ jobs:
           python-version: '3.x'
       - if: matrix.language == 'python'
         run: |
-          pip install -r requirements.txt
-          pytest --maxfail=1 --disable-warnings -q --cov=src
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pytest --maxfail=1 --disable-warnings -q
 
       - name: JavaScript Tests
         if: matrix.language == 'javascript'
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-      - if: matrix.language == 'javascript'
+      - if: matrix.language == 'javascript' && hashFiles('package.json') != ''
         run: |
-          npm ci
+          npm install --no-audit --no-fund
           npm test -- --coverage

@@ -20,7 +20,7 @@ jobs:
       - name: Run Python Linters
         if: matrix.language == 'python'
         run: |
-          flake8 src
+          flake8 .
           isort --check-only .
           black --check .
 
@@ -30,10 +30,10 @@ jobs:
         with:
           node-version: '18'
       - name: Install JS Lint Tools
-        if: matrix.language == 'javascript'
-        run: npm ci
+        if: matrix.language == 'javascript' && hashFiles('package.json') != ''
+        run: npm install --no-audit --no-fund
       - name: Run JS Linters
-        if: matrix.language == 'javascript'
+        if: matrix.language == 'javascript' && hashFiles('package.json') != ''
         run: |
           npm run lint
           npm run format:check

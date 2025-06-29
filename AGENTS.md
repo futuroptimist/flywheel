@@ -21,3 +21,6 @@ This project uses several lightweight LLM assistants to keep the flywheel spinni
 ---
 
 For personalization, run `./scripts/setup.sh YOURNAME YOURREPO` after cloning.
+
+Before pushing changes, run `pre-commit run --all-files` to execute the same
+checks used in CI.

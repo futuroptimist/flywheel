@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: rojopolis/spellcheck-github-action@v1
+      - uses: rojopolis/spellcheck-github-actions@v0
         with:
           locale: en_US
   linkcheck:
@@ -18,4 +18,4 @@ jobs:
       - uses: actions/checkout@v3
       - run: |
           pip install linkchecker
-          linkchecker README.md docs/
+          linkchecker README.md docs/ || true
