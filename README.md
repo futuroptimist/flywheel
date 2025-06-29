@@ -1,4 +1,4 @@
-# \U0001F3A1 flywheel
+# 🎡 flywheel
 
 [![Lint & Format](https://img.shields.io/github/actions/workflow/status/__OWNER__/__REPO__/.github/workflows/01-lint-format.yml)]()
 [![Tests](https://img.shields.io/github/actions/workflow/status/__OWNER__/__REPO__/.github/workflows/02-tests.yml)]()
