@@ -35,3 +35,12 @@ tokenplace
 txt
 wasm
 yourorg
+
+PRD
+auth
+env
+frictionless
+macOS
+AES
+OpenAI
+RSA
