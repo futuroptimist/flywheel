@@ -17,6 +17,11 @@ This project uses several lightweight LLM assistants to keep the flywheel spinni
 ## Synergy Bot
 - **When:** multiple repos evolve
 - **Does:** detect duplicate utilities and propose extraction into a shared package
+- Works well with [Axel](https://github.com/futuroptimist/axel) for coordinating quests across repositories
+
+## Release Drafter Bot
+- **When:** commits land on `main`
+- **Does:** update release notes automatically
 
 ---
 

@@ -5,6 +5,7 @@ NEWREPO
 REPO
 YOURNAME
 cd
+futuroptimist
 github
 https
 img
@@ -12,8 +13,14 @@ io
 md
 pre
 repo
+repos
 yml
-dspace
-npm
 eslint
 isort
+dspace
+npm
+README
+roadmap
+axel
+axel's
+repo_manager

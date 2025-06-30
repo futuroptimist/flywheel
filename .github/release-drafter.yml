@@ -1,0 +1,11 @@
+name-template: 'v$RESOLVED_VERSION'
+version-template: '$MAJOR.$MINOR.$PATCH'
+change-template: '- $TITLE (#$NUMBER)'
+no-changes-template: 'No changes'
+categories:
+  - title: '🚀 Features'
+    labels: ['feature']
+  - title: '🐛 Fixes'
+    labels: ['fix']
+  - title: '📝 Docs'
+    labels: ['docs']

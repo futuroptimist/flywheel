@@ -20,7 +20,8 @@
 - CodeQL workflow for security scanning
 - Style guides for Python and JavaScript
 - Example code and templates
-- AGENTS.md detailing included LLM assistants
+- [AGENTS.md](AGENTS.md) detailing included LLM assistants
+- Axel integration guide in `docs/axel-integration.md`
 
 ## Getting Started
 
@@ -43,3 +44,7 @@ pre-commit install
 # Run checks before committing
 pre-commit run --all-files
 ```
+
+## Related Projects
+
+- [Axel](https://github.com/futuroptimist/axel) – personal LLM accelerator that manages goals across your repositories. See `docs/axel-integration.md` for how to pair it with flywheel.
