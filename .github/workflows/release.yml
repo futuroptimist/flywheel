@@ -1,0 +1,13 @@
+name: Draft Release
+on:
+  push:
+    branches:
+      - main
+jobs:
+  draft-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: release-drafter/release-drafter@v6
+        with:
+          config-name: release-drafter.yml
