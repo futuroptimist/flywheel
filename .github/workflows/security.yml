@@ -1,0 +1,11 @@
+name: "Security scan"
+on: [push, pull_request]
+jobs:
+  codeql:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: github/codeql-action/init@v2
+        with:
+          languages: go, javascript, python
+      - uses: github/codeql-action/analyze@v2

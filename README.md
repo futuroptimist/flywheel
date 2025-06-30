@@ -16,6 +16,8 @@
 ## Contents
 
 - CI workflows for linting, tests, and docs
+- Dependabot for automated dependency updates
+- CodeQL workflow for security scanning
 - Style guides for Python and JavaScript
 - Example code and templates
 - AGENTS.md detailing included LLM assistants
