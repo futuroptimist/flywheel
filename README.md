@@ -45,6 +45,17 @@ pre-commit install
 pre-commit run --all-files
 ```
 
+## Embedding in existing projects
+
+Apply flywheel to an existing repository:
+
+```bash
+python flywheel.py init --save-dev .
+```
+
+The `--save-dev` flag injects ESLint, Prettier, CI workflows, Dependabot, tests, and release scripts. Run `flywheel.py update --save-dev` anytime to refresh them.
+
+
 ## Related Projects
 
 - [Axel](https://github.com/futuroptimist/axel) – personal LLM accelerator that manages goals across your repositories. See `docs/axel-integration.md` for how to pair it with flywheel.
