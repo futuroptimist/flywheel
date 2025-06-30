@@ -1,4 +1,5 @@
-Axel
+CodeQL
+Dependabot
 LLM
 NEWREPO
 REPO
@@ -21,5 +22,5 @@ npm
 README
 roadmap
 axel
-Axel's
+axel's
 repo_manager
