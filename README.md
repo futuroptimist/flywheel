@@ -16,12 +16,16 @@
 ## Contents
 
 - CI workflows for linting, tests, and docs
-- Dependabot for automated dependency updates
+- DEPENDABOT for automated dependency updates
 - CodeQL workflow for security scanning
 - Style guides for Python and JavaScript
 - Example code and templates
+- Python CLI with subcommands `init`, `update`, `audit`, and `prompt`
 - [AGENTS.md](AGENTS.md) detailing included LLM assistants
 - Axel integration guide in `docs/axel-integration.md`
+- token.place roadmap in `docs/tokenplace-roadmap.md`
+- token.place features in `docs/tokenplace-features.md`
+- token.place PRD in `docs/tokenplace-prd.md`
 
 ## Getting Started
 
@@ -43,6 +47,22 @@ pre-commit install
 
 # Run checks before committing
 pre-commit run --all-files
+```
+
+### Embedding in an existing project
+
+Install the CLI and inject dev tooling:
+
+```bash
+pipx run flywheel init . --language python --save-dev --yes
+```
+
+### Generating Codex prompts
+
+Invoke the prompt agent to get repo-aware suggestions:
+
+```bash
+flywheel prompt
 ```
 
 ## Related Projects
