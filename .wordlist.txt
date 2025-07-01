@@ -27,6 +27,7 @@ eslint
 eslintrc
 frictionless
 futuroptimist
+Gabriel
 github
 https
 idempotency
