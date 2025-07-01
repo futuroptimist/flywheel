@@ -23,6 +23,9 @@
 - Python CLI with subcommands `init`, `update`, `audit`, and `prompt` that prompts interactively unless `--yes` is used
 - [AGENTS.md](AGENTS.md) detailing included LLM assistants
 - Axel integration guide in `docs/axel-integration.md`
+- token.place roadmap in `docs/tokenplace-roadmap.md`
+- token.place features in `docs/tokenplace-features.md`
+- token.place PRD in `docs/tokenplace-PRD.md`
 
 ## Getting Started
 

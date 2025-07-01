@@ -29,9 +29,8 @@ JS_FILES = ["templates/javascript/package.json"]
 
 def copy_file(src: Path, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
-    if dest.exists():
-        if dest.read_bytes() == src.read_bytes():
-            return
+    if dest.exists() and dest.read_bytes() == src.read_bytes():
+        return
     shutil.copy2(src, dest)
 
 
