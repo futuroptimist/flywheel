@@ -14,6 +14,8 @@ Gabriel's `FLYWHEEL_RISK_MODEL.md` explores how the rapid automation loops promo
 
 Expect improvements in security tooling or agent workflows to flow both ways as these repositories mature.
 
+The goal is for Gabriel to serve as a dedicated security sibling to this repository. When Flywheel introduces a new automation agent or coding pattern, Gabriel's risk model will be updated accordingly. Likewise, hardening techniques pioneered in Gabriel should roll back into Flywheel so that future templates ship with safer defaults.
+
 ## Quick start
 
 1. Clone Gabriel next to this repository:
@@ -25,4 +27,3 @@ Expect improvements in security tooling or agent workflows to flow both ways as 
    cat gabriel/docs/FLYWHEEL_RISK_MODEL.md
    ```
 3. Use Gabriel's future CLI commands to audit your flywheel-managed projects.
-
