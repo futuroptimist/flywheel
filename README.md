@@ -24,6 +24,7 @@
 - [AGENTS.md](AGENTS.md) detailing included LLM assistants
 - Axel integration guide in `docs/axel-integration.md`
 - token.place roadmap in `docs/tokenplace-roadmap.md`
+- local environment guide in `docs/local-environments.md`
 - token.place features in `docs/tokenplace-features.md`
 - token.place PRD in `docs/tokenplace-PRD.md`
 
@@ -64,6 +65,10 @@ Invoke the prompt agent to get repo-aware suggestions:
 ```bash
 flywheel prompt
 ```
+
+## Values
+
+We aim for a positive-sum, empathetic community. The flywheel embraces regenerative and open-source principles to keep energy cycling back into every project.
 
 ## Related Projects
 
