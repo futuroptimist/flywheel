@@ -12,7 +12,7 @@ This document expands on the roadmap for distributing **flywheel** as a package 
 
 ```
 +---------------+          npm            +----------------+         HTTPS         +-----------------+
-| Developer env | ---------------------> | flywheel pkg   | ---------------------> | token.place API |
+| Developer environment | ---------------------> | flywheel pkg   | ---------------------> | token.place API |
 | (JS or Python)| <--------------------- | (API wrapper)  | <--------------------- |  inference node |
 +---------------+   LLM responses        +----------------+         results        +-----------------+
 ```

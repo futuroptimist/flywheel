@@ -16,7 +16,6 @@
 ## Contents
 
 - CI workflows for linting, tests, and docs
-- Dependabot for automated dependency updates
 - DEPENDABOT for automated dependency updates
 - CodeQL workflow for security scanning
 - Style guides for Python and JavaScript
@@ -26,7 +25,7 @@
 - Axel integration guide in `docs/axel-integration.md`
 - token.place roadmap in `docs/tokenplace-roadmap.md`
 - token.place features in `docs/tokenplace-features.md`
-- token.place PRD in `docs/tokenplace-prd.md`
+- token.place PRD in `docs/tokenplace-PRD.md`
 
 ## Getting Started
 
