@@ -15,3 +15,4 @@ dist/
 # Misc
 .DS_Store
 coverage/
+dictionary.dic
