@@ -23,6 +23,10 @@ This project uses several lightweight LLM assistants to keep the flywheel spinni
 - **When:** commits land on `main`
 - **Does:** update release notes automatically
 
+## Prompt Agent
+- **When:** you run `flywheel prompt`
+- **Does:** generate context-aware prompts for Codex or other LLM assistants
+
 ---
 
 For personalization, run `./scripts/setup.sh YOURNAME YOURREPO` after cloning.
