@@ -27,6 +27,7 @@ eslint
 eslintrc
 frictionless
 futuroptimist
+Gabriel
 github
 https
 idempotency
@@ -58,3 +59,4 @@ yourorg
 YOURREPO
 styleguides
 customizations
+gabriel
