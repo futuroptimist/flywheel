@@ -4,9 +4,6 @@ matrix:
     sources:
       - README.md
       - docs/**/*.md
-    dictionary:
-      wordlists:
-        - .wordlist.txt
     aspell:
       lang: en
       d: en_US
