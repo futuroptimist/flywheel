@@ -1,0 +1,12 @@
+# Flywheel llms.txt
+
+This repository provides a GitHub template with CI workflows, style guides, and LLM-powered helpers.
+
+Commit messages should be descriptive; every change feeds the public knowledge base.
+
+## Development
+- Python 3.12, formatted with black and flake8 via pre-commit.
+- Install hooks with `pre-commit install` and run `pre-commit run --all-files` before pushing.
+- Tests live in `tests/` and run with `pytest`.
+
+See AGENTS.md for built-in assistants and docs/ for integration guides.
