@@ -60,3 +60,15 @@ YOURREPO
 styleguides
 customizations
 gabriel
+heatmap
+llms
+onboarding
+runbook
+Runbook
+subcommand
+virtualenvs
+Makefile
+YAML
+solarpunk
+Futuroptimist's
+LLMs

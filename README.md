@@ -22,6 +22,8 @@
 - Example code and templates
 - Python CLI with subcommands `init`, `update`, `audit`, and `prompt` that prompts interactively unless `--yes` is used
 - [AGENTS.md](AGENTS.md) detailing included LLM assistants
+- [llms.txt](llms.txt) with quick context for AI helpers
+  and a [runbook.yml](runbook.yml) checklist for repo setup
 - Axel integration guide in `docs/axel-integration.md`
 - token.place roadmap in `docs/tokenplace-roadmap.md`
 - local environment guide in `docs/local-environments.md`
@@ -74,3 +76,4 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 
 - [Axel](https://github.com/futuroptimist/axel) – personal LLM accelerator that manages goals across your repositories. See `docs/axel-integration.md` for how to pair it with flywheel.
 - [Gabriel](https://github.com/futuroptimist/gabriel) – "guardian angel" LLM focused on security. Its `docs/FLYWHEEL_RISK_MODEL.md` discusses how flywheel-style automation changes your threat model. See `docs/gabriel-integration.md` for ways these repositories will share tooling and evolve together.
+- [Futuroptimist](https://github.com/futuroptimist/futuroptimist) – YouTube scripts and automation experiments. See `docs/futuroptimist-integration.md` for lessons this repo borrows and improvement ideas.
