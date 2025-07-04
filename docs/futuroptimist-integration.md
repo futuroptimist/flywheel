@@ -1,12 +1,12 @@
 # Futuroptimist Synergy
 
-[futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) hosts video scripts, helper utilities and a complete test suite for a solarpunk YouTube channel. The repository uses `llms.txt` and `AGENTS.md` to keep AI assistants aligned with its workflow. It also includes a 3‑D heat‑map generator that visualizes lines of code changed per day.
+[futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) hosts video scripts, helper utilities and a complete test suite for a solarpunk YouTube channel. The repository uses `llms.txt`, `AGENTS.md` and `CLAUDE.md` to keep AI assistants aligned with its workflow. It also includes a 3‑D heat‑map generator that visualizes lines of code changed per day.
 
 This document collects lessons Flywheel can borrow and suggests improvements for Futuroptimist.
 
 ## Lessons for Flywheel
 
-- **Orientation file** – Maintaining a short `llms.txt` alongside `AGENTS.md` helps LLMs understand tone and context. Flywheel adopters should consider adding a similar file after running `./scripts/setup.sh`.
+- **Orientation file** – Maintaining a short `llms.txt` alongside `AGENTS.md` and `CLAUDE.md` helps LLMs understand tone and context. Flywheel adopters should consider adding similar docs and extending them with `CUSTOM_INSTRUCTIONS.md` after running `./scripts/setup.sh`.
 - **Structured metadata** – Each video script lives in a dated folder with a `metadata.json` file validated by JSON Schema.
 - **Automation helpers** – The Makefile creates virtualenvs, fetches subtitles and scaffolds new script folders with one command.
 - **Cross-platform** – Make targets run on both Unix and Windows.

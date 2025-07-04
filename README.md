@@ -23,6 +23,8 @@
 - Python CLI with subcommands `init`, `update`, `audit`, and `prompt` that prompts interactively unless `--yes` is used
 - [AGENTS.md](AGENTS.md) detailing included LLM assistants
 - [llms.txt](llms.txt) with quick context for AI helpers
+- [CLAUDE.md](CLAUDE.md) summarizing Anthropic guidance
+- [CUSTOM_INSTRUCTIONS.md](CUSTOM_INSTRUCTIONS.md) for Codex rules
   and a [runbook.yml](runbook.yml) checklist for repo setup
 - Axel integration guide in `docs/axel-integration.md`
 - token.place roadmap in `docs/tokenplace-roadmap.md`
