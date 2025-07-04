@@ -9,4 +9,6 @@ Commit messages should be descriptive; every change feeds the public knowledge b
 - Install hooks with `pre-commit install` and run `pre-commit run --all-files` before pushing.
 - Tests live in `tests/` and run with `pytest`.
 
-See AGENTS.md for built-in assistants and docs/ for integration guides.
+See AGENTS.md for built-in assistants, [CLAUDE.md](CLAUDE.md) for
+Anthropic-style best practices, and [CUSTOM_INSTRUCTIONS.md](CUSTOM_INSTRUCTIONS.md)
+for Codex behavior rules. Additional integration guides live in `docs/`.

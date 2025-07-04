@@ -1,6 +1,9 @@
 # \U0001F916 AGENTS
 
 This project uses several lightweight LLM assistants to keep the flywheel spinning.
+See [llms.txt](llms.txt) for a quick orientation summary and [CLAUDE.md](CLAUDE.md)
+for Anthropic-specific coding guidance. Broader Codex behavior rules live in
+[CUSTOM_INSTRUCTIONS.md](CUSTOM_INSTRUCTIONS.md).
 
 ## Code Linter Agent
 - **When:** every PR

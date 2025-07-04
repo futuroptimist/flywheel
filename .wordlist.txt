@@ -72,3 +72,4 @@ YAML
 solarpunk
 Futuroptimist's
 LLMs
+Anthropic
