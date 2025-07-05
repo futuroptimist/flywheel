@@ -46,3 +46,13 @@ def test_prompt(tmp_path):
         check=True,
     )
     assert "# Purpose" in result.stdout
+
+
+def test_prompt_no_readme(tmp_path):
+    result = subprocess.run(
+        [sys.executable, "-m", "flywheel", "prompt", str(tmp_path)],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert "No README found." in result.stdout
