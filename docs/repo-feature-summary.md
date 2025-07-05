@@ -4,7 +4,7 @@ This table tracks which flywheel features each related repository has adopted.
 
 | Repo | Coverage | Installer | License | CI | AGENTS.md | Code of Conduct | Contributing | Pre-commit |
 | ---- | -------- | --------- | ------- | -- | --------- | --------------- | ------------ | ---------- |
-| [futuroptimist/flywheel](https://github.com/futuroptimist/flywheel) | ✅ (20%) | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ (20%) | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ (unknown) | pip | ✅ | ❌ | ✅ | ❌ | ✅ | ✅ |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ (unknown) | pip | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ (100%) | pip | ✅ | ❌ | ✅ | ❌ | ❌ | ✅ |

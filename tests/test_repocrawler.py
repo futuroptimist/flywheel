@@ -35,5 +35,5 @@ def test_generate_summary():
     crawler = rc.RepoCrawler(["foo/bar"], session=session)
     out = crawler.generate_summary()
     assert "100%" in out
-    assert "foo/bar" in out
+    assert "**[foo/bar](https://github.com/foo/bar)**" in out
     assert "pip" in out
