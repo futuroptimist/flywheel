@@ -10,6 +10,7 @@ This patch extends the flywheel template with a Python CLI and agent hook.
 - added minimal `.eslintrc.json` and `.prettierrc` used as templates.
 - interactive prompts ask for language and dev tooling unless `--yes` is used.
 - repo crawler uses the `requests` library to fetch files.
+- root `requirements.txt` lists `requests` so CI installs dependencies.
 
 ## Tests
 - end-to-end tests verify template generation and idempotency by running the CLI twice against a temporary directory.
