@@ -113,11 +113,13 @@ class RepoCrawler:
             header,
             sep,
         ]
-        for info in repos:
+        for idx, info in enumerate(repos):
             coverage = "❌"
             if info.coverage:
                 coverage = f"✅ ({info.coverage})"
             repo_link = f"[{info.name}](https://github.com/{info.name})"
+            if idx == 0:
+                repo_link = f"**{repo_link}**"
             row = "| {} | {} | {} | {} | {} | {} | {} | {} | {} |".format(
                 repo_link,
                 coverage,
