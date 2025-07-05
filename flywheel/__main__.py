@@ -2,6 +2,8 @@ import argparse
 import shutil
 from pathlib import Path
 
+from .repocrawler import RepoCrawler
+
 ROOT = Path(__file__).resolve().parent.parent
 
 WORKFLOW_FILES = [
@@ -93,6 +95,12 @@ def prompt(args: argparse.Namespace) -> None:
     print(PROMPT_TMPL.format(snippet=snippet))
 
 
+def crawl(args: argparse.Namespace) -> None:
+    crawler = RepoCrawler(args.repos)
+    md = crawler.generate_summary()
+    Path(args.output).write_text(md)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="flywheel")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -131,6 +139,15 @@ def build_parser() -> argparse.ArgumentParser:
         help="repository path",
     )
     p_prompt.set_defaults(func=prompt)
+
+    p_crawl = sub.add_parser("crawl", help="generate repo feature summary")
+    p_crawl.add_argument("repos", nargs="+", help="repos in owner/name form")
+    p_crawl.add_argument(
+        "--output",
+        default="docs/repo-feature-summary.md",
+        help="output markdown path",
+    )
+    p_crawl.set_defaults(func=crawl)
 
     return parser
 

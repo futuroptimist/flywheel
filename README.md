@@ -20,7 +20,7 @@
 - CodeQL workflow for security scanning
 - Style guides for Python and JavaScript
 - Example code and templates
-- Python CLI with subcommands `init`, `update`, `audit`, and `prompt` that prompts interactively unless `--yes` is used
+- Python CLI with subcommands `init`, `update`, `audit`, `prompt`, and `crawl` that prompts interactively unless `--yes` is used
 - [AGENTS.md](AGENTS.md) detailing included LLM assistants
 - [llms.txt](llms.txt) with quick context for AI helpers
 - [CLAUDE.md](CLAUDE.md) summarizing Anthropic guidance
