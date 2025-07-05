@@ -36,6 +36,7 @@
 - Futuroptimist integration in `docs/futuroptimist-integration.md`
 - Gabriel integration in `docs/gabriel-integration.md`
 - Sigma integration in `docs/sigma-integration.md`
+- Repo feature matrix in `docs/repo-feature-summary.md`
 
 ## Getting Started
 
@@ -88,3 +89,4 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - [DSPACE](https://github.com/democratizedspace/dspace) – offline-first idle simulation with maker quests. See `docs/dspace-integration.md` for quest ideas.
 - [f2clipboard](https://github.com/futuroptimist/f2clipboard) – bulk-copy utility exploring macro workflows. See `docs/f2clipboard-integration.md`.
 - [Sigma](https://github.com/futuroptimist/sigma) – ESP32 "AI pin" hardware. See `docs/sigma-integration.md`.
+- Summary of flywheel adoption across projects in `docs/repo-feature-summary.md`
