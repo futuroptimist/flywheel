@@ -15,7 +15,7 @@ Clone the tool and run it alongside Flywheel:
 ```bash
 git clone https://github.com/futuroptimist/f2clipboard
 cd f2clipboard
-pip install -e .
+uv pip install -e .
 python -m f2clipboard --dir ../flywheel --pattern "*.md"
 ```
 

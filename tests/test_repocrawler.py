@@ -36,3 +36,4 @@ def test_generate_summary():
     out = crawler.generate_summary()
     assert "100%" in out
     assert "foo/bar" in out
+    assert "pip" in out

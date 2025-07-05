@@ -19,6 +19,7 @@ class RepoInfo:
     has_coc: bool
     has_contributing: bool
     has_precommit: bool
+    installer: str
 
 
 class RepoCrawler:
@@ -55,6 +56,24 @@ class RepoCrawler:
     def _check_repo(self, repo: str) -> RepoInfo:
         readme = self._fetch_file(repo, "README.md")
         coverage = self._parse_coverage(readme)
+        wf1 = (
+            self._fetch_file(
+                repo,
+                ".github/workflows/01-lint-format.yml",
+            )
+            or ""
+        )
+        wf2 = self._fetch_file(repo, ".github/workflows/02-tests.yml") or ""
+        installer = (
+            "uv"
+            if (
+                "uv pip" in wf1
+                or "uv pip" in wf2
+                or "setup-uv" in wf1
+                or "setup-uv" in wf2
+            )
+            else "pip"
+        )
         return RepoInfo(
             name=repo,
             coverage=coverage,
@@ -67,6 +86,7 @@ class RepoCrawler:
             has_coc=self._has_file(repo, "CODE_OF_CONDUCT.md"),
             has_contributing=self._has_file(repo, "CONTRIBUTING.md"),
             has_precommit=self._has_file(repo, ".pre-commit-config.yaml"),
+            installer=installer,
         )
 
     def crawl(self) -> List[RepoInfo]:
@@ -75,11 +95,11 @@ class RepoCrawler:
     def generate_summary(self) -> str:
         repos = self.crawl()
         header = (
-            "| Repo | Coverage | License | CI | AGENTS.md | "
+            "| Repo | Coverage | Installer | License | CI | AGENTS.md | "
             "Code of Conduct | Contributing | Pre-commit |"
         )
         sep = (
-            "| ---- | -------- | ------- | -- | --------- | "
+            "| ---- | -------- | --------- | ------- | -- | --------- | "
             "--------------- | ------------ | ---------- |"
         )
         lines = [
@@ -98,9 +118,10 @@ class RepoCrawler:
             if info.coverage:
                 coverage = f"✅ ({info.coverage})"
             repo_link = f"[{info.name}](https://github.com/{info.name})"
-            row = "| {} | {} | {} | {} | {} | {} | {} | {} |".format(
+            row = "| {} | {} | {} | {} | {} | {} | {} | {} | {} |".format(
                 repo_link,
                 coverage,
+                "🚀 uv" if info.installer == "uv" else "pip",
                 "✅" if info.has_license else "❌",
                 "✅" if info.has_ci else "❌",
                 "✅" if info.has_agents else "❌",
@@ -112,7 +133,8 @@ class RepoCrawler:
         lines.append("")
         lines.append(
             "Legend: ✅ indicates the repo has adopted that feature from "
-            "flywheel. Coverage percentages are parsed from their badges "
-            "where available."
+            "flywheel. 🚀 uv highlights repos using uv for faster installs. "
+            "Coverage percentages are parsed from their badges where "
+            "available."
         )
         return "\n".join(lines)

@@ -9,6 +9,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Setup uv
+        if: matrix.language == 'python'
+        uses: astral-sh/setup-uv@v1
+
       - name: Setup Python
         if: matrix.language == 'python'
         uses: actions/setup-python@v4
@@ -16,7 +20,7 @@ jobs:
           python-version: '3.x'
       - name: Install Py Lint Tools
         if: matrix.language == 'python'
-        run: pip install flake8 black isort
+        run: uv pip install flake8 black isort
       - name: Run Python Linters
         if: matrix.language == 'python'
         run: |
