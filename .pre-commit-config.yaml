@@ -17,4 +17,5 @@ repos:
           - black
           - pytest
           - linkchecker
+          - requests
         pass_filenames: false

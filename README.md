@@ -75,6 +75,14 @@ Invoke the prompt agent to get repo-aware suggestions:
 flywheel prompt
 ```
 
+### Generating repo feature summary
+
+Create a Markdown table showing which flywheel files each repo uses:
+
+```bash
+flywheel crawl futuroptimist/flywheel futuroptimist/axel --output docs/repo-feature-summary.md
+```
+
 ## Values
 
 We aim for a positive-sum, empathetic community. The flywheel embraces regenerative and open-source principles to keep energy cycling back into every project.
