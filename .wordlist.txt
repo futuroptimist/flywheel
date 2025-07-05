@@ -73,3 +73,8 @@ solarpunk
 Futuroptimist's
 LLMs
 Anthropic
+democratizedspace
+CLIs
+dir
+pio
+testbed
