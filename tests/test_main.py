@@ -9,7 +9,7 @@ def test_build_parser_commands():
     parser = fm.build_parser()
     sub = parser._subparsers._group_actions[0]
     cmds = set(sub.choices.keys())
-    assert {"init", "update", "audit", "prompt"} <= cmds
+    assert {"init", "update", "audit", "prompt", "crawl"} <= cmds
 
 
 def test_main_audit(capsys, tmp_path):
@@ -18,3 +18,18 @@ def test_main_audit(capsys, tmp_path):
     fm.main(["audit", str(repo)])
     out = capsys.readouterr().out
     assert "TODO" in out
+
+
+def test_main_crawl(monkeypatch, tmp_path):
+    out = tmp_path / "sum.md"
+
+    class DummyCrawler:
+        def __init__(self, repos):
+            self.repos = repos
+
+        def generate_summary(self):
+            return "report"
+
+    monkeypatch.setattr(fm, "RepoCrawler", DummyCrawler)
+    fm.main(["crawl", "foo/bar", "--output", str(out)])
+    assert out.read_text() == "report"
