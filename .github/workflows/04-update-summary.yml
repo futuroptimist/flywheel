@@ -3,6 +3,7 @@ on:
   push:
 jobs:
   crawl:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,7 +21,10 @@ jobs:
         run: |
           python -m flywheel crawl futuroptimist/flywheel futuroptimist/axel futuroptimist/gabriel futuroptimist/futuroptimist futuroptimist/token.place democratizedspace/dspace futuroptimist/f2clipboard futuroptimist/sigma --output docs/repo-feature-summary.md
       - name: Run pre-commit
-        run: pre-commit run --files docs/repo-feature-summary.md
+        run: |
+          pre-commit run --files docs/repo-feature-summary.md || true
+          git add docs/repo-feature-summary.md
+          pre-commit run --files docs/repo-feature-summary.md
       - name: Commit changes
         run: |
           git config user.name github-actions
