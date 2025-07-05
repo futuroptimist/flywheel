@@ -20,7 +20,7 @@ jobs:
           python-version: '3.x'
       - name: Install Py Lint Tools
         if: matrix.language == 'python'
-        run: uv pip install flake8 black isort
+        run: uv pip install --system flake8 black isort
       - name: Run Python Linters
         if: matrix.language == 'python'
         run: |

@@ -53,7 +53,8 @@ git add .
 git commit -m "chore: initialize flywheel"
 
 # Install uv and pre-commit hooks
-curl -Ls https://astral.sh/uv/install | sh
+curl -Ls https://astral.sh/uv/install.sh | sh
+uv venv
 uv pip install pre-commit
 pre-commit install
 
