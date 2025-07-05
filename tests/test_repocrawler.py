@@ -37,3 +37,20 @@ def test_generate_summary():
     assert "100%" in out
     assert "**[foo/bar](https://github.com/foo/bar)**" in out
     assert "pip" in out
+
+
+def test_parse_coverage_none():
+    crawler = rc.RepoCrawler([])
+    assert crawler._parse_coverage(None) is None
+
+
+def test_parse_coverage_unknown():
+    crawler = rc.RepoCrawler([])
+    result = crawler._parse_coverage("partial coverage info")
+    assert result == "unknown"
+
+
+def test_parse_coverage_no_match():
+    crawler = rc.RepoCrawler([])
+    result = crawler._parse_coverage("nothing here")
+    assert result is None

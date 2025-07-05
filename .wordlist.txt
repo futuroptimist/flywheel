@@ -80,3 +80,4 @@ pio
 testbed
 uv
 venv
+brightgreen

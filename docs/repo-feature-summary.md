@@ -8,7 +8,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ (unknown) | pip | ✅ | ❌ | ✅ | ❌ | ✅ | ✅ |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ (unknown) | pip | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ (100%) | pip | ✅ | ❌ | ✅ | ❌ | ❌ | ✅ |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ (unknown) | pip | ✅ | ❌ | ❌ | ✅ | ❌ | ✅ |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ (unknown) | pip | ✅ | ❌ | ✅ | ✅ | ❌ | ✅ |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ❌ | pip | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | pip | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ❌ | pip | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ |
