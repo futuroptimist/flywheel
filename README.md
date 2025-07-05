@@ -82,6 +82,7 @@ Create a Markdown table showing which flywheel files each repo uses:
 ```bash
 flywheel crawl futuroptimist/flywheel futuroptimist/axel --output docs/repo-feature-summary.md
 ```
+The table in `docs/repo-feature-summary.md` is automatically refreshed after each commit via GitHub Actions.
 
 ## Values
 

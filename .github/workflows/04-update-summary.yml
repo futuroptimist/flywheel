@@ -1,0 +1,34 @@
+name: Update Repo Feature Summary
+on:
+  push:
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pre-commit
+      - name: Generate summary
+        run: |
+          python -m flywheel crawl futuroptimist/flywheel futuroptimist/axel futuroptimist/gabriel futuroptimist/futuroptimist futuroptimist/token.place democratizedspace/dspace futuroptimist/f2clipboard futuroptimist/sigma --output docs/repo-feature-summary.md
+      - name: Run pre-commit
+        run: pre-commit run --files docs/repo-feature-summary.md
+      - name: Commit changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add docs/repo-feature-summary.md
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update repo feature summary"
+            git push
+          fi
