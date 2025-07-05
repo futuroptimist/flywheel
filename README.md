@@ -19,6 +19,7 @@
 - DEPENDABOT for automated dependency updates
 - CodeQL workflow for security scanning
 - Style guides for Python and JavaScript
+- Fast Python installs powered by [uv](https://github.com/astral-sh/uv)
 - Example code and templates
 - Python CLI with subcommands `init`, `update`, `audit`, `prompt`, and `crawl` that prompts interactively unless `--yes` is used
 - [AGENTS.md](AGENTS.md) detailing included LLM assistants
@@ -51,8 +52,10 @@ cd NEWREPO
 git add .
 git commit -m "chore: initialize flywheel"
 
-# Install pre-commit hooks
-pip install pre-commit
+# Install uv and pre-commit hooks
+curl -Ls https://astral.sh/uv/install.sh | sh
+uv venv
+uv pip install pre-commit
 pre-commit install
 
 # Run checks before committing

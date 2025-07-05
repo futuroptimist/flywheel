@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: astral-sh/setup-uv@v1
       - run: |
-          pip install linkchecker
+          uv pip install --system linkchecker
           linkchecker README.md docs/ || true
