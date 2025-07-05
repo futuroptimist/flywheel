@@ -2,9 +2,9 @@
 set -e
 
 # python checks
-flake8 .
-isort --check-only .
-black --check .
+flake8 . --exclude=.venv
+isort --check-only . --skip .venv
+black --check . --exclude ".venv/"
 
 # js checks
 if [ -f package.json ]; then
