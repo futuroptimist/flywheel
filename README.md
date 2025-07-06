@@ -88,6 +88,7 @@ flywheel crawl futuroptimist/flywheel futuroptimist/axel --output docs/repo-feat
 ```
 The table in `docs/repo-feature-summary.md` is automatically refreshed after each commit via GitHub Actions.
 The summary now records the short SHA of the latest commit and the name of each repository's default branch.
+Set the `GITHUB_TOKEN` environment variable or pass `--token YOURTOKEN` to avoid GitHub API rate limits.
 
 ## Values
 

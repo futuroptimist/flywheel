@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import re
 from dataclasses import dataclass
 from typing import Iterable, List, Optional
@@ -28,10 +29,14 @@ class RepoCrawler:
     """Check remote GitHub repos for standard flywheel features."""
 
     def __init__(
-        self, repos: Iterable[str], session: Optional[requests.Session] = None
+        self,
+        repos: Iterable[str],
+        session: Optional[requests.Session] = None,
+        token: Optional[str] = None,
     ) -> None:
         self.repos = list(repos)
         self.session = session or requests.Session()
+        self.token = token or os.getenv("GITHUB_TOKEN")
 
     def _fetch_file(
         self,
@@ -40,19 +45,22 @@ class RepoCrawler:
         branch: Optional[str],
     ) -> Optional[str]:
         branches = [b for b in (branch, "main", "master") if b]
+        headers = {}
+        if self.token:
+            headers["Authorization"] = f"token {self.token}"
         for br in branches:
             url = f"https://raw.githubusercontent.com/{repo}/{br}/{path}"
-            resp = self.session.get(url)
+            resp = self.session.get(url, headers=headers)
             if resp.status_code == 200:
                 return resp.text
         return None
 
     def _default_branch(self, repo: str) -> str:
         url = f"https://api.github.com/repos/{repo}"
-        resp = self.session.get(
-            url,
-            headers={"Accept": "application/vnd.github+json"},
-        )
+        headers = {"Accept": "application/vnd.github+json"}
+        if self.token:
+            headers["Authorization"] = f"token {self.token}"
+        resp = self.session.get(url, headers=headers)
         if resp.status_code == 200:
             try:
                 return resp.json().get("default_branch", "main")
@@ -65,10 +73,10 @@ class RepoCrawler:
             repo,
             branch,
         )
-        resp = self.session.get(
-            url,
-            headers={"Accept": "application/vnd.github+json"},
-        )
+        headers = {"Accept": "application/vnd.github+json"}
+        if self.token:
+            headers["Authorization"] = f"token {self.token}"
+        resp = self.session.get(url, headers=headers)
         if resp.status_code == 200:
             try:
                 return resp.json()[0]["sha"][:7]
