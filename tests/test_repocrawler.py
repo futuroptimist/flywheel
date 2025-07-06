@@ -90,3 +90,15 @@ def test_init_with_token():
 def test_ci_detection_single_file():
     crawler = rc.RepoCrawler([])
     assert crawler._has_ci({"ci.yml"}) is True
+
+
+def test_branch_override():
+    files = {
+        "foo/bar/dev/README.md": "100% coverage",
+        "foo/bar/dev/LICENSE": "",
+        "foo/bar/dev/.github/workflows/ci.yml": "",
+    }
+    session = DummySession(files)
+    crawler = rc.RepoCrawler(["foo/bar@dev"], session=session)
+    info = crawler.crawl()[0]
+    assert info.branch == "dev"
