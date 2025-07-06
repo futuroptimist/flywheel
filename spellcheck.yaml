@@ -4,6 +4,11 @@ matrix:
     sources:
       - README.md
       - docs/**/*.md
+    defaults:
+      pipeline:
+        - pyspelling.filters.markdown
+        - name: pyspelling.filters.html
+          ignores: [code]
     dictionary:
       wordlists:
         - .wordlist.txt
