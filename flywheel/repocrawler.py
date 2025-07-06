@@ -20,6 +20,7 @@ class RepoInfo:
     has_contributing: bool
     has_precommit: bool
     installer: str
+    latest_commit: Optional[str]
 
 
 class RepoCrawler:
@@ -38,6 +39,19 @@ class RepoCrawler:
             resp = self.session.get(url)
             if resp.status_code == 200:
                 return resp.text
+        return None
+
+    def _latest_commit(self, repo: str) -> Optional[str]:
+        url = f"https://api.github.com/repos/{repo}/commits?per_page=1"
+        resp = self.session.get(
+            url,
+            headers={"Accept": "application/vnd.github+json"},
+        )
+        if resp.status_code == 200:
+            try:
+                return resp.json()[0]["sha"][:7]
+            except Exception:
+                return None
         return None
 
     def _has_file(self, repo: str, path: str) -> bool:
@@ -74,6 +88,7 @@ class RepoCrawler:
             )
             else "pip"
         )
+        latest_commit = self._latest_commit(repo)
         return RepoInfo(
             name=repo,
             coverage=coverage,
@@ -87,6 +102,7 @@ class RepoCrawler:
             has_contributing=self._has_file(repo, "CONTRIBUTING.md"),
             has_precommit=self._has_file(repo, ".pre-commit-config.yaml"),
             installer=installer,
+            latest_commit=latest_commit,
         )
 
     def crawl(self) -> List[RepoInfo]:
@@ -96,11 +112,11 @@ class RepoCrawler:
         repos = self.crawl()
         header = (
             "| Repo | Coverage | Installer | License | CI | AGENTS.md | "
-            "Code of Conduct | Contributing | Pre-commit |"
+            "Code of Conduct | Contributing | Pre-commit | Commit |"
         )
         sep = (
             "| ---- | -------- | --------- | ------- | -- | --------- | "
-            "--------------- | ------------ | ---------- |"
+            "--------------- | ------------ | ---------- | ------ |"
         )
         lines = [
             "# Repo Feature Summary",
@@ -120,7 +136,7 @@ class RepoCrawler:
             repo_link = f"[{info.name}](https://github.com/{info.name})"
             if idx == 0:
                 repo_link = f"**{repo_link}**"
-            row = "| {} | {} | {} | {} | {} | {} | {} | {} | {} |".format(
+            row = "| {} | {} | {} | {} | {} | {} | {} | {} | {} | {} |".format(
                 repo_link,
                 coverage,
                 "🚀 uv" if info.installer == "uv" else "pip",
@@ -130,6 +146,7 @@ class RepoCrawler:
                 "✅" if info.has_coc else "❌",
                 "✅" if info.has_contributing else "❌",
                 "✅" if info.has_precommit else "❌",
+                info.latest_commit or "n/a",
             )
             lines.append(row)
         lines.append("")
@@ -137,6 +154,7 @@ class RepoCrawler:
             "Legend: ✅ indicates the repo has adopted that feature from "
             "flywheel. 🚀 uv highlights repos using uv for faster installs. "
             "Coverage percentages are parsed from their badges where "
-            "available."
+            "available. The commit column shows the short SHA of the latest "
+            "main branch commit at crawl time."
         )
         return "\n".join(lines)

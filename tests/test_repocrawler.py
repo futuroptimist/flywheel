@@ -9,15 +9,22 @@ class DummySession:
     def __init__(self, files):
         self.files = files
 
-    def get(self, url):
+    def get(self, url, **kwargs):
         class Resp:
             def __init__(self, text, status):
                 self.text = text
                 self.status_code = status
 
+            def json(self):
+                import json
+
+                return json.loads(self.text)
+
         path = url.split("raw.githubusercontent.com/")[-1]
         if path in self.files:
             return Resp(self.files[path], 200)
+        if url.startswith("https://api.github.com/repos/"):
+            return Resp('[{"sha": "deadbeef"}]', 200)
         return Resp("", 404)
 
 
@@ -37,6 +44,7 @@ def test_generate_summary():
     assert "100%" in out
     assert "**[foo/bar](https://github.com/foo/bar)**" in out
     assert "pip" in out
+    assert "deadbee" in out
 
 
 def test_parse_coverage_none():
