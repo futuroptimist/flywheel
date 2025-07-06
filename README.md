@@ -86,6 +86,7 @@ Create a Markdown table showing which flywheel files each repo uses:
 ```bash
 flywheel crawl futuroptimist/flywheel futuroptimist/axel --output docs/repo-feature-summary.md
 ```
+Pass `--token YOURTOKEN` or set `GITHUB_TOKEN` to avoid API rate limits.
 The table in `docs/repo-feature-summary.md` is automatically refreshed after each commit via GitHub Actions.
 The summary now records the short SHA of the latest commit and the name of each repository's default branch.
 
