@@ -10,3 +10,10 @@ matrix:
     aspell:
       lang: en
       d: en_US
+    pipeline:
+      - pyspelling.filters.markdown:
+      - pyspelling.filters.html:
+          comments: false
+          ignores:
+            - code
+            - pre
