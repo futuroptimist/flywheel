@@ -24,7 +24,7 @@ def test_main_crawl(monkeypatch, tmp_path):
     out = tmp_path / "sum.md"
 
     class DummyCrawler:
-        def __init__(self, repos):
+        def __init__(self, repos, token=None):
             self.repos = repos
 
         def generate_summary(self):

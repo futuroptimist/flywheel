@@ -8,6 +8,7 @@ import flywheel.repocrawler as rc  # noqa: E402
 class DummySession:
     def __init__(self, files):
         self.files = files
+        self.headers = {}
 
     def get(self, url, **kwargs):
         class Resp:
@@ -66,3 +67,9 @@ def test_parse_coverage_no_match():
     crawler = rc.RepoCrawler([])
     result = crawler._parse_coverage("nothing here")
     assert result is None
+
+
+def test_init_with_token():
+    session = DummySession({})
+    rc.RepoCrawler(["foo/bar"], session=session, token="abc123")
+    assert session.headers.get("Authorization") == "Bearer abc123"
