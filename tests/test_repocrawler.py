@@ -41,6 +41,8 @@ class DummySession:
         path = url.split("raw.githubusercontent.com/")[-1]
         if path in self.files:
             return Resp(self.files[path], 200)
+        if url.startswith("https://img.shields.io/codecov"):
+            return Resp("<svg>95%</svg>", 200)
         return Resp("", 404)
 
 
@@ -66,19 +68,34 @@ def test_generate_summary():
 
 def test_parse_coverage_none():
     crawler = rc.RepoCrawler([])
-    assert crawler._parse_coverage(None) is None
+    assert crawler._parse_coverage(None, "foo/bar", "main") is None
 
 
 def test_parse_coverage_unknown():
     crawler = rc.RepoCrawler([])
-    result = crawler._parse_coverage("partial coverage info")
+    result = crawler._parse_coverage(
+        "partial coverage info",
+        "foo/bar",
+        "main",
+    )
     assert result == "unknown"
 
 
 def test_parse_coverage_no_match():
     crawler = rc.RepoCrawler([])
-    result = crawler._parse_coverage("nothing here")
+    result = crawler._parse_coverage("nothing here", "foo/bar", "main")
     assert result is None
+
+
+def test_parse_coverage_codecov():
+    crawler = rc.RepoCrawler([], session=DummySession({}))
+    # fmt: off
+    readme = (
+        "![Coverage](" "https://codecov.io/gh/foo/bar/branch/main/" "graph/badge.svg)"  # noqa: E501
+    )
+    # fmt: on
+    result = crawler._parse_coverage(readme, "foo/bar", "main")
+    assert result == "95%"
 
 
 def test_init_with_token():

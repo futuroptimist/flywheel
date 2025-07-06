@@ -125,12 +125,35 @@ class RepoCrawler:
             for wf in workflow_files  # noqa: E501
         )
 
-    def _parse_coverage(self, readme: Optional[str]) -> Optional[str]:
+    # ------------------------ Coverage helpers ------------------------ #
+    def _coverage_from_codecov(self, repo: str, branch: str) -> Optional[str]:
+        """Retrieve coverage percentage from the shields.io Codecov proxy."""
+        url = f"https://img.shields.io/codecov/c/github/{repo}/{branch}.svg"
+        resp = self.session.get(url, timeout=10)
+        if resp.status_code == 200:
+            m = re.search(r">(\d{1,3})%<", resp.text)
+            if m:
+                return f"{m.group(1)}%"
+        return None
+
+    def _parse_coverage(
+        self, readme: Optional[str], repo: str, branch: str
+    ) -> Optional[str]:
         if not readme:
             return None
-        match = re.search(r"(\d{1,3})%", readme)
-        if match:
-            return f"{match.group(1)}%"
+
+        # 1. Fast path – percentage already in the README (shields badge, etc.)
+        m = re.search(r"(\d{1,3})%", readme)
+        if m:
+            return f"{m.group(1)}%"
+
+        # 2. README mentions Codecov → query shields proxy.
+        if "codecov.io" in readme:
+            pct = self._coverage_from_codecov(repo, branch)
+            if pct:
+                return pct
+
+        # 3. We spoke about coverage but still no number.
         if "coverage" in readme.lower():
             return "unknown"
         return None
@@ -138,7 +161,7 @@ class RepoCrawler:
     def _check_repo(self, repo: str) -> RepoInfo:
         branch = self._branch_overrides.get(repo) or self._default_branch(repo)
         readme = self._fetch_file(repo, "README.md", branch)
-        coverage = self._parse_coverage(readme)
+        coverage = self._parse_coverage(readme, repo, branch)
         workflow_files = self._list_workflows(repo, branch)
         wf1 = (
             self._fetch_file(
