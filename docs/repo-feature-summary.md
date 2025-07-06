@@ -2,7 +2,6 @@
 
 This table tracks which flywheel features each related repository has adopted.
 
-<!-- spellcheck-disable -->
 | Repo | Branch | Coverage | Installer | License | CI | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Commit |
 | ---- | ------ | -------- | --------- | ------- | -- | --------- | --------------- | ------------ | ---------- | ------ |
 | **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | ✅ (20%) | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ef45c45 |
@@ -13,6 +12,5 @@ This table tracks which flywheel features each related repository has adopted.
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | main | ❌ | pip | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | 1ee6938 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | ✅ (100%) | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 30fd08e |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | ✅ (100%) | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | bda6390 |
-<!-- spellcheck-enable -->
 
 Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv highlights repos using uv for faster installs. Coverage percentages are parsed from their badges where available. The commit column shows the short SHA of the latest default branch commit at crawl time.
