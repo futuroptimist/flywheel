@@ -191,7 +191,7 @@ class RepoCrawler:
                 "✅" if info.has_ci else "❌",
                 "✅" if info.has_agents else "❌",
                 "✅" if info.has_coc else "❌",
-            ) + "{} | {} | {} |".format(
+            ) + "{} | {} | `{}` |".format(
                 "✅" if info.has_contributing else "❌",
                 "✅" if info.has_precommit else "❌",
                 info.latest_commit or "n/a",
