@@ -1,6 +1,8 @@
 name: Update Repo Feature Summary
 on:
   push:
+    branches:
+      - main
 jobs:
   crawl:
     if: github.actor != 'github-actions[bot]'
