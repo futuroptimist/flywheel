@@ -9,9 +9,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: rojopolis/spellcheck-github-actions@v0
+
+      # Ensure dictionaries are present
+      - name: Install aspell dictionaries
+        run: sudo apt-get update && sudo apt-get install -y aspell aspell-en
+
+      - name: Spell check markdown & docs
+        uses: rojopolis/spellcheck-github-actions@0.35.0
         with:
-          config_path: spellcheck.yaml
+          config_path: .spellcheck.yaml
+        # If you prefer non-blocking:
+        # continue-on-error: true
   linkcheck:
     runs-on: ubuntu-latest
     steps:
