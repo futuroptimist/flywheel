@@ -8,10 +8,9 @@ matrix:
       wordlists:
         - .wordlist.txt
     aspell:
-      lang: en
-      d: en_US
+      lang: en_US
     pipeline:
-      - pyspelling.filters.markdown:
+      - pyspelling.filters.markdown
       - pyspelling.filters.html:
           comments: false
           ignores:
