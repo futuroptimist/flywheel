@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import re
 from dataclasses import dataclass
 from typing import Iterable, List, Optional
@@ -28,10 +29,16 @@ class RepoCrawler:
     """Check remote GitHub repos for standard flywheel features."""
 
     def __init__(
-        self, repos: Iterable[str], session: Optional[requests.Session] = None
+        self,
+        repos: Iterable[str],
+        session: Optional[requests.Session] = None,
+        token: Optional[str] = None,
     ) -> None:
         self.repos = list(repos)
         self.session = session or requests.Session()
+        tok = token or os.environ.get("GITHUB_TOKEN")
+        if tok:
+            self.session.headers.update({"Authorization": f"Bearer {tok}"})
 
     def _fetch_file(
         self,

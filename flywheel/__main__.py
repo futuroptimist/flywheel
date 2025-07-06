@@ -96,7 +96,7 @@ def prompt(args: argparse.Namespace) -> None:
 
 
 def crawl(args: argparse.Namespace) -> None:
-    crawler = RepoCrawler(args.repos)
+    crawler = RepoCrawler(args.repos, token=args.token)
     md = crawler.generate_summary()
     Path(args.output).write_text(md)
 
@@ -146,6 +146,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--output",
         default="docs/repo-feature-summary.md",
         help="output markdown path",
+    )
+    p_crawl.add_argument(
+        "--token",
+        help="GitHub token for authenticated API calls",
+        default=None,
     )
     p_crawl.set_defaults(func=crawl)
 
