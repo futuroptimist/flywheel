@@ -172,6 +172,7 @@ class RepoCrawler:
                 "repository has adopted."
             ),
             "",
+            "<!-- spellchecker: disable -->",
             header,
             sep,
         ]
@@ -182,6 +183,7 @@ class RepoCrawler:
             repo_link = f"[{info.name}](https://github.com/{info.name})"
             if idx == 0:
                 repo_link = f"**{repo_link}**"
+            commit = f"`{info.latest_commit}`" if info.latest_commit else "n/a"
             row = "| {} | {} | {} | {} | {} | {} | {} | {} | ".format(
                 repo_link,
                 info.branch,
@@ -194,7 +196,7 @@ class RepoCrawler:
             ) + "{} | {} | {} |".format(
                 "✅" if info.has_contributing else "❌",
                 "✅" if info.has_precommit else "❌",
-                info.latest_commit or "n/a",
+                commit,
             )
             lines.append(row)
         lines.append("")
