@@ -24,6 +24,18 @@ class DummySession:
         if url.startswith("https://api.github.com/repos/"):
             if url.endswith("/commits?per_page=1&sha=main"):
                 return Resp('[{"sha": "deadbeef"}]', 200)
+            if "/contents/.github/workflows" in url:
+                import json
+
+                repo = url.split("repos/")[1].split("/contents")[0]
+                branch = url.split("ref=")[-1]
+                prefix = f"{repo}/{branch}/.github/workflows/"
+                names = [
+                    p.split("/")[-1]
+                    for p in self.files
+                    if p.startswith(prefix)  # noqa: E501
+                ]  # noqa: E501
+                return Resp(json.dumps([{"name": n} for n in names]), 200)
             return Resp('{"default_branch": "main"}', 200)
 
         path = url.split("raw.githubusercontent.com/")[-1]
@@ -73,3 +85,8 @@ def test_init_with_token():
     session = DummySession({})
     rc.RepoCrawler(["foo/bar"], session=session, token="abc123")
     assert session.headers.get("Authorization") == "Bearer abc123"
+
+
+def test_ci_detection_single_file():
+    crawler = rc.RepoCrawler([])
+    assert crawler._has_ci({"ci.yml"}) is True

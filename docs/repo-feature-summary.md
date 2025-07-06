@@ -5,11 +5,11 @@ This table tracks which flywheel features each related repository has adopted.
 <!-- spellchecker: disable -->
 | Repo | Branch | Coverage | Installer | License | CI | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Commit |
 | ---- | ------ | -------- | --------- | ------- | -- | --------- | --------------- | ------------ | ---------- | ------ |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | ✅ (20%) | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `831b46f` |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | ✅ (unknown) | pip | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | `ac58b74` |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | ✅ (100%) | pip | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | `7de9b86` |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | ✅ (20%) | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `5581218` |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | ✅ (unknown) | pip | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `ac58b74` |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | ✅ (100%) | pip | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `7de9b86` |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | ✅ (100%) | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `bd2e736` |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | ✅ (unknown) | pip | ✅ | ❌ | ✅ | ✅ | ❌ | ✅ | `b9f666f` |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | ✅ (unknown) | pip | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ | `b9f666f` |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | main | ❌ | pip | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | `1ee6938` |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | ✅ (100%) | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `30fd08e` |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | ✅ (100%) | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `bda6390` |
