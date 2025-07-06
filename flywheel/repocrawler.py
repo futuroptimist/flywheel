@@ -39,7 +39,17 @@ class RepoCrawler:
         session: Optional[requests.Session] = None,
         token: Optional[str] = None,
     ) -> None:
-        self.repos = list(repos)
+        """Initialize with an optional list of ``owner/name@branch`` specs."""
+
+        self.repos: list[str] = []
+        self._branch_overrides: dict[str, str] = {}
+        for r in repos:
+            if "@" in r:
+                name, branch = r.split("@", 1)
+                self.repos.append(name)
+                self._branch_overrides[name] = branch
+            else:
+                self.repos.append(r)
         self.session = session or requests.Session()
         tok = token or os.environ.get("GITHUB_TOKEN")
         if tok:
@@ -126,7 +136,7 @@ class RepoCrawler:
         return None
 
     def _check_repo(self, repo: str) -> RepoInfo:
-        branch = self._default_branch(repo)
+        branch = self._branch_overrides.get(repo) or self._default_branch(repo)
         readme = self._fetch_file(repo, "README.md", branch)
         coverage = self._parse_coverage(readme)
         workflow_files = self._list_workflows(repo, branch)
