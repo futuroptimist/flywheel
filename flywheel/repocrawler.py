@@ -28,6 +28,11 @@ class RepoInfo:
 class RepoCrawler:
     """Check remote GitHub repos for standard flywheel features."""
 
+    # Filenames whose presence in `.github/workflows/` signals that the repo
+    # runs some form of continuous integration. This keeps the heuristic broad
+    # so repos with custom workflow names still count.
+    CI_KEYWORDS = ("ci", "test", "lint", "build", "docs")
+
     def __init__(
         self,
         repos: Iterable[str],
@@ -86,6 +91,30 @@ class RepoCrawler:
     def _has_file(self, repo: str, path: str, branch: str) -> bool:
         return self._fetch_file(repo, path, branch) is not None
 
+    def _list_workflows(self, repo: str, branch: str) -> set[str]:
+        """Return workflow filenames under `.github/workflows` for the repo."""
+        url = (
+            "https://api.github.com/repos/"
+            f"{repo}/contents/.github/workflows?ref={branch}"
+        )
+        resp = self.session.get(
+            url,
+            headers={"Accept": "application/vnd.github+json"},
+        )
+        if resp.status_code == 200:
+            try:
+                return {item.get("name", "") for item in resp.json()}
+            except Exception:
+                return set()
+        return set()
+
+    def _has_ci(self, workflow_files: set[str]) -> bool:
+        """Return True if any workflow filename hints at CI presence."""
+        return any(
+            any(k in wf.lower() for k in self.CI_KEYWORDS)
+            for wf in workflow_files  # noqa: E501
+        )
+
     def _parse_coverage(self, readme: Optional[str]) -> Optional[str]:
         if not readme:
             return None
@@ -100,6 +129,7 @@ class RepoCrawler:
         branch = self._default_branch(repo)
         readme = self._fetch_file(repo, "README.md", branch)
         coverage = self._parse_coverage(readme)
+        workflow_files = self._list_workflows(repo, branch)
         wf1 = (
             self._fetch_file(
                 repo,
@@ -132,11 +162,7 @@ class RepoCrawler:
             branch=branch,
             coverage=coverage,
             has_license=self._has_file(repo, "LICENSE", branch),
-            has_ci=self._has_file(
-                repo,
-                ".github/workflows/01-lint-format.yml",
-                branch,
-            ),
+            has_ci=self._has_ci(workflow_files),
             has_agents=self._has_file(repo, "AGENTS.md", branch),
             has_coc=self._has_file(repo, "CODE_OF_CONDUCT.md", branch),
             has_contributing=self._has_file(repo, "CONTRIBUTING.md", branch),
