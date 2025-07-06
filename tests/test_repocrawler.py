@@ -20,11 +20,14 @@ class DummySession:
 
                 return json.loads(self.text)
 
+        if url.startswith("https://api.github.com/repos/"):
+            if url.endswith("/commits?per_page=1&sha=main"):
+                return Resp('[{"sha": "deadbeef"}]', 200)
+            return Resp('{"default_branch": "main"}', 200)
+
         path = url.split("raw.githubusercontent.com/")[-1]
         if path in self.files:
             return Resp(self.files[path], 200)
-        if url.startswith("https://api.github.com/repos/"):
-            return Resp('[{"sha": "deadbeef"}]', 200)
         return Resp("", 404)
 
 
@@ -43,6 +46,7 @@ def test_generate_summary():
     out = crawler.generate_summary()
     assert "100%" in out
     assert "**[foo/bar](https://github.com/foo/bar)**" in out
+    assert "main" in out
     assert "pip" in out
     assert "deadbee" in out
 

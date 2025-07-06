@@ -12,6 +12,7 @@ import requests
 @dataclass
 class RepoInfo:
     name: str
+    branch: str
     coverage: Optional[str]
     has_license: bool
     has_ci: bool
@@ -32,17 +33,38 @@ class RepoCrawler:
         self.repos = list(repos)
         self.session = session or requests.Session()
 
-    def _fetch_file(self, repo: str, path: str) -> Optional[str]:
-        for branch in ("main", "master"):
-            base = "https://raw.githubusercontent.com/"
-            url = f"{base}{repo}/{branch}/{path}"
+    def _fetch_file(
+        self,
+        repo: str,
+        path: str,
+        branch: Optional[str],
+    ) -> Optional[str]:
+        branches = [b for b in (branch, "main", "master") if b]
+        for br in branches:
+            url = f"https://raw.githubusercontent.com/{repo}/{br}/{path}"
             resp = self.session.get(url)
             if resp.status_code == 200:
                 return resp.text
         return None
 
-    def _latest_commit(self, repo: str) -> Optional[str]:
-        url = f"https://api.github.com/repos/{repo}/commits?per_page=1"
+    def _default_branch(self, repo: str) -> str:
+        url = f"https://api.github.com/repos/{repo}"
+        resp = self.session.get(
+            url,
+            headers={"Accept": "application/vnd.github+json"},
+        )
+        if resp.status_code == 200:
+            try:
+                return resp.json().get("default_branch", "main")
+            except Exception:
+                return "main"
+        return "main"
+
+    def _latest_commit(self, repo: str, branch: str) -> Optional[str]:
+        url = "https://api.github.com/repos/%s/commits?per_page=1&sha=%s" % (
+            repo,
+            branch,
+        )
         resp = self.session.get(
             url,
             headers={"Accept": "application/vnd.github+json"},
@@ -54,8 +76,8 @@ class RepoCrawler:
                 return None
         return None
 
-    def _has_file(self, repo: str, path: str) -> bool:
-        return self._fetch_file(repo, path) is not None
+    def _has_file(self, repo: str, path: str, branch: str) -> bool:
+        return self._fetch_file(repo, path, branch) is not None
 
     def _parse_coverage(self, readme: Optional[str]) -> Optional[str]:
         if not readme:
@@ -68,16 +90,25 @@ class RepoCrawler:
         return None
 
     def _check_repo(self, repo: str) -> RepoInfo:
-        readme = self._fetch_file(repo, "README.md")
+        branch = self._default_branch(repo)
+        readme = self._fetch_file(repo, "README.md", branch)
         coverage = self._parse_coverage(readme)
         wf1 = (
             self._fetch_file(
                 repo,
                 ".github/workflows/01-lint-format.yml",
+                branch,
             )
             or ""
         )
-        wf2 = self._fetch_file(repo, ".github/workflows/02-tests.yml") or ""
+        wf2 = (
+            self._fetch_file(
+                repo,
+                ".github/workflows/02-tests.yml",
+                branch,
+            )
+            or ""
+        )
         installer = (
             "uv"
             if (
@@ -88,19 +119,25 @@ class RepoCrawler:
             )
             else "pip"
         )
-        latest_commit = self._latest_commit(repo)
+        latest_commit = self._latest_commit(repo, branch)
         return RepoInfo(
             name=repo,
+            branch=branch,
             coverage=coverage,
-            has_license=self._has_file(repo, "LICENSE"),
+            has_license=self._has_file(repo, "LICENSE", branch),
             has_ci=self._has_file(
                 repo,
                 ".github/workflows/01-lint-format.yml",
+                branch,
             ),
-            has_agents=self._has_file(repo, "AGENTS.md"),
-            has_coc=self._has_file(repo, "CODE_OF_CONDUCT.md"),
-            has_contributing=self._has_file(repo, "CONTRIBUTING.md"),
-            has_precommit=self._has_file(repo, ".pre-commit-config.yaml"),
+            has_agents=self._has_file(repo, "AGENTS.md", branch),
+            has_coc=self._has_file(repo, "CODE_OF_CONDUCT.md", branch),
+            has_contributing=self._has_file(repo, "CONTRIBUTING.md", branch),
+            has_precommit=self._has_file(
+                repo,
+                ".pre-commit-config.yaml",
+                branch,
+            ),
             installer=installer,
             latest_commit=latest_commit,
         )
@@ -111,12 +148,14 @@ class RepoCrawler:
     def generate_summary(self) -> str:
         repos = self.crawl()
         header = (
-            "| Repo | Coverage | Installer | License | CI | AGENTS.md | "
-            "Code of Conduct | Contributing | Pre-commit | Commit |"
+            "| Repo | Branch | Coverage | Installer | License | CI | "
+            "AGENTS.md | Code of Conduct | Contributing | Pre-commit | "
+            "Commit |"
         )
         sep = (
-            "| ---- | -------- | --------- | ------- | -- | --------- | "
-            "--------------- | ------------ | ---------- | ------ |"
+            "| ---- | ------ | -------- | --------- | ------- | -- | "
+            "--------- | --------------- | ------------ | ---------- | "
+            "------ |"
         )
         lines = [
             "# Repo Feature Summary",
@@ -136,14 +175,16 @@ class RepoCrawler:
             repo_link = f"[{info.name}](https://github.com/{info.name})"
             if idx == 0:
                 repo_link = f"**{repo_link}**"
-            row = "| {} | {} | {} | {} | {} | {} | {} | {} | {} | {} |".format(
+            row = "| {} | {} | {} | {} | {} | {} | {} | {} | ".format(
                 repo_link,
+                info.branch,
                 coverage,
                 "🚀 uv" if info.installer == "uv" else "pip",
                 "✅" if info.has_license else "❌",
                 "✅" if info.has_ci else "❌",
                 "✅" if info.has_agents else "❌",
                 "✅" if info.has_coc else "❌",
+            ) + "{} | {} | {} |".format(
                 "✅" if info.has_contributing else "❌",
                 "✅" if info.has_precommit else "❌",
                 info.latest_commit or "n/a",
@@ -155,6 +196,6 @@ class RepoCrawler:
             "flywheel. 🚀 uv highlights repos using uv for faster installs. "
             "Coverage percentages are parsed from their badges where "
             "available. The commit column shows the short SHA of the latest "
-            "main branch commit at crawl time."
+            "default branch commit at crawl time."
         )
         return "\n".join(lines)
