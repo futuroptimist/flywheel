@@ -83,3 +83,6 @@ venv
 brightgreen
 SHA
 YOURTOKEN
+
+htmlcontent
+installable
