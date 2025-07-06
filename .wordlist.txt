@@ -81,3 +81,4 @@ testbed
 uv
 venv
 brightgreen
+SHA
