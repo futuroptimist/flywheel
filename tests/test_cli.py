@@ -56,3 +56,14 @@ def test_prompt_no_readme(tmp_path):
         check=True,
     )
     assert "No README found." in result.stdout
+
+
+def test_cli_help():
+    result = subprocess.run(
+        [sys.executable, "-m", "flywheel", "--help"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert "init" in result.stdout
+    assert "crawl" in result.stdout
