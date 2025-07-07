@@ -120,3 +120,13 @@ def test_network_exceptions_handled():
     assert c._latest_commit("demo/repo", "main") is None
     assert c._list_workflows("demo/repo", "main") == set()
     assert c._coverage_from_codecov("demo/repo", "main") is None
+
+
+def test_parse_coverage_codecov_fallback(monkeypatch):
+    crawler = RepoCrawler([])
+
+    monkeypatch.setattr(crawler, "_coverage_from_codecov", lambda *a: None)
+
+    readme = "![Coverage](https://codecov.io/gh/foo/bar/branch/main/badge.svg)"
+    result = crawler._parse_coverage(readme, "foo/bar", "main")
+    assert result == "unknown"
