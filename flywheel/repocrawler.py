@@ -33,6 +33,24 @@ class RepoCrawler:
     # so repos with custom workflow names still count.
     CI_KEYWORDS = ("ci", "test", "lint", "build", "docs")
 
+    _UV_OK = re.compile(r"\buv\s+pip\b", re.I)
+    _PIP_BAD = re.compile(
+        r"""
+        (?<!\buv\s)(?<!\w)(?:pip3?|python\s+-m\s+pip)\s+install
+        |pip\s+compile
+        |apt[\w\- ]+python3?-pip
+        """,
+        re.I | re.X,
+    )
+
+    DOCKER_FILES = (
+        "Dockerfile",
+        "Dockerfile.dev",
+        "Dockerfile.prod",
+        "docker/Dockerfile",
+        "frontend/Dockerfile",
+    )
+
     def __init__(
         self,
         repos: Iterable[str],
@@ -125,6 +143,16 @@ class RepoCrawler:
             for wf in workflow_files  # noqa: E501
         )
 
+    def _detect_installer(self, text: str) -> str:
+        """Return 'uv', 'partial', or 'pip' based on shell snippets."""
+        has_uv = bool(self._UV_OK.search(text))
+        has_pip = bool(self._PIP_BAD.search(text))
+        if has_uv and not has_pip:
+            return "uv"
+        if has_uv and has_pip:
+            return "partial"
+        return "pip"
+
     # ------------------------ Coverage helpers ------------------------ #
     def _coverage_from_codecov(self, repo: str, branch: str) -> Optional[str]:
         """Retrieve coverage percentage from the shields.io Codecov proxy."""
@@ -167,32 +195,37 @@ class RepoCrawler:
         readme = self._fetch_file(repo, "README.md", branch)
         coverage = self._parse_coverage(readme, repo, branch)
         workflow_files = self._list_workflows(repo, branch)
-        wf1 = (
+        workflows_txt = "".join(
+            [
+                self._fetch_file(
+                    repo,
+                    f".github/workflows/{name}",
+                    branch,
+                )
+                or ""
+                for name in workflow_files
+            ]
+        )
+        docker_txt = "".join(
+            filter(
+                None,
+                [self._fetch_file(repo, p, branch) for p in self.DOCKER_FILES],
+            )
+        )
+        pkg_txt = self._fetch_file(repo, "package.json", branch) or ""
+        frontend_txt = (
             self._fetch_file(
                 repo,
-                ".github/workflows/01-lint-format.yml",
+                "frontend/package.json",
                 branch,
             )
             or ""
         )
-        wf2 = (
-            self._fetch_file(
-                repo,
-                ".github/workflows/02-tests.yml",
-                branch,
-            )
-            or ""
-        )
-        installer = (
-            "uv"
-            if (
-                "uv pip" in wf1
-                or "uv pip" in wf2
-                or "setup-uv" in wf1
-                or "setup-uv" in wf2
-            )
-            else "pip"
-        )
+        npm_scripts_txt = pkg_txt + frontend_txt
+
+        installer = self._detect_installer(
+            workflows_txt + docker_txt + npm_scripts_txt
+        )  # noqa: E501
         latest_commit = self._latest_commit(repo, branch)
         return RepoInfo(
             name=repo,
@@ -247,11 +280,17 @@ class RepoCrawler:
             if idx == 0:
                 repo_link = f"**{repo_link}**"
             commit = f"`{info.latest_commit}`" if info.latest_commit else "n/a"
+            if info.installer == "uv":
+                inst = "🚀 uv"
+            elif info.installer == "partial":
+                inst = "🔶 partial"
+            else:
+                inst = "pip"
             row = "| {} | {} | {} | {} | {} | {} | {} | {} | ".format(
                 repo_link,
                 info.branch,
                 coverage,
-                "🚀 uv" if info.installer == "uv" else "pip",
+                inst,
                 "✅" if info.has_license else "❌",
                 "✅" if info.has_ci else "❌",
                 "✅" if info.has_agents else "❌",
@@ -265,7 +304,8 @@ class RepoCrawler:
         lines.append("")
         lines.append(
             "Legend: ✅ indicates the repo has adopted that feature from "
-            "flywheel. 🚀 uv highlights repos using uv for faster installs. "
+            "flywheel. 🚀 uv means only uv was found. "
+            "🔶 partial signals a mix of uv and pip. "
             "Coverage percentages are parsed from their badges where "
             "available. The commit column shows the short SHA of the latest "
             "default branch commit at crawl time."

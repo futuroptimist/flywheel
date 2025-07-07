@@ -14,4 +14,4 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | ✅ (100%) | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `30fd08e` |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | ✅ (100%) | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `bda6390` |
 
-Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv highlights repos using uv for faster installs. Coverage percentages are parsed from their badges where available. The commit column shows the short SHA of the latest default branch commit at crawl time.
+Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip. Coverage percentages are parsed from their badges where available. The commit column shows the short SHA of the latest default branch commit at crawl time.
