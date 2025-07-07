@@ -34,11 +34,21 @@ jobs:
           npm install --no-audit --no-fund
           npm test -- --coverage --coverageReporters=lcov
 
-      - name: Upload coverage to Codecov
-        if: always()
+      # --- Upload coverage only if the matching report exists ---
+      - name: Upload Python coverage
+        if: matrix.language == 'python' && hashFiles('coverage.xml') != ''
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          flags: ${{ matrix.language }}
+          files: ./coverage.xml
+          flags: python
           fail_ci_if_error: true
-          files: ./coverage.xml, ./coverage/lcov.info
+
+      - name: Upload JS coverage
+        if: matrix.language == 'javascript' && hashFiles('coverage/lcov.info') != ''
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          flags: javascript
+          fail_ci_if_error: true
