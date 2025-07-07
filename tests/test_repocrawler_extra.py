@@ -1,4 +1,5 @@
 import pytest
+import requests
 
 from flywheel.repocrawler import RepoCrawler
 
@@ -103,3 +104,19 @@ def test_has_ci_false():
 def test_installer_strict(snippet, expected):
     c = RepoCrawler([])
     assert c._detect_installer(snippet) == expected
+
+
+def test_network_exceptions_handled():
+    class ErrSession:
+        def __init__(self):
+            self.headers = {}
+
+        def get(self, *_, **__):
+            raise requests.RequestException("boom")
+
+    c = RepoCrawler([], session=ErrSession())
+    assert c._fetch_file("demo/repo", "README.md", "main") is None
+    assert c._default_branch("demo/repo") == "main"
+    assert c._latest_commit("demo/repo", "main") is None
+    assert c._list_workflows("demo/repo", "main") == set()
+    assert c._coverage_from_codecov("demo/repo", "main") is None

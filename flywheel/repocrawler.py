@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Iterable, List, Optional
 
 import requests
+from requests import RequestException
 
 
 @dataclass
@@ -82,17 +83,23 @@ class RepoCrawler:
         branches = [b for b in (branch, "main", "master") if b]
         for br in branches:
             url = f"https://raw.githubusercontent.com/{repo}/{br}/{path}"
-            resp = self.session.get(url)
+            try:
+                resp = self.session.get(url)
+            except RequestException:
+                continue
             if resp.status_code == 200:
                 return resp.text
         return None
 
     def _default_branch(self, repo: str) -> str:
         url = f"https://api.github.com/repos/{repo}"
-        resp = self.session.get(
-            url,
-            headers={"Accept": "application/vnd.github+json"},
-        )
+        try:
+            resp = self.session.get(
+                url,
+                headers={"Accept": "application/vnd.github+json"},
+            )
+        except RequestException:
+            return "main"
         if resp.status_code == 200:
             try:
                 return resp.json().get("default_branch", "main")
@@ -105,10 +112,13 @@ class RepoCrawler:
             repo,
             branch,
         )
-        resp = self.session.get(
-            url,
-            headers={"Accept": "application/vnd.github+json"},
-        )
+        try:
+            resp = self.session.get(
+                url,
+                headers={"Accept": "application/vnd.github+json"},
+            )
+        except RequestException:
+            return None
         if resp.status_code == 200:
             try:
                 return resp.json()[0]["sha"][:7]
@@ -125,10 +135,13 @@ class RepoCrawler:
             "https://api.github.com/repos/"
             f"{repo}/contents/.github/workflows?ref={branch}"
         )
-        resp = self.session.get(
-            url,
-            headers={"Accept": "application/vnd.github+json"},
-        )
+        try:
+            resp = self.session.get(
+                url,
+                headers={"Accept": "application/vnd.github+json"},
+            )
+        except RequestException:
+            return set()
         if resp.status_code == 200:
             try:
                 return {item.get("name", "") for item in resp.json()}
@@ -157,7 +170,10 @@ class RepoCrawler:
     def _coverage_from_codecov(self, repo: str, branch: str) -> Optional[str]:
         """Retrieve coverage percentage from the shields.io Codecov proxy."""
         url = f"https://img.shields.io/codecov/c/github/{repo}/{branch}.svg"
-        resp = self.session.get(url, timeout=10)
+        try:
+            resp = self.session.get(url, timeout=10)
+        except RequestException:
+            return None
         if resp.status_code == 200:
             m = re.search(r">(\d{1,3})%<", resp.text)
             if m:
