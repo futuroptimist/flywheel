@@ -143,9 +143,13 @@ class RepoCrawler:
             return None
 
         # 1. Fast path – percentage already in the README (shields badge, etc.)
-        m = re.search(r"(\d{1,3})%", readme)
-        if m:
-            return f"{m.group(1)}%"
+        coverage_match = (
+            re.search(r"coverage-(\d+)%25", readme)
+            or re.search(r"codecov.*?(\d+)%", readme)
+            or re.search(r"(\d{1,3})%", readme)
+        )
+        if coverage_match:
+            return f"{coverage_match.group(1)}%"
 
         # 2. README mentions Codecov → query shields proxy.
         if "codecov.io" in readme:
