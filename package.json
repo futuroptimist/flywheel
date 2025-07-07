@@ -1,0 +1,14 @@
+{
+  "name": "flywheel",
+  "type": "module",
+  "scripts": {
+    "lint": "echo skip",
+    "format": "echo skip",
+    "format:check": "echo skip",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "cross-env": "^7.0.3"
+  }
+}
