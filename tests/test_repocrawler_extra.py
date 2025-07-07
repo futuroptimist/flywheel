@@ -1,3 +1,5 @@
+import pytest
+
 from flywheel.repocrawler import RepoCrawler
 
 
@@ -87,3 +89,17 @@ def test_coverage_from_codecov_no_match():
 def test_has_ci_false():
     crawler = RepoCrawler([])
     assert crawler._has_ci({"deploy.yml"}) is False
+
+
+@pytest.mark.parametrize(
+    "snippet,expected",
+    [
+        ("uv pip install -r req.txt", "uv"),
+        ("uv pip install && pip install black", "partial"),
+        ("python -m pip install -r requirements.txt", "pip"),
+        ("RUN pip3 install uv && uv pip install .", "partial"),
+    ],
+)
+def test_installer_strict(snippet, expected):
+    c = RepoCrawler([])
+    assert c._detect_installer(snippet) == expected

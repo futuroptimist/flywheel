@@ -119,3 +119,27 @@ def test_branch_override():
     crawler = rc.RepoCrawler(["foo/bar@dev"], session=session)
     info = crawler.crawl()[0]
     assert info.branch == "dev"
+
+
+def test_generate_summary_installer_variants(monkeypatch):
+    info_uv = rc.RepoInfo(
+        name="demo/uv",
+        branch="main",
+        coverage="100%",
+        has_license=True,
+        has_ci=True,
+        has_agents=False,
+        has_coc=True,
+        has_contributing=True,
+        has_precommit=True,
+        installer="uv",
+        latest_commit="cafec0d",
+    )
+    info_partial = info_uv.__class__(
+        **{**info_uv.__dict__, "name": "demo/partial", "installer": "partial"}
+    )
+    crawler = rc.RepoCrawler([])
+    monkeypatch.setattr(crawler, "crawl", lambda: [info_uv, info_partial])
+    summary = crawler.generate_summary()
+    assert "🚀 uv" in summary
+    assert "🔶 partial" in summary
