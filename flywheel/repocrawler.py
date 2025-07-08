@@ -16,7 +16,7 @@ class RepoInfo:
     name: str
     branch: str
     coverage: Optional[str]
-    patch: Optional[str]
+    patch_percent: Optional[float]
     has_license: bool
     has_ci: bool
     has_agents: bool
@@ -52,6 +52,8 @@ class RepoCrawler:
         "docker/Dockerfile",
         "frontend/Dockerfile",
     )
+
+    PATCH_THRESHOLD = 90
 
     def __init__(
         self,
@@ -189,18 +191,44 @@ class RepoCrawler:
         self,
         repo: str,
         branch: str,
-    ) -> Optional[str]:
-        """Retrieve patch coverage percentage via shields.io."""
-        base = "https://img.shields.io/codecov/c/github/"
-        url = base + f"{repo}/{branch}.svg?flag=patch"
+    ) -> Optional[float]:
+        """Retrieve patch coverage percentage via Codecov REST API."""
+        owner, name = repo.split("/", 1)
+        headers = {}
+        token = os.environ.get("CODECOV_TOKEN")
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
+        totals = (
+            "https://api.codecov.io/api/v2/github/"
+            f"{owner}/repos/{name}/totals/?branch={branch}"
+        )
         try:
-            resp = self.session.get(url, timeout=10)
+            resp = self.session.get(totals, headers=headers, timeout=10)
+            if resp.status_code == 200:
+                body = resp.json()
+                pct = body.get("totals", {}).get("patch", {}).get("coverage")
+                if pct is not None:
+                    return float(pct)
         except RequestException:
             return None
-        if resp.status_code == 200:
-            m = re.search(r">(\d{1,3})%<", resp.text)
-            if m:
-                return f"{m.group(1)}%"
+        except Exception:
+            pass
+
+        compare = (
+            "https://api.codecov.io/api/v2/github/"
+            f"{owner}/repos/{name}/compare/?base=HEAD~1&head=HEAD"
+        )
+        try:
+            resp = self.session.get(compare, headers=headers, timeout=10)
+            if resp.status_code == 200:
+                body = resp.json()
+                pct = body.get("totals", {}).get("patch", {}).get("coverage")
+                if pct is not None:
+                    return float(pct)
+        except RequestException:
+            return None
+        except Exception:
+            pass
         return None
 
     def _parse_coverage(
@@ -271,7 +299,7 @@ class RepoCrawler:
             name=repo,
             branch=branch,
             coverage=coverage,
-            patch=patch_cov,
+            patch_percent=patch_cov,
             has_license=self._has_file(repo, "LICENSE", branch),
             has_ci=self._has_ci(workflow_files),
             has_agents=self._has_file(repo, "AGENTS.md", branch),
@@ -317,9 +345,12 @@ class RepoCrawler:
             coverage = "❌"
             if info.coverage:
                 coverage = f"✅ ({info.coverage})"
-            patch = "❌"
-            if info.patch:
-                patch = f"✅ ({info.patch})"
+            if info.patch_percent is None:
+                patch = "—"
+            else:
+                passed = info.patch_percent >= self.PATCH_THRESHOLD
+                emoji = "✅" if passed else "❌"
+                patch = f"{emoji} ({info.patch_percent:.0f}%)"
             repo_link = f"[{info.name}](https://github.com/{info.name})"
             if idx == 0:
                 repo_link = f"**{repo_link}**"
@@ -346,7 +377,9 @@ class RepoCrawler:
             "flywheel. 🚀 uv means only uv was found. "
             "🔶 partial signals a mix of uv and pip. "
             "Coverage percentages are parsed from their badges where "
-            "available. The commit column shows the short SHA of the latest "
-            "default branch commit at crawl time."
+            "available. Patch shows ✅ when diff coverage is at least 90% "
+            "and ❌ otherwise, with the percentage in parentheses. "
+            "The commit column shows the short SHA of the latest default "
+            "branch commit at crawl time."
         )
         return "\n".join(lines)
