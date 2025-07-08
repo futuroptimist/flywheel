@@ -84,7 +84,7 @@ def test_list_workflows_non_200():
 def test_coverage_from_codecov_no_match():
     sess = make_session({"codecov": DummyResp(200, "<svg></svg>")})
     crawler = RepoCrawler([], session=sess)
-    assert crawler._coverage_from_codecov("demo/repo", "main") is None
+    assert crawler._project_coverage_from_codecov("demo/repo", "main") is None
 
 
 def test_has_ci_false():
@@ -119,13 +119,17 @@ def test_network_exceptions_handled():
     assert c._default_branch("demo/repo") == "main"
     assert c._latest_commit("demo/repo", "main") is None
     assert c._list_workflows("demo/repo", "main") == set()
-    assert c._coverage_from_codecov("demo/repo", "main") is None
+    assert c._project_coverage_from_codecov("demo/repo", "main") is None
 
 
 def test_parse_coverage_codecov_fallback(monkeypatch):
     crawler = RepoCrawler([])
 
-    monkeypatch.setattr(crawler, "_coverage_from_codecov", lambda *a: None)
+    monkeypatch.setattr(
+        crawler,
+        "_project_coverage_from_codecov",
+        lambda *a: None,
+    )
 
     readme = "![Coverage](https://codecov.io/gh/foo/bar/branch/main/badge.svg)"
     result = crawler._parse_coverage(readme, "foo/bar", "main")

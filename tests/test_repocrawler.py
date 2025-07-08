@@ -42,6 +42,8 @@ class DummySession:
         if path in self.files:
             return Resp(self.files[path], 200)
         if url.startswith("https://img.shields.io/codecov"):
+            if "flag=patch" in url:
+                return Resp("<svg><text>73%</text></svg>", 200)
             return Resp("<svg>95%</svg>", 200)
         return Resp("", 404)
 
@@ -126,6 +128,7 @@ def test_generate_summary_installer_variants(monkeypatch):
         name="demo/uv",
         branch="main",
         coverage="100%",
+        patch=None,
         has_license=True,
         has_ci=True,
         has_agents=False,
@@ -150,6 +153,7 @@ def test_summary_column_order(monkeypatch):
         name="demo/uv",
         branch="main",
         coverage="100%",
+        patch=None,
         has_license=True,
         has_ci=True,
         has_agents=True,
@@ -164,6 +168,13 @@ def test_summary_column_order(monkeypatch):
     lines = crawler.generate_summary().splitlines()
     header = lines[5]
     row = lines[7]
-    assert header.startswith("| Repo | Branch | Coverage | Installer |")
-    assert row.count("|") >= 11
+    expected = "| Repo | Branch | Coverage | Patch | Installer |"
+    assert header.startswith(expected)
+    assert row.count("|") >= 12
     assert "`abcdef0`" in row
+
+
+def test_patch_coverage_svg():
+    crawler = rc.RepoCrawler([], session=DummySession({}))
+    pct = crawler._patch_coverage_from_codecov("foo/bar", "main")
+    assert pct == "73%"
