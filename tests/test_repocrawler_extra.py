@@ -139,7 +139,7 @@ def test_parse_coverage_codecov_fallback(monkeypatch):
 def test_patch_coverage_not_found():
     """404 or bad response returns None."""
 
-    sess = make_session({"flag=patch": DummyResp(404)})
+    sess = make_session({"/totals/": DummyResp(404)})
     crawler = RepoCrawler([], session=sess)
     assert crawler._patch_coverage_from_codecov("foo/bar", "main") is None
 
@@ -151,7 +151,7 @@ def test_generate_summary_no_patch(monkeypatch):
         name="demo/repo",
         branch="main",
         coverage="100%",
-        patch=None,
+        patch_percent=None,
         has_license=True,
         has_ci=True,
         has_agents=False,
@@ -164,4 +164,4 @@ def test_generate_summary_no_patch(monkeypatch):
     crawler = RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
     table = crawler.generate_summary().splitlines()[7]
-    assert "| ❌ |" in table
+    assert "| — |" in table

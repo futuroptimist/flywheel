@@ -41,9 +41,10 @@ class DummySession:
         path = url.split("raw.githubusercontent.com/")[-1]
         if path in self.files:
             return Resp(self.files[path], 200)
+        if url.startswith("https://api.codecov.io/api/v2/github/"):
+            if "totals" in url or "compare" in url:
+                return Resp('{"totals": {"patch": {"coverage": 73}}}', 200)
         if url.startswith("https://img.shields.io/codecov"):
-            if "flag=patch" in url:
-                return Resp("<svg><text>73%</text></svg>", 200)
             return Resp("<svg>95%</svg>", 200)
         return Resp("", 404)
 
@@ -128,7 +129,7 @@ def test_generate_summary_installer_variants(monkeypatch):
         name="demo/uv",
         branch="main",
         coverage="100%",
-        patch=None,
+        patch_percent=None,
         has_license=True,
         has_ci=True,
         has_agents=False,
@@ -153,7 +154,7 @@ def test_summary_column_order(monkeypatch):
         name="demo/uv",
         branch="main",
         coverage="100%",
-        patch=None,
+        patch_percent=None,
         has_license=True,
         has_ci=True,
         has_agents=True,
@@ -177,7 +178,7 @@ def test_summary_column_order(monkeypatch):
 def test_patch_coverage_svg():
     crawler = rc.RepoCrawler([], session=DummySession({}))
     pct = crawler._patch_coverage_from_codecov("foo/bar", "main")
-    assert pct == "73%"
+    assert pct == 73.0
 
 
 def test_generate_summary_with_patch(monkeypatch):
@@ -187,7 +188,7 @@ def test_generate_summary_with_patch(monkeypatch):
         name="demo/repo",
         branch="main",
         coverage="100%",
-        patch="73%",
+        patch_percent=73.0,
         has_license=True,
         has_ci=True,
         has_agents=False,
@@ -200,5 +201,5 @@ def test_generate_summary_with_patch(monkeypatch):
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
     summary = crawler.generate_summary().splitlines()[7]
-    assert "✅ (73%)" in summary
+    assert "❌ (73%)" in summary
     assert "(73%)" in summary
