@@ -4,6 +4,9 @@ coverage:
       default:
         target: 80
         threshold: 0
+    patch:
+      default:
+        target: 100
 ignore: []
 comment:
   layout: "header, diff"

@@ -16,6 +16,7 @@ class RepoInfo:
     name: str
     branch: str
     coverage: Optional[str]
+    patch: Optional[str]
     has_license: bool
     has_ci: bool
     has_agents: bool
@@ -167,9 +168,31 @@ class RepoCrawler:
         return "pip"
 
     # ------------------------ Coverage helpers ------------------------ #
-    def _coverage_from_codecov(self, repo: str, branch: str) -> Optional[str]:
-        """Retrieve coverage percentage from the shields.io Codecov proxy."""
+    def _project_coverage_from_codecov(
+        self,
+        repo: str,
+        branch: str,
+    ) -> Optional[str]:
+        """Retrieve project coverage percentage via shields.io."""
         url = f"https://img.shields.io/codecov/c/github/{repo}/{branch}.svg"
+        try:
+            resp = self.session.get(url, timeout=10)
+        except RequestException:
+            return None
+        if resp.status_code == 200:
+            m = re.search(r">(\d{1,3})%<", resp.text)
+            if m:
+                return f"{m.group(1)}%"
+        return None
+
+    def _patch_coverage_from_codecov(
+        self,
+        repo: str,
+        branch: str,
+    ) -> Optional[str]:
+        """Retrieve patch coverage percentage via shields.io."""
+        base = "https://img.shields.io/codecov/c/github/"
+        url = base + f"{repo}/{branch}.svg?flag=patch"
         try:
             resp = self.session.get(url, timeout=10)
         except RequestException:
@@ -197,7 +220,7 @@ class RepoCrawler:
 
         # 2. README mentions Codecov → query shields proxy.
         if "codecov.io" in readme:
-            pct = self._coverage_from_codecov(repo, branch)
+            pct = self._project_coverage_from_codecov(repo, branch)
             if pct:
                 return pct
 
@@ -210,6 +233,7 @@ class RepoCrawler:
         branch = self._branch_overrides.get(repo) or self._default_branch(repo)
         readme = self._fetch_file(repo, "README.md", branch)
         coverage = self._parse_coverage(readme, repo, branch)
+        patch_cov = self._patch_coverage_from_codecov(repo, branch)
         workflow_files = self._list_workflows(repo, branch)
         workflows_txt = "".join(
             [
@@ -247,6 +271,7 @@ class RepoCrawler:
             name=repo,
             branch=branch,
             coverage=coverage,
+            patch=patch_cov,
             has_license=self._has_file(repo, "LICENSE", branch),
             has_ci=self._has_ci(workflow_files),
             has_agents=self._has_file(repo, "AGENTS.md", branch),
@@ -267,12 +292,12 @@ class RepoCrawler:
     def generate_summary(self) -> str:
         repos = self.crawl()
         header = (
-            "| Repo | Branch | Coverage | Installer | License | CI | "
+            "| Repo | Branch | Coverage | Patch | Installer | License | CI | "
             "AGENTS.md | Code of Conduct | Contributing | Pre-commit | "
             "Commit |"
         )
         sep = (
-            "| ---- | ------ | -------- | --------- | ------- | -- | "
+            "| ---- | ------ | -------- | ----- | --------- | ------- | -- | "
             "--------- | --------------- | ------------ | ---------- | "
             "------ |"
         )
@@ -292,6 +317,9 @@ class RepoCrawler:
             coverage = "❌"
             if info.coverage:
                 coverage = f"✅ ({info.coverage})"
+            patch = "❌"
+            if info.patch:
+                patch = f"✅ ({info.patch})"
             repo_link = f"[{info.name}](https://github.com/{info.name})"
             if idx == 0:
                 repo_link = f"**{repo_link}**"
@@ -302,19 +330,14 @@ class RepoCrawler:
                 inst = "🔶 partial"
             else:
                 inst = "pip"
-            row = "| {} | {} | {} | {} | {} | {} | {} | {} | ".format(
-                repo_link,
-                info.branch,
-                coverage,
-                inst,
-                "✅" if info.has_license else "❌",
-                "✅" if info.has_ci else "❌",
-                "✅" if info.has_agents else "❌",
-                "✅" if info.has_coc else "❌",
-            ) + "{} | {} | {} |".format(
-                "✅" if info.has_contributing else "❌",
-                "✅" if info.has_precommit else "❌",
-                commit,
+            row = (
+                f"| {repo_link} | {info.branch} | {coverage} | {patch} | "
+                f"{inst} | {'✅' if info.has_license else '❌'} | "
+                f"{'✅' if info.has_ci else '❌'} | "
+                f"{'✅' if info.has_agents else '❌'} | "
+                f"{'✅' if info.has_coc else '❌'} | "
+                f"{'✅' if info.has_contributing else '❌'} | "
+                f"{'✅' if info.has_precommit else '❌'} | {commit} |"
             )
             lines.append(row)
         lines.append("")
