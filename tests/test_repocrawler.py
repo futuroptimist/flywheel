@@ -143,3 +143,27 @@ def test_generate_summary_installer_variants(monkeypatch):
     summary = crawler.generate_summary()
     assert "🚀 uv" in summary
     assert "🔶 partial" in summary
+
+
+def test_summary_column_order(monkeypatch):
+    info = rc.RepoInfo(
+        name="demo/uv",
+        branch="main",
+        coverage="100%",
+        has_license=True,
+        has_ci=True,
+        has_agents=True,
+        has_coc=True,
+        has_contributing=True,
+        has_precommit=True,
+        installer="uv",
+        latest_commit="abcdef0",
+    )
+    crawler = rc.RepoCrawler([])
+    monkeypatch.setattr(crawler, "crawl", lambda: [info])
+    lines = crawler.generate_summary().splitlines()
+    header = lines[5]
+    row = lines[7]
+    assert header.startswith("| Repo | Branch | Coverage | Installer |")
+    assert row.count("|") >= 11
+    assert "`abcdef0`" in row
