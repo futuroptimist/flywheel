@@ -178,3 +178,27 @@ def test_patch_coverage_svg():
     crawler = rc.RepoCrawler([], session=DummySession({}))
     pct = crawler._patch_coverage_from_codecov("foo/bar", "main")
     assert pct == "73%"
+
+
+def test_generate_summary_with_patch(monkeypatch):
+    """Row should show ✅ and percentage when patch coverage is known."""
+
+    info = rc.RepoInfo(
+        name="demo/repo",
+        branch="main",
+        coverage="100%",
+        patch="73%",
+        has_license=True,
+        has_ci=True,
+        has_agents=False,
+        has_coc=True,
+        has_contributing=True,
+        has_precommit=True,
+        installer="uv",
+        latest_commit="abcdef1",
+    )
+    crawler = rc.RepoCrawler([])
+    monkeypatch.setattr(crawler, "crawl", lambda: [info])
+    summary = crawler.generate_summary().splitlines()[7]
+    assert "✅ (73%)" in summary
+    assert "(73%)" in summary
