@@ -1,7 +1,7 @@
 import pytest
 import requests
 
-from flywheel.repocrawler import RepoCrawler
+from flywheel.repocrawler import RepoCrawler, RepoInfo
 
 
 class DummyResp:
@@ -84,7 +84,7 @@ def test_list_workflows_non_200():
 def test_coverage_from_codecov_no_match():
     sess = make_session({"codecov": DummyResp(200, "<svg></svg>")})
     crawler = RepoCrawler([], session=sess)
-    assert crawler._coverage_from_codecov("demo/repo", "main") is None
+    assert crawler._project_coverage_from_codecov("demo/repo", "main") is None
 
 
 def test_has_ci_false():
@@ -119,14 +119,49 @@ def test_network_exceptions_handled():
     assert c._default_branch("demo/repo") == "main"
     assert c._latest_commit("demo/repo", "main") is None
     assert c._list_workflows("demo/repo", "main") == set()
-    assert c._coverage_from_codecov("demo/repo", "main") is None
+    assert c._project_coverage_from_codecov("demo/repo", "main") is None
 
 
 def test_parse_coverage_codecov_fallback(monkeypatch):
     crawler = RepoCrawler([])
 
-    monkeypatch.setattr(crawler, "_coverage_from_codecov", lambda *a: None)
+    monkeypatch.setattr(
+        crawler,
+        "_project_coverage_from_codecov",
+        lambda *a: None,
+    )
 
     readme = "![Coverage](https://codecov.io/gh/foo/bar/branch/main/badge.svg)"
     result = crawler._parse_coverage(readme, "foo/bar", "main")
     assert result == "unknown"
+
+
+def test_patch_coverage_not_found():
+    """404 or bad response returns None."""
+
+    sess = make_session({"flag=patch": DummyResp(404)})
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._patch_coverage_from_codecov("foo/bar", "main") is None
+
+
+def test_generate_summary_no_patch(monkeypatch):
+    """patch=None should render the ❌ symbol (covers else-branch)."""
+
+    info = RepoInfo(
+        name="demo/repo",
+        branch="main",
+        coverage="100%",
+        patch=None,
+        has_license=True,
+        has_ci=True,
+        has_agents=False,
+        has_coc=True,
+        has_contributing=True,
+        has_precommit=True,
+        installer="uv",
+        latest_commit="123cafe",
+    )
+    crawler = RepoCrawler([])
+    monkeypatch.setattr(crawler, "crawl", lambda: [info])
+    table = crawler.generate_summary().splitlines()[7]
+    assert "| ❌ |" in table
