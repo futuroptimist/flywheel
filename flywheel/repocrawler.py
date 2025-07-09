@@ -10,6 +10,9 @@ from typing import Iterable, List, Optional
 import requests
 from requests import RequestException
 
+PATCH_THRESHOLD = 90.0
+BADGE_PATCH = "https://img.shields.io/codecov/patch/github/{repo}/{branch}.svg"
+
 
 @dataclass
 class RepoInfo:
@@ -53,7 +56,18 @@ class RepoCrawler:
         "frontend/Dockerfile",
     )
 
-    PATCH_THRESHOLD = 90
+    def _badge_patch_percent(self, repo: str, branch: str) -> Optional[float]:
+        """Return patch coverage parsed from the public badge."""
+        url = BADGE_PATCH.format(repo=repo, branch=branch)
+        try:
+            resp = self.session.get(url, timeout=10)
+        except RequestException:
+            return None
+        if resp.status_code == 200:
+            m = re.search(r">(\d{1,3})%<", resp.text)
+            if m:
+                return float(m.group(1))
+        return None
 
     def __init__(
         self,
@@ -210,7 +224,7 @@ class RepoCrawler:
                 if pct is not None:
                     return float(pct)
         except RequestException:
-            return None
+            pass
         except Exception:
             pass
 
@@ -226,10 +240,11 @@ class RepoCrawler:
                 if pct is not None:
                     return float(pct)
         except RequestException:
-            return None
+            pass
         except Exception:
             pass
-        return None
+
+        return self._badge_patch_percent(repo, branch)
 
     def _parse_coverage(
         self, readme: Optional[str], repo: str, branch: str
@@ -348,7 +363,7 @@ class RepoCrawler:
             if info.patch_percent is None:
                 patch = "—"
             else:
-                passed = info.patch_percent >= self.PATCH_THRESHOLD
+                passed = info.patch_percent >= PATCH_THRESHOLD
                 emoji = "✅" if passed else "❌"
                 patch = f"{emoji} ({info.patch_percent:.0f}%)"
             repo_link = f"[{info.name}](https://github.com/{info.name})"
