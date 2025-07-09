@@ -18,4 +18,5 @@ repos:
           - pytest
           - linkchecker
           - requests
+          - responses
         pass_filenames: false
