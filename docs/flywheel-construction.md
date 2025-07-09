@@ -29,3 +29,7 @@ This general approach lets you experiment with different materials while
 keeping the overall design consistent.
 
 For a refresher on the math, see [Flywheel Physics](flywheel-physics.md).
+For a printable stand and shaft that use skateboard bearings, see
+[Flywheel Stand](flywheel-stand.md).
+
+For a removable clamp to attach the wheel, see [Flywheel Clamp Adapter](flywheel-adapter.md).
