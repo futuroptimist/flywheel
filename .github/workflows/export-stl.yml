@@ -1,0 +1,29 @@
+name: Export SCAD to STL
+on:
+  schedule:
+    - cron: '15 5 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install OpenSCAD
+        run: sudo apt-get update && sudo apt-get install -y openscad
+      - name: Generate STL files
+        run: |
+          ./scripts/build_stl.sh
+      - name: Commit STL models
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add stl/**/*.stl || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update STL models"
+            git push
+          fi
