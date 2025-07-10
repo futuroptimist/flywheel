@@ -1,0 +1,33 @@
+name: Export SCAD to OBJ
+
+on:
+  push:
+    paths:
+      - 'cad/**.scad'
+      - '.github/workflows/05-export-obj.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install OpenSCAD
+        run: sudo apt-get update && sudo apt-get install -y openscad
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install deps
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Export OBJ files
+        run: python scripts/export_all_objs.py
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: obj-files
+          path: cad/*.obj
+

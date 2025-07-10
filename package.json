@@ -5,10 +5,12 @@
     "lint": "echo skip",
     "format": "echo skip",
     "format:check": "echo skip",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:playwright": "playwright test"
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "@playwright/test": "^1.53.2"
   }
 }

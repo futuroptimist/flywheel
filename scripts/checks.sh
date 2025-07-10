@@ -12,6 +12,8 @@ if [ -f package.json ]; then
   npm run lint
   npm run format:check
   npm test -- --coverage
+  npx playwright install --with-deps chromium
+  npm run test:playwright
 fi
 
 # run tests
