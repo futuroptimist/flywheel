@@ -100,3 +100,6 @@ localhost
 dropdown
 IRL
 repurpose
+dirs
+gitshelves
+wove
