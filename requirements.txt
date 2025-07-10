@@ -1,2 +1,5 @@
 requests
 responses
+flask
+playwright
+pytest-playwright

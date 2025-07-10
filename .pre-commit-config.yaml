@@ -19,4 +19,7 @@ repos:
           - linkchecker
           - requests
           - responses
+          - flask
+          - playwright
+          - pytest-playwright
         pass_filenames: false

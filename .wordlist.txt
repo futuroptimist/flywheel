@@ -87,3 +87,7 @@ YOURTOKEN
 htmlcontent
 installable
 OpenSCAD
+LaTeX
+tfrac
+frac
+PETG
