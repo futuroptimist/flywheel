@@ -15,6 +15,7 @@ if [ -f package.json ]; then
 fi
 
 # run tests
+playwright install chromium > /dev/null
 pytest -q
 
 # docs checks
