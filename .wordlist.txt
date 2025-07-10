@@ -87,3 +87,16 @@ YOURTOKEN
 htmlcontent
 installable
 OpenSCAD
+LaTeX
+tfrac
+frac
+PETG
+explainer
+PLA
+STL
+retightened
+http
+localhost
+dropdown
+IRL
+repurpose

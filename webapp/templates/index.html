@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SCAD Viewer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <select id="model-select">
+    {% for m in models %}
+    <option value="{{ m }}">{{ m }}</option>
+    {% endfor %}
+  </select>
+  <canvas id="canvas"></canvas>
+  <div id="viewer"></div>
+  <script type="module" src="{{ url_for('static', filename='js/viewer.js') }}"></script>
+</body>
+</html>

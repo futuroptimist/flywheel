@@ -9,6 +9,7 @@ black --check . --exclude ".venv/"
 # js checks
 if [ -f package.json ]; then
   npm ci
+  npx playwright install --with-deps
   npm run lint
   npm run format:check
   npm test -- --coverage
