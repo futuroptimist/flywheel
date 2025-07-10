@@ -5,12 +5,12 @@ This table tracks which flywheel features each related repository has adopted.
 <!-- spellchecker: disable -->
 | Repo | Branch | Coverage | Patch | Installer | License | CI | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Commit |
 | ---- | ------ | -------- | ----- | --------- | ------- | -- | --------- | --------------- | ------------ | ---------- | ------ |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | ✅ (20%) | — | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `b053a1f` |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | ✅ (100%) | — | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `064c79a` |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | ✅ (100%) | — | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `35105a6` |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | ✅ (100%) | — | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `fc84a64` |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | ✅ (93%) | — | pip | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ | `715addf` |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | ✅ (78%) | — | pip | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | `b87f446` |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | ✅ (20%) | — | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `d68f830` |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | ✅ (100%) | — | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `3eb7ec7` |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | ✅ (100%) | — | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `35a85fe` |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | ✅ (100%) | — | 🔶 partial | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `d5dff5e` |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | ✅ (93%) | — | pip | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ | `7873d3e` |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | ✅ (78%) | — | pip | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | `72a2032` |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | ✅ (100%) | — | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `25cd2c6` |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | ✅ (100%) | — | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `64d265f` |
 
