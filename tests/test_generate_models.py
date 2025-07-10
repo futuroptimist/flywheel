@@ -1,5 +1,3 @@
-import os
-import shutil
 import importlib
 from pathlib import Path
 
@@ -7,37 +5,47 @@ import pytest
 
 from webapp import app as webapp_module
 
-MODEL_DIR = Path(__file__).resolve().parent.parent / 'webapp' / 'static' / 'models'
-CAD_DIR = Path(__file__).resolve().parent.parent / 'cad'
+REPO_ROOT = Path(__file__).resolve().parent.parent
+MODEL_DIR = REPO_ROOT / "webapp" / "static" / "models"
+CAD_DIR = REPO_ROOT / "cad"
 
 
 def openscad_available():
     from shutil import which
-    return which('openscad') is not None
+
+    return which("openscad") is not None
 
 
-@pytest.mark.skipif(not openscad_available(), reason='OpenSCAD CLI not available')
+SKIP_REASON = "OpenSCAD CLI not available"
+
+
+@pytest.mark.skipif(
+    not openscad_available(),
+    reason=SKIP_REASON,
+)
 def test_scad_to_obj_conversion(tmp_path, monkeypatch):
     """ensure_obj_models should produce an OBJ for every SCAD in cad/."""
-    # Work in a temp copy of the repo directories so we don't modify source tree
-    tmp_models = tmp_path / 'models'
+    # Work in a temp copy so we don't modify the source tree
+    tmp_models = tmp_path / "models"
     tmp_models.mkdir()
 
-    monkeypatch.setattr(webapp_module, 'MODEL_DIR', tmp_models)
+    monkeypatch.setattr(webapp_module, "MODEL_DIR", tmp_models)
     # point to real CAD_DIR
-    monkeypatch.setattr(webapp_module, 'SCAD_DIR', CAD_DIR)
+    monkeypatch.setattr(webapp_module, "SCAD_DIR", CAD_DIR)
 
     # Reload to apply monkeypatched globals inside ensure_obj_models import
     importlib.reload(webapp_module)
 
     webapp_module.ensure_obj_models()
 
-    scad_files = [p.stem for p in CAD_DIR.glob('*.scad')]
-    obj_files = [p.stem for p in tmp_models.glob('*.obj')]
+    scad_files = [p.stem for p in CAD_DIR.glob("*.scad")]
+    obj_files = [p.stem for p in tmp_models.glob("*.obj")]
 
     if not set(scad_files).issubset(obj_files):
-        pytest.skip('OBJ conversion failed for some SCAD files in CI environment')
+        pytest.skip(
+            "OBJ conversion failed for some SCAD files in CI environment",
+        )
 
     # Each generated OBJ should be non-empty
-    for obj in tmp_models.glob('*.obj'):
-        assert obj.stat().st_size > 0, f"{obj.name} is empty" 
+    for obj in tmp_models.glob("*.obj"):
+        assert obj.stat().st_size > 0, f"{obj.name} is empty"
