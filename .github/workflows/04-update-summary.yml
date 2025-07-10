@@ -21,7 +21,7 @@ jobs:
           uv pip install --system pre-commit
       - name: Generate summary
         run: |
-          python -m flywheel crawl futuroptimist/flywheel futuroptimist/axel futuroptimist/gabriel futuroptimist/futuroptimist futuroptimist/token.place democratizedspace/dspace@v3 futuroptimist/f2clipboard futuroptimist/sigma --output docs/repo-feature-summary.md
+          python -m flywheel crawl futuroptimist/flywheel futuroptimist/axel futuroptimist/gabriel futuroptimist/futuroptimist futuroptimist/token.place democratizedspace/dspace@v3 futuroptimist/f2clipboard futuroptimist/sigma futuroptimist/wove --output docs/repo-feature-summary.md
       - name: Run pre-commit
         run: |
           pre-commit run --files docs/repo-feature-summary.md || true
