@@ -160,8 +160,11 @@ def test_generate_summary_no_patch(monkeypatch):
         has_precommit=True,
         installer="uv",
         latest_commit="123cafe",
+        workflow_count=1,
     )
     crawler = RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
-    table = crawler.generate_summary().splitlines()[7]
-    assert "| — |" in table
+    lines = crawler.generate_summary().splitlines()
+    idx = lines.index("| Repo | Coverage | Patch | Installer |")
+    row = lines[idx + 2]
+    assert "| — |" in row

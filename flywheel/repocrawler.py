@@ -28,6 +28,7 @@ class RepoInfo:
     has_precommit: bool
     installer: str
     latest_commit: Optional[str]
+    workflow_count: int
 
 
 class RepoCrawler:
@@ -278,6 +279,7 @@ class RepoCrawler:
         coverage = self._parse_coverage(readme, repo, branch)
         patch_cov = self._patch_coverage_from_codecov(repo, branch)
         workflow_files = self._list_workflows(repo, branch)
+        workflow_count = len(workflow_files)
         workflows_txt = "".join(
             [
                 self._fetch_file(
@@ -327,6 +329,7 @@ class RepoCrawler:
             ),
             installer=installer,
             latest_commit=latest_commit,
+            workflow_count=workflow_count,
         )
 
     def crawl(self) -> List[RepoInfo]:
@@ -334,16 +337,6 @@ class RepoCrawler:
 
     def generate_summary(self) -> str:
         repos = self.crawl()
-        header = (
-            "| Repo | Branch | Coverage | Patch | Installer | License | CI | "
-            "AGENTS.md | Code of Conduct | Contributing | Pre-commit | "
-            "Commit |"
-        )
-        sep = (
-            "| ---- | ------ | -------- | ----- | --------- | ------- | -- | "
-            "--------- | --------------- | ------------ | ---------- | "
-            "------ |"
-        )
         lines = [
             "# Repo Feature Summary",
             "",
@@ -353,9 +346,27 @@ class RepoCrawler:
             ),
             "",
             "<!-- spellchecker: disable -->",
-            header,
-            sep,
         ]
+
+        basics_header = "| Repo | Branch | Commit |"
+        basics_sep = "| ---- | ------ | ------ |"
+        lines.extend(["## Basics", basics_header, basics_sep])
+        basics_rows = []
+
+        coverage_header = "| Repo | Coverage | Patch | Installer |"
+        coverage_sep = "| ---- | -------- | ----- | --------- |"
+        coverage_rows = []
+
+        policy_header = (
+            "| Repo | License | CI | Workflows | AGENTS.md |"
+            " Code of Conduct | Contributing | Pre-commit |"
+        )
+        policy_sep = (
+            "| ---- | ------- | -- | --------- | --------- |"
+            " --------------- | ------------ | ---------- |"
+        )
+        policy_rows = []
+
         for idx, info in enumerate(repos):
             coverage = "❌"
             if info.coverage:
@@ -376,16 +387,46 @@ class RepoCrawler:
                 inst = "🔶 partial"
             else:
                 inst = "pip"
-            row = (
-                f"| {repo_link} | {info.branch} | {coverage} | {patch} | "
-                f"{inst} | {'✅' if info.has_license else '❌'} | "
-                f"{'✅' if info.has_ci else '❌'} | "
-                f"{'✅' if info.has_agents else '❌'} | "
-                f"{'✅' if info.has_coc else '❌'} | "
-                f"{'✅' if info.has_contributing else '❌'} | "
-                f"{'✅' if info.has_precommit else '❌'} | {commit} |"
+
+            basics_rows.append(f"| {repo_link} | {info.branch} | {commit} |")
+            coverage_rows.append(
+                "| {} | {} | {} | {} |".format(
+                    repo_link,
+                    coverage,
+                    patch,
+                    inst,
+                )
             )
-            lines.append(row)
+            policy_rows.append(
+                (
+                    "| {repo} | {lic} | {ci} | {count} | {agents} | {coc} | "
+                    "{cont} | {pre} |"
+                ).format(
+                    repo=repo_link,
+                    lic="✅" if info.has_license else "❌",
+                    ci="✅" if info.has_ci else "❌",
+                    count=info.workflow_count,
+                    agents="✅" if info.has_agents else "❌",
+                    coc="✅" if info.has_coc else "❌",
+                    cont="✅" if info.has_contributing else "❌",
+                    pre="✅" if info.has_precommit else "❌",
+                )
+            )
+
+        lines.extend(basics_rows)
+        lines.extend(
+            [
+                "",
+                "## Coverage & Installer",
+                coverage_header,
+                coverage_sep,
+            ]
+        )
+        lines.extend(coverage_rows)
+        lines.extend(
+            ["", "## Policies & Automation", policy_header, policy_sep]
+        )  # noqa: E501
+        lines.extend(policy_rows)
         lines.append("")
         lines.append(
             "Legend: ✅ indicates the repo has adopted that feature from "

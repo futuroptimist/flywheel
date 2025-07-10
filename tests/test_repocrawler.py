@@ -138,6 +138,7 @@ def test_generate_summary_installer_variants(monkeypatch):
         has_precommit=True,
         installer="uv",
         latest_commit="cafec0d",
+        workflow_count=1,
     )
     info_partial = info_uv.__class__(
         **{**info_uv.__dict__, "name": "demo/partial", "installer": "partial"}
@@ -163,15 +164,17 @@ def test_summary_column_order(monkeypatch):
         has_precommit=True,
         installer="uv",
         latest_commit="abcdef0",
+        workflow_count=1,
     )
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
-    lines = crawler.generate_summary().splitlines()
-    header = lines[5]
-    row = lines[7]
-    expected = "| Repo | Branch | Coverage | Patch | Installer |"
-    assert header.startswith(expected)
-    assert row.count("|") >= 12
+    summary = crawler.generate_summary()
+    assert "| Repo | Branch | Commit |" in summary
+    assert "| Repo | Coverage | Patch | Installer |" in summary
+    assert "| Repo | License | CI | Workflows |" in summary
+    lines = summary.splitlines()
+    idx = lines.index("| Repo | Branch | Commit |")
+    row = lines[idx + 2]
     assert "`abcdef0`" in row
 
 
@@ -197,9 +200,12 @@ def test_generate_summary_with_patch(monkeypatch):
         has_precommit=True,
         installer="uv",
         latest_commit="abcdef1",
+        workflow_count=1,
     )
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
-    summary = crawler.generate_summary().splitlines()[7]
-    assert "❌ (73%)" in summary
-    assert "(73%)" in summary
+    lines = crawler.generate_summary().splitlines()
+    idx = lines.index("| Repo | Coverage | Patch | Installer |")
+    row = lines[idx + 2]
+    assert "❌ (73%)" in row
+    assert "(73%)" in row
