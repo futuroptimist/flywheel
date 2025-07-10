@@ -16,16 +16,13 @@ def openscad_available():
     return which("openscad") is not None
 
 
-SKIP_REASON = "OpenSCAD CLI not available"
-
-
 @pytest.mark.skipif(
     not openscad_available(),
-    reason=SKIP_REASON,
+    reason="OpenSCAD CLI not available",
 )
 def test_scad_to_obj_conversion(tmp_path, monkeypatch):
     """ensure_obj_models should produce an OBJ for every SCAD in cad/."""
-    # Work in a temp copy so we don't modify the source tree
+    # Work in a temp copy so source tree isn't modified
     tmp_models = tmp_path / "models"
     tmp_models.mkdir()
 

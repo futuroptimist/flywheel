@@ -20,8 +20,8 @@ test('model dropdown and canvas are visible', async ({ page }) => {
   const dropdown = page.locator('#model-select');
   await expect(dropdown).toBeVisible();
 
-  // Verify canvas visibility
-  await expect(page.locator('canvas')).toBeVisible();
+  // Verify canvas visibility - use viewer canvas to avoid ambiguity
+  await expect(page.locator('#viewer canvas')).toBeVisible();
 });
 
 test('no failed JS resource requests', async ({ page }) => {

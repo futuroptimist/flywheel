@@ -34,8 +34,8 @@ def ensure_obj_models():
 
                 if shutil.which("openscad") is None:
                     print(
-                        "[WARN] OpenSCAD executable not found "
-                        "– cannot export SCAD models."
+                        "[WARN] OpenSCAD executable not found – cannot export "
+                        "SCAD models."
                     )
                     break
 
@@ -43,11 +43,10 @@ def ensure_obj_models():
                     stl_path = Path(tmpdir) / f"{scad_path.stem}.stl"
 
                     # Export SCAD -> STL (STL is always supported)
-                    msg = (
+                    print(
                         f"[INFO] Exporting {scad_path.name} -> "
                         f"{stl_path.name} (intermediate STL)…"
                     )
-                    print(msg)
                     subprocess.run(
                         [
                             "openscad",
@@ -59,7 +58,10 @@ def ensure_obj_models():
                     )
 
                     # Convert STL -> OBJ using trimesh
-                    msg = f"[INFO] Converting {stl_path.name} -> {obj_path.name} …"  # noqa: E501
+                    msg = "[INFO] Converting %s -> %s …" % (
+                        stl_path.name,
+                        obj_path.name,
+                    )
                     print(msg)
                     mesh = trimesh.load_mesh(stl_path, file_type="stl")
                     mesh.export(obj_path, file_type="obj")

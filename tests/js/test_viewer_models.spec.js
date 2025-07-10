@@ -30,4 +30,4 @@ test('selecting each model triggers OBJ request', async ({ page }) => {
     const value = await page.$eval('#model-select', el => el.value);
     expect(value).toBe(name);
   }
-}); 
+});
