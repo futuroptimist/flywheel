@@ -5,9 +5,9 @@ import pytest
 
 from webapp import app as webapp_module
 
-ROOT = Path(__file__).resolve().parent.parent
-MODEL_DIR = ROOT / "webapp" / "static" / "models"
-CAD_DIR = ROOT / "cad"
+REPO_ROOT = Path(__file__).resolve().parent.parent
+MODEL_DIR = REPO_ROOT / "webapp" / "static" / "models"
+CAD_DIR = REPO_ROOT / "cad"
 
 
 def openscad_available():
