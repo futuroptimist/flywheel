@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SCAD Viewer</title>
+  <style>
+    body { margin: 0; }
+    canvas { width: 100%; height: 100%; display: block; }
+  </style>
+</head>
+<body>
+<select id="model-select" data-models='{{ models | tojson }}'></select>
+<script type="module" src="/static/viewer.js"></script>
+</body>
+</html>
