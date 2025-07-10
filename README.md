@@ -40,6 +40,9 @@
 - Sigma integration in `docs/sigma-integration.md`
 - Flywheel construction guide in `docs/flywheel-construction.md` with CAD files in `cad/`
   including `stand.scad`, `shaft.scad`, and `adapter.scad`. Assembly details live in `docs/flywheel-stand.md`, clamp instructions in `docs/flywheel-adapter.md`, and physics in `docs/flywheel-physics.md`
+- 3D preview web app in `web/` uses Flask and Three.js to display OBJ files generated from these SCAD sources via GitHub Actions
+  See `docs/web-preview.md` for running the demo locally and
+  `docs/web-preview-tests.md` for automated UI checks.
 
 ## Getting Started
 
