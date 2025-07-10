@@ -33,6 +33,7 @@ jobs:
       - if: matrix.language == 'javascript' && hashFiles('package.json') != ''
         run: |
           npm install --no-audit --no-fund
+          npx playwright install --with-deps
           npm test -- --coverage --coverageReporters=lcov
 
       # --- Upload coverage only if the matching report exists ---

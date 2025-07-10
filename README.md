@@ -38,6 +38,7 @@
 - Futuroptimist integration in `docs/futuroptimist-integration.md`
 - Gabriel integration in `docs/gabriel-integration.md`
 - Sigma integration in `docs/sigma-integration.md`
+- Web viewer instructions in `docs/web-viewer.md`
 - Flywheel construction guide in `docs/flywheel-construction.md` with CAD files in `cad/`
   including `stand.scad`, `shaft.scad`, and `adapter.scad`. Assembly details live in `docs/flywheel-stand.md`, clamp instructions in `docs/flywheel-adapter.md`, and physics in `docs/flywheel-physics.md`
 
