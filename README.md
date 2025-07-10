@@ -41,6 +41,8 @@
 - Flywheel construction guide in `docs/flywheel-construction.md` with CAD files in `cad/`
   including `stand.scad`, `shaft.scad`, and `adapter.scad`. Assembly details live in `docs/flywheel-stand.md`, clamp instructions in `docs/flywheel-adapter.md`, and physics in `docs/flywheel-physics.md`
 
+- New web-based viewer documented in `docs/scad-viewer.md`
+
 ## Getting Started
 
 ```bash

@@ -18,5 +18,8 @@ repos:
           - pytest
           - linkchecker
           - requests
+          - Flask
+          - meshio
+          - playwright
           - responses
         pass_filenames: false
