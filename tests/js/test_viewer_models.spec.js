@@ -30,4 +30,4 @@ test('selecting each model triggers OBJ request', async ({ page }) => {
     ]);
     expect(response.ok()).toBeTruthy();
   }
-}); 
+});

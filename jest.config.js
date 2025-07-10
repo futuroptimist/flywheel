@@ -1,3 +1,4 @@
 export default {
-  testPathIgnorePatterns: ['/node_modules/', '/tests/js/test_viewer.spec.js']
+  // Ignore Playwright tests so Jest only runs its own suite
+  testPathIgnorePatterns: ['/node_modules/', '/tests/js/']
 };

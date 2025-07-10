@@ -22,29 +22,49 @@ def ensure_obj_models():
     for scad_path in SCAD_DIR.glob("*.scad"):
         obj_path = MODEL_DIR / f"{scad_path.stem}.obj"
         try:
-            if not obj_path.exists() or scad_path.stat().st_mtime > obj_path.stat().st_mtime:
-                import subprocess, shutil, tempfile, trimesh
+            if (
+                not obj_path.exists()
+                or scad_path.stat().st_mtime > obj_path.stat().st_mtime
+            ):
+                import shutil
+                import subprocess
+                import tempfile
+
+                import trimesh
 
                 if shutil.which("openscad") is None:
-                    print("[WARN] OpenSCAD executable not found – cannot export SCAD models.")
+                    print(
+                        "[WARN] OpenSCAD executable not found – cannot export "
+                        "SCAD models."
+                    )
                     break
 
                 with tempfile.TemporaryDirectory() as tmpdir:
                     stl_path = Path(tmpdir) / f"{scad_path.stem}.stl"
 
                     # Export SCAD -> STL (STL is always supported)
-                    print(f"[INFO] Exporting {scad_path.name} -> {stl_path.name} (intermediate STL)…")
-                    subprocess.run([
-                        "openscad",
-                        "-o",
-                        str(stl_path),
-                        str(scad_path),
-                    ], check=True)
+                    print(
+                        f"[INFO] Exporting {scad_path.name} -> "
+                        f"{stl_path.name} (intermediate STL)…"
+                    )
+                    subprocess.run(
+                        [
+                            "openscad",
+                            "-o",
+                            str(stl_path),
+                            str(scad_path),
+                        ],
+                        check=True,
+                    )
 
                     # Convert STL -> OBJ using trimesh
-                    print(f"[INFO] Converting {stl_path.name} -> {obj_path.name} …")
-                    mesh = trimesh.load_mesh(stl_path, file_type='stl')
-                    mesh.export(obj_path, file_type='obj')
+                    msg = "[INFO] Converting %s -> %s …" % (
+                        stl_path.name,
+                        obj_path.name,
+                    )
+                    print(msg)
+                    mesh = trimesh.load_mesh(stl_path, file_type="stl")
+                    mesh.export(obj_path, file_type="obj")
         except Exception as exc:
             print(f"[ERROR] Failed to export {scad_path.name}: {exc}")
 
