@@ -18,5 +18,6 @@ repos:
           - pytest
           - linkchecker
           - requests
+          - Flask
           - responses
         pass_filenames: false

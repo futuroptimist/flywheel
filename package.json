@@ -5,10 +5,17 @@
     "lint": "echo skip",
     "format": "echo skip",
     "format:check": "echo skip",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
+    "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "playwright": "playwright test",
+    "test": "npm run jest -- && npm run playwright",
+    "playwright:install": "playwright install"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
-    "cross-env": "^7.0.3"
+    "@playwright/test": "^1.43.1",
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "three": "^0.178.0"
   }
 }

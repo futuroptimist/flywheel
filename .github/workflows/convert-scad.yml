@@ -1,0 +1,34 @@
+name: Export SCAD to OBJ
+on:
+  push:
+    paths:
+      - 'cad/*.scad'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install OpenSCAD
+        run: sudo apt-get update && sudo apt-get install -y openscad
+      - name: Convert SCAD files
+        run: |
+          mkdir -p webapp/static/models
+          for f in cad/*.scad; do
+            base=$(basename "$f" .scad)
+            openscad "$f" -o "webapp/static/models/$base.obj"
+          done
+      - name: Commit OBJ models
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add webapp/static/models/*.obj
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update OBJ models"
+            git push
+          fi

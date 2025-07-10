@@ -17,3 +17,5 @@ dist/
 coverage/
 dictionary.dic
 .venv/
+playwright-report/
+test-results/
