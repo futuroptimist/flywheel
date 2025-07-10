@@ -6,7 +6,7 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit |
 | ---- | ------ | ------ |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `5b7ba57` |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `6698ae0` |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `3eb7ec7` |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `2da14d3` |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `2f860ed` |
@@ -32,7 +32,7 @@ This table tracks which flywheel features each related repository has adopted.
 ## Policies & Automation
 | Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit |
 | ---- | ------- | -- | --------- | --------- | --------------- | ------------ | ---------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ | ✅ | 7 | ✅ | ✅ | ✅ | ✅ |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ | ✅ | 8 | ✅ | ✅ | ✅ | ✅ |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ | ✅ | 1 | ✅ | ✅ | ✅ | ✅ |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ | ✅ | 2 | ✅ | ✅ | ✅ | ✅ |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ |
