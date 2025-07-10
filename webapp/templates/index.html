@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <title>SCAD Viewer</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.178.0/build/three.module.js"
+      }
+    }
+  </script>
 </head>
 <body>
   <select id="model-select">

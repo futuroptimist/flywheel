@@ -1,5 +1,5 @@
-import * as THREE from './three.module.min.js';
-import { OBJLoader } from './OBJLoader.js';
+import * as THREE from 'three';
+import { OBJLoader } from 'https://unpkg.com/three@0.178.0/examples/jsm/loaders/OBJLoader.js';
 
 const container = document.getElementById('viewer');
 const renderer = new THREE.WebGLRenderer({ antialias: true });

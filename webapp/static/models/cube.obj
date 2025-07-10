@@ -1,0 +1,23 @@
+# Simple cube model (units: 1)
+# 8 vertices
+v -1 -1 -1
+v 1 -1 -1
+v 1 1 -1
+v -1 1 -1
+v -1 -1 1
+v 1 -1 1
+v 1 1 1
+v -1 1 1
+# 12 triangular faces
+f 1 2 3
+f 1 3 4
+f 5 6 7
+f 5 7 8
+f 1 2 6
+f 1 6 5
+f 2 3 7
+f 2 7 6
+f 3 4 8
+f 3 8 7
+f 4 1 5
+f 4 5 8 

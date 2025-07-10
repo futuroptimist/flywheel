@@ -1,3 +1,4 @@
 requests
 responses
 Flask
+trimesh
