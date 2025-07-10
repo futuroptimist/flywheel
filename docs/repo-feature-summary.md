@@ -13,5 +13,6 @@ This table tracks which flywheel features each related repository has adopted.
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | ✅ (78%) | — | pip | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | `72a2032` |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | ✅ (100%) | — | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `25cd2c6` |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | ✅ (100%) | — | 🚀 uv | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | `64d265f` |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | ❌ | — | pip | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | n/a |
 
 Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip. Coverage percentages are parsed from their badges where available. Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses. The commit column shows the short SHA of the latest default branch commit at crawl time.
