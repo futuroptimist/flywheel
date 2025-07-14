@@ -17,7 +17,7 @@ def test_main_audit(capsys, tmp_path):
     repo.mkdir()
     fm.main(["audit", str(repo)])
     out = capsys.readouterr().out
-    assert "TODO" in out
+    assert "Missing dev tooling files" in out
 
 
 def test_main_crawl(monkeypatch, tmp_path):
