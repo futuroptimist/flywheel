@@ -19,7 +19,7 @@ This table tracks which flywheel features each related repository has adopted.
 ## Coverage & Installer
 | Repo | Coverage | Patch | Installer |
 | ---- | -------- | ----- | --------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ (20%) | — | 🔶 partial |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ (20%) | — | 🚀 uv |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ (100%) | — | 🚀 uv |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ (100%) | — | 🚀 uv |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ (100%) | — | 🔶 partial |
