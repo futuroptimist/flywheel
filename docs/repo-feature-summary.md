@@ -6,11 +6,11 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit |
 | ---- | ------ | ------ |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `6698ae0` |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `55e79dc` |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `3eb7ec7` |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `2da14d3` |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `2f860ed` |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `7873d3e` |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `5f4452a` |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `72a2032` |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `25cd2c6` |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `64d265f` |
@@ -23,7 +23,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ (100%) | — | 🚀 uv |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ (100%) | — | 🚀 uv |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ (100%) | — | 🔶 partial |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ (93%) | — | pip |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ (100%) | — | pip |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✅ (78%) | — | pip |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ✅ (100%) | — | 🚀 uv |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ (100%) | — | 🚀 uv |
