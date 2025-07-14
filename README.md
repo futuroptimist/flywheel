@@ -20,6 +20,7 @@
 - DEPENDABOT for automated dependency updates
 - CodeQL workflow for security scanning
 - Style guides for Python and JavaScript
+- Detailed best practice explanations in `docs/best_practices_catalog.md`
 - Fast Python installs powered by [uv](https://github.com/astral-sh/uv)
 - Example code and templates
 - Python CLI with subcommands `init`, `update`, `audit`, `prompt`, and `crawl` that prompts interactively unless `--yes` is used
