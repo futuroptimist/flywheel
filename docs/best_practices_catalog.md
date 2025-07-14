@@ -86,4 +86,3 @@ Each section covers three points:
 - Keep links to other docs (README, AGENTS, style guides) current.
 - LLM agents should scan for config changes on each push and propose updates here.
 - Humans can open small PRs to clarify steps or fix typos.
-
