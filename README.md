@@ -95,6 +95,14 @@ Pass `--token YOURTOKEN` or set `GITHUB_TOKEN` to avoid API rate limits.
 The table in `docs/repo-feature-summary.md` is automatically refreshed after each commit via GitHub Actions.
 The summary now records the short SHA of the latest commit and the name of each repository's default branch.
 
+### Auditing dev tooling
+
+Verify that a repository contains the expected CI workflows and config files:
+
+```bash
+flywheel audit path/to/repo
+```
+
 ## Values
 
 We aim for a positive-sum, empathetic community. The flywheel embraces regenerative and open-source principles to keep energy cycling back into every project.

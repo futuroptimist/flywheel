@@ -41,6 +41,19 @@ def inject_dev(target: Path) -> None:
         copy_file(ROOT / rel, target / rel)
 
 
+def audit_repo(target: Path) -> None:
+    missing = []
+    for rel in WORKFLOW_FILES + OTHER_FILES:
+        if not (target / rel).exists():
+            missing.append(rel)
+    if missing:
+        print("Missing dev tooling files:")
+        for rel in missing:
+            print(f" - {rel}")
+    else:
+        print("All dev tooling files present.")
+
+
 def prompt_bool(question: str, default: bool) -> bool:
     suffix = "Y/n" if default else "y/N"
     resp = input(f"{question} [{suffix}]: ").strip().lower()
@@ -129,7 +142,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_audit = sub.add_parser("audit", help="check for missing tooling")
     p_audit.add_argument("path", help="repository path")
-    p_audit.set_defaults(func=lambda a: print("TODO: audit not implemented"))
+    p_audit.set_defaults(func=lambda a: audit_repo(Path(a.path)))
 
     p_prompt = sub.add_parser("prompt", help="generate Codex prompt")
     p_prompt.add_argument(
