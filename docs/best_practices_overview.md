@@ -2,6 +2,8 @@
 
 This documentation outlines recommended workflows, CI setup, and guidelines to keep your project healthy.
 
+For a deeper explanation of each practice, see [best_practices_catalog.md](best_practices_catalog.md).
+
 ## Energy Across Dimensions
 
 - **Code conventions** ensure consistent style. See the style guides in `docs/styleguides`.
