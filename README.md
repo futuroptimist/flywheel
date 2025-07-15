@@ -104,6 +104,16 @@ Verify that a repository contains the expected CI workflows and config files:
 flywheel audit path/to/repo
 ```
 
+### Viewing the 3D flywheel
+
+Run the bundled Flask app to explore the CAD models:
+
+```bash
+python webapp/app.py
+```
+
+Visit `http://localhost:42165` and watch the wheel spin in your browser.
+
 ## Values
 
 We aim for a positive-sum, empathetic community. The flywheel embraces regenerative and open-source principles to keep energy cycling back into every project.
