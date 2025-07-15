@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
         with:
@@ -22,12 +24,13 @@ jobs:
             openscad "$f" -o "webapp/static/models/$base.obj"
           done
       - name: Commit OBJ models
+        if: github.ref == 'refs/heads/main'
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add webapp/static/models/*.obj
           if git diff --cached --quiet; then
-            echo "No changes to commit"
+            echo "No OBJ changes to commit"
           else
             git commit -m "chore: update OBJ models"
             git push

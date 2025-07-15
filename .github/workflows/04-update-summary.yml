@@ -5,7 +5,6 @@ jobs:
   crawl:
     permissions:
       contents: write
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -29,11 +28,8 @@ jobs:
           pre-commit run --files docs/repo-feature-summary.md || true
           git add docs/repo-feature-summary.md
           pre-commit run --files docs/repo-feature-summary.md
-      - name: Set up PAT
-        run: git remote set-url origin https://$TOKEN@github.com/futuroptimist/flywheel.git
-        env:
-          TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - name: Commit changes
+        if: github.ref == 'refs/heads/main'
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
@@ -44,3 +40,5 @@ jobs:
             git commit -m "chore: update repo feature summary"
             git push
           fi
+      - name: Publish summary
+        run: cat docs/repo-feature-summary.md >> "$GITHUB_STEP_SUMMARY"
