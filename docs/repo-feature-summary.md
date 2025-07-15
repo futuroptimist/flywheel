@@ -8,7 +8,7 @@ This table tracks which flywheel features each related repository has adopted.
 | ---- | ------ | ------ |
 | **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `84f8204` |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `3eb7ec7` |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `2da14d3` |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `f794ae6` |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `2f860ed` |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `bda1c4a` |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `8ba17a3` |
