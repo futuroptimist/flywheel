@@ -104,6 +104,26 @@ Verify that a repository contains the expected CI workflows and config files:
 flywheel audit path/to/repo
 ```
 
+### Viewing the 3D flywheel
+
+Run the bundled Flask app to explore the CAD models:
+
+```bash
+python webapp/app.py
+```
+
+Visit `http://localhost:42165` and watch the wheel spin in your browser.
+
+### Verifying CAD fit
+
+Run a quick check to ensure the STLs match their SCAD sources:
+
+```bash
+python -m flywheel.fit
+```
+
+If no assertions fail, the printed message confirms the parts align correctly.
+
 ## Values
 
 We aim for a positive-sum, empathetic community. The flywheel embraces regenerative and open-source principles to keep energy cycling back into every project.
