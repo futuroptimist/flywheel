@@ -40,7 +40,8 @@
 - Gabriel integration in `docs/gabriel-integration.md`
 - Sigma integration in `docs/sigma-integration.md`
 - Web viewer instructions in `docs/web-viewer.md`
-- Nightly STL exports live in `stl/` for quick preview on GitHub
+- CI troubleshooting tips in `docs/ci-guide.md`
+- Nightly STL exports are committed back to `stl/` after each run
 - Flywheel construction guide in `docs/flywheel-construction.md` with CAD files in `cad/`
   including `stand.scad`, `shaft.scad`, and `adapter.scad`. Assembly details live in `docs/flywheel-stand.md`, clamp instructions in `docs/flywheel-adapter.md`, and physics in `docs/flywheel-physics.md`
 
@@ -93,8 +94,8 @@ flywheel crawl futuroptimist/flywheel futuroptimist/axel --output docs/repo-feat
 ```
 Append `@branch` to any repo to crawl a non-default branch, e.g. `owner/name@dev`.
 Pass `--token YOURTOKEN` or set `GITHUB_TOKEN` to avoid API rate limits.
-The table in `docs/repo-feature-summary.md` is automatically refreshed after each commit via GitHub Actions.
-The summary now records the short SHA of the latest commit and the name of each repository's default branch.
+The `Update Repo Feature Summary` workflow commits `docs/repo-feature-summary.md` to `main` after each merge.
+The summary records the short SHA of the latest commit and the name of each repository's default branch.
 
 ### Auditing dev tooling
 
