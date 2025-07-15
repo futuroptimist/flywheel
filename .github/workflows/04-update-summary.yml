@@ -29,6 +29,10 @@ jobs:
           pre-commit run --files docs/repo-feature-summary.md || true
           git add docs/repo-feature-summary.md
           pre-commit run --files docs/repo-feature-summary.md
+      - name: Set up PAT
+        run: git remote set-url origin https://$TOKEN@github.com/futuroptimist/flywheel.git
+        env:
+          TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - name: Commit changes
         run: |
           git config user.name github-actions

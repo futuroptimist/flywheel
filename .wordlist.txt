@@ -94,7 +94,6 @@ PETG
 explainer
 PLA
 STL
-STLs
 retightened
 http
 localhost
@@ -104,4 +103,5 @@ repurpose
 config
 PRs
 changelogs
+STLs
 sugarkube
