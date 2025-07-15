@@ -20,4 +20,5 @@ repos:
           - requests
           - Flask
           - responses
+          - trimesh
         pass_filenames: false
