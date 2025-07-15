@@ -47,6 +47,11 @@ def test_patch_coverage_token_and_errors(monkeypatch):
 
     sess = Sess()
     crawler = RepoCrawler([], session=sess)
+    monkeypatch.setattr(
+        crawler,
+        "_recent_commits",
+        lambda *a, **kw: ["h", "b"],
+    )
     monkeypatch.setenv("CODECOV_TOKEN", "abc")
     monkeypatch.setattr(crawler, "_badge_patch_percent", lambda *a, **kw: 42.0)
     pct = crawler._patch_coverage_from_codecov("foo/bar", "main")
@@ -73,6 +78,11 @@ def test_patch_coverage_compare_on_error(monkeypatch):
                 return Resp()
 
     crawler = RepoCrawler([], session=Sess())
+    monkeypatch.setattr(
+        crawler,
+        "_recent_commits",
+        lambda *a, **kw: ["h", "b"],
+    )
     pct = crawler._patch_coverage_from_codecov("foo/bar", "main")
     assert pct == 77.0
 
@@ -97,4 +107,9 @@ def test_patch_coverage_compare_request_exception(monkeypatch):
 
     crawler = RepoCrawler([], session=Sess())
     monkeypatch.setattr(crawler, "_badge_patch_percent", lambda *a, **kw: None)
+    monkeypatch.setattr(
+        crawler,
+        "_recent_commits",
+        lambda *a, **kw: [],
+    )
     assert crawler._patch_coverage_from_codecov("foo/bar", "main") is None

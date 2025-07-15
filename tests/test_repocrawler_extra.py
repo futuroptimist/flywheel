@@ -168,3 +168,36 @@ def test_generate_summary_no_patch(monkeypatch):
     idx = lines.index("| Repo | Coverage | Patch | Installer |")
     row = lines[idx + 2]
     assert "| — |" in row
+
+
+def test_recent_commits_success():
+    sess = make_session(
+        {
+            "/commits?per_page=2&sha=main": DummyResp(
+                200,
+                json_data=[{"sha": "aa"}, {"sha": "bb"}],
+            )
+        }
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._recent_commits("demo/repo", "main") == ["aa", "bb"]
+
+
+def test_recent_commits_invalid_json():
+    sess = make_session(
+        {"/commits?per_page=2": DummyResp(200, json_data=ValueError("bad"))}
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._recent_commits("demo/repo", "main") == []
+
+
+def test_recent_commits_request_exception():
+    class ErrSession:
+        def __init__(self):
+            self.headers = {}
+
+        def get(self, *_, **__):
+            raise requests.RequestException("boom")
+
+    crawler = RepoCrawler([], session=ErrSession())
+    assert crawler._recent_commits("demo/repo", "main") == []

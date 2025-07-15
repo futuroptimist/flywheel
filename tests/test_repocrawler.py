@@ -24,6 +24,8 @@ class DummySession:
         if url.startswith("https://api.github.com/repos/"):
             if url.endswith("/commits?per_page=1&sha=main"):
                 return Resp('[{"sha": "deadbeef"}]', 200)
+            if url.endswith("/commits?per_page=2&sha=main"):
+                return Resp('[{"sha": "cafecafe"}, {"sha": "deadbeef"}]', 200)
             if "/contents/.github/workflows" in url:
                 import json
 

@@ -144,6 +144,31 @@ class RepoCrawler:
                 return None
         return None
 
+    def _recent_commits(
+        self,
+        repo: str,
+        branch: str,
+        count: int = 2,
+    ) -> list[str]:
+        """Return the most recent commit SHAs for the branch."""
+        url = (
+            "https://api.github.com/repos/"
+            f"{repo}/commits?per_page={count}&sha={branch}"
+        )
+        try:
+            resp = self.session.get(
+                url,
+                headers={"Accept": "application/vnd.github+json"},
+            )
+        except RequestException:
+            return []
+        if resp.status_code == 200:
+            try:
+                return [c["sha"] for c in resp.json()][:count]
+            except Exception:
+                return []
+        return []
+
     def _has_file(self, repo: str, path: str, branch: str) -> bool:
         return self._fetch_file(repo, path, branch) is not None
 
@@ -221,7 +246,13 @@ class RepoCrawler:
             resp = self.session.get(totals, headers=headers, timeout=10)
             if resp.status_code == 200:
                 body = resp.json()
-                pct = body.get("totals", {}).get("patch", {}).get("coverage")
+                # fmt: off
+                pct = (
+                    body.get("totals", {})
+                    .get("patch", {})
+                    .get("coverage")
+                )
+                # fmt: on
                 if pct is not None:
                     return float(pct)
         except RequestException:
@@ -229,15 +260,26 @@ class RepoCrawler:
         except Exception:
             pass
 
+        commits = self._recent_commits(repo, branch, 2)
+        if len(commits) == 2:
+            base, head = commits[1], commits[0]
+        else:
+            base, head = "HEAD~1", "HEAD"
         compare = (
             "https://api.codecov.io/api/v2/github/"
-            f"{owner}/repos/{name}/compare/?base=HEAD~1&head=HEAD"
+            f"{owner}/repos/{name}/compare/?base={base}&head={head}"
         )
         try:
             resp = self.session.get(compare, headers=headers, timeout=10)
             if resp.status_code == 200:
                 body = resp.json()
-                pct = body.get("totals", {}).get("patch", {}).get("coverage")
+                # fmt: off
+                pct = (
+                    body.get("totals", {})
+                    .get("patch", {})
+                    .get("coverage")
+                )
+                # fmt: on
                 if pct is not None:
                     return float(pct)
         except RequestException:
