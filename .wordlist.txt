@@ -2,6 +2,7 @@ AES
 CLI
 CodeQL
 DEPENDABOT
+Dependabot
 DoS
 ESLint
 JS
