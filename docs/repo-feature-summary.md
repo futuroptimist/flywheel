@@ -6,7 +6,7 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit |
 | ---- | ------ | ------ |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `cab476e` |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `a6b20eb` |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `3eb7ec7` |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `f794ae6` |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `a73e111` |
@@ -15,7 +15,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `25cd2c6` |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `64d265f` |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `9438883` |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `2aabdc0` |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | n/a |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Installer |
