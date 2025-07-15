@@ -6,7 +6,7 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit |
 | ---- | ------ | ------ |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `84f8204` |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `a6ec9be` |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `3eb7ec7` |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `f794ae6` |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `2f860ed` |
@@ -20,7 +20,7 @@ This table tracks which flywheel features each related repository has adopted.
 ## Coverage & Installer
 | Repo | Coverage | Patch | Installer |
 | ---- | -------- | ----- | --------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ (20%) | ❌ (0%) | 🔶 partial |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ (20%) | — | 🔶 partial |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ (100%) | — | 🚀 uv |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ (100%) | — | 🚀 uv |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ (100%) | — | 🔶 partial |
