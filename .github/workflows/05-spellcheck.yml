@@ -1,0 +1,11 @@
+name: Spelling
+on: [push, pull_request]
+jobs:
+  spell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: codespell-project/actions-codespell@v1
+        with:
+          ignore_words_file: dict/allow.txt
+          skip: "*.lock,*.svg"
