@@ -110,4 +110,4 @@ extend-words = [
 ]
 
 [files]
-extend-exclude=["*.lock","*.svg"]
+extend-exclude = ["*.lock", "*.svg"]
