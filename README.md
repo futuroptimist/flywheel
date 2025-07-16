@@ -69,6 +69,12 @@ pre-commit install
 pre-commit run --all-files
 ```
 
+The hooks include a spell checker powered by `codespell`. Add project-specific
+terms to `dict/allow.txt` so they are not flagged as typos. VS Code users will
+see the same suggestions if they install the recommended Code Spell Checker
+extension. A GitHub Action runs the `typos` checker on every push to catch
+misspellings that slip past local hooks.
+
 ### Embedding in an existing project
 
 Install the CLI and inject dev tooling. Without `--yes`, the command prompts for language and whether to add dev tools:
