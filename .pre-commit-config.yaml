@@ -22,3 +22,11 @@ repos:
           - responses
           - trimesh
         pass_filenames: false
+
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.0
+    hooks:
+      - id: codespell
+        args:
+          - "--ignore-words=dict/allow.txt"
+          - "--skip=*.lock,*.svg,*.min.js"
