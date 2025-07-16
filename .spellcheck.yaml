@@ -6,7 +6,7 @@ matrix:
       - docs/**/*.md
     dictionary:
       wordlists:
-        - .wordlist.txt
+        - dict/allow.txt
     aspell:
       lang: en
       d: en_US
