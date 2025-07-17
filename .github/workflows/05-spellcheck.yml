@@ -5,6 +5,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Validate typos config
+        uses: crate-ci/typos@v1
+        with:
+          args: --config .typos.toml --dump-config -
       - uses: crate-ci/typos@v1
         with:
           config: .typos.toml
