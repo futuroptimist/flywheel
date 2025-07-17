@@ -106,7 +106,7 @@ extend-words = [
   "PRs",
   "changelogs",
   "STLs",
-  "sugarkube",
+  "sugarkube"
 ]
 
 [files]
