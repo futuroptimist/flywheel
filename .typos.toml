@@ -1,9 +1,29 @@
-# .typos.toml  — 100 % valid for typos‑cli ≥ 1.16
+# .typos.toml ── flywheel spell‑check configuration
 # -------------------------------------------------
-# Each “word = word” pair marks the token as always‑valid.
-# Keep everything CASE‑SENSITIVE; typos treats ‘JS’ and ‘js’ separately.
+# This version:
+#   • Skips minified JS and other generated artefacts
+#   • Treats commit SHAs and short project tokens as valid
+#   • Keeps your previous word allow‑list untouched
+#
+# Notes on structure:
+#   * Keys under [default] configure *behaviour*.
+#   * The [default.extend-words] table enumerates additional valid words.
+#   * The [files] table extends the file‑selection globs.
+
+[default]
+# Ignore any 7‑ to 40‑char hexadecimal sequence (Git commit hashes, object IDs, etc.)
+extend-ignore-re = [
+  "\\b[0-9a-f]{7,40}\\b",
+]
 
 [default.extend-words]
+# ─── New very short tokens triggered by SHA‑splitting or abbreviations ───
+ba = "ba"
+ot = "ot"
+ue = "ue"
+Ot = "Ot"
+Ue = "Ue"
+# ───‑‑‑ Everything you already had follows unchanged ‑‑‑───────────────────
 AES               = "AES"
 CLI               = "CLI"
 CodeQL            = "CodeQL"
@@ -113,7 +133,11 @@ STLs              = "STLs"
 sugarkube         = "sugarkube"
 
 [files]
+# Existing exclusions plus new ones for generated assets
 extend-exclude = [
   "*.lock",
   "*.svg",
+  # Ignore all minified or vendor JS – reduces noise massively
+  "**/*.min.js",
+  "webapp/static/js/**",
 ]
