@@ -39,15 +39,9 @@ class RepoCrawler:
     # so repos with custom workflow names still count.
     CI_KEYWORDS = ("ci", "test", "lint", "build", "docs")
 
-    _UV_OK = re.compile(r"\buv\s+pip\b", re.I)
-    _PIP_BAD = re.compile(
-        r"""
-        (?<!\buv\s)(?<!\w)(?:pip3?|python\s+-m\s+pip)\s+install
-        |pip\s+compile
-        |apt[\w\- ]+python3?-pip
-        """,
-        re.I | re.X,
-    )
+    _UV = re.compile(r"setup-uv|uv venv", re.I)
+    _PIP = re.compile(r"pip install", re.I)
+    _POETRY = re.compile(r"poetry\s+install", re.I)
 
     DOCKER_FILES = (
         "Dockerfile",
@@ -126,22 +120,25 @@ class RepoCrawler:
         return "main"
 
     def _latest_commit(self, repo: str, branch: str) -> Optional[str]:
-        url = "https://api.github.com/repos/%s/commits?per_page=1&sha=%s" % (
-            repo,
-            branch,
+        owner, name = repo.split("/", 1)
+        url = (
+            "https://api.github.com/repos/"
+            f"{owner}/{name}/commits?per_page=1&sha={branch}"
         )
         try:
             resp = self.session.get(
                 url,
                 headers={"Accept": "application/vnd.github+json"},
+                timeout=10,
             )
+            if resp.status_code == 200:
+                data = resp.json()
+                if isinstance(data, list) and data:
+                    return data[0].get("sha", "")[:7]
         except RequestException:
             return None
-        if resp.status_code == 200:
-            try:
-                return resp.json()[0]["sha"][:7]
-            except Exception:
-                return None
+        except Exception:
+            return None
         return None
 
     def _recent_commits(
@@ -182,32 +179,34 @@ class RepoCrawler:
             resp = self.session.get(
                 url,
                 headers={"Accept": "application/vnd.github+json"},
+                timeout=10,
             )
         except RequestException:
             return set()
         if resp.status_code == 200:
             try:
-                return {item.get("name", "") for item in resp.json()}
+                return {
+                    item.get("name", "")
+                    for item in resp.json()
+                    if item.get("name", "").endswith(".yml")
+                }
             except Exception:
                 return set()
         return set()
 
     def _has_ci(self, workflow_files: set[str]) -> bool:
-        """Return True if any workflow filename hints at CI presence."""
-        return any(
-            any(k in wf.lower() for k in self.CI_KEYWORDS)
-            for wf in workflow_files  # noqa: E501
-        )
+        """Return True if the repo defines any workflows."""
+        return len(workflow_files) > 0
 
     def _detect_installer(self, text: str) -> str:
-        """Return 'uv', 'partial', or 'pip' based on shell snippets."""
-        has_uv = bool(self._UV_OK.search(text))
-        has_pip = bool(self._PIP_BAD.search(text))
-        if has_uv and not has_pip:
+        """Return installer hint based on workflow snippets."""
+        if self._UV.search(text):
             return "uv"
-        if has_uv and has_pip:
-            return "partial"
-        return "pip"
+        if self._PIP.search(text):
+            return "pip"
+        if self._POETRY.search(text):
+            return "poetry"
+        return "partial"
 
     # ------------------------ Coverage helpers ------------------------ #
     def _project_coverage_from_codecov(
@@ -215,16 +214,21 @@ class RepoCrawler:
         repo: str,
         branch: str,
     ) -> Optional[str]:
-        """Retrieve project coverage percentage via shields.io."""
-        url = f"https://img.shields.io/codecov/c/github/{repo}/{branch}.svg"
+        """Retrieve project coverage percentage via Codecov API."""
+        owner, name = repo.split("/", 1)
+        url = f"https://codecov.io/api/gh/{owner}/{name}"
         try:
             resp = self.session.get(url, timeout=10)
         except RequestException:
             return None
         if resp.status_code == 200:
-            m = re.search(r">(\d{1,3})%<", resp.text)
-            if m:
-                return f"{m.group(1)}%"
+            try:
+                body = resp.json()
+                cov = body.get("commit", {}).get("totals", {}).get("coverage")
+                if cov is not None:
+                    return f"{cov}%"
+            except Exception:
+                return None
         return None
 
     def _patch_coverage_from_codecov(
@@ -238,56 +242,27 @@ class RepoCrawler:
         token = os.environ.get("CODECOV_TOKEN")
         if token:
             headers["Authorization"] = f"Bearer {token}"
-        totals = (
-            "https://api.codecov.io/api/v2/github/"
-            f"{owner}/repos/{name}/totals/?branch={branch}"
-        )
         try:
-            resp = self.session.get(totals, headers=headers, timeout=10)
-            if resp.status_code == 200:
-                body = resp.json()
-                # fmt: off
-                pct = (
-                    body.get("totals", {})
-                    .get("patch", {})
-                    .get("coverage")
-                )
-                # fmt: on
-                if pct is not None:
-                    return float(pct)
+            resp = self.session.get(
+                f"https://codecov.io/api/gh/{owner}/{name}",
+                headers=headers,
+                timeout=10,
+            )
         except RequestException:
-            pass
-        except Exception:
-            pass
-
-        commits = self._recent_commits(repo, branch, 2)
-        if len(commits) == 2:
-            base, head = commits[1], commits[0]
-        else:
-            base, head = "HEAD~1", "HEAD"
-        compare = (
-            "https://api.codecov.io/api/v2/github/"
-            f"{owner}/repos/{name}/compare/?base={base}&head={head}"
-        )
-        try:
-            resp = self.session.get(compare, headers=headers, timeout=10)
-            if resp.status_code == 200:
+            return None
+        if resp.status_code == 200:
+            try:
                 body = resp.json()
-                # fmt: off
-                pct = (
-                    body.get("totals", {})
-                    .get("patch", {})
-                    .get("coverage")
+                diff = (
+                    body.get("commit", {})
+                    .get("totals", {})
+                    .get("coverage_diff")  # noqa: E501
                 )
-                # fmt: on
-                if pct is not None:
-                    return float(pct)
-        except RequestException:
-            pass
-        except Exception:
-            pass
-
-        return self._badge_patch_percent(repo, branch)
+                if diff is not None and diff >= 90:
+                    return float(diff)
+            except Exception:
+                return None
+        return None
 
     def _parse_coverage(
         self, readme: Optional[str], repo: str, branch: str
@@ -295,24 +270,12 @@ class RepoCrawler:
         if not readme:
             return None
 
-        # 1. Fast path – percentage already in the README (shields badge, etc.)
-        coverage_match = (
-            re.search(r"coverage-(\d+)%25", readme)
-            or re.search(r"codecov.*?(\d+)%", readme)
-            or re.search(r"(\d{1,3})%", readme)
-        )
-        if coverage_match:
-            return f"{coverage_match.group(1)}%"
+        if not re.search(r"codecov.io/.+?/badge.svg", readme):
+            return None
 
-        # 2. README mentions Codecov → query shields proxy.
-        if "codecov.io" in readme:
-            pct = self._project_coverage_from_codecov(repo, branch)
-            if pct:
-                return pct
-
-        # 3. We spoke about coverage but still no number.
-        if "coverage" in readme.lower():
-            return "unknown"
+        pct = self._project_coverage_from_codecov(repo, branch)
+        if pct:
+            return pct
         return None
 
     def _check_repo(self, repo: str) -> RepoInfo:
@@ -428,7 +391,7 @@ class RepoCrawler:
             elif info.installer == "partial":
                 inst = "🔶 partial"
             else:
-                inst = "pip"
+                inst = info.installer
 
             basics_rows.append(f"| {repo_link} | {info.branch} | {commit} |")
             coverage_rows.append(

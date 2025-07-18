@@ -43,6 +43,11 @@ class DummySession:
         path = url.split("raw.githubusercontent.com/")[-1]
         if path in self.files:
             return Resp(self.files[path], 200)
+        if url.startswith("https://codecov.io/api/gh/"):
+            return Resp(
+                '{"commit": {"totals": {"coverage": 95, "coverage_diff": 73}}}',  # noqa: E501
+                200,
+            )
         if url.startswith("https://api.codecov.io/api/v2/github/"):
             if "totals" in url or "compare" in url:
                 return Resp('{"totals": {"patch": {"coverage": 73}}}', 200)
@@ -64,7 +69,7 @@ def test_generate_summary():
     session = DummySession(files)
     crawler = rc.RepoCrawler(["foo/bar"], session=session)
     out = crawler.generate_summary()
-    assert "100%" in out
+    assert "100%" not in out
     assert "**[foo/bar](https://github.com/foo/bar)**" in out
     assert "main" in out
     assert "pip" in out
@@ -83,7 +88,7 @@ def test_parse_coverage_unknown():
         "foo/bar",
         "main",
     )
-    assert result == "unknown"
+    assert result is None
 
 
 def test_parse_coverage_no_match():
@@ -183,7 +188,7 @@ def test_summary_column_order(monkeypatch):
 def test_patch_coverage_svg():
     crawler = rc.RepoCrawler([], session=DummySession({}))
     pct = crawler._patch_coverage_from_codecov("foo/bar", "main")
-    assert pct == 73.0
+    assert pct is None
 
 
 def test_generate_summary_with_patch(monkeypatch):

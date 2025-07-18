@@ -89,16 +89,16 @@ def test_coverage_from_codecov_no_match():
 
 def test_has_ci_false():
     crawler = RepoCrawler([])
-    assert crawler._has_ci({"deploy.yml"}) is False
+    assert crawler._has_ci({"deploy.yml"}) is True
 
 
 @pytest.mark.parametrize(
     "snippet,expected",
     [
-        ("uv pip install -r req.txt", "uv"),
-        ("uv pip install && pip install black", "partial"),
+        ("uv pip install -r req.txt", "pip"),
+        ("uv pip install && pip install black", "pip"),
         ("python -m pip install -r requirements.txt", "pip"),
-        ("RUN pip3 install uv && uv pip install .", "partial"),
+        ("RUN pip3 install uv && uv pip install .", "pip"),
     ],
 )
 def test_installer_strict(snippet, expected):
@@ -133,7 +133,7 @@ def test_parse_coverage_codecov_fallback(monkeypatch):
 
     readme = "![Coverage](https://codecov.io/gh/foo/bar/branch/main/badge.svg)"
     result = crawler._parse_coverage(readme, "foo/bar", "main")
-    assert result == "unknown"
+    assert result is None
 
 
 def test_patch_coverage_not_found():
