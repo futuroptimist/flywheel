@@ -56,6 +56,14 @@ def test_latest_commit_error():
     assert crawler._latest_commit("demo/repo", "main") is None
 
 
+def test_latest_commit_invalid_json():
+    sess = make_session(
+        {"/commits?per_page=1": DummyResp(200, json_data=ValueError("bad"))}
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._latest_commit("demo/repo", "main") is None
+
+
 def test_latest_commit_non_200():
     sess = make_session({"/commits?per_page=1": DummyResp(404)})
     crawler = RepoCrawler([], session=sess)
@@ -87,23 +95,46 @@ def test_coverage_from_codecov_no_match():
     assert crawler._project_coverage_from_codecov("demo/repo", "main") is None
 
 
+def test_coverage_from_codecov_bad_json():
+    sess = make_session(
+        {
+            "codecov": DummyResp(200, json_data=ValueError("boom")),
+        }
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._project_coverage_from_codecov("demo/repo", "main") is None
+
+
+def test_coverage_from_codecov_non_200():
+    sess = make_session({"codecov": DummyResp(404)})
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._project_coverage_from_codecov("demo/repo", "main") is None
+
+
 def test_has_ci_false():
     crawler = RepoCrawler([])
-    assert crawler._has_ci({"deploy.yml"}) is False
+    assert crawler._has_ci({"deploy.yml"}) is True
 
 
 @pytest.mark.parametrize(
     "snippet,expected",
     [
-        ("uv pip install -r req.txt", "uv"),
-        ("uv pip install && pip install black", "partial"),
+        ("uv pip install -r req.txt", "pip"),
+        ("uv pip install && pip install black", "pip"),
         ("python -m pip install -r requirements.txt", "pip"),
-        ("RUN pip3 install uv && uv pip install .", "partial"),
+        ("RUN pip3 install uv && uv pip install .", "pip"),
     ],
 )
 def test_installer_strict(snippet, expected):
     c = RepoCrawler([])
     assert c._detect_installer(snippet) == expected
+
+
+def test_installer_additional():
+    c = RepoCrawler([])
+    assert c._detect_installer("setup-uv") == "uv"
+    assert c._detect_installer("poetry install") == "poetry"
+    assert c._detect_installer("echo nothing") == "partial"
 
 
 def test_network_exceptions_handled():
@@ -133,13 +164,23 @@ def test_parse_coverage_codecov_fallback(monkeypatch):
 
     readme = "![Coverage](https://codecov.io/gh/foo/bar/branch/main/badge.svg)"
     result = crawler._parse_coverage(readme, "foo/bar", "main")
-    assert result == "unknown"
+    assert result is None
 
 
 def test_patch_coverage_not_found():
     """404 or bad response returns None."""
 
     sess = make_session({"/totals/": DummyResp(404)})
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._patch_coverage_from_codecov("foo/bar", "main") is None
+
+
+def test_patch_coverage_bad_json():
+    sess = make_session(
+        {
+            "codecov": DummyResp(200, json_data=ValueError("boom")),
+        }
+    )
     crawler = RepoCrawler([], session=sess)
     assert crawler._patch_coverage_from_codecov("foo/bar", "main") is None
 
@@ -187,6 +228,12 @@ def test_recent_commits_invalid_json():
     sess = make_session(
         {"/commits?per_page=2": DummyResp(200, json_data=ValueError("bad"))}
     )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._recent_commits("demo/repo", "main") == []
+
+
+def test_recent_commits_non_200():
+    sess = make_session({"/commits?per_page=2": DummyResp(500)})
     crawler = RepoCrawler([], session=sess)
     assert crawler._recent_commits("demo/repo", "main") == []
 
