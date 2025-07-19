@@ -12,6 +12,7 @@ from requests import RequestException
 
 PATCH_THRESHOLD = 90.0
 BADGE_PATCH = "https://img.shields.io/codecov/patch/github/{repo}/{branch}.svg"
+BADGE_COVERAGE = "https://codecov.io/gh/{repo}/branch/{branch}/graph/badge.svg"
 
 
 @dataclass
@@ -62,6 +63,19 @@ class RepoCrawler:
             m = re.search(r">(\d{1,3})%<", resp.text)
             if m:
                 return float(m.group(1))
+        return None
+
+    def _badge_coverage_percent(self, repo: str, branch: str) -> Optional[str]:
+        """Return project coverage percentage parsed from the badge."""
+        url = BADGE_COVERAGE.format(repo=repo, branch=branch)
+        try:
+            resp = self.session.get(url, timeout=10)
+        except RequestException:
+            return None
+        if resp.status_code == 200:
+            m = re.search(r">(\d{1,3})%<", resp.text)
+            if m:
+                return f"{m.group(1)}%"
         return None
 
     def __init__(
@@ -276,7 +290,7 @@ class RepoCrawler:
         pct = self._project_coverage_from_codecov(repo, branch)
         if pct:
             return pct
-        return None
+        return self._badge_coverage_percent(repo, branch)
 
     def _check_repo(self, repo: str) -> RepoInfo:
         branch = self._branch_overrides.get(repo) or self._default_branch(repo)
