@@ -210,7 +210,7 @@ def test_summary_column_order(monkeypatch):
 def test_patch_coverage_svg():
     crawler = rc.RepoCrawler([], session=DummySession({}))
     pct = crawler._patch_coverage_from_codecov("foo/bar", "main")
-    assert pct is None
+    assert pct == 95.0
 
 
 def test_generate_summary_with_patch(monkeypatch):

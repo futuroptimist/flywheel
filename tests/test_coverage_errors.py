@@ -52,7 +52,7 @@ def test_patch_coverage_token_and_errors(monkeypatch):
     monkeypatch.setenv("CODECOV_TOKEN", "abc")
     monkeypatch.setattr(crawler, "_badge_patch_percent", lambda *a, **kw: 42.0)
     pct = crawler._patch_coverage_from_codecov("foo/bar", "main")
-    assert pct is None
+    assert pct == 42.0
     assert sess.calls[0][1]["Authorization"] == "Bearer abc"
 
 

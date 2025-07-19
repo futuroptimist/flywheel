@@ -12,6 +12,7 @@ from requests import RequestException
 
 PATCH_THRESHOLD = 90.0
 BADGE_PATCH = "https://img.shields.io/codecov/patch/github/{repo}/{branch}.svg"
+BADGE_TOTAL = "https://codecov.io/gh/{repo}/branch/{branch}/graph/badge.svg"
 
 
 @dataclass
@@ -62,6 +63,19 @@ class RepoCrawler:
             m = re.search(r">(\d{1,3})%<", resp.text)
             if m:
                 return float(m.group(1))
+        return None
+
+    def _badge_total_percent(self, repo: str, branch: str) -> Optional[str]:
+        """Return total coverage parsed from the public badge."""
+        url = BADGE_TOTAL.format(repo=repo, branch=branch)
+        try:
+            resp = self.session.get(url, timeout=10)
+        except RequestException:
+            return None
+        if resp.status_code == 200:
+            m = re.search(r">(\d{1,3})%<", resp.text)
+            if m:
+                return f"{m.group(1)}%"
         return None
 
     def __init__(
@@ -220,16 +234,20 @@ class RepoCrawler:
         try:
             resp = self.session.get(url, timeout=10)
         except RequestException:
-            return None
-        if resp.status_code == 200:
+            resp = None
+        if resp and resp.status_code == 200:
             try:
                 body = resp.json()
                 cov = body.get("commit", {}).get("totals", {}).get("coverage")
                 if cov is not None:
                     return f"{cov}%"
             except Exception:
-                return None
-        return None
+                pass
+        # Fallback to parsing the public badge if the API fails
+        try:
+            return self._badge_total_percent(repo, branch)
+        except Exception:
+            return None
 
     def _patch_coverage_from_codecov(
         self,
@@ -249,8 +267,8 @@ class RepoCrawler:
                 timeout=10,
             )
         except RequestException:
-            return None
-        if resp.status_code == 200:
+            resp = None
+        if resp and resp.status_code == 200:
             try:
                 body = resp.json()
                 diff = (
@@ -261,8 +279,12 @@ class RepoCrawler:
                 if diff is not None and diff >= 90:
                     return float(diff)
             except Exception:
-                return None
-        return None
+                pass
+        # Fallback to parsing the badge
+        try:
+            return self._badge_patch_percent(repo, branch)
+        except Exception:
+            return None
 
     def _parse_coverage(
         self, readme: Optional[str], repo: str, branch: str
