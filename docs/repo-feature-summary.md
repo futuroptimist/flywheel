@@ -6,7 +6,7 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit |
 | ---- | ------ | ------ |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `b662445` |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `5674541` |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `540fb42` |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `b0c308a` |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `186b68d` |
@@ -14,7 +14,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `4d11689` |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `37db08f` |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `179d186` |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `b5cd05a` |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `b9a888c` |
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `65e5c5e` |
 
 ## Coverage & Installer
