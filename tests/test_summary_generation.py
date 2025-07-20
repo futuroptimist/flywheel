@@ -13,6 +13,7 @@ def test_summary_generation(monkeypatch):
     monkeypatch.setattr(crawler, "_fetch_file", lambda *a, **kw: "")
     monkeypatch.setattr(crawler, "_list_workflows", lambda *a, **kw: set())
     monkeypatch.setattr(crawler, "_latest_commit", lambda *a, **kw: "deadbee")
+    monkeypatch.setattr(crawler, "_branch_green", lambda *a, **kw: True)
     monkeypatch.setattr(crawler, "_detect_installer", lambda *a, **kw: "uv")
     monkeypatch.setattr(crawler, "_has_file", lambda *a, **kw: True)
 

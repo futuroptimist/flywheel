@@ -30,6 +30,7 @@ class RepoInfo:
     installer: str
     latest_commit: Optional[str]
     workflow_count: int
+    trunk_green: Optional[bool]
 
 
 class RepoCrawler:
@@ -155,6 +156,30 @@ class RepoCrawler:
             return None
         return None
 
+    def _branch_green(self, repo: str, sha: str) -> Optional[bool]:
+        """Return True if the commit status is success."""
+        if not sha:
+            return None
+        owner, name = repo.split("/", 1)
+        base = "https://api.github.com/repos"
+        url = f"{base}/{owner}/{name}/commits/{sha}/status"
+        try:
+            resp = self.session.get(
+                url,
+                headers={"Accept": "application/vnd.github+json"},
+                timeout=10,
+            )
+        except RequestException:
+            return None
+        if resp.status_code == 200:
+            try:
+                state = resp.json().get("state")
+                if state:
+                    return state == "success"
+            except Exception:
+                return None
+        return None
+
     def _recent_commits(
         self,
         repo: str,
@@ -202,7 +227,7 @@ class RepoCrawler:
                 return {
                     item.get("name", "")
                     for item in resp.json()
-                    if item.get("name", "").endswith(".yml")
+                    if item.get("name", "").endswith((".yml", ".yaml"))
                 }
             except Exception:
                 return set()
@@ -339,6 +364,10 @@ class RepoCrawler:
             workflows_txt + docker_txt + npm_scripts_txt
         )  # noqa: E501
         latest_commit = self._latest_commit(repo, branch)
+        if latest_commit:
+            trunk_green = self._branch_green(repo, latest_commit)
+        else:
+            trunk_green = None
         return RepoInfo(
             name=repo,
             branch=branch,
@@ -357,6 +386,7 @@ class RepoCrawler:
             installer=installer,
             latest_commit=latest_commit,
             workflow_count=workflow_count,
+            trunk_green=trunk_green,
         )
 
     def crawl(self) -> List[RepoInfo]:
@@ -375,8 +405,8 @@ class RepoCrawler:
             "<!-- spellchecker: disable -->",
         ]
 
-        basics_header = "| Repo | Branch | Commit |"
-        basics_sep = "| ---- | ------ | ------ |"
+        basics_header = "| Repo | Branch | Commit | Trunk |"
+        basics_sep = "| ---- | ------ | ------ | ----- |"
         lines.extend(["## Basics", basics_header, basics_sep])
         basics_rows = []
 
@@ -415,7 +445,14 @@ class RepoCrawler:
             else:
                 inst = info.installer
 
-            basics_rows.append(f"| {repo_link} | {info.branch} | {commit} |")
+            trunk = "n/a"
+            if info.trunk_green is True:
+                trunk = "✅"
+            elif info.trunk_green is False:
+                trunk = "❌"
+            basics_rows.append(
+                f"| {repo_link} | {info.branch} | {commit} | {trunk} |"  # noqa: E501
+            )
             coverage_rows.append(
                 "| {} | {} | {} | {} |".format(
                     repo_link,
@@ -463,6 +500,7 @@ class RepoCrawler:
             "available. Patch shows ✅ when diff coverage is at least 90% "
             "and ❌ otherwise, with the percentage in parentheses. "
             "The commit column shows the short SHA of the latest default "
-            "branch commit at crawl time."
+            "branch commit at crawl time. The Trunk column indicates "
+            "whether CI is green for that commit."
         )
         return "\n".join(lines)
