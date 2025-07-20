@@ -146,6 +146,7 @@ def test_generate_summary_installer_variants(monkeypatch):
         installer="uv",
         latest_commit="cafec0d",
         workflow_count=1,
+        trunk_green=True,
     )
     info_partial = info_uv.__class__(
         **{**info_uv.__dict__, "name": "demo/partial", "installer": "partial"}
@@ -172,6 +173,7 @@ def test_generate_summary_other_installer(monkeypatch):
         installer="poetry",
         latest_commit="1234567",
         workflow_count=1,
+        trunk_green=True,
     )
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
@@ -194,13 +196,14 @@ def test_summary_column_order(monkeypatch):
         installer="uv",
         latest_commit="abcdef0",
         workflow_count=1,
+        trunk_green=True,
     )
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
     summary = crawler.generate_summary()
     assert "| Repo | Branch | Commit |" in summary
     assert "| Repo | Coverage | Patch | Installer |" in summary
-    assert "| Repo | License | CI | Workflows |" in summary
+    assert "| Repo | License | CI | Trunk | Workflows |" in summary
     lines = summary.splitlines()
     idx = lines.index("| Repo | Branch | Commit |")
     row = lines[idx + 2]
@@ -230,6 +233,7 @@ def test_generate_summary_with_patch(monkeypatch):
         installer="uv",
         latest_commit="abcdef1",
         workflow_count=1,
+        trunk_green=False,
     )
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])

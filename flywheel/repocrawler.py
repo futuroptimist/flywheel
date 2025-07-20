@@ -30,6 +30,7 @@ class RepoInfo:
     installer: str
     latest_commit: Optional[str]
     workflow_count: int
+    trunk_green: Optional[bool] = None
 
 
 class RepoCrawler:
@@ -40,7 +41,7 @@ class RepoCrawler:
     # so repos with custom workflow names still count.
     CI_KEYWORDS = ("ci", "test", "lint", "build", "docs")
 
-    _UV = re.compile(r"setup-uv|uv venv", re.I)
+    _UV = re.compile(r"setup-uv|uv\s+(venv|pip)", re.I)
     _PIP = re.compile(r"pip install", re.I)
     _POETRY = re.compile(r"poetry\s+install", re.I)
 
@@ -179,6 +180,26 @@ class RepoCrawler:
             except Exception:
                 return []
         return []
+
+    def _trunk_green(self, repo: str, sha: str) -> Optional[bool]:
+        """Return True if the given commit has a successful status."""
+        url = f"https://api.github.com/repos/{repo}/commits/{sha}/status"
+        try:
+            resp = self.session.get(
+                url,
+                headers={"Accept": "application/vnd.github+json"},
+                timeout=10,
+            )
+        except RequestException:
+            return None
+        if resp.status_code == 200:
+            try:
+                state = resp.json().get("state")
+                if state:
+                    return state == "success"
+            except Exception:
+                return None
+        return None
 
     def _has_file(self, repo: str, path: str, branch: str) -> bool:
         return self._fetch_file(repo, path, branch) is not None
@@ -339,6 +360,9 @@ class RepoCrawler:
             workflows_txt + docker_txt + npm_scripts_txt
         )  # noqa: E501
         latest_commit = self._latest_commit(repo, branch)
+        trunk_green = (
+            self._trunk_green(repo, latest_commit) if latest_commit else None
+        )  # noqa: E501
         return RepoInfo(
             name=repo,
             branch=branch,
@@ -357,6 +381,7 @@ class RepoCrawler:
             installer=installer,
             latest_commit=latest_commit,
             workflow_count=workflow_count,
+            trunk_green=trunk_green,
         )
 
     def crawl(self) -> List[RepoInfo]:
@@ -385,11 +410,11 @@ class RepoCrawler:
         coverage_rows = []
 
         policy_header = (
-            "| Repo | License | CI | Workflows | AGENTS.md |"
+            "| Repo | License | CI | Trunk | Workflows | AGENTS.md |"
             " Code of Conduct | Contributing | Pre-commit |"
         )
         policy_sep = (
-            "| ---- | ------- | -- | --------- | --------- |"
+            "| ---- | ------- | -- | ----- | --------- | --------- |"
             " --------------- | ------------ | ---------- |"
         )
         policy_rows = []
@@ -424,14 +449,21 @@ class RepoCrawler:
                     inst,
                 )
             )
+            if info.trunk_green is True:
+                trunk = "✅"
+            elif info.trunk_green is False:
+                trunk = "❌"
+            else:
+                trunk = "—"
             policy_rows.append(
                 (
-                    "| {repo} | {lic} | {ci} | {count} | {agents} | {coc} | "
-                    "{cont} | {pre} |"
+                    "| {repo} | {lic} | {ci} | {trunk} | {count} | "
+                    "{agents} | {coc} | {cont} | {pre} |"
                 ).format(
                     repo=repo_link,
                     lic="✅" if info.has_license else "❌",
                     ci="✅" if info.has_ci else "❌",
+                    trunk=trunk,
                     count=info.workflow_count,
                     agents="✅" if info.has_agents else "❌",
                     coc="✅" if info.has_coc else "❌",
@@ -463,6 +495,7 @@ class RepoCrawler:
             "available. Patch shows ✅ when diff coverage is at least 90% "
             "and ❌ otherwise, with the percentage in parentheses. "
             "The commit column shows the short SHA of the latest default "
-            "branch commit at crawl time."
+            "branch commit at crawl time. Trunk shows the combined status of "
+            "that commit."
         )
         return "\n".join(lines)

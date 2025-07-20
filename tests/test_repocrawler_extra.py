@@ -119,10 +119,10 @@ def test_has_ci_false():
 @pytest.mark.parametrize(
     "snippet,expected",
     [
-        ("uv pip install -r req.txt", "pip"),
-        ("uv pip install && pip install black", "pip"),
+        ("uv pip install -r req.txt", "uv"),
+        ("uv pip install && pip install black", "uv"),
         ("python -m pip install -r requirements.txt", "pip"),
-        ("RUN pip3 install uv && uv pip install .", "pip"),
+        ("RUN pip3 install uv && uv pip install .", "uv"),
     ],
 )
 def test_installer_strict(snippet, expected):
@@ -202,6 +202,7 @@ def test_generate_summary_no_patch(monkeypatch):
         installer="uv",
         latest_commit="123cafe",
         workflow_count=1,
+        trunk_green=None,
     )
     crawler = RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
@@ -248,3 +249,21 @@ def test_recent_commits_request_exception():
 
     crawler = RepoCrawler([], session=ErrSession())
     assert crawler._recent_commits("demo/repo", "main") == []
+
+
+def test_trunk_green_states():
+    sess_success = make_session(
+        {"/status": DummyResp(200, json_data={"state": "success"})}
+    )
+    crawler = RepoCrawler([], session=sess_success)
+    assert crawler._trunk_green("demo/repo", "abc") is True
+
+    sess_fail = make_session(
+        {"/status": DummyResp(200, json_data={"state": "failure"})}
+    )
+    crawler = RepoCrawler([], session=sess_fail)
+    assert crawler._trunk_green("demo/repo", "abc") is False
+
+    sess_error = make_session({"/status": DummyResp(404)})
+    crawler = RepoCrawler([], session=sess_error)
+    assert crawler._trunk_green("demo/repo", "abc") is None
