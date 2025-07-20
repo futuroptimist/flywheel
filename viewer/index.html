@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flywheel Assembly</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script type="module" src="viewer.js"></script>
+  <style>
+    body{margin:0;font-family:sans-serif;background:var(--bg,#fff);color:var(--fg,#000);}
+    #legend{position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,0.5);color:#fff;padding:.5rem;list-style:none;}
+    #controls{position:absolute;top:1rem;left:1rem;background:rgba(255,255,255,0.7);padding:.5rem;border-radius:4px;}
+    body.dark{--bg:#222;--fg:#fff;}
+    li{cursor:pointer;margin:0;}
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <label>Explode <input id="explode" type="range" min="0" max="1" step="0.01" value="0"></label>
+    <button id="dark">Toggle Dark</button>
+  </div>
+  <ul id="legend"></ul>
+  <model-viewer id="mv" src="../assembly.glb" camera-controls autoplay></model-viewer>
+</body>
+</html>
