@@ -202,6 +202,7 @@ def test_generate_summary_no_patch(monkeypatch):
         installer="uv",
         latest_commit="123cafe",
         workflow_count=1,
+        trunk_green=None,
     )
     crawler = RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
@@ -248,3 +249,68 @@ def test_recent_commits_request_exception():
 
     crawler = RepoCrawler([], session=ErrSession())
     assert crawler._recent_commits("demo/repo", "main") == []
+
+
+def test_branch_green_success():
+    sess = make_session(
+        {
+            "/commits/cafe/status": DummyResp(
+                200,
+                json_data={"state": "success"},
+            )
+        }
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._branch_green("demo/repo", "cafe") is True
+
+
+def test_branch_green_failure():
+    sess = make_session(
+        {
+            "/commits/dead/status": DummyResp(
+                200,
+                json_data={"state": "failure"},
+            )
+        }
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._branch_green("demo/repo", "dead") is False
+
+
+def test_branch_green_request_exception():
+    class ErrSession:
+        def __init__(self):
+            self.headers = {}
+
+        def get(self, *_, **__):
+            raise requests.RequestException("boom")
+
+    crawler = RepoCrawler([], session=ErrSession())
+    assert crawler._branch_green("demo/repo", "dead") is None
+
+
+def test_branch_green_no_sha():
+    crawler = RepoCrawler([])
+    assert crawler._branch_green("demo/repo", "") is None
+
+
+def test_branch_green_bad_json():
+    sess = make_session(
+        {"/commits/bad/status": DummyResp(200, json_data=ValueError("boom"))}
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._branch_green("demo/repo", "bad") is None
+
+
+def test_branch_green_non_200():
+    sess = make_session({"/commits/miss/status": DummyResp(404)})
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._branch_green("demo/repo", "miss") is None
+
+
+def test_branch_green_no_state():
+    sess = make_session(
+        {"/commits/nothing/status": DummyResp(200, json_data={})}
+    )  # noqa: E501
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._branch_green("demo/repo", "nothing") is None

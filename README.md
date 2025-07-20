@@ -101,7 +101,7 @@ flywheel crawl futuroptimist/flywheel futuroptimist/axel --output docs/repo-feat
 Append `@branch` to any repo to crawl a non-default branch, e.g. `owner/name@dev`.
 Pass `--token YOURTOKEN` or set `GITHUB_TOKEN` to avoid API rate limits.
 The `Update Repo Feature Summary` workflow commits `docs/repo-feature-summary.md` to `main` after each merge.
-The summary records the short SHA of the latest commit and the name of each repository's default branch.
+The summary records the short SHA of the latest commit, the name of each repository's default branch, and whether the latest commit passed CI on that branch.
 
 ### Auditing dev tooling
 
