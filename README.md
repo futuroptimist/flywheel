@@ -5,6 +5,7 @@
 [![Coverage](https://codecov.io/gh/futuroptimist/flywheel/branch/main/graph/badge.svg)](https://codecov.io/gh/futuroptimist/flywheel)
 [![Docs](https://img.shields.io/github/actions/workflow/status/futuroptimist/flywheel/.github/workflows/03-docs.yml?label=docs)](https://github.com/futuroptimist/flywheel/actions/workflows/03-docs.yml)
 [![License](https://img.shields.io/github/license/futuroptimist/flywheel)](LICENSE)
+[![Viewer](https://img.shields.io/badge/view-assembly-blue)](https://github.com/futuroptimist/flywheel/blob/main/viewer/index.html)
 
 **flywheel** is a GitHub template for rapid project bootstrapping. It bundles linting, testing, documentation checks, and LLM-powered agents to keep your repo healthy.
 
