@@ -202,6 +202,7 @@ def test_generate_summary_no_patch(monkeypatch):
         installer="uv",
         latest_commit="123cafe",
         workflow_count=1,
+        trunk_green=None,
     )
     crawler = RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
