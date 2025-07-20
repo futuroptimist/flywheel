@@ -1,0 +1,27 @@
+name: Build GLB
+on:
+  push:
+    paths:
+      - 'parts/*.stl'
+      - 'scripts/build_glb.py'
+      - '.github/workflows/build-glb.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install pygltflib assimp_py
+      - name: Build GLB
+        run: python scripts/build_glb.py
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: assembly-glb
+          path: assembly.glb

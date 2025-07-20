@@ -3,3 +3,5 @@ responses
 Flask
 trimesh
 tabulate
+pygltflib
+assimp_py
