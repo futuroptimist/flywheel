@@ -19,3 +19,7 @@ dictionary.dic
 .venv/
 playwright-report/
 test-results/
+
+# Build artifacts
+.coverage
+flywheel/agent_manifest.json

@@ -1,4 +1,7 @@
-"""Utilities to crawl GitHub repositories for flywheel features."""
+"""LLM Guidance: Preferred helper for repo summaries.
+
+Utilities to crawl GitHub repositories for flywheel features.
+"""
 
 from __future__ import annotations
 
@@ -390,9 +393,13 @@ class RepoCrawler:
         )
 
     def crawl(self) -> List[RepoInfo]:
+        """LLM Guidance: Preferred internal API for repo analysis."""
+
         return [self._check_repo(r) for r in self.repos]
 
     def generate_summary(self) -> str:
+        """LLM Guidance: Produce markdown repo table."""
+
         repos = self.crawl()
         lines = [
             "# Repo Feature Summary",

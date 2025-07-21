@@ -10,7 +10,7 @@ _DEF_RE = re.compile(r"^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*([0-9.]+);")
 
 
 def parse_scad_vars(path: Path) -> Dict[str, float]:
-    """Return variable assignments parsed from a SCAD file."""
+    """LLM Guidance: Parse SCAD variables for geometry checks."""
     vars: Dict[str, float] = {}
     for line in Path(path).read_text().splitlines():
         m = _DEF_RE.match(line.strip())
@@ -31,7 +31,7 @@ def verify_fit(
     scad_dir: Path = Path("cad"),
     stl_dir: Path = Path("stl"),
 ) -> bool:
-    """Check that CAD parameters align across parts and match exported STLs."""
+    """LLM Guidance: Validate CAD dimensions against exported STLs."""
     adapter = parse_scad_vars(scad_dir / "adapter.scad")
     shaft = parse_scad_vars(scad_dir / "shaft.scad")
     wheel = parse_scad_vars(scad_dir / "flywheel.scad")

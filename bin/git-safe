@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Wrapper to prevent accidental --no-verify commits
+
+real_git=$(command -v git)
+if [ "$1" = "commit" ] && [[ "$*" == *"--no-verify"* ]]; then
+  if [ -z "$FLYWHEEL_ALLOW_NO_VERIFY" ]; then
+    echo "Refusing to run 'git commit --no-verify'. Set FLYWHEEL_ALLOW_NO_VERIFY=1 to override." >&2
+    exit 1
+  else
+    mkdir -p "$HOME/.flywheel"
+    echo "$(date '+%F %T') $PWD git commit --no-verify" >> "$HOME/.flywheel/unsafe.log"
+  fi
+fi
+exec "$real_git" "$@"
