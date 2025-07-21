@@ -12,6 +12,39 @@ repos:
         args: ["--ignore-words", "dict/allow.txt", "--skip", "*.lock,*.svg,webapp/static/js/*"]
   - repo: local
     hooks:
+      - id: flake8
+        name: flake8
+        entry: flake8 .
+        language: python
+        additional_dependencies: [flake8]
+        pass_filenames: false
+      - id: pytest
+        name: pytest
+        entry: pytest -q
+        language: python
+        additional_dependencies:
+          - pytest
+          - requests
+          - responses
+          - Flask
+          - trimesh
+          - tabulate
+          - pygltflib
+          - assimp_py
+        pass_filenames: false
+      - id: audit
+        name: flywheel audit
+        entry: python -m flywheel audit --ci .
+        language: python
+        additional_dependencies:
+          - requests
+          - responses
+          - Flask
+          - trimesh
+          - tabulate
+          - pygltflib
+          - assimp_py
+        pass_filenames: false
       - id: run-checks
         name: run project checks
         entry: bash scripts/checks.sh
