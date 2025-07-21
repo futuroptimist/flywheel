@@ -124,13 +124,32 @@ Visit `http://localhost:42165` and watch the wheel spin in your browser.
 
 ### Verifying CAD fit
 
-Run a quick check to ensure the STLs match their SCAD sources:
+Install the Python requirements if you haven't already:
+
+```bash
+pip install -r requirements.txt
+```
+
+Then run the fit checker to ensure the exported STLs match the SCAD sources:
 
 ```bash
 python -m flywheel.fit
 ```
 
-If no assertions fail, the printed message confirms the parts align correctly.
+A successful run prints:
+
+```
+All parts fit together.
+```
+
+Below is a simplified view of how the pieces stack:
+
+```mermaid
+graph TD
+  Stand --> Shaft
+  Shaft --> Adapter
+  Adapter --> Flywheel
+```
 
 ## Values
 
