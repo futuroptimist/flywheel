@@ -55,3 +55,15 @@ Connecting flywheels lets you trade off space, weight, and speed.  A
 small high-speed wheel might feed power into a larger, slower wheel to
 smooth out fluctuations.  Keep belt tension high enough to avoid slip
 and align pulleys carefully so side loads do not wear the bearings.
+
+Belt drives obey the tension ratio
+$$\frac{T_1}{T_2} = e^{\mu \theta}$$
+where $T_1$ is the tight-side tension, $T_2$ the slack side tension,
+$\mu$ the coefficient of friction, and $\theta$ the wrap angle in radians.
+This sets the maximum torque each belt can transmit.
+
+As an example, a 200\,mm wheel driving a 50\,mm pulley quadruples the speed.
+Linking that smaller pulley to a third wheel can multiply storage while
+keeping the overall setup compact.
+Gears or chains work similarly but eliminate belt slip at the cost of more
+noise and alignment care.
