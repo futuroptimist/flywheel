@@ -15,17 +15,35 @@ repos:
       - id: flake8
         name: flake8
         entry: flake8 .
-        language: system
+        language: python
+        additional_dependencies: [flake8]
         pass_filenames: false
       - id: pytest
         name: pytest
         entry: pytest -q
-        language: system
+        language: python
+        additional_dependencies:
+          - pytest
+          - requests
+          - responses
+          - Flask
+          - trimesh
+          - tabulate
+          - pygltflib
+          - assimp_py
         pass_filenames: false
       - id: audit
         name: flywheel audit
         entry: python -m flywheel audit --ci .
-        language: system
+        language: python
+        additional_dependencies:
+          - requests
+          - responses
+          - Flask
+          - trimesh
+          - tabulate
+          - pygltflib
+          - assimp_py
         pass_filenames: false
       - id: run-checks
         name: run project checks
