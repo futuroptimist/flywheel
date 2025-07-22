@@ -32,6 +32,20 @@ Each section covers three points:
 
 **Maintenance:** Keep `requirements.txt` up to date. Mention `uv` commands in setup docs and check CI workflows for consistency.
 
+### Running Python scripts with dependencies
+
+**Why:** `uv` can execute a standalone script and automatically install any required packages on-the-fly. This keeps one-off utilities lightweight.
+
+**How it works:** Invoke `uv run` with the `--with` flag to declare dependencies at runtime:
+
+```bash
+uv run --with rich example.py
+```
+
+Use `uv add --script example.py requests` to embed dependencies as metadata inside the script.
+
+**Maintenance:** Encourage contributors to prefer inline script metadata for repeatable scripts. Document updates to the recommended flags here if the `uv` syntax evolves.
+
 ## Local Environments
 
 **Why:** The `.local` folder lets each contributor store private configuration without committing it to the repository.
