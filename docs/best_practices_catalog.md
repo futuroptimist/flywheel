@@ -32,6 +32,43 @@ Each section covers three points:
 
 **Maintenance:** Keep `requirements.txt` up to date. Mention `uv` commands in setup docs and check CI workflows for consistency.
 
+### Running Python scripts with dependencies
+
+**Why:** `uv` can execute a standalone script and automatically install any required packages on-the-fly. This keeps one-off utilities lightweight.
+
+**How it works:** There are two ways to declare dependencies:
+
+1. Pass them at runtime with `--with`:
+
+   ```bash
+   uv run --with rich example.py
+   ```
+
+2. Embed them using [PEP 723](https://peps.python.org/pep-0723/) metadata:
+
+   ```bash
+   uv add --script example.py 'requests<3' rich
+   ```
+
+   This inserts a block at the top of the file:
+
+   ```python
+   # /// script
+   # dependencies = [
+   #   "requests<3",
+   #   "rich",
+   # ]
+   # ///
+   ```
+
+   Once present, run the script normally and `uv` handles installation automatically:
+
+   ```bash
+   uv run example.py
+   ```
+
+**Maintenance:** Encourage contributors to use inline metadata when sharing scripts. Document updates to the recommended flags here if the `uv` syntax evolves.
+
 ## Local Environments
 
 **Why:** The `.local` folder lets each contributor store private configuration without committing it to the repository.
