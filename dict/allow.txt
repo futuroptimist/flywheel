@@ -108,3 +108,7 @@ STLs
 sugarkube
 cdots
 runtime
+
+devlop
+sade
+trough

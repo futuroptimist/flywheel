@@ -51,5 +51,5 @@ def main() -> None:
         out.write_text(md)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover - manual entry point
     main()
