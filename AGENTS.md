@@ -30,6 +30,11 @@ for Anthropic-specific coding guidance. Broader Codex behavior rules live in
 - **When:** you run `flywheel prompt`
 - **Does:** generate context-aware prompts for Codex or other LLM assistants
 
+## Repo Scanner Agent
+- **When:** scheduled nightly or run manually
+- **Does:** clones a list of repositories and writes Markdown reports. Run with
+  `python -m flywheel.agents.scanner`.
+
 ---
 
 For personalization, run `./scripts/setup.sh YOURNAME YOURREPO` after cloning.

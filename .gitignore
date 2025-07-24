@@ -19,3 +19,7 @@ dictionary.dic
 .venv/
 playwright-report/
 test-results/
+reports/
+.scan-tmp/
+docs-site/node_modules/
+docs-site/dist/

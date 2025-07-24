@@ -9,7 +9,7 @@ repos:
     rev: v2.4.0
     hooks:
       - id: codespell
-        args: ["--ignore-words", "dict/allow.txt", "--skip", "*.lock,*.svg,webapp/static/js/*"]
+        args: ["--ignore-words", "dict/allow.txt", "--skip", "*.lock,*.svg,webapp/static/js/*,docs-site/package-lock.json"]
   - repo: local
     hooks:
       - id: run-checks
@@ -26,4 +26,6 @@ repos:
           - Flask
           - responses
           - trimesh
+          - bandit
+          - safety
         pass_filenames: false
