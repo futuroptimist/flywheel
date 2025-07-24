@@ -23,7 +23,7 @@ jobs:
           cd docs-site
           npm install --no-audit --no-fund
           npm run build
-      - uses: actions/upload-pages-artifact@v1
+      - uses: actions/upload-pages-artifact@v2
         with:
           path: docs-site/dist
       - uses: actions/deploy-pages@v1
