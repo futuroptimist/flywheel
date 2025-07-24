@@ -112,6 +112,15 @@ Verify that a repository contains the expected CI workflows and config files:
 flywheel audit path/to/repo
 ```
 
+### Scanning other repositories
+
+Clone a set of repos and generate Markdown reports:
+
+```bash
+python -m flywheel.agents.scanner
+```
+Reports are written to `reports/`.
+
 ### Viewing the 3D flywheel
 
 Run the bundled Flask app to explore the CAD models:

@@ -131,6 +131,7 @@ PRs               = "PRs"
 changelogs        = "changelogs"
 STLs              = "STLs"
 sugarkube         = "sugarkube"
+trough            = "trough"
 
 [files]
 # Existing exclusions plus new ones for generated assets

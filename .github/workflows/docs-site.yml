@@ -1,0 +1,31 @@
+name: Build Docs Site
+on:
+  push:
+    paths:
+      - 'docs-site/**'
+      - '.github/workflows/docs-site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: |
+          cd docs-site
+          npm install --no-audit --no-fund
+          npm run build
+      - uses: actions/upload-pages-artifact@v1
+        with:
+          path: docs-site/dist
+      - uses: actions/deploy-pages@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

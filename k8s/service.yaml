@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flywheel
+spec:
+  selector:
+    app: flywheel
+  ports:
+    - port: 80
+      targetPort: 42165
+  type: ClusterIP

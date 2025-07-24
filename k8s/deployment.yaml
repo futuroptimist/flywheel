@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flywheel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flywheel
+  template:
+    metadata:
+      labels:
+        app: flywheel
+    spec:
+      containers:
+        - name: flywheel
+          image: ghcr.io/owner/flywheel:latest
+          ports:
+            - containerPort: 42165
