@@ -6,16 +6,16 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk |
 | ---- | ------ | ------ | ----- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `2d8c9dd` | ❌ |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `6863847` | ❌ |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `540fb42` | ❌ |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `5dca5ca` | ✅ |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `bc9aa07` | ✅ |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `f4bf4ba` | ✅ |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `239604d` | ✅ |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `50aefd1` | ✅ |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `b76e177` | ✅ |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `37db08f` | ❌ |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `6e349ed` | ❌ |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `00d12c5` | ✅ |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `af0f170` | ❌ |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `2149e6a` | ❌ |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Installer |
