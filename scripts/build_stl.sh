@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCAD_DIR="${SCAD_DIR:-cad}"
-STL_DIR="${STL_DIR:-stl}"
+SCAD_DIR="${SCAD_DIR:-hardware/cad}"
+STL_DIR="${STL_DIR:-hardware/stl}"
 
 mkdir -p "$STL_DIR"
 

@@ -42,8 +42,8 @@
 - Sigma integration in `docs/sigma-integration.md`
 - Web viewer instructions in `docs/web-viewer.md`
 - CI troubleshooting tips in `docs/ci-guide.md`
-- Nightly STL exports are committed back to `stl/` after each run
-- Flywheel construction guide in `docs/flywheel-construction.md` with CAD files in `cad/`
+- Nightly STL exports are committed back to `hardware/stl/` after each run
+- Flywheel construction guide in `docs/flywheel-construction.md` with CAD files in `hardware/cad/`
   including `stand.scad`, `shaft.scad`, and `adapter.scad`. Assembly details live in `docs/flywheel-stand.md`, clamp instructions in `docs/flywheel-adapter.md`, and physics in `docs/flywheel-physics.md`
 
 ## Getting Started

@@ -39,8 +39,8 @@ PALETTE = [
     (0.8, 0.2, 1.0, 1.0),
 ]
 
-PARTS_DIR = Path("parts")
-OUTPUT = Path("assembly.glb")
+PARTS_DIR = Path("hardware/parts")
+OUTPUT = Path("hardware/assembly.glb")
 
 
 def _vec_min_max(values: list[float]) -> tuple[list[float], list[float]]:
@@ -53,7 +53,7 @@ def _vec_min_max(values: list[float]) -> tuple[list[float], list[float]]:
 def build() -> None:
     parts = sorted(PARTS_DIR.glob("*.stl"))
     if not parts:
-        raise SystemExit("No STL files found in ./parts/")
+        raise SystemExit("No STL files found in ./hardware/parts/")
 
     gltf = GLTF2(asset=Asset(version="2.0"))
     gltf.scenes = [Scene(nodes=list(range(len(parts))))]

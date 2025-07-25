@@ -50,6 +50,7 @@ class RepoCrawler:
         "Dockerfile.dev",
         "Dockerfile.prod",
         "docker/Dockerfile",
+        "infra/docker/Dockerfile",
         "frontend/Dockerfile",
     )
 

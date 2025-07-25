@@ -5,8 +5,8 @@ from pathlib import Path
 import flywheel.fit as ff
 
 REPO = Path(__file__).resolve().parents[1]
-CAD_DIR = REPO / "cad"
-STL_DIR = REPO / "stl"
+CAD_DIR = REPO / "hardware" / "cad"
+STL_DIR = REPO / "hardware" / "stl"
 
 
 def test_parse_scad_vars(tmp_path):
