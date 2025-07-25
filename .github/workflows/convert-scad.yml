@@ -2,7 +2,7 @@ name: Export SCAD to OBJ
 on:
   push:
     paths:
-      - 'cad/*.scad'
+      - 'hardware/cad/*.scad'
   workflow_dispatch:
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
       - name: Convert SCAD files
         run: |
           mkdir -p webapp/static/models
-          for f in cad/*.scad; do
+          for f in hardware/cad/*.scad; do
             base=$(basename "$f" .scad)
             openscad "$f" -o "webapp/static/models/$base.obj"
           done

@@ -28,8 +28,8 @@ def _dims(stl_path: Path) -> Tuple[float, float, float]:
 
 
 def verify_fit(
-    scad_dir: Path = Path("cad"),
-    stl_dir: Path = Path("stl"),
+    scad_dir: Path = Path("hardware") / "cad",
+    stl_dir: Path = Path("hardware") / "stl",
 ) -> bool:
     """Check that CAD parameters align across parts and match exported STLs."""
     adapter = parse_scad_vars(scad_dir / "adapter.scad")

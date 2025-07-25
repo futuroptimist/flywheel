@@ -6,12 +6,11 @@ app = Flask(__name__)
 
 
 MODEL_DIR = Path(__file__).resolve().parent / "static" / "models"
-SCAD_DIR = Path(__file__).resolve().parent.parent / "cad"
+SCAD_DIR = Path(__file__).resolve().parent.parent / "hardware" / "cad"
 
 
 def ensure_obj_models():
-    """Convert any .scad files in cad/ to .obj models in static/models/.
-
+    """Convert SCAD files from hardware/cad into OBJ models in static/models.
     Uses the OpenSCAD CLI if available. Only re-exports when the source file is
     newer than the existing .obj or the .obj is missing. Silently ignores
     failures so the web app still runs even if OpenSCAD isn’t installed.
