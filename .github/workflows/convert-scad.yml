@@ -2,7 +2,7 @@ name: Export SCAD to OBJ
 on:
   push:
     paths:
-      - 'cad/*.scad'
+      - 'hardware/cad/*.scad'
   workflow_dispatch:
 
 jobs:
@@ -18,11 +18,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y openscad
       - name: Convert SCAD files
         run: |
-          mkdir -p webapp/static/models
-          for f in cad/*.scad; do
-            base=$(basename "$f" .scad)
-            openscad "$f" -o "webapp/static/models/$base.obj"
-          done
+          python scripts/build_obj.py
       - name: Commit OBJ models
         if: github.ref == 'refs/heads/main'
         run: |

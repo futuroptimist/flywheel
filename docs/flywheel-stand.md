@@ -8,7 +8,7 @@ This guide covers a simple stand and matching shaft for the flywheel. The design
 - **PLA or PETG** – for printing the stand.
 - **Metal rod** – 8\,mm diameter if you prefer a metal shaft.
 
-The CAD files `cad/stand.scad` and `cad/shaft.scad` can be tweaked to change these dimensions.
+The CAD files `hardware/cad/stand.scad` and `hardware/cad/shaft.scad` can be tweaked to change these dimensions.
 
 ## Printing
 

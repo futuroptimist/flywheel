@@ -2,7 +2,7 @@ name: Build GLB
 on:
   push:
     paths:
-      - 'parts/*.stl'
+      - 'hardware/parts/*.stl'
       - 'scripts/build_glb.py'
       - '.github/workflows/build-glb.yml'
   workflow_dispatch:
@@ -24,4 +24,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: assembly-glb
-          path: assembly.glb
+          path: hardware/assembly.glb

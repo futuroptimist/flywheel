@@ -6,7 +6,7 @@ This part locks the flywheel to the shaft using a split-collar design so you can
 - **PETG or nylon** – strong and slightly flexible for the adapter body.
 - **M4 bolts and nuts** – two for clamping and two or more to attach the wheel.
 
-The geometry lives in `cad/adapter.scad` and can be tweaked for different shaft sizes or bolt diameters.
+The geometry lives in `hardware/cad/adapter.scad` and can be tweaked for different shaft sizes or bolt diameters.
 
 ## Printing
 1. Adjust the SCAD parameters if needed, then export to STL.
