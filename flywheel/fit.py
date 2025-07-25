@@ -21,15 +21,16 @@ def parse_scad_vars(path: Path) -> Dict[str, float]:
 
 def _dims(stl_path: Path) -> Tuple[float, float, float]:
     """Return (x, y, z) dimensions of the STL mesh."""
-    mesh = trimesh.load_mesh(stl_path)
-    bounds = mesh.bounds
-    diff = bounds[1] - bounds[0]
+    mesh = trimesh.load_mesh(stl_path, force="mesh")
+    if mesh is None or not hasattr(mesh, "bounds") or mesh.bounds is None:
+        raise ValueError(f"Could not load mesh or bounds from {stl_path}")
+    diff = mesh.bounds[1] - mesh.bounds[0]
     return float(diff[0]), float(diff[1]), float(diff[2])
 
 
 def verify_fit(
-    scad_dir: Path = Path("cad"),
-    stl_dir: Path = Path("stl"),
+    scad_dir: Path = Path("hardware") / "cad",
+    stl_dir: Path = Path("hardware") / "stl",
 ) -> bool:
     """Check that CAD parameters align across parts and match exported STLs."""
     adapter = parse_scad_vars(scad_dir / "adapter.scad")

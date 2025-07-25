@@ -1,11 +1,11 @@
 # Web-based CAD Viewer
 
-This repo includes a tiny Flask application that renders OBJ models generated from the SCAD files in `cad/`.
+This repo includes a tiny Flask application that renders OBJ models generated from the SCAD files in `hardware/cad/`.
 
 A GitHub Actions workflow converts the SCAD files to OBJ using `openscad` and
 commits the results to `webapp/static/models/` when it runs on the `main`
 branch. Another scheduled workflow generates nightly STL exports and commits
-them to `stl/`. GitHub renders `.stl` files with a built‑in 3D viewer so you can
+them to `hardware/stl/`. GitHub renders `.stl` files with a built‑in 3D viewer so you can
 inspect the geometry right in the browser.
 
 ## Running Locally

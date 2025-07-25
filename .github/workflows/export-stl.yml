@@ -23,7 +23,7 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add stl/**/*.stl || true
+          git add hardware/stl/**/*.stl hardware/parts/**/*.stl || true
           if git diff --cached --quiet; then
             echo "No STL changes to commit"
           else

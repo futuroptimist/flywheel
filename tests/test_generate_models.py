@@ -7,7 +7,7 @@ from webapp import app as webapp_module
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MODEL_DIR = REPO_ROOT / "webapp" / "static" / "models"
-CAD_DIR = REPO_ROOT / "cad"
+CAD_DIR = REPO_ROOT / "hardware" / "cad"
 
 
 def openscad_available():
@@ -21,7 +21,7 @@ def openscad_available():
     reason="OpenSCAD CLI not available",
 )
 def test_scad_to_obj_conversion(tmp_path, monkeypatch):
-    """ensure_obj_models should produce an OBJ for every SCAD in cad/."""
+    """ensure_obj_models converts each SCAD in hardware/cad to an OBJ."""
     # Work in a temp copy so source tree isn't modified
     tmp_models = tmp_path / "models"
     tmp_models.mkdir()
