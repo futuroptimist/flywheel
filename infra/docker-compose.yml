@@ -3,7 +3,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: docker/Dockerfile
+      dockerfile: infra/docker/Dockerfile
     ports:
       - "42165:42165"
     command: python webapp/app.py
