@@ -1,7 +1,7 @@
 # IRL Flywheel Construction
 
 This document explains how to build a physical flywheel using the
-`cad/flywheel.scad` design or any similar heavy cylinder. The provided
+`hardware/cad/flywheel.scad` design or any similar heavy cylinder. The provided
 OpenSCAD file produces a simple hub with a center bore for a shaft.
 
 ## Materials

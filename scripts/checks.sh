@@ -19,7 +19,7 @@ fi
 pytest -q
 
 # security scans
-bandit -r flywheel -x tests,stl --severity-level medium
+bandit -r flywheel -x tests,hardware/stl,hardware/parts --severity-level medium
 safety check -r requirements.txt --full-report --continue-on-error
 
 # docs checks
