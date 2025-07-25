@@ -1,2 +1,2 @@
 [bandit]
-exclude: tests/,hardware/stl/
+exclude: tests/,hardware/stl/,hardware/parts/
