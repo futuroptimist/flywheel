@@ -19,3 +19,12 @@ npm run generate-quest --prefix dspace
 ```
 
 Future iterations will tighten the integration so quests can be drafted in Flywheel and consumed directly by DSPACE.
+
+## Codex Automation
+
+DSPACE keeps its own automation prompt at
+`frontend/src/pages/docs/md/prompts-codex.md`. The prompt instructs Codex to pick
+an unchecked item from the September 1, 2025 changelog and fully implement it.
+Each run should tackle a different backlog task and then run
+`npm run test:pr` to verify code style and all tests. Reviewing this prompt helps
+align Flywheel's agents with DSPACE workflows when building shared features.
