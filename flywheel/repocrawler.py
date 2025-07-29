@@ -156,12 +156,47 @@ class RepoCrawler:
             return None
         return None
 
-    def _branch_green(self, repo: str, sha: str) -> Optional[bool]:
-        """Return True if the commit status is success."""
+    PASS_CONCLUSIONS = {"success", "neutral", "skipped", "no_status"}
+
+    def _branch_green(
+        self,
+        repo: str,
+        branch: str,
+        sha: str,
+    ) -> Optional[bool]:
+        """Return True when the HEAD of ``branch`` is considered passing."""
+
         if not sha:
             return None
+
         owner, name = repo.split("/", 1)
         base = "https://api.github.com/repos"
+
+        # First check the latest workflow run on the branch
+        runs_url = (
+            f"{base}/{owner}/{name}/actions/runs"
+            f"?branch={branch}&status=completed&per_page=1"
+        )
+        try:
+            resp = self.session.get(
+                runs_url,
+                headers={"Accept": "application/vnd.github+json"},
+                timeout=10,
+            )
+        except RequestException:
+            resp = None
+
+        if resp and resp.status_code == 200:
+            try:
+                runs = resp.json().get("workflow_runs", [])
+            except Exception:
+                runs = []
+            if runs:
+                conclusion = runs[0].get("conclusion")
+                if conclusion:
+                    return conclusion in self.PASS_CONCLUSIONS
+
+        # Fallback to the combined commit status API
         url = f"{base}/{owner}/{name}/commits/{sha}/status"
         try:
             resp = self.session.get(
@@ -171,13 +206,14 @@ class RepoCrawler:
             )
         except RequestException:
             return None
+
         if resp.status_code == 200:
             try:
-                state = resp.json().get("state")
-                if state:
-                    return state == "success"
+                state = resp.json().get("state", "no_status")
+                return state in self.PASS_CONCLUSIONS
             except Exception:
                 return None
+
         return None
 
     def _recent_commits(
@@ -365,7 +401,7 @@ class RepoCrawler:
         )  # noqa: E501
         latest_commit = self._latest_commit(repo, branch)
         if latest_commit:
-            trunk_green = self._branch_green(repo, latest_commit)
+            trunk_green = self._branch_green(repo, branch, latest_commit)
         else:
             trunk_green = None
         return RepoInfo(
