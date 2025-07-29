@@ -3,7 +3,7 @@
 > Guidance for LLM-based assistants working in the Flywheel repository. See
 > [llms.txt](llms.txt) for a quick orientation summary and
 > [CLAUDE.md](CLAUDE.md) for Anthropic-specific advice. Broader Codex behavior
-> rules live in [CUSTOM_INSTRUCTIONS.md](CUSTOM_INSTRUCTIONS.md).
+> rules live in [CUSTOM_INSTRUCTIONS.md](CUSTOM_INSTRUCTIONS.md). The baseline automation prompt is stored in [docs/prompts-codex.md](docs/prompts-codex.md).
 
 ## Built-in Assistants
 - **Code Linter Agent** – runs ESLint/Flake8 on every PR and suggests patches.
