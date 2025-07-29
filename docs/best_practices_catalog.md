@@ -117,6 +117,14 @@ Each section covers three points:
 
 **Maintenance:** Review these documents periodically. Agents should flag outdated links or wording.
 
+## Respecting Users
+
+**Why:** Avoid manipulative design choices that erode trust.
+
+**How it works:** The [dark-patterns guide](dark-patterns.md) outlines common traps and the "bright" alternatives we encourage. A companion [bright-patterns guide](bright-patterns.md) lists pro-user design elements. The repo crawler scans each repository for suspicious dark patterns and for positive bright patterns, recording the counts in `docs/repo-feature-summary.md`.
+
+**Maintenance:** Update the pattern list and scanning heuristics as new anti-patterns emerge. Keep this catalog and the guide in sync.
+
 ## Maintaining This Catalog
 
 - Add a new section whenever a best practice is added to the repository.

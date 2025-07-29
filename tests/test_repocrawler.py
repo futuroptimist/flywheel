@@ -74,6 +74,7 @@ def test_generate_summary():
     assert "main" in out
     assert "pip" in out
     assert "deadbee" in out
+    assert "| Repo | Dark Patterns | Bright Patterns |" in out
 
 
 def test_parse_coverage_none():
@@ -204,6 +205,7 @@ def test_summary_column_order(monkeypatch):
     assert "| Repo | Branch | Commit | Trunk |" in summary
     assert "| Repo | Coverage | Patch | Installer |" in summary
     assert "| Repo | License | CI | Workflows |" in summary
+    assert "| Repo | Dark Patterns | Bright Patterns |" in summary
     lines = summary.splitlines()
     idx = lines.index("| Repo | Branch | Commit | Trunk |")
     row = lines[idx + 2]
