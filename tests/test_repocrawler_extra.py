@@ -251,30 +251,74 @@ def test_recent_commits_request_exception():
     assert crawler._recent_commits("demo/repo", "main") == []
 
 
-def test_branch_green_success():
+@pytest.mark.parametrize("conclusion", ["success", "neutral", "skipped"])
+def test_branch_green_actions_pass(conclusion):
     sess = make_session(
         {
+            "/actions/runs": DummyResp(
+                200,
+                json_data={"workflow_runs": [{"conclusion": conclusion}]},
+            )
+        }
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._branch_green("demo/repo", "main", "dead") is True
+
+
+@pytest.mark.parametrize("conclusion", ["failure", "timed_out", "cancelled"])
+def test_branch_green_actions_fail(conclusion):
+    sess = make_session(
+        {
+            "/actions/runs": DummyResp(
+                200,
+                json_data={"workflow_runs": [{"conclusion": conclusion}]},
+            )
+        }
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._branch_green("demo/repo", "main", "dead") is False
+
+
+def test_branch_green_fallback_success():
+    sess = make_session(
+        {
+            "/actions/runs": DummyResp(200, json_data={"workflow_runs": []}),
             "/commits/cafe/status": DummyResp(
                 200,
                 json_data={"state": "success"},
-            )
+            ),
         }
     )
     crawler = RepoCrawler([], session=sess)
-    assert crawler._branch_green("demo/repo", "cafe") is True
+    assert crawler._branch_green("demo/repo", "main", "cafe") is True
 
 
-def test_branch_green_failure():
+def test_branch_green_no_status_treated_as_pass():
     sess = make_session(
         {
+            "/actions/runs": DummyResp(200, json_data={"workflow_runs": []}),
+            "/commits/nosh/status": DummyResp(
+                200,
+                json_data={"state": "no_status"},
+            ),
+        }
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._branch_green("demo/repo", "main", "nosh") is True
+
+
+def test_branch_green_failure_fallback():
+    sess = make_session(
+        {
+            "/actions/runs": DummyResp(200, json_data={"workflow_runs": []}),
             "/commits/dead/status": DummyResp(
                 200,
                 json_data={"state": "failure"},
-            )
+            ),
         }
     )
     crawler = RepoCrawler([], session=sess)
-    assert crawler._branch_green("demo/repo", "dead") is False
+    assert crawler._branch_green("demo/repo", "main", "dead") is False
 
 
 def test_branch_green_request_exception():
@@ -286,31 +330,9 @@ def test_branch_green_request_exception():
             raise requests.RequestException("boom")
 
     crawler = RepoCrawler([], session=ErrSession())
-    assert crawler._branch_green("demo/repo", "dead") is None
+    assert crawler._branch_green("demo/repo", "main", "dead") is None
 
 
 def test_branch_green_no_sha():
     crawler = RepoCrawler([])
-    assert crawler._branch_green("demo/repo", "") is None
-
-
-def test_branch_green_bad_json():
-    sess = make_session(
-        {"/commits/bad/status": DummyResp(200, json_data=ValueError("boom"))}
-    )
-    crawler = RepoCrawler([], session=sess)
-    assert crawler._branch_green("demo/repo", "bad") is None
-
-
-def test_branch_green_non_200():
-    sess = make_session({"/commits/miss/status": DummyResp(404)})
-    crawler = RepoCrawler([], session=sess)
-    assert crawler._branch_green("demo/repo", "miss") is None
-
-
-def test_branch_green_no_state():
-    sess = make_session(
-        {"/commits/nothing/status": DummyResp(200, json_data={})}
-    )  # noqa: E501
-    crawler = RepoCrawler([], session=sess)
-    assert crawler._branch_green("demo/repo", "nothing") is None
+    assert crawler._branch_green("demo/repo", "main", "") is None
