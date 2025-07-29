@@ -132,6 +132,15 @@ changelogs        = "changelogs"
 STLs              = "STLs"
 sugarkube         = "sugarkube"
 trough            = "trough"
+Changelog         = "Changelog"
+ci                = "ci"
+ChatGPT           = "ChatGPT"
+changelog         = "changelog"
+stabilise         = "stabilise"
+programmatically  = "programmatically"
+pnpm              = "pnpm"
+StackOverflow     = "StackOverflow"
+CommonMark        = "CommonMark"
 
 [files]
 # Existing exclusions plus new ones for generated assets
