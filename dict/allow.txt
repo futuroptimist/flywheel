@@ -110,4 +110,13 @@ cdots
 runtime
 
 trough
+Changelog
+ci
+ChatGPT
+changelog
+stabilise
+programmatically
+pnpm
+StackOverflow
+CommonMark
 npx
