@@ -31,6 +31,8 @@ class RepoInfo:
     latest_commit: Optional[str]
     workflow_count: int
     trunk_green: Optional[bool]
+    dark_pattern_count: int = 0
+    bright_pattern_count: int = 0
 
 
 class RepoCrawler:
@@ -44,6 +46,19 @@ class RepoCrawler:
     _UV = re.compile(r"setup-uv|uv venv", re.I)
     _PIP = re.compile(r"pip install", re.I)
     _POETRY = re.compile(r"poetry\s+install", re.I)
+    DARK_PATTERNS = [
+        re.compile(r"onbeforeunload", re.I),
+        re.compile(r"navigator\.clipboard\.writeText", re.I),
+        re.compile(r"auto\s*play", re.I),
+        re.compile(r"confirmshame", re.I),
+    ]
+    BRIGHT_PATTERNS = [
+        re.compile(r"delete\s+account", re.I),
+        re.compile(r"unsubscribe", re.I),
+        re.compile(r"opt[-_ ]?out", re.I),
+        re.compile(r"privacy", re.I),
+        re.compile(r"no[-_ ]?tracking", re.I),
+    ]
 
     DOCKER_FILES = (
         "Dockerfile",
@@ -52,6 +67,79 @@ class RepoCrawler:
         "docker/Dockerfile",
         "frontend/Dockerfile",
     )
+
+    def _list_files(self, repo: str, branch: str) -> list[str]:
+        base = "https://api.github.com/repos/"
+        url = f"{base}{repo}/git/trees/{branch}?recursive=1"
+        try:
+            resp = self.session.get(
+                url,
+                headers={"Accept": "application/vnd.github+json"},
+                timeout=10,
+            )
+        except RequestException:
+            return []
+        if resp.status_code == 200:
+            try:
+                data = resp.json()
+                return [
+                    item.get("path", "")
+                    for item in data.get("tree", [])
+                    if item.get("type") == "blob"
+                ]
+            except Exception:
+                return []
+        return []
+
+    def _detect_dark_patterns(self, repo: str, branch: str) -> int:
+        count = 0
+        files = self._list_files(repo, branch)[:50]
+        for path in files:
+            if not path.endswith(
+                (
+                    ".js",
+                    ".ts",
+                    ".tsx",
+                    ".py",
+                    ".html",
+                    ".md",
+                    ".json",
+                )
+            ):
+                continue
+            text = self._fetch_file(repo, path, branch)
+            if not text:
+                continue
+            for pat in self.DARK_PATTERNS:
+                if pat.search(text):
+                    count += 1
+                    break
+        return count
+
+    def _detect_bright_patterns(self, repo: str, branch: str) -> int:
+        count = 0
+        files = self._list_files(repo, branch)[:50]
+        for path in files:
+            if not path.endswith(
+                (
+                    ".js",
+                    ".ts",
+                    ".tsx",
+                    ".py",
+                    ".html",
+                    ".md",
+                    ".json",
+                )
+            ):
+                continue
+            text = self._fetch_file(repo, path, branch)
+            if not text:
+                continue
+            for pat in self.BRIGHT_PATTERNS:
+                if pat.search(text):
+                    count += 1
+                    break
+        return count
 
     def _badge_patch_percent(self, repo: str, branch: str) -> Optional[float]:
         """Return patch coverage parsed from the public badge."""
@@ -404,6 +492,8 @@ class RepoCrawler:
             trunk_green = self._branch_green(repo, branch, latest_commit)
         else:
             trunk_green = None
+        dark_count = self._detect_dark_patterns(repo, branch)
+        bright_count = self._detect_bright_patterns(repo, branch)
         return RepoInfo(
             name=repo,
             branch=branch,
@@ -423,6 +513,8 @@ class RepoCrawler:
             latest_commit=latest_commit,
             workflow_count=workflow_count,
             trunk_green=trunk_green,
+            dark_pattern_count=dark_count,
+            bright_pattern_count=bright_count,
         )
 
     def crawl(self) -> List[RepoInfo]:
@@ -459,6 +551,10 @@ class RepoCrawler:
             " --------------- | ------------ | ---------- |"
         )
         policy_rows = []
+
+        pattern_header = "| Repo | Dark Patterns | Bright Patterns |"
+        pattern_sep = "| ---- | ------------- | --------------- |"
+        pattern_rows = []
 
         for idx, info in enumerate(repos):
             coverage = "❌"
@@ -512,6 +608,12 @@ class RepoCrawler:
                     pre="✅" if info.has_precommit else "❌",
                 )
             )
+            pattern_rows.append(
+                (
+                    f"| {repo_link} | {info.dark_pattern_count} | "
+                    f"{info.bright_pattern_count} |"
+                )
+            )
 
         lines.extend(basics_rows)
         lines.extend(
@@ -527,6 +629,15 @@ class RepoCrawler:
             ["", "## Policies & Automation", policy_header, policy_sep]
         )  # noqa: E501
         lines.extend(policy_rows)
+        lines.extend(
+            [
+                "",
+                "## Dark & Bright Pattern Scan",
+                pattern_header,
+                pattern_sep,
+            ]
+        )
+        lines.extend(pattern_rows)
         lines.append("")
         lines.append(
             "Legend: ✅ indicates the repo has adopted that feature from "
@@ -537,6 +648,8 @@ class RepoCrawler:
             "and ❌ otherwise, with the percentage in parentheses. "
             "The commit column shows the short SHA of the latest default "
             "branch commit at crawl time. The Trunk column indicates "
-            "whether CI is green for that commit."
+            "whether CI is green for that commit. Dark Patterns and Bright "
+            "Patterns list counts of suspicious or positive code snippets "
+            "detected."
         )
         return "\n".join(lines)
