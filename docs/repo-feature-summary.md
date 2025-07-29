@@ -46,3 +46,8 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 5 | ✅ | ❌ | ❌ | ✅ |
 
 Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip. Coverage percentages are parsed from their badges where available. Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses. The commit column shows the short SHA of the latest default branch commit at crawl time. The Trunk column indicates whether CI is green for that commit.
+
+## Documentation Assets
+| Docs | Changelog | Codex Prompts | **CI-Fix Prompt** |
+| ---- | --------- | ------------- | ---------------- |
+| ✅  | ✅ | prompts-codex.md | prompts-codex-ci-fix.md |
