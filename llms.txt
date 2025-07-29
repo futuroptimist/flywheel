@@ -1,14 +1,20 @@
-# Flywheel llms.txt
+# Flywheel
 
-This repository provides a GitHub template with CI workflows, style guides, and LLM-powered helpers.
+> GitHub template for bootstrapping projects with CI, docs, and LLM-driven helpers. Works with ChatGPT, Claude, Gemini, or open-source models like Llama 2.
 
-Commit messages should be descriptive; every change feeds the public knowledge base.
+Flywheel bundles style guides, automation scripts, and integration docs so autonomous agents can quickly get oriented.
 
-## Development
-- Python 3.12, formatted with black and flake8 via pre-commit.
-- Install hooks with `pre-commit install` and run `pre-commit run --all-files` before pushing.
-- Tests live in `tests/` and run with `pytest`.
+## Docs
+- [README.md](README.md) – overview and setup instructions
+- [AGENTS.md](AGENTS.md) – guidance for LLM assistants
+- [CLAUDE.md](CLAUDE.md) – Claude-specific advice
+- [CUSTOM_INSTRUCTIONS.md](CUSTOM_INSTRUCTIONS.md) – behavior rules
+- [docs/best_practices_catalog.md](docs/best_practices_catalog.md) – coding tips
 
-See AGENTS.md for built-in assistants, [CLAUDE.md](CLAUDE.md) for
-Anthropic-style best practices, and [CUSTOM_INSTRUCTIONS.md](CUSTOM_INSTRUCTIONS.md)
-for Codex behavior rules. Additional integration guides live in `docs/`.
+## Examples
+- [examples/basic.py](examples/basic.py) – CLI usage example
+- [tests/](tests) – baseline tests to extend
+
+## Optional
+- [viewer/index.html](viewer/index.html) – interactive 3‑D viewer
+- [docs-site/](docs-site) – generated docs site
