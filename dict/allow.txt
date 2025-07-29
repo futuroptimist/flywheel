@@ -120,3 +120,7 @@ pnpm
 StackOverflow
 CommonMark
 npx
+Confirmshaming
+Zuckering
+Dismissible
+cancelled

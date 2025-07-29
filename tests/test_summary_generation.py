@@ -20,3 +20,4 @@ def test_summary_generation(monkeypatch):
     summary = crawler.generate_summary()
     assert "(95%)" in summary
     assert "—" not in summary
+    assert "| Repo | Dark Patterns | Bright Patterns |" in summary
