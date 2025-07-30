@@ -33,6 +33,8 @@
 - [CUSTOM_INSTRUCTIONS.md](CUSTOM_INSTRUCTIONS.md) for Codex rules
   and a [runbook.yml](runbook.yml) checklist for repo setup
 - Codex automation prompt in `docs/prompts-codex.md`
+- CAD update prompt in `docs/prompts-codex-cad.md`
+- Physics explainer prompt in `docs/prompts-codex-physics.md`
 - Axel integration guide in `docs/axel-integration.md`
 - DSPACE synergy doc in `docs/dspace-integration.md`
 - token.place roadmap in `docs/tokenplace-roadmap.md`

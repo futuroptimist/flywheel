@@ -3,7 +3,7 @@
 > Guidance for LLM-based assistants working in the Flywheel repository. See
 > [llms.txt](llms.txt) for a quick orientation summary and
 > [CLAUDE.md](CLAUDE.md) for Anthropic-specific advice. Broader Codex behavior
-> rules live in [CUSTOM_INSTRUCTIONS.md](CUSTOM_INSTRUCTIONS.md). The baseline automation prompt is stored in [docs/prompts-codex.md](docs/prompts-codex.md).
+> rules live in [CUSTOM_INSTRUCTIONS.md](CUSTOM_INSTRUCTIONS.md). The baseline automation prompt is stored in [docs/prompts-codex.md](docs/prompts-codex.md) along with specialized prompts like [docs/prompts-codex-cad.md](docs/prompts-codex-cad.md) and [docs/prompts-codex-physics.md](docs/prompts-codex-physics.md).
 
 ## Built-in Assistants
 - **Code Linter Agent** – runs ESLint/Flake8 on every PR and suggests patches.
@@ -17,6 +17,8 @@
 - **Prompt Agent** – generates context‑aware prompts via `flywheel prompt`.
 - **Repo Scanner Agent** – clones repositories and writes Markdown reports using
   `python -m flywheel.agents.scanner`.
+- **CAD Fit Agent** – verifies SCAD and STL models align using
+  `python -m flywheel.fit` and comments on discrepancies.
 
 ## Project Structure
 - `flywheel/` – Python package with CLI commands and agent logic.
@@ -25,6 +27,8 @@
 - `scripts/` – automation helpers such as `checks.sh`.
 - `tests/` – Python and JavaScript tests.
 - `viewer/` – 3‑D assembly viewer.
+- `cad/` – OpenSCAD source files.
+- `stl/` – exported models kept in sync with `cad/`.
 
 ## Coding Conventions
 ### General
@@ -32,6 +36,8 @@
 - TypeScript with `eslint` and `prettier` for the webapp.
 - Keep functions small and name them descriptively.
 - Document complex logic with comments.
+- Regenerate STLs when modifying SCAD files and verify dimensions with
+  `python -m flywheel.fit`.
 
 ### CSS/Styling
 - Prefer Tailwind CSS for styling in `webapp/`.
@@ -44,6 +50,7 @@ Run the full test suite before committing:
 pre-commit run --all-files
 pytest -q
 npm test -- --coverage
+python -m flywheel.fit
 ```
 
 ## Pull Request Guidelines
