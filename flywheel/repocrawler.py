@@ -260,10 +260,34 @@ class RepoCrawler:
         owner, name = repo.split("/", 1)
         base = "https://api.github.com/repos"
 
-        # First check the latest workflow run on the branch
+        # Check combined commit status first. This aggregates the
+        # results across all workflows and is generally the most
+        # accurate indicator of the branch health.
+        url = f"{base}/{owner}/{name}/commits/{sha}/status"
+        try:
+            resp = self.session.get(
+                url,
+                headers={"Accept": "application/vnd.github+json"},
+                timeout=10,
+            )
+        except RequestException:
+            resp = None
+
+        if resp and resp.status_code == 200:
+            try:
+                state = resp.json().get("state", "no_status")
+                if state == "pending" or state == "no_status":
+                    return None
+                return state in self.PASS_CONCLUSIONS
+            except Exception:
+                pass
+
+        # Fallback to the workflow runs when no status is found. We
+        # look through a few recent runs to see if the HEAD commit was
+        # executed.
         runs_url = (
             f"{base}/{owner}/{name}/actions/runs"
-            f"?branch={branch}&status=completed&per_page=1"
+            f"?branch={branch}&status=completed&per_page=5"
         )
         try:
             resp = self.session.get(
@@ -279,28 +303,15 @@ class RepoCrawler:
                 runs = resp.json().get("workflow_runs", [])
             except Exception:
                 runs = []
+            for run in runs:
+                if run.get("head_sha", "").startswith(sha):
+                    concl = run.get("conclusion")
+                    if concl:
+                        return concl in self.PASS_CONCLUSIONS
             if runs:
-                conclusion = runs[0].get("conclusion")
-                if conclusion:
-                    return conclusion in self.PASS_CONCLUSIONS
-
-        # Fallback to the combined commit status API
-        url = f"{base}/{owner}/{name}/commits/{sha}/status"
-        try:
-            resp = self.session.get(
-                url,
-                headers={"Accept": "application/vnd.github+json"},
-                timeout=10,
-            )
-        except RequestException:
-            return None
-
-        if resp.status_code == 200:
-            try:
-                state = resp.json().get("state", "no_status")
-                return state in self.PASS_CONCLUSIONS
-            except Exception:
-                return None
+                concl = runs[0].get("conclusion")
+                if concl:
+                    return concl in self.PASS_CONCLUSIONS
 
         return None
 
