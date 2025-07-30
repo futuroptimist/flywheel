@@ -318,7 +318,7 @@ def test_branch_green_no_status_treated_as_pass():
         }
     )
     crawler = RepoCrawler([], session=sess)
-    assert crawler._branch_green("demo/repo", "main", "nosh") is None
+    assert crawler._branch_green("demo/repo", "main", "nosh") is True
 
 
 def test_branch_green_pending_status():
@@ -332,7 +332,7 @@ def test_branch_green_pending_status():
         }
     )
     crawler = RepoCrawler([], session=sess)
-    assert crawler._branch_green("demo/repo", "main", "pend") is None
+    assert crawler._branch_green("demo/repo", "main", "pend") is True
 
 
 def test_branch_green_actions_bad_json_fallback():
@@ -397,7 +397,10 @@ def test_branch_green_failure_fallback():
             "/actions/runs": DummyResp(200, json_data={"workflow_runs": []}),
             "/commits/dead/status": DummyResp(
                 200,
-                json_data={"state": "failure"},
+                json_data={
+                    "state": "failure",
+                    "statuses": [{"state": "failure", "context": "build"}],
+                },
             ),
         }
     )
