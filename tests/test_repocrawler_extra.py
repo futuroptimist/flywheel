@@ -257,7 +257,14 @@ def test_branch_green_actions_pass(conclusion):
         {
             "/actions/runs": DummyResp(
                 200,
-                json_data={"workflow_runs": [{"conclusion": conclusion}]},
+                json_data={
+                    "workflow_runs": [
+                        {
+                            "conclusion": conclusion,
+                            "head_sha": "dead",
+                        }
+                    ]
+                },
             )
         }
     )
@@ -271,7 +278,14 @@ def test_branch_green_actions_fail(conclusion):
         {
             "/actions/runs": DummyResp(
                 200,
-                json_data={"workflow_runs": [{"conclusion": conclusion}]},
+                json_data={
+                    "workflow_runs": [
+                        {
+                            "conclusion": conclusion,
+                            "head_sha": "dead",
+                        }
+                    ]
+                },
             )
         }
     )
@@ -304,7 +318,7 @@ def test_branch_green_no_status_treated_as_pass():
         }
     )
     crawler = RepoCrawler([], session=sess)
-    assert crawler._branch_green("demo/repo", "main", "nosh") is True
+    assert crawler._branch_green("demo/repo", "main", "nosh") is None
 
 
 def test_branch_green_actions_bad_json_fallback():

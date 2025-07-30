@@ -260,10 +260,10 @@ class RepoCrawler:
         owner, name = repo.split("/", 1)
         base = "https://api.github.com/repos"
 
-        # First check the latest workflow run on the branch
+        # First check workflow runs for the specific commit
         runs_url = (
             f"{base}/{owner}/{name}/actions/runs"
-            f"?branch={branch}&status=completed&per_page=1"
+            f"?branch={branch}&status=completed&per_page=20"
         )
         try:
             resp = self.session.get(
@@ -279,10 +279,12 @@ class RepoCrawler:
                 runs = resp.json().get("workflow_runs", [])
             except Exception:
                 runs = []
-            if runs:
-                conclusion = runs[0].get("conclusion")
-                if conclusion:
-                    return conclusion in self.PASS_CONCLUSIONS
+            for run in runs:
+                if run.get("head_sha", "").startswith(sha):
+                    conclusion = run.get("conclusion")
+                    if conclusion:
+                        return conclusion in self.PASS_CONCLUSIONS
+                    break
 
         # Fallback to the combined commit status API
         url = f"{base}/{owner}/{name}/commits/{sha}/status"
@@ -298,6 +300,8 @@ class RepoCrawler:
         if resp.status_code == 200:
             try:
                 state = resp.json().get("state", "no_status")
+                if state in {"pending", "no_status"}:
+                    return None
                 return state in self.PASS_CONCLUSIONS
             except Exception:
                 return None
