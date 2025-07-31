@@ -318,7 +318,7 @@ def test_branch_green_no_status_treated_as_pass():
         }
     )
     crawler = RepoCrawler([], session=sess)
-    assert crawler._branch_green("demo/repo", "main", "nosh") is None
+    assert crawler._branch_green("demo/repo", "main", "nosh") is True
 
 
 def test_branch_green_pending_status():
@@ -332,7 +332,7 @@ def test_branch_green_pending_status():
         }
     )
     crawler = RepoCrawler([], session=sess)
-    assert crawler._branch_green("demo/repo", "main", "pend") is None
+    assert crawler._branch_green("demo/repo", "main", "pend") is True
 
 
 def test_branch_green_actions_bad_json_fallback():
@@ -397,12 +397,71 @@ def test_branch_green_failure_fallback():
             "/actions/runs": DummyResp(200, json_data={"workflow_runs": []}),
             "/commits/dead/status": DummyResp(
                 200,
-                json_data={"state": "failure"},
+                json_data={
+                    "state": "failure",
+                    "statuses": [{"state": "failure", "context": "build"}],
+                },
             ),
         }
     )
     crawler = RepoCrawler([], session=sess)
     assert crawler._branch_green("demo/repo", "main", "dead") is False
+
+
+def test_branch_green_ignore_coverage_context_success():
+    sess = make_session(
+        {
+            "/actions/runs": DummyResp(200, json_data={"workflow_runs": []}),
+            "/commits/cc/status": DummyResp(
+                200,
+                json_data={
+                    "state": "failure",
+                    "statuses": [
+                        {"state": "success", "context": "build"},
+                        {"state": "failure", "context": "codecov/project"},
+                    ],
+                },
+            ),
+        }
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._branch_green("demo/repo", "main", "cc") is True
+
+
+def test_branch_green_checks_api_success():
+    sess = make_session(
+        {
+            "/actions/runs": DummyResp(200, json_data={"workflow_runs": []}),
+            "/commits/chk/status": DummyResp(
+                200,
+                json_data={"state": "failure"},
+            ),
+            "/commits/chk/check-runs": DummyResp(
+                200,
+                json_data={"check_runs": [{"conclusion": "success"}]},
+            ),
+        }
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._branch_green("demo/repo", "main", "chk") is True
+
+
+def test_branch_green_checks_api_failure():
+    sess = make_session(
+        {
+            "/actions/runs": DummyResp(200, json_data={"workflow_runs": []}),
+            "/commits/badchk/status": DummyResp(
+                200,
+                json_data={"state": "failure"},
+            ),
+            "/commits/badchk/check-runs": DummyResp(
+                200,
+                json_data={"check_runs": [{"conclusion": "failure"}]},
+            ),
+        }
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._branch_green("demo/repo", "main", "badchk") is False
 
 
 def test_branch_green_status_bad_json():

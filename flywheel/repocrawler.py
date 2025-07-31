@@ -297,16 +297,63 @@ class RepoCrawler:
         except RequestException:
             return None
 
-        if resp.status_code == 200:
-            try:
-                state = resp.json().get("state", "no_status")
-                if state in {"pending", "no_status"}:
-                    return None
-                return state in self.PASS_CONCLUSIONS
-            except Exception:
-                return None
+        # ----- New, more robust evaluation ---------------------------------
+        if resp.status_code != 200:
+            return None
 
-        return None
+        try:
+            body = resp.json()
+        except Exception:
+            return None
+
+        # 1. Fast-path: combined status already success
+        if body.get("state") == "success":
+            return True
+
+        statuses = body.get("statuses", [])
+
+        _COVERAGE_CONTEXTS = {"codecov/patch", "codecov/project"}
+
+        hard_failure = False
+        has_success = False
+        for st in statuses:
+            ctx = st.get("context", "")
+            state = st.get("state")
+            if ctx in _COVERAGE_CONTEXTS:
+                continue
+            if state == "success":
+                has_success = True
+            elif state in {"failure", "error"}:
+                hard_failure = True
+
+        if hard_failure:
+            return False
+        if has_success:
+            return True
+
+        # 2. Fallback to the Checks API (used by GitHub Actions)
+        checks_url = (
+            "https://api.github.com/repos/" f"{repo}/commits/{sha}/check-runs"
+        )  # noqa: E501
+        try:
+            r = self.session.get(
+                checks_url,
+                headers={"Accept": "application/vnd.github+json"},
+                timeout=10,
+            )
+            if r.status_code == 200:
+                runs = r.json().get("check_runs", [])
+                if runs:
+                    conclusions = {run.get("conclusion") for run in runs}
+                    if conclusions <= {"success", "neutral", "skipped"}:
+                        return True
+                    if {"failure", "cancelled", "timed_out"} & conclusions:
+                        return False
+        except RequestException:  # pragma: no cover - network error handling
+            pass
+
+        # 3. Last resort: no CI contexts present → treat as green
+        return True
 
     def _recent_commits(
         self,
