@@ -349,7 +349,7 @@ class RepoCrawler:
                         return True
                     if {"failure", "cancelled", "timed_out"} & conclusions:
                         return False
-        except RequestException:
+        except RequestException:  # pragma: no cover - network error handling
             pass
 
         # 3. Last resort: no CI contexts present → treat as green
