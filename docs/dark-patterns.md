@@ -21,5 +21,9 @@ Manipulative interfaces erode trust and may even violate privacy or consumer pro
 | **Nagging** | Persistent pop-ups or notifications wear users down. | Provide respectful reminders that can be dismissed permanently. |
 | **Trick questions** | Ambiguous wording leads to wrong choices. | Write plain-language questions with unambiguous answers. |
 | **Sneak into basket** | Adding items to a cart without consent exploits inattentive users. | Require explicit confirmation before modifying orders. |
+| **Scarcity cues** | Countdown timers and low-stock warnings create needless urgency. | Provide realistic timeframes and avoid false shortages. |
+| **Activity notifications** | Fake or exaggerated purchase alerts push FOMO. | Only show genuine activity or remove these notifications. |
+| **Data grabs** | Collecting more personal info than required erodes privacy. | Limit data collection to what is truly necessary. |
+| **False hierarchy** | Visual emphasis on pricey options nudges higher spend. | Present choices with equal weight and clear pricing. |
 
 For additional guidance, see [best_practices_catalog.md](best_practices_catalog.md).
