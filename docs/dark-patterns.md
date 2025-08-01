@@ -21,5 +21,12 @@ Manipulative interfaces erode trust and may even violate privacy or consumer pro
 | **Nagging** | Persistent pop-ups or notifications wear users down. | Provide respectful reminders that can be dismissed permanently. |
 | **Trick questions** | Ambiguous wording leads to wrong choices. | Write plain-language questions with unambiguous answers. |
 | **Sneak into basket** | Adding items to a cart without consent exploits inattentive users. | Require explicit confirmation before modifying orders. |
+| **Scarcity cues** | Countdown timers or "only X left" messages create unnecessary urgency. | Provide honest stock levels and reasonable time to decide. |
+| **Activity notifications** | Fake or repeated updates about other shoppers apply social pressure. | Show only genuine activity or none at all. |
+| **Data grabs** | Requesting excess personal details risks privacy misuse. | Collect only what is needed for the task. |
+| **False hierarchy** | Interface layout pushes the provider's preferred option. | Present choices evenly so the user can decide freely. |
+| **Redirection or nagging** | Repeated pop-ups steer users away from their intended action. | Let people dismiss prompts and continue without detours. |
+
+This list incorporates examples from [NSW Fair Trading's dark pattern guide](https://www.nsw.gov.au/departments-and-agencies/fair-trading/dark-patterns).
 
 For additional guidance, see [best_practices_catalog.md](best_practices_catalog.md).

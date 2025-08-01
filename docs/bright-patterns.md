@@ -15,5 +15,10 @@ This catalog lists design choices that respect user autonomy and well-being. The
 | Dismissible reminders | Notifications can be permanently turned off. |
 | Plain language questions | No trick phrasing or double negatives. |
 | Explicit order confirmation | Nothing is added to a cart or order without clear consent. |
+| Honest stock levels | Availability indicators match reality and do not rush decisions. |
+| Genuine activity updates | Only real, relevant activity is shown, if any. |
+| Minimal data collection | Ask only for the information truly required. |
+| Balanced option layout | All choices are presented with equal visual weight. |
+| Non-intrusive prompts | Users can dismiss pop-ups and continue without disruption. |
 
 Use these bright patterns to build trust and foster positive engagement.
