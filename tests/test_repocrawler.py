@@ -138,6 +138,7 @@ def test_generate_summary_installer_variants(monkeypatch):
         branch="main",
         coverage="100%",
         patch_percent=None,
+        uses_codecov=True,
         has_license=True,
         has_ci=True,
         has_agents=False,
@@ -150,7 +151,11 @@ def test_generate_summary_installer_variants(monkeypatch):
         trunk_green=True,
     )
     info_partial = info_uv.__class__(
-        **{**info_uv.__dict__, "name": "demo/partial", "installer": "partial"}
+        **{
+            **info_uv.__dict__,
+            "name": "demo/partial",
+            "installer": "partial",
+        }
     )
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info_uv, info_partial])
@@ -165,6 +170,7 @@ def test_generate_summary_other_installer(monkeypatch):
         branch="main",
         coverage="80%",
         patch_percent=None,
+        uses_codecov=True,
         has_license=True,
         has_ci=True,
         has_agents=True,
@@ -188,6 +194,7 @@ def test_summary_column_order(monkeypatch):
         branch="main",
         coverage="100%",
         patch_percent=None,
+        uses_codecov=True,
         has_license=True,
         has_ci=True,
         has_agents=True,
@@ -203,7 +210,7 @@ def test_summary_column_order(monkeypatch):
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
     summary = crawler.generate_summary()
     assert "| Repo | Branch | Commit | Trunk |" in summary
-    assert "| Repo | Coverage | Patch | Installer |" in summary
+    assert "| Repo | Coverage | Patch | Installer | Codecov |" in summary
     assert "| Repo | License | CI | Workflows |" in summary
     assert "| Repo | Dark Patterns | Bright Patterns |" in summary
     lines = summary.splitlines()
@@ -226,6 +233,7 @@ def test_generate_summary_with_patch(monkeypatch):
         branch="main",
         coverage="100%",
         patch_percent=73.0,
+        uses_codecov=True,
         has_license=True,
         has_ci=True,
         has_agents=False,
@@ -240,7 +248,7 @@ def test_generate_summary_with_patch(monkeypatch):
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
     lines = crawler.generate_summary().splitlines()
-    idx = lines.index("| Repo | Coverage | Patch | Installer |")
+    idx = lines.index("| Repo | Coverage | Patch | Installer | Codecov |")
     row = lines[idx + 2]
     assert "❌ (73%)" in row
     assert "(73%)" in row

@@ -21,6 +21,7 @@ class RepoInfo:
     branch: str
     coverage: Optional[str]
     patch_percent: Optional[float]
+    uses_codecov: bool
     has_license: bool
     has_ci: bool
     has_agents: bool
@@ -505,6 +506,14 @@ class RepoCrawler:
         readme = self._fetch_file(repo, "README.md", branch)
         coverage = self._parse_coverage(readme, repo, branch)
         patch_cov = self._patch_coverage_from_codecov(repo, branch)
+        uses_codecov = any(
+            [
+                bool(coverage),
+                patch_cov is not None,
+                self._has_file(repo, "codecov.yml", branch),
+                self._has_file(repo, ".codecov.yml", branch),
+            ]
+        )
         workflow_files = self._list_workflows(repo, branch)
         workflow_count = len(workflow_files)
         workflows_txt = "".join(
@@ -550,6 +559,7 @@ class RepoCrawler:
             branch=branch,
             coverage=coverage,
             patch_percent=patch_cov,
+            uses_codecov=uses_codecov,
             has_license=self._has_file(repo, "LICENSE", branch),
             has_ci=self._has_ci(workflow_files),
             has_agents=self._has_file(repo, "AGENTS.md", branch),
@@ -589,8 +599,8 @@ class RepoCrawler:
         lines.extend(["## Basics", basics_header, basics_sep])
         basics_rows = []
 
-        coverage_header = "| Repo | Coverage | Patch | Installer |"
-        coverage_sep = "| ---- | -------- | ----- | --------- |"
+        coverage_header = "| Repo | Coverage | Patch | Installer | Codecov |"
+        coverage_sep = "| ---- | -------- | ----- | --------- | ------- |"
         coverage_rows = []
 
         policy_header = (
@@ -637,11 +647,12 @@ class RepoCrawler:
                 f"| {repo_link} | {info.branch} | {commit} | {trunk} |"  # noqa: E501
             )
             coverage_rows.append(
-                "| {} | {} | {} | {} |".format(
+                "| {} | {} | {} | {} | {} |".format(
                     repo_link,
                     coverage,
                     patch,
                     inst,
+                    "✅" if info.uses_codecov else "❌",
                 )
             )
             policy_rows.append(

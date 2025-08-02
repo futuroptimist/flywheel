@@ -30,7 +30,7 @@ def main() -> None:
     infos = crawler.crawl()
 
     basics = [["Repo", "Branch", "Commit"]]
-    coverage = [["Repo", "Coverage", "Patch", "Installer"]]
+    coverage = [["Repo", "Coverage", "Patch", "Installer", "Codecov"]]
     policy = [
         [
             "Repo",
@@ -63,7 +63,15 @@ def main() -> None:
 
         inst_map = {"uv": "🚀 uv", "partial": "🔶 partial"}
         inst = inst_map.get(info.installer, info.installer)
-        coverage.append([link, cov, patch, inst])
+        coverage.append(
+            [
+                link,
+                cov,
+                patch,
+                inst,
+                "✅" if info.uses_codecov else "❌",
+            ]
+        )
 
         policy.append(
             [
@@ -80,30 +88,46 @@ def main() -> None:
 
     lines = [
         "## Basics",
-        tabulate(basics[1:], headers=basics[0], tablefmt="github"),
+        tabulate(
+            basics[1:],
+            headers=basics[0],
+            tablefmt="github",
+            maxcolwidths=[None] * len(basics[0]),
+        ),
     ]
     lines.extend(
         [
             "",
             "## Coverage & Installer",
-            tabulate(coverage[1:], headers=coverage[0], tablefmt="github"),
+            tabulate(
+                coverage[1:],
+                headers=coverage[0],
+                tablefmt="github",
+                maxcolwidths=[None] * len(coverage[0]),
+            ),
         ]
     )
     lines.extend(
         [
             "",
             "## Policies & Automation",
-            tabulate(policy[1:], headers=policy[0], tablefmt="github"),
+            tabulate(
+                policy[1:],
+                headers=policy[0],
+                tablefmt="github",
+                maxcolwidths=[None] * len(policy[0]),
+            ),
         ]
     )
     lines.append("")
     lines.append(
         "Legend: ✅ indicates the repo has adopted that feature from flywheel. "
         "🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip. "
-        "Coverage percentages are parsed from Codecov when available. Patch "
-        "shows ✅ when diff coverage is at least 90% and ❌ otherwise. The "
-        "commit column shows the short SHA of the latest default branch "
-        "commit at crawl time."
+        "Coverage percentages are parsed from Codecov when available. The "
+        "Codecov column marks repos using Codecov for reporting. Patch shows "
+        "✅ when diff coverage is at least 90% and ❌ otherwise. The commit "
+        "column shows the short SHA of the latest default branch commit at "
+        "crawl time."
     )
     lines.append(
         f"_Updated automatically: {date.today()}_",
