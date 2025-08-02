@@ -131,3 +131,9 @@ explainers
 NSW
 RepoCrawler
 py
+GraphQL
+octokit
+Snyk
+mjs
+yyyy
+LTS

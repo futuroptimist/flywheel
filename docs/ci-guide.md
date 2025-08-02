@@ -6,7 +6,7 @@ The workflow now commits `docs/repo-feature-summary.md` only when it runs on the
 
 ## How to update the summary locally
 1. Check out the branch you want to update.
-2. Run `flywheel crawl futuroptimist/flywheel futuroptimist/axel --output docs/repo-feature-summary.md`.
+2. Run `flywheel crawl --repos-file docs/repo_list.txt --output docs/repo-feature-summary.md`.
 3. Commit the updated `docs/repo-feature-summary.md` yourself.
 
 ## CI best practices
