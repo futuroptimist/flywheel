@@ -141,6 +141,12 @@ programmatically  = "programmatically"
 pnpm              = "pnpm"
 StackOverflow     = "StackOverflow"
 CommonMark        = "CommonMark"
+GraphQL           = "GraphQL"
+octokit           = "octokit"
+Snyk              = "Snyk"
+mjs               = "mjs"
+yyyy              = "yyyy"
+LTS               = "LTS"
 
 [files]
 # Existing exclusions plus new ones for generated assets
