@@ -109,7 +109,15 @@ def prompt(args: argparse.Namespace) -> None:
 
 
 def crawl(args: argparse.Namespace) -> None:
-    crawler = RepoCrawler(args.repos, token=args.token)
+    repos = list(args.repos)
+    repo_file = Path(args.repos_file)
+    if repo_file.exists():
+        lines = repo_file.read_text().splitlines()
+        file_repos = [line.strip() for line in lines if line.strip()]
+        repos = file_repos + repos
+    if not repos:
+        raise SystemExit("No repositories provided")
+    crawler = RepoCrawler(repos, token=args.token)
     md = crawler.generate_summary()
     Path(args.output).write_text(md)
 
@@ -154,7 +162,12 @@ def build_parser() -> argparse.ArgumentParser:
     p_prompt.set_defaults(func=prompt)
 
     p_crawl = sub.add_parser("crawl", help="generate repo feature summary")
-    p_crawl.add_argument("repos", nargs="+", help="repos in owner/name form")
+    p_crawl.add_argument("repos", nargs="*", help="repos in owner/name form")
+    p_crawl.add_argument(
+        "--repos-file",
+        default="docs/repo_list.txt",
+        help="path to file listing repos",
+    )
     p_crawl.add_argument(
         "--output",
         default="docs/repo-feature-summary.md",
