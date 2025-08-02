@@ -8,7 +8,7 @@ Flywheel bundles style guides, automation scripts, and integration docs so auton
 - [README.md](README.md) – overview and setup instructions
 - [AGENTS.md](AGENTS.md) – guidance for LLM assistants
 - [CLAUDE.md](CLAUDE.md) – Claude-specific advice
-- [CUSTOM_INSTRUCTIONS.md](CUSTOM_INSTRUCTIONS.md) – behavior rules
+- [codex-custom-instructions.md](docs/codex-custom-instructions.md) – behavior rules
 - [docs/best_practices_catalog.md](docs/best_practices_catalog.md) – coding tips
 
 ## Examples

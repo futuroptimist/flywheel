@@ -30,7 +30,7 @@
 - [AGENTS.md](AGENTS.md) detailing included LLM assistants
 - [llms.txt](llms.txt) with quick context for AI helpers
 - [CLAUDE.md](CLAUDE.md) summarizing Anthropic guidance
-- [CUSTOM_INSTRUCTIONS.md](CUSTOM_INSTRUCTIONS.md) for Codex rules
+- [codex-custom-instructions.md](docs/codex-custom-instructions.md) for Codex rules
   and a [runbook.yml](runbook.yml) checklist for repo setup
 - Codex automation prompt in `docs/prompts-codex.md`
 - CAD update prompt in `docs/prompts-codex-cad.md`
