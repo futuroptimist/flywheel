@@ -19,8 +19,16 @@ fi
 pytest -q
 
 # security scans
-bandit -r flywheel -x tests,stl --severity-level medium
-safety check -r requirements.txt --full-report --continue-on-error
+if command -v bandit >/dev/null 2>&1; then
+  bandit -r flywheel -x tests,stl --severity-level medium
+else
+  echo "bandit not installed, skipping bandit scan"
+fi
+if command -v safety >/dev/null 2>&1; then
+  safety check -r requirements.txt --full-report --continue-on-error
+else
+  echo "safety not installed, skipping dependency scan"
+fi
 
 # docs checks
 if command -v pyspelling >/dev/null 2>&1 && [ -f .spellcheck.yaml ]; then

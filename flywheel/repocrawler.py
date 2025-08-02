@@ -21,6 +21,7 @@ class RepoInfo:
     branch: str
     coverage: Optional[str]
     patch_percent: Optional[float]
+    uses_codecov: bool
     has_license: bool
     has_ci: bool
     has_agents: bool
@@ -383,6 +384,16 @@ class RepoCrawler:
     def _has_file(self, repo: str, path: str, branch: str) -> bool:
         return self._fetch_file(repo, path, branch) is not None
 
+    def _uses_codecov(self, repo: str, branch: str) -> bool:
+        """Return True if the repo configures Codecov."""
+        paths = (
+            "codecov.yml",
+            "codecov.yaml",
+            ".codecov.yml",
+            ".codecov.yaml",
+        )
+        return any(self._has_file(repo, p, branch) for p in paths)
+
     def _list_workflows(self, repo: str, branch: str) -> set[str]:
         """Return workflow filenames under `.github/workflows` for the repo."""
         url = (
@@ -550,6 +561,7 @@ class RepoCrawler:
             branch=branch,
             coverage=coverage,
             patch_percent=patch_cov,
+            uses_codecov=self._uses_codecov(repo, branch),
             has_license=self._has_file(repo, "LICENSE", branch),
             has_ci=self._has_ci(workflow_files),
             has_agents=self._has_file(repo, "AGENTS.md", branch),
@@ -589,8 +601,8 @@ class RepoCrawler:
         lines.extend(["## Basics", basics_header, basics_sep])
         basics_rows = []
 
-        coverage_header = "| Repo | Coverage | Patch | Installer |"
-        coverage_sep = "| ---- | -------- | ----- | --------- |"
+        coverage_header = "| Repo | Coverage | Patch | Codecov | Installer |"
+        coverage_sep = "| ---- | -------- | ----- | ------- | --------- |"
         coverage_rows = []
 
         policy_header = (
@@ -637,10 +649,11 @@ class RepoCrawler:
                 f"| {repo_link} | {info.branch} | {commit} | {trunk} |"  # noqa: E501
             )
             coverage_rows.append(
-                "| {} | {} | {} | {} |".format(
+                "| {} | {} | {} | {} | {} |".format(
                     repo_link,
                     coverage,
                     patch,
+                    "✅" if info.uses_codecov else "❌",
                     inst,
                 )
             )
@@ -697,6 +710,7 @@ class RepoCrawler:
             "Coverage percentages are parsed from their badges where "
             "available. Patch shows ✅ when diff coverage is at least 90% "
             "and ❌ otherwise, with the percentage in parentheses. "
+            "Codecov shows ✅ when a Codecov config is present. "
             "The commit column shows the short SHA of the latest default "
             "branch commit at crawl time. The Trunk column indicates "
             "whether CI is green for that commit. Dark Patterns and Bright "
