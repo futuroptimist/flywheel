@@ -129,6 +129,11 @@ TODO
 DSPACE's
 explainers
 NSW
+RepoCrawler
+py
+
+pyspelling
+yaml
 GraphQL
 octokit
 Snyk
