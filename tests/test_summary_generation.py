@@ -18,6 +18,7 @@ def test_summary_generation(monkeypatch):
     monkeypatch.setattr(crawler, "_has_file", lambda *a, **kw: True)
 
     summary = crawler.generate_summary()
+    assert "| Repo | Coverage | Patch | Codecov | Installer |" in summary
     assert "(95%)" in summary
     assert "—" not in summary
     assert "| Repo | Dark Patterns | Bright Patterns |" in summary
