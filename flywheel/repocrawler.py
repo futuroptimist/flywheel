@@ -199,7 +199,7 @@ class RepoCrawler:
         for br in branches:
             url = f"https://raw.githubusercontent.com/{repo}/{br}/{path}"
             try:
-                resp = self.session.get(url)
+                resp = self.session.get(url, timeout=10)
             except RequestException:
                 continue
             if resp.status_code == 200:

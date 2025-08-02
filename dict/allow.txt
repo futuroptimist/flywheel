@@ -134,3 +134,9 @@ py
 
 pyspelling
 yaml
+GraphQL
+octokit
+Snyk
+mjs
+yyyy
+LTS

@@ -102,9 +102,9 @@ flywheel prompt
 Create a Markdown table showing which flywheel files each repo uses:
 
 ```bash
-flywheel crawl futuroptimist/flywheel futuroptimist/axel --output docs/repo-feature-summary.md
+flywheel crawl --repos-file docs/repo_list.txt --output docs/repo-feature-summary.md
 ```
-Append `@branch` to any repo to crawl a non-default branch, e.g. `owner/name@dev`.
+Append `@branch` to any repo to crawl a non-default branch, e.g. `owner/name@dev`. Lines in `docs/repo_list.txt` are combined with any repos passed on the command line.
 Pass `--token YOURTOKEN` or set `GITHUB_TOKEN` to avoid API rate limits.
 The `Update Repo Feature Summary` workflow commits `docs/repo-feature-summary.md` to `main` after each merge.
 The summary records the short SHA of the latest commit, the name of each repository's default branch, and whether the latest commit passed CI on that branch.
