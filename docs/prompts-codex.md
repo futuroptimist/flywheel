@@ -67,7 +67,7 @@ FILES OF INTEREST
 - .github/workflows/security-scan.yml (new)
 
 REQUIREMENTS
-1. Detect presence of `.github/dependabot.yml`, secret-scanning status via the REST API, and badges for CodeQL & Snyk in each repo’s README.
+1. Detect presence of `.github/dependabot.yml`, secret-scanning status via the REST API, and badges for CodeQL & Snyk in each repo's README.
 2. Count ✔️/❌ per repo and render the table.
 3. Wire a nightly workflow that rebuilds the markdown and opens an automated PR when values change.
 4. Maintain > 90 % test coverage for the new script.
@@ -79,7 +79,7 @@ OUTPUT
 A PR adding the new table, scan script and workflow.
 ```
 
-### 3 Bug-fix: Correct 100 %-coverage mis-report for sugarkube
+### 3 Bug-fix: Correct 100 %-coverage misreport for sugarkube
 ```
 SYSTEM: You are an automated contributor for **futuroptimist/flywheel**.
 
@@ -111,7 +111,7 @@ Add a **Last-Updated (UTC)** column to every table in `docs/repo-feature-summary
 
 CONSTRAINTS
 - Reuse the existing GitHub API call cache if present.
-- Display timestamps in yyyy-MM-dd format to keep width manageable.
+- Display timestamps in `yyyy-MM-dd` format to keep width manageable.
 - Ensure markdown line length ≤ 120 chars.
 
 ACCEPTANCE CHECK
