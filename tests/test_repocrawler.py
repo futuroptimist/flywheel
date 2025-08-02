@@ -109,6 +109,19 @@ def test_parse_coverage_codecov():
     assert result == "95%"
 
 
+def test_uses_codecov_from_readme():
+    sess = DummySession({})
+    crawler = rc.RepoCrawler([], session=sess)
+    readme = "See https://codecov.io/gh/foo/bar for coverage"
+    assert crawler._uses_codecov("foo/bar", "main", readme) is True
+
+
+def test_uses_codecov_false():
+    sess = DummySession({})
+    crawler = rc.RepoCrawler([], session=sess)
+    assert crawler._uses_codecov("foo/bar", "main", "no badge") is False
+
+
 def test_init_with_token():
     session = DummySession({})
     rc.RepoCrawler(["foo/bar"], session=session, token="abc123")
