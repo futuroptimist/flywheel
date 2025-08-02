@@ -6,6 +6,7 @@ import os
 import re
 from dataclasses import dataclass
 from typing import Iterable, List, Optional
+from urllib.parse import urlparse
 
 import requests
 from requests import RequestException
@@ -21,6 +22,7 @@ class RepoInfo:
     branch: str
     coverage: Optional[str]
     patch_percent: Optional[float]
+    uses_codecov: bool
     has_license: bool
     has_ci: bool
     has_agents: bool
@@ -500,10 +502,38 @@ class RepoCrawler:
             return pct
         return None
 
+    def _uses_codecov(
+        self,
+        repo: str,
+        branch: str,
+        readme: Optional[str],
+    ) -> bool:
+        """Return True if Codecov appears to be configured."""
+        if readme:
+            # Find URLs in the README and examine their hostnames for Codecov
+            urls = re.findall(r"https?://[^\s)\]]+", readme)
+            for url in urls:
+                host = urlparse(url).hostname
+                is_codecov = host == "codecov.io" or (
+                    host and host.endswith(".codecov.io")
+                )
+                if is_codecov:
+                    return True
+        for name in (
+            "codecov.yml",
+            "codecov.yaml",
+            ".codecov.yml",
+            ".codecov.yaml",
+        ):
+            if self._has_file(repo, name, branch):
+                return True
+        return False
+
     def _check_repo(self, repo: str) -> RepoInfo:
         branch = self._branch_overrides.get(repo) or self._default_branch(repo)
         readme = self._fetch_file(repo, "README.md", branch)
         coverage = self._parse_coverage(readme, repo, branch)
+        uses_codecov = self._uses_codecov(repo, branch, readme)
         patch_cov = self._patch_coverage_from_codecov(repo, branch)
         workflow_files = self._list_workflows(repo, branch)
         workflow_count = len(workflow_files)
@@ -550,6 +580,7 @@ class RepoCrawler:
             branch=branch,
             coverage=coverage,
             patch_percent=patch_cov,
+            uses_codecov=uses_codecov,
             has_license=self._has_file(repo, "LICENSE", branch),
             has_ci=self._has_ci(workflow_files),
             has_agents=self._has_file(repo, "AGENTS.md", branch),
@@ -589,8 +620,8 @@ class RepoCrawler:
         lines.extend(["## Basics", basics_header, basics_sep])
         basics_rows = []
 
-        coverage_header = "| Repo | Coverage | Patch | Installer |"
-        coverage_sep = "| ---- | -------- | ----- | --------- |"
+        coverage_header = "| Repo | Coverage | Patch | Codecov | Installer |"
+        coverage_sep = "| ---- | -------- | ----- | ------- | --------- |"
         coverage_rows = []
 
         policy_header = (
@@ -636,11 +667,13 @@ class RepoCrawler:
             basics_rows.append(
                 f"| {repo_link} | {info.branch} | {commit} | {trunk} |"  # noqa: E501
             )
+            codecov = "✅" if info.uses_codecov else "❌"
             coverage_rows.append(
-                "| {} | {} | {} | {} |".format(
+                "| {} | {} | {} | {} | {} |".format(
                     repo_link,
                     coverage,
                     patch,
+                    codecov,
                     inst,
                 )
             )
@@ -695,7 +728,8 @@ class RepoCrawler:
             "flywheel. 🚀 uv means only uv was found. "
             "🔶 partial signals a mix of uv and pip. "
             "Coverage percentages are parsed from their badges where "
-            "available. Patch shows ✅ when diff coverage is at least 90% "
+            "available. Codecov shows ✅ when a Codecov config or badge is "
+            "present. Patch shows ✅ when diff coverage is at least 90% "
             "and ❌ otherwise, with the percentage in parentheses. "
             "The commit column shows the short SHA of the latest default "
             "branch commit at crawl time. The Trunk column indicates "

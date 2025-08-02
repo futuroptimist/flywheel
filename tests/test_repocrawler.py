@@ -109,6 +109,37 @@ def test_parse_coverage_codecov():
     assert result == "95%"
 
 
+def test_uses_codecov_from_readme():
+    sess = DummySession({})
+    crawler = rc.RepoCrawler([], session=sess)
+    readme = "See https://codecov.io/gh/foo/bar for coverage"
+    assert crawler._uses_codecov("foo/bar", "main", readme) is True
+
+
+def test_uses_codecov_false():
+    sess = DummySession({})
+    crawler = rc.RepoCrawler([], session=sess)
+    assert crawler._uses_codecov("foo/bar", "main", "no badge") is False
+
+
+def test_uses_codecov_from_config(monkeypatch):
+    sess = DummySession({})
+    crawler = rc.RepoCrawler([], session=sess)
+    monkeypatch.setattr(
+        crawler,
+        "_has_file",
+        lambda r, n, b: n == "codecov.yml",
+    )
+    assert crawler._uses_codecov("foo/bar", "main", None) is True
+
+
+def test_uses_codecov_ignores_similar_domains():
+    sess = DummySession({})
+    crawler = rc.RepoCrawler([], session=sess)
+    readme = "See https://not-codecov.io/gh/foo/bar for coverage"
+    assert crawler._uses_codecov("foo/bar", "main", readme) is False
+
+
 def test_init_with_token():
     session = DummySession({})
     rc.RepoCrawler(["foo/bar"], session=session, token="abc123")
@@ -138,6 +169,7 @@ def test_generate_summary_installer_variants(monkeypatch):
         branch="main",
         coverage="100%",
         patch_percent=None,
+        uses_codecov=True,
         has_license=True,
         has_ci=True,
         has_agents=False,
@@ -165,6 +197,7 @@ def test_generate_summary_other_installer(monkeypatch):
         branch="main",
         coverage="80%",
         patch_percent=None,
+        uses_codecov=True,
         has_license=True,
         has_ci=True,
         has_agents=True,
@@ -188,6 +221,7 @@ def test_summary_column_order(monkeypatch):
         branch="main",
         coverage="100%",
         patch_percent=None,
+        uses_codecov=True,
         has_license=True,
         has_ci=True,
         has_agents=True,
@@ -203,7 +237,7 @@ def test_summary_column_order(monkeypatch):
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
     summary = crawler.generate_summary()
     assert "| Repo | Branch | Commit | Trunk |" in summary
-    assert "| Repo | Coverage | Patch | Installer |" in summary
+    assert "| Repo | Coverage | Patch | Codecov | Installer |" in summary
     assert "| Repo | License | CI | Workflows |" in summary
     assert "| Repo | Dark Patterns | Bright Patterns |" in summary
     lines = summary.splitlines()
@@ -226,6 +260,7 @@ def test_generate_summary_with_patch(monkeypatch):
         branch="main",
         coverage="100%",
         patch_percent=73.0,
+        uses_codecov=True,
         has_license=True,
         has_ci=True,
         has_agents=False,
@@ -240,7 +275,7 @@ def test_generate_summary_with_patch(monkeypatch):
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
     lines = crawler.generate_summary().splitlines()
-    idx = lines.index("| Repo | Coverage | Patch | Installer |")
+    idx = lines.index("| Repo | Coverage | Patch | Codecov | Installer |")
     row = lines[idx + 2]
     assert "❌ (73%)" in row
     assert "(73%)" in row
