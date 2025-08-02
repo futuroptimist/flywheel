@@ -30,7 +30,7 @@ def main() -> None:
     infos = crawler.crawl()
 
     basics = [["Repo", "Branch", "Commit"]]
-    coverage = [["Repo", "Coverage", "Patch", "Installer"]]
+    coverage = [["Repo", "Coverage", "Patch", "Codecov", "Installer"]]
     policy = [
         [
             "Repo",
@@ -63,7 +63,8 @@ def main() -> None:
 
         inst_map = {"uv": "🚀 uv", "partial": "🔶 partial"}
         inst = inst_map.get(info.installer, info.installer)
-        coverage.append([link, cov, patch, inst])
+        codecov = "✅" if info.uses_codecov else "❌"
+        coverage.append([link, cov, patch, codecov, inst])
 
         policy.append(
             [
@@ -100,8 +101,9 @@ def main() -> None:
     lines.append(
         "Legend: ✅ indicates the repo has adopted that feature from flywheel. "
         "🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip. "
-        "Coverage percentages are parsed from Codecov when available. Patch "
-        "shows ✅ when diff coverage is at least 90% and ❌ otherwise. The "
+        "Coverage percentages are parsed from Codecov when available. Codecov "
+        "shows ✅ when a Codecov config or badge is present. Patch shows ✅ "
+        "when diff coverage is at least 90% and ❌ otherwise. The "
         "commit column shows the short SHA of the latest default branch "
         "commit at crawl time."
     )

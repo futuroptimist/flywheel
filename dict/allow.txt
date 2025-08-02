@@ -1,6 +1,7 @@
 AES
 CLI
 CodeQL
+Codecov
 DEPENDABOT
 Dependabot
 DoS

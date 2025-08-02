@@ -18,18 +18,18 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `e98ee18` | ✅ |
 
 ## Coverage & Installer
-| Repo | Coverage | Patch | Installer |
-| ---- | -------- | ----- | --------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ (100%) | — | 🚀 uv |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ (100%) | — | 🚀 uv |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ (100%) | — | 🚀 uv |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ (100%) | — | 🚀 uv |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ (100%) | — | pip |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✅ (100%) | — | 🔶 partial |
-| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | — | 🚀 uv |
-| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ (100%) | — | 🚀 uv |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ (100%) | — | pip |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ (57%) | — | 🚀 uv |
+| Repo | Coverage | Patch | Codecov | Installer |
+| ---- | -------- | ----- | ------- | --------- |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ (100%) | — | ✅ | 🚀 uv |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ (100%) | — | ✅ | 🚀 uv |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ (100%) | — | ✅ | 🚀 uv |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ (100%) | — | ✅ | 🚀 uv |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ (100%) | — | ✅ | pip |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✅ (100%) | — | ✅ | 🔶 partial |
+| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | — | ❌ | 🚀 uv |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ (100%) | — | ✅ | 🚀 uv |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ (100%) | — | ✅ | pip |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ (57%) | — | ✅ | 🚀 uv |
 
 ## Policies & Automation
 | Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit |
@@ -59,4 +59,4 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | 0 | 0 |
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 0 | 0 |
 
-Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip. Coverage percentages are parsed from their badges where available. Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses. The commit column shows the short SHA of the latest default branch commit at crawl time. The Trunk column indicates whether CI is green for that commit. Dark Patterns and Bright Patterns list counts of suspicious or positive code snippets detected.
+Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip. Coverage percentages are parsed from their badges where available. Codecov shows ✅ when a Codecov config or badge is present. Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses. The commit column shows the short SHA of the latest default branch commit at crawl time. The Trunk column indicates whether CI is green for that commit. Dark Patterns and Bright Patterns list counts of suspicious or positive code snippets detected.

@@ -193,6 +193,7 @@ def test_generate_summary_no_patch(monkeypatch):
         branch="main",
         coverage="100%",
         patch_percent=None,
+        uses_codecov=True,
         has_license=True,
         has_ci=True,
         has_agents=False,
@@ -207,7 +208,7 @@ def test_generate_summary_no_patch(monkeypatch):
     crawler = RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
     lines = crawler.generate_summary().splitlines()
-    idx = lines.index("| Repo | Coverage | Patch | Installer |")
+    idx = lines.index("| Repo | Coverage | Patch | Codecov | Installer |")
     row = lines[idx + 2]
     assert "| — |" in row
 
