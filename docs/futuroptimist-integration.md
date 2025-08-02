@@ -6,7 +6,7 @@ This document collects lessons Flywheel can borrow and suggests improvements for
 
 ## Lessons for Flywheel
 
-- **Orientation file** – Maintaining a short `llms.txt` alongside `AGENTS.md` and `CLAUDE.md` helps LLMs understand tone and context. Flywheel adopters should consider adding similar docs and extending them with `CUSTOM_INSTRUCTIONS.md` after running `./scripts/setup.sh`.
+- **Orientation file** – Maintaining a short `llms.txt` alongside `AGENTS.md` and `CLAUDE.md` helps LLMs understand tone and context. Flywheel adopters should consider adding similar docs and extending them with `docs/codex-custom-instructions.md` after running `./scripts/setup.sh`.
 - **Structured metadata** – Each video script lives in a dated folder with a `metadata.json` file validated by JSON Schema.
 - **Automation helpers** – The Makefile creates virtualenvs, fetches subtitles and scaffolds new script folders with one command.
 - **Cross-platform** – Make targets run on both Unix and Windows.

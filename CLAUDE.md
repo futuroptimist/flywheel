@@ -10,4 +10,4 @@ specific to the Claude model family.
 - Use code comments to explain non-obvious logic.
 - Validate model output before acting on it.
 
-For broader assistant behavior, see [CUSTOM_INSTRUCTIONS.md](CUSTOM_INSTRUCTIONS.md).
+For broader assistant behavior, see [codex-custom-instructions.md](docs/codex-custom-instructions.md).

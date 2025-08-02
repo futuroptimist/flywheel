@@ -91,7 +91,7 @@ Each section covers three points:
 
 **How it works:** Workflows under `.github/workflows` run linting, tests, documentation checks, and security scans. Results appear on each pull request.
 
-**Maintenance:** Add new jobs or matrix entries as tooling evolves. Keep the "Quality Targets" table in `CUSTOM_INSTRUCTIONS.md` aligned with the workflows.
+**Maintenance:** Add new jobs or matrix entries as tooling evolves. Keep the "Quality Targets" table in `docs/codex-custom-instructions.md` aligned with the workflows.
 
 ## Release Drafter
 
