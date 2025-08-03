@@ -1,2 +1,10 @@
 futuroptimist/flywheel
 democratizedspace/dspace@v3
+futuroptimist/axel
+futuroptimist/f2clipboard
+futuroptimist/futuroptimist
+futuroptimist/gabriel
+futuroptimist/sigma
+futuroptimist/sugarkube
+futuroptimist/token.place
+futuroptimist/wove

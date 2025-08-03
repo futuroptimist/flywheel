@@ -14,6 +14,42 @@ from tabulate import tabulate  # noqa: E402
 
 from flywheel.repocrawler import RepoCrawler  # noqa: E402
 
+# Suggested prompt docs for repositories that currently lack them.
+SUGGESTED_DOCS = {
+    "futuroptimist/axel": (
+        "prompts-synergy.md",
+        "Centralize prompts for cross-repo coordination via the Synergy Bot",
+    ),
+    "futuroptimist/gabriel": (
+        "prompts-gabriel.md",
+        "Document prompts guiding Gabriel integrations",
+    ),
+    "futuroptimist/futuroptimist": (
+        "prompts-organization.md",
+        "Capture prompts for organizational workflows and profile updates",
+    ),
+    "futuroptimist/token.place": (
+        "prompts-market.md",
+        "Outline prompts for token marketplace operations",
+    ),
+    "futuroptimist/f2clipboard": (
+        "prompts-clipboard.md",
+        "Describe prompts for clipboard automation and sharing",
+    ),
+    "futuroptimist/sigma": (
+        "prompts-design.md",
+        "Collect prompts for collaborative design sessions",
+    ),
+    "futuroptimist/wove": (
+        "prompts-weaving.md",
+        "Detail prompts for weaving simulations and planning",
+    ),
+    "futuroptimist/sugarkube": (
+        "prompts-devops.md",
+        "Provide prompts for deployment and infrastructure tasks",
+    ),
+}
+
 
 def load_repos(path: Path) -> List[str]:
     lines = path.read_text().splitlines()
@@ -46,6 +82,7 @@ def main() -> None:
     infos = crawler.crawl()
 
     rows: list[list[str]] = []
+    repos_with_docs: set[str] = set()
 
     # Include prompt docs from the local repository (first entry)
     local_repo = repos[0].split("@")[0]
@@ -60,6 +97,7 @@ def main() -> None:
             f"{file_name})"
         )
         rows.append([repo_link, doc_link, title])
+        repos_with_docs.add(local_repo)
 
     # Add prompt docs from remote repositories (skip local repo)
     for info in infos[1:]:
@@ -75,25 +113,45 @@ def main() -> None:
                     f"{info.branch}/{path})"
                 )
                 rows.append([repo_link, doc_link, title])
+                repos_with_docs.add(info.name)
 
     table = tabulate(
         rows,
         headers=["Repo", "Document", "Title"],
         tablefmt="github",
     )
+
+    suggestions: list[list[str]] = []
+    for repo in (r.split("@")[0] for r in repos):
+        if repo in repos_with_docs:
+            continue
+        doc_info = SUGGESTED_DOCS.get(repo)
+        if doc_info:
+            doc_name, purpose = doc_info
+            repo_link = f"[{repo}](https://github.com/{repo})"
+            suggestions.append([repo_link, doc_name, purpose])
+
     lines = [
         "# Prompt Docs Summary",
         "",
-        "This index is auto-generated with "
-        "[scripts/update_prompt_docs_summary.py]"
+        "This index is auto-generated with ",
+        "[scripts/update_prompt_docs_summary.py]",
         "(../scripts/update_prompt_docs_summary.py)",
         "using RepoCrawler to discover prompt documents across repositories.",
         "",
         table,
-        "",
-        f"_Updated automatically: {date.today()}_",
-        "",
     ]
+
+    if suggestions:
+        suggestion_table = tabulate(
+            suggestions,
+            headers=["Repo", "Suggested Doc", "Purpose"],
+            tablefmt="github",
+        )
+        lines.extend(["", "## Suggested Prompt Docs", "", suggestion_table])
+
+    lines.extend(["", f"_Updated automatically: {date.today()}_", ""])
+
     args.out.write_text("\n".join(lines))
 
 
