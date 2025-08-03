@@ -35,6 +35,7 @@
 - Codex automation prompt in `docs/prompts-codex.md`
 - CAD update prompt in `docs/prompts-codex-cad.md`
 - Physics explainer prompt in `docs/prompts-codex-physics.md`
+- Cross-repo prompt index in `docs/prompt-docs-summary.md` listing `prompts-items.md`, `prompts-quests.md`, and `prompts-codex.md` across repos
 - Axel integration guide in `docs/axel-integration.md`
 - DSPACE synergy doc in `docs/dspace-integration.md`
 - token.place roadmap in `docs/tokenplace-roadmap.md`
