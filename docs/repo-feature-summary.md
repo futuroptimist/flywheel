@@ -6,16 +6,16 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk |
 | ---- | ------ | ------ | ----- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `4d02658` | ✅ |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `80da57d` | ✅ |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `e7829e7` | ✅ |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `277d494` | ✅ |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `7b5c1b5` | ❌ |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `a8abe86` | ✅ |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `a6ae194` | ✅ |
-| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `302b9fb` | ✅ |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `a22f51f` | ❌ |
+| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `3154d64` | ✅ |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `c501f49` | ✅ |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `8da1955` | ✅ |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | n/a | n/a |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `725863d` | ✅ |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer |
@@ -25,7 +25,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ (100%) | — | ✅ | 🚀 uv |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ (100%) | — | ✅ | 🚀 uv |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ (100%) | — | ✅ | pip |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✅ (100%) | — | ✅ | 🔶 partial |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ❌ | — | ✅ | 🔶 partial |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | — | ❌ | 🚀 uv |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ (100%) | — | ✅ | 🚀 uv |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ (100%) | — | ✅ | pip |
