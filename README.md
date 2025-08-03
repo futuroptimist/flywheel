@@ -104,6 +104,7 @@ Create a Markdown table showing which flywheel files each repo uses:
 ```bash
 flywheel crawl --repos-file docs/repo_list.txt --output docs/repo-feature-summary.md
 ```
+
 Append `@branch` to any repo to crawl a non-default branch, e.g. `owner/name@dev`. Lines in `docs/repo_list.txt` are combined with any repos passed on the command line.
 Pass `--token YOURTOKEN` or set `GITHUB_TOKEN` to avoid API rate limits.
 The `Update Repo Feature Summary` workflow commits `docs/repo-feature-summary.md` to `main` after each merge.
@@ -124,6 +125,7 @@ Clone a set of repos and generate Markdown reports:
 ```bash
 python -m flywheel.agents.scanner
 ```
+
 Reports are written to `reports/`.
 
 ### Viewing the 3D flywheel
@@ -135,6 +137,8 @@ python webapp/app.py
 ```
 
 Visit `http://localhost:42165` and watch the wheel spin in your browser.
+
+Alternatively, open `viewer/threejs.html` for a standalone Three.js demo that loads the STL parts and shows simple ball bearings.
 
 ### Verifying CAD fit
 
