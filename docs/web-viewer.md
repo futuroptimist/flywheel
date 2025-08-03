@@ -19,6 +19,10 @@ python webapp/app.py
 
 Visit [http://localhost:5000](http://localhost:5000) and select a model. Drag the mouse to rotate and scroll to zoom.
 
+## Three.js Demo
+
+Open `viewer/threejs.html` directly in your browser to spin the STL-based flywheel. The script uses the Three.js `STLLoader` and adds simple animated spheres as ball bearings.
+
 ## User Journeys
 
 - **Rotate:** left-click and drag on the canvas.
