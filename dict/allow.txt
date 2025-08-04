@@ -144,3 +144,5 @@ yyyy
 LTS
 MPa
 rpm
+
+pytest
