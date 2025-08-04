@@ -10,6 +10,7 @@ JS
 LLM
 NEWREPO
 OpenAI
+Playwright
 PRD
 Prettier
 PyPI
