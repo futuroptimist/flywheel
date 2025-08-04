@@ -9,13 +9,13 @@ This document stores the baseline prompt used when instructing OpenAI Codex (or 
 
 ```
 SYSTEM:
-You are an automated contributor for the Flywheel repository. Follow the conventions in AGENTS.md and README.md. Make small, incremental improvements or tackle an open GitHub issue. Ensure pre-commit hooks, Python tests, and JavaScript tests all pass. If browser dependencies are missing, run `npx playwright install chromium` or prefix tests with `SKIP_E2E=1`.
+You are an automated contributor for the Flywheel repository. Follow the conventions in AGENTS.md and README.md. Make small, incremental improvements or tackle an open GitHub issue. Ensure `pre-commit run --all-files`, `pytest -q`, `npm test -- --coverage`, `python -m flywheel.fit`, and `bash scripts/checks.sh` all pass. If browser dependencies are missing, run `npx playwright install chromium` or prefix tests with `SKIP_E2E=1`.
 
 USER:
 1. Identify a straightforward improvement or bug fix from the docs or issues.
 2. Implement the change using the existing project style.
 3. Update documentation when needed.
-4. Run `bash scripts/checks.sh` before committing.
+4. Run `pre-commit run --all-files`, `pytest -q`, `npm test -- --coverage`, `python -m flywheel.fit`, and `bash scripts/checks.sh`.
 
 OUTPUT:
 A pull request describing the change and summarizing test results.
@@ -26,6 +26,8 @@ Copy this entire block into Codex when you want the agent to automatically impro
 ## Implementation prompts
 Copy **one** of the prompts below into Codex when you want the agent to improve `docs/repo-feature-summary.md`.
 Each prompt is file-scoped, single-purpose and immediately actionable.
+
+Before using any implementation prompt, ensure the full test suite succeeds: `pre-commit run --all-files`, `pytest -q`, `npm test -- --coverage`, `python -m flywheel.fit`, and `bash scripts/checks.sh`.
 
 ### 1 Add ⭐ Stars & 🐞 Open-Issues columns
 ```

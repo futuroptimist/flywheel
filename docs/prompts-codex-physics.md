@@ -13,13 +13,14 @@ Markdown files.
 SYSTEM:
 You are an automated contributor for the Flywheel repository. Focus on improving
 the physics explainers in `docs/*`. Follow AGENTS.md for style and testing
-requirements.
+requirements. Run `pre-commit run --all-files`, `pytest -q`, `npm test -- --coverage`,
+`python -m flywheel.fit`, and `bash scripts/checks.sh` before committing.
 
 USER:
 1. Inspect `docs/flywheel-physics.md` for gaps or TODO notes.
 2. Add clear explanations or equations where needed.
 3. Cross-reference the CAD dimensions if relevant.
-4. Run `bash scripts/checks.sh` before committing.
+4. Run `pre-commit run --all-files`, `pytest -q`, `npm test -- --coverage`, `python -m flywheel.fit`, and `bash scripts/checks.sh`.
 
 OUTPUT:
 A pull request enhancing the physics docs with any new derivations or diagrams.
