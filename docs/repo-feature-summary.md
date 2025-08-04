@@ -4,18 +4,18 @@ This table tracks which flywheel features each related repository has adopted.
 
 <!-- spellchecker: disable -->
 ## Basics
-| Repo | Branch | Commit | Trunk | Last-Updated (UTC) |
-| ---- | ------ | ------ | ----- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `9c90f54` | ✅ | 2025-08-04 |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `e7829e7` | ✅ | 2025-07-29 |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `277d494` | ✅ | 2025-07-29 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `7b5c1b5` | ❌ | 2025-07-29 |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `a8abe86` | ✅ | 2025-07-29 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `3feb8ca` | ✅ | 2025-08-04 |
-| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `3154d64` | ✅ | 2025-08-03 |
-| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `c501f49` | ✅ | 2025-07-29 |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `8da1955` | ✅ | 2025-07-29 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | n/a | n/a | n/a |
+| Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
+| ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `9c90f54` | ✅ | 0 | 0 | 2025-08-04 |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `e7829e7` | ✅ | 0 | 0 | 2025-07-29 |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `277d494` | ✅ | 0 | 0 | 2025-07-29 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `7b5c1b5` | ❌ | 0 | 0 | 2025-07-29 |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `a8abe86` | ✅ | 6 | 3 | 2025-07-29 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `3feb8ca` | ✅ | 3 | 37 | 2025-08-04 |
+| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `3154d64` | ✅ | 1 | 0 | 2025-08-03 |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `c501f49` | ✅ | 0 | 0 | 2025-07-29 |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `8da1955` | ✅ | 0 | 0 | 2025-07-29 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | n/a | n/a | 0 | 0 | n/a |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |

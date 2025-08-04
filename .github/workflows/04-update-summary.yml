@@ -1,6 +1,9 @@
 name: Update Repo Feature Summary
 on:
   push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * *'
 jobs:
   crawl:
     permissions:
@@ -20,9 +23,16 @@ jobs:
         run: |
           uv pip install --system -r requirements.txt
           uv pip install --system pre-commit
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
       - name: Generate summary
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python -m flywheel crawl --repos-file docs/repo_list.txt --output docs/repo-feature-summary.md
+          node scripts/gen-repo-feature-summary.ts
       - name: Run pre-commit
         run: |
           pre-commit run --files docs/repo-feature-summary.md || true
