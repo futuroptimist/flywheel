@@ -1,0 +1,30 @@
+name: Security Scan
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  security-scan:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run scan
+        run: node scripts/security-scan.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: 'chore: update security scan results'
+          title: 'chore: update security scan results'
+          branch: security-scan
+          base: main
+          add-paths: docs/repo-feature-summary.md
