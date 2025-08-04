@@ -15,7 +15,7 @@ pre-commit install
 Run all checks before committing:
 
 ```bash
-pre-commit run --all-files
+bash scripts/checks.sh
 ```
 
 ## Pull Requests

@@ -72,8 +72,8 @@ uv venv
 uv pip install pre-commit
 pre-commit install
 
-# Run checks before committing
-pre-commit run --all-files
+# Run all checks before committing
+bash scripts/checks.sh
 ```
 
 The hooks include a spell checker powered by `codespell`. Add project-specific
