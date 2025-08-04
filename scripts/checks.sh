@@ -1,6 +1,25 @@
 #!/usr/bin/env bash
 set -e
 
+# security scan helper
+run_security_checks() {
+  if command -v bandit >/dev/null 2>&1; then
+    bandit -r flywheel -x tests,stl --severity-level medium
+  else
+    echo "bandit not installed; skipping security scan"
+  fi
+  if command -v safety >/dev/null 2>&1; then
+    safety check -r requirements.txt --full-report --continue-on-error
+  else
+    echo "safety not installed; skipping dependency scan"
+  fi
+}
+
+if [ "${RUN_SECURITY_ONLY}" = "1" ]; then
+  run_security_checks
+  exit 0
+fi
+
 # python checks
 flake8 . --exclude=.venv
 isort --check-only . --skip .venv
@@ -19,8 +38,7 @@ fi
 pytest -q
 
 # security scans
-bandit -r flywheel -x tests,stl --severity-level medium
-safety check -r requirements.txt --full-report --continue-on-error
+run_security_checks
 
 # docs checks
 if command -v pyspelling >/dev/null 2>&1 && [ -f .spellcheck.yaml ]; then
