@@ -43,7 +43,6 @@ def main() -> None:
 
     repos = load_repos(args.repos_from)
     crawler = RepoCrawler(repos, token=args.token)
-    infos = crawler.crawl()
 
     rows: list[list[str]] = []
 
@@ -62,17 +61,24 @@ def main() -> None:
         rows.append([repo_link, doc_link, title])
 
     # Add prompt docs from remote repositories (skip local repo)
-    for info in infos[1:]:
-        files = crawler._list_files(info.name, info.branch)
+    for spec in repos[1:]:
+        if "@" in spec:
+            name, branch = spec.split("@", 1)
+        else:
+            name = spec
+            branch = crawler._default_branch(name)
+        files = crawler._list_files(name, branch)
         for path in files:
             if "prompts-" in path and path.endswith(".md"):
-                text = crawler._fetch_file(info.name, path, info.branch) or ""
+                text = crawler._fetch_file(name, path, branch) or ""
                 title = extract_title(text)
-                repo_link = f"[{info.name}](https://github.com/{info.name})"
+                repo_link = f"[{name}](https://github.com/{name})"
                 file_name = path.split("/")[-1]
-                doc_link = (
-                    f"[{file_name}](https://github.com/{info.name}/blob/"
-                    f"{info.branch}/{path})"
+                doc_link = "[{0}](https://github.com/{1}/blob/{2}/{3})".format(
+                    file_name,
+                    name,
+                    branch,
+                    path,
                 )
                 rows.append([repo_link, doc_link, title])
 
