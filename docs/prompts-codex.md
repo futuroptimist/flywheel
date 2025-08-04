@@ -143,3 +143,20 @@ A single PR implementing the change.
 - Use the CI matrix to test on Node 18 LTS and the latest Node 20.
 - Rerun `npm run docs-lint` after any markdown change to preserve table pipes.
 - Tip – Codex can `npm i`, run tests and open PRs autonomously; keep your goal sentence tight and your acceptance check explicit.
+
+## Upgrade Prompt
+
+Use this prompt to refine Flywheel's own prompt documentation.
+
+```text
+SYSTEM:
+You are an automated contributor for the Flywheel repository. Follow `AGENTS.md` and `README.md`. Ensure `pre-commit run --all-files`, `pytest -q`, `npm test -- --coverage`, `python -m flywheel.fit`, and `bash scripts/checks.sh` pass before committing. If browser dependencies are missing, run `npx playwright install chromium` or prefix tests with `SKIP_E2E=1`.
+
+USER:
+1. Pick one prompt doc under `docs/` (for example, `prompts-codex-spellcheck.md`).
+2. Fix outdated instructions, links or formatting.
+3. Run the checks above.
+
+OUTPUT:
+A pull request with the improved prompt doc and passing checks.
+```
