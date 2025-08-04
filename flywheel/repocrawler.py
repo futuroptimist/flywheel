@@ -5,11 +5,18 @@ from __future__ import annotations
 import os
 import re
 from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
 from typing import Iterable, List, Optional
 from urllib.parse import urlparse
 
 import requests
 from requests import RequestException
+
+try:  # pragma: no cover - optional dependency
+    import requests_cache
+except Exception:  # pragma: no cover - fallback when cache not installed
+    requests_cache = None
 
 PATCH_THRESHOLD = 90.0
 BADGE_PATCH = "https://img.shields.io/codecov/patch/github/{repo}/{branch}.svg"
@@ -33,6 +40,7 @@ class RepoInfo:
     latest_commit: Optional[str]
     workflow_count: int
     trunk_green: Optional[bool]
+    commit_date: Optional[str] = None
     dark_pattern_count: int = 0
     bright_pattern_count: int = 0
 
@@ -186,7 +194,16 @@ class RepoCrawler:
                 self._branch_overrides[name] = branch
             else:
                 self.repos.append(r)
-        self.session = session or requests.Session()
+        if session is not None:
+            self.session = session
+        elif requests_cache:
+            cache_dir = Path(".cache")
+            cache_dir.mkdir(exist_ok=True)
+            self.session = requests_cache.CachedSession(
+                cache_dir / "github-cache"
+            )  # noqa: E501
+        else:  # pragma: no cover - requests_cache not installed
+            self.session = requests.Session()
         tok = token or os.environ.get("GITHUB_TOKEN")
         if tok:
             self.session.headers.update({"Authorization": f"Bearer {tok}"})
@@ -224,7 +241,9 @@ class RepoCrawler:
                 return "main"
         return "main"
 
-    def _latest_commit(self, repo: str, branch: str) -> Optional[str]:
+    def _latest_commit(
+        self, repo: str, branch: str
+    ) -> tuple[Optional[str], Optional[str]]:
         owner, name = repo.split("/", 1)
         url = (
             "https://api.github.com/repos/"
@@ -239,12 +258,26 @@ class RepoCrawler:
             if resp.status_code == 200:
                 data = resp.json()
                 if isinstance(data, list) and data:
-                    return data[0].get("sha", "")[:7]
+                    sha = data[0].get("sha", "")
+                    date_str = (
+                        data[0].get("commit", {}).get("author", {}).get("date")
+                    )  # noqa: E501
+                    if date_str:
+                        try:
+                            dt = datetime.fromisoformat(
+                                date_str.replace("Z", "+00:00")
+                            )  # noqa: E501
+                            date = dt.date().isoformat()
+                        except Exception:  # pragma: no cover - parsing errors
+                            date = None
+                    else:
+                        date = None
+                    return sha[:7] if sha else None, date
         except RequestException:
-            return None
-        except Exception:
-            return None
-        return None
+            return None, None
+        except Exception:  # pragma: no cover - unexpected JSON
+            return None, None
+        return None, None
 
     PASS_CONCLUSIONS = {"success", "neutral", "skipped", "no_status"}
 
@@ -568,7 +601,7 @@ class RepoCrawler:
         installer = self._detect_installer(
             workflows_txt + docker_txt + npm_scripts_txt
         )  # noqa: E501
-        latest_commit = self._latest_commit(repo, branch)
+        latest_commit, commit_date = self._latest_commit(repo, branch)
         if latest_commit:
             trunk_green = self._branch_green(repo, branch, latest_commit)
         else:
@@ -595,6 +628,7 @@ class RepoCrawler:
             latest_commit=latest_commit,
             workflow_count=workflow_count,
             trunk_green=trunk_green,
+            commit_date=commit_date,
             dark_pattern_count=dark_count,
             bright_pattern_count=bright_count,
         )
@@ -615,27 +649,25 @@ class RepoCrawler:
             "<!-- spellchecker: disable -->",
         ]
 
-        basics_header = "| Repo | Branch | Commit | Trunk |"
-        basics_sep = "| ---- | ------ | ------ | ----- |"
+        basics_header = (
+            "| Repo | Branch | Commit | Trunk | Last-Updated (UTC) |"  # noqa: E501
+        )
+        basics_sep = "| ---- | ------ | ------ | ----- | ----------------- |"
         lines.extend(["## Basics", basics_header, basics_sep])
         basics_rows = []
 
-        coverage_header = "| Repo | Coverage | Patch | Codecov | Installer |"
-        coverage_sep = "| ---- | -------- | ----- | ------- | --------- |"
+        coverage_header = "| Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |"  # noqa: E501
+        coverage_sep = "| ---- | -------- | ----- | ------- | --------- | ----------------- |"  # noqa: E501
         coverage_rows = []
 
-        policy_header = (
-            "| Repo | License | CI | Workflows | AGENTS.md |"
-            " Code of Conduct | Contributing | Pre-commit |"
-        )
-        policy_sep = (
-            "| ---- | ------- | -- | --------- | --------- |"
-            " --------------- | ------------ | ---------- |"
-        )
+        policy_header = "| Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Last-Updated (UTC) |"  # noqa: E501
+        policy_sep = "| ---- | ------- | -- | --------- | --------- | --------------- | ------------ | ---------- | ----------------- |"  # noqa: E501
         policy_rows = []
 
-        pattern_header = "| Repo | Dark Patterns | Bright Patterns |"
-        pattern_sep = "| ---- | ------------- | --------------- |"
+        pattern_header = (
+            "| Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |"
+        )
+        pattern_sep = "| ---- | ------------- | --------------- | ----------------- |"  # noqa: E501
         pattern_rows = []
 
         for idx, info in enumerate(repos):
@@ -664,23 +696,25 @@ class RepoCrawler:
                 trunk = "✅"
             elif info.trunk_green is False:
                 trunk = "❌"
+            updated = info.commit_date or "n/a"
             basics_rows.append(
-                f"| {repo_link} | {info.branch} | {commit} | {trunk} |"  # noqa: E501
+                f"| {repo_link} | {info.branch} | {commit} | {trunk} | {updated} |"  # noqa: E501
             )
             codecov = "✅" if info.uses_codecov else "❌"
             coverage_rows.append(
-                "| {} | {} | {} | {} | {} |".format(
+                "| {} | {} | {} | {} | {} | {} |".format(
                     repo_link,
                     coverage,
                     patch,
                     codecov,
                     inst,
+                    updated,
                 )
             )
             policy_rows.append(
                 (
                     "| {repo} | {lic} | {ci} | {count} | {agents} | {coc} | "
-                    "{cont} | {pre} |"
+                    "{cont} | {pre} | {updated} |"
                 ).format(
                     repo=repo_link,
                     lic="✅" if info.has_license else "❌",
@@ -690,12 +724,12 @@ class RepoCrawler:
                     coc="✅" if info.has_coc else "❌",
                     cont="✅" if info.has_contributing else "❌",
                     pre="✅" if info.has_precommit else "❌",
+                    updated=updated,
                 )
             )
             pattern_rows.append(
                 (
-                    f"| {repo_link} | {info.dark_pattern_count} | "
-                    f"{info.bright_pattern_count} |"
+                    f"| {repo_link} | {info.dark_pattern_count} | {info.bright_pattern_count} | {updated} |"  # noqa: E501
                 )
             )
 
@@ -724,17 +758,12 @@ class RepoCrawler:
         lines.extend(pattern_rows)
         lines.append("")
         lines.append(
-            "Legend: ✅ indicates the repo has adopted that feature from "
-            "flywheel. 🚀 uv means only uv was found. "
-            "🔶 partial signals a mix of uv and pip. "
-            "Coverage percentages are parsed from their badges where "
-            "available. Codecov shows ✅ when a Codecov config or badge is "
-            "present. Patch shows ✅ when diff coverage is at least 90% "
-            "and ❌ otherwise, with the percentage in parentheses. "
-            "The commit column shows the short SHA of the latest default "
-            "branch commit at crawl time. The Trunk column indicates "
-            "whether CI is green for that commit. Dark Patterns and Bright "
-            "Patterns list counts of suspicious or positive code snippets "
-            "detected."
+            "Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. "  # noqa: E501
+            "🔶 partial signals a mix of uv and pip.\n"
+            "Coverage percentages are parsed from their badges where available. Codecov shows ✅ when a Codecov config or badge is present. "  # noqa: E501
+            "Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses.\n"  # noqa: E501
+            "The commit column shows the short SHA of the latest default branch commit at crawl time. The Trunk column indicates whether CI is green for that commit. "  # noqa: E501
+            "Dark Patterns and Bright Patterns list counts of suspicious or positive code snippets detected.\n"  # noqa: E501
+            "Last-Updated (UTC) records the date of the commit used for each row."  # noqa: E501
         )
         return "\n".join(lines)

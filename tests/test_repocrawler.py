@@ -74,7 +74,10 @@ def test_generate_summary():
     assert "main" in out
     assert "pip" in out
     assert "deadbee" in out
-    assert "| Repo | Dark Patterns | Bright Patterns |" in out
+    assert (
+        "| Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |"
+        in out  # noqa: E501
+    )
 
 
 def test_parse_coverage_none():
@@ -236,12 +239,25 @@ def test_summary_column_order(monkeypatch):
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
     summary = crawler.generate_summary()
-    assert "| Repo | Branch | Commit | Trunk |" in summary
-    assert "| Repo | Coverage | Patch | Codecov | Installer |" in summary
-    assert "| Repo | License | CI | Workflows |" in summary
-    assert "| Repo | Dark Patterns | Bright Patterns |" in summary
+    assert (
+        "| Repo | Branch | Commit | Trunk | Last-Updated (UTC) |" in summary
+    )  # noqa: E501
+    assert (
+        "| Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |"  # noqa: E501
+        in summary
+    )
+    assert (
+        "| Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Last-Updated (UTC) |"  # noqa: E501
+        in summary
+    )
+    assert (
+        "| Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |"  # noqa: E501
+        in summary
+    )
     lines = summary.splitlines()
-    idx = lines.index("| Repo | Branch | Commit | Trunk |")
+    idx = lines.index(
+        "| Repo | Branch | Commit | Trunk | Last-Updated (UTC) |"
+    )  # noqa: E501
     row = lines[idx + 2]
     assert "`abcdef0`" in row
 
@@ -275,7 +291,9 @@ def test_generate_summary_with_patch(monkeypatch):
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
     lines = crawler.generate_summary().splitlines()
-    idx = lines.index("| Repo | Coverage | Patch | Codecov | Installer |")
+    idx = lines.index(
+        "| Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |"  # noqa: E501
+    )
     row = lines[idx + 2]
     assert "❌ (73%)" in row
     assert "(73%)" in row
