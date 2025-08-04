@@ -10,6 +10,7 @@ JS
 LLM
 NEWREPO
 OpenAI
+Playwright
 PRD
 Prettier
 PyPI
@@ -141,3 +142,5 @@ Snyk
 mjs
 yyyy
 LTS
+MPa
+rpm
