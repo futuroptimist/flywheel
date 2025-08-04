@@ -141,3 +141,5 @@ Snyk
 mjs
 yyyy
 LTS
+MPa
+rpm
