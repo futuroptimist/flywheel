@@ -29,8 +29,17 @@ def main() -> None:
     crawler = RepoCrawler(repos, token=args.token)
     infos = crawler.crawl()
 
-    basics = [["Repo", "Branch", "Commit"]]
-    coverage = [["Repo", "Coverage", "Patch", "Codecov", "Installer"]]
+    basics = [["Repo", "Branch", "Commit", "Last-Updated (UTC)"]]
+    coverage = [
+        [
+            "Repo",
+            "Coverage",
+            "Patch",
+            "Codecov",
+            "Installer",
+            "Last-Updated (UTC)",
+        ]
+    ]
     policy = [
         [
             "Repo",
@@ -41,6 +50,7 @@ def main() -> None:
             "Code of Conduct",
             "Contributing",
             "Pre-commit",
+            "Last-Updated (UTC)",
         ]
     ]
 
@@ -49,7 +59,8 @@ def main() -> None:
         if idx == 0:
             link = f"**{link}**"
         commit = f"`{info.latest_commit}`" if info.latest_commit else "n/a"
-        basics.append([link, info.branch, commit])
+        updated = info.commit_date or "n/a"
+        basics.append([link, info.branch, commit, updated])
 
         cov = "❌"
         if info.coverage:
@@ -64,7 +75,7 @@ def main() -> None:
         inst_map = {"uv": "🚀 uv", "partial": "🔶 partial"}
         inst = inst_map.get(info.installer, info.installer)
         codecov = "✅" if info.uses_codecov else "❌"
-        coverage.append([link, cov, patch, codecov, inst])
+        coverage.append([link, cov, patch, codecov, inst, updated])
 
         policy.append(
             [
@@ -76,6 +87,7 @@ def main() -> None:
                 "✅" if info.has_coc else "❌",
                 "✅" if info.has_contributing else "❌",
                 "✅" if info.has_precommit else "❌",
+                updated,
             ]
         )
 
@@ -99,13 +111,11 @@ def main() -> None:
     )
     lines.append("")
     lines.append(
-        "Legend: ✅ indicates the repo has adopted that feature from flywheel. "
-        "🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip. "
-        "Coverage percentages are parsed from Codecov when available. Codecov "
-        "shows ✅ when a Codecov config or badge is present. Patch shows ✅ "
-        "when diff coverage is at least 90% and ❌ otherwise. The "
-        "commit column shows the short SHA of the latest default branch "
-        "commit at crawl time."
+        "Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. "  # noqa: E501
+        "🔶 partial signals a mix of uv and pip.\n"  # noqa: E501
+        "Coverage percentages are parsed from Codecov when available. Codecov shows ✅ when a Codecov config or badge is present. "  # noqa: E501
+        "Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise. The commit column shows the short SHA of the latest default branch commit at crawl time.\n"  # noqa: E501
+        "Last-Updated (UTC) records the date of that commit."
     )
     lines.append(
         f"_Updated automatically: {date.today()}_",

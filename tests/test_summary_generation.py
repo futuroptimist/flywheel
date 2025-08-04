@@ -12,13 +12,21 @@ def test_summary_generation(monkeypatch):
     monkeypatch.setattr(crawler, "_default_branch", lambda *a, **kw: "main")
     monkeypatch.setattr(crawler, "_fetch_file", lambda *a, **kw: "")
     monkeypatch.setattr(crawler, "_list_workflows", lambda *a, **kw: set())
-    monkeypatch.setattr(crawler, "_latest_commit", lambda *a, **kw: "deadbee")
+    monkeypatch.setattr(
+        crawler, "_latest_commit", lambda *a, **kw: ("deadbee", "2024-01-01")
+    )
     monkeypatch.setattr(crawler, "_branch_green", lambda *a, **kw: True)
     monkeypatch.setattr(crawler, "_detect_installer", lambda *a, **kw: "uv")
     monkeypatch.setattr(crawler, "_has_file", lambda *a, **kw: True)
 
     summary = crawler.generate_summary()
-    assert "| Repo | Coverage | Patch | Codecov | Installer |" in summary
+    assert (
+        "| Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |"  # noqa: E501
+        in summary
+    )
     assert "(95%)" in summary
     assert "—" not in summary
-    assert "| Repo | Dark Patterns | Bright Patterns |" in summary
+    assert (
+        "| Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |"  # noqa: E501
+        in summary
+    )

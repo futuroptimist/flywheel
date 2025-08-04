@@ -53,7 +53,7 @@ def test_default_branch_errors():
 def test_latest_commit_error():
     sess = make_session({"/commits?per_page=1": DummyResp(200, json_data={})})
     crawler = RepoCrawler([], session=sess)
-    assert crawler._latest_commit("demo/repo", "main") is None
+    assert crawler._latest_commit("demo/repo", "main") == (None, None)
 
 
 def test_latest_commit_invalid_json():
@@ -61,13 +61,13 @@ def test_latest_commit_invalid_json():
         {"/commits?per_page=1": DummyResp(200, json_data=ValueError("bad"))}
     )
     crawler = RepoCrawler([], session=sess)
-    assert crawler._latest_commit("demo/repo", "main") is None
+    assert crawler._latest_commit("demo/repo", "main") == (None, None)
 
 
 def test_latest_commit_non_200():
     sess = make_session({"/commits?per_page=1": DummyResp(404)})
     crawler = RepoCrawler([], session=sess)
-    assert crawler._latest_commit("demo/repo", "main") is None
+    assert crawler._latest_commit("demo/repo", "main") == (None, None)
 
 
 def test_list_workflows_error():
@@ -148,7 +148,7 @@ def test_network_exceptions_handled():
     c = RepoCrawler([], session=ErrSession())
     assert c._fetch_file("demo/repo", "README.md", "main") is None
     assert c._default_branch("demo/repo") == "main"
-    assert c._latest_commit("demo/repo", "main") is None
+    assert c._latest_commit("demo/repo", "main") == (None, None)
     assert c._list_workflows("demo/repo", "main") == set()
     assert c._project_coverage_from_codecov("demo/repo", "main") is None
 
@@ -204,11 +204,14 @@ def test_generate_summary_no_patch(monkeypatch):
         latest_commit="123cafe",
         workflow_count=1,
         trunk_green=None,
+        commit_date="2024-01-01",
     )
     crawler = RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
     lines = crawler.generate_summary().splitlines()
-    idx = lines.index("| Repo | Coverage | Patch | Codecov | Installer |")
+    idx = lines.index(
+        "| Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |"  # noqa: E501
+    )
     row = lines[idx + 2]
     assert "| — |" in row
 
