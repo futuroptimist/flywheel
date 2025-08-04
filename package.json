@@ -7,8 +7,8 @@
     "format:check": "echo skip",
     "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "playwright": "playwright test",
-    "test": "npm run jest -- && npm run playwright",
-    "playwright:install": "playwright install",
+    "playwright:install": "playwright install --with-deps",
+    "test": "npm run playwright:install && npm run jest -- && npm run playwright",
     "docs:dev": "npm --prefix docs-site run dev"
   },
   "devDependencies": {

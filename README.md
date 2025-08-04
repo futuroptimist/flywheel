@@ -77,7 +77,7 @@ pre-commit run --all-files
 bash scripts/checks.sh
 ```
 
-The hooks include a spell checker powered by `codespell`. Add project-specific
+The script includes a spell checker powered by `codespell`. Add project-specific
 terms to `dict/allow.txt` so they are not flagged as typos. VS Code users will
 see the same suggestions if they install the recommended Code Spell Checker
 extension. A GitHub Action runs the `typos` checker on every push to catch
