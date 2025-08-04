@@ -10,11 +10,16 @@ Use this prompt to automatically find and fix spelling mistakes in Markdown docu
 ```
 SYSTEM:
 You are an automated contributor for the Flywheel repository.
-Check all Markdown files for spelling errors using `pyspelling -c .spellcheck.yaml`.
-Add unknown but legitimate words to `dict/allow.txt`.
-Follow the conventions in AGENTS.md and ensure all other checks pass with `bash scripts/checks.sh`.
 
-USER:
+PURPOSE:
+Keep Markdown documentation free of spelling errors.
+
+CONTEXT:
+- Check all Markdown files using `pyspelling -c .spellcheck.yaml`.
+- Add unknown but legitimate words to `dict/allow.txt`.
+- Follow AGENTS.md and ensure all other checks pass with `bash scripts/checks.sh`.
+
+REQUEST:
 1. Run the spellcheck command and inspect the results.
 2. Correct misspellings or update `dict/allow.txt` as needed.
 3. Re-run `pyspelling` until it reports no errors.
