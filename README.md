@@ -73,6 +73,7 @@ uv pip install pre-commit
 pre-commit install
 
 # Run checks before committing
+pre-commit run --all-files
 bash scripts/checks.sh
 ```
 
@@ -81,6 +82,10 @@ terms to `dict/allow.txt` so they are not flagged as typos. VS Code users will
 see the same suggestions if they install the recommended Code Spell Checker
 extension. A GitHub Action runs the `typos` checker on every push to catch
 misspellings that slip past local hooks.
+
+If Playwright browser binaries are missing, install them with
+`npx playwright install chromium` or skip end-to-end tests by running
+`SKIP_E2E=1 bash scripts/checks.sh`.
 
 ### Embedding in an existing project
 
