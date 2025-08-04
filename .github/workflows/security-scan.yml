@@ -1,0 +1,43 @@
+name: Security Scan
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - uses: astral-sh/setup-uv@v1
+      - name: Install deps
+        run: |
+          uv pip install --system -r requirements.txt
+          uv pip install --system pre-commit
+      - name: Rebuild summary
+        run: |
+          python -m flywheel crawl --repos-file docs/repo_list.txt --output docs/repo-feature-summary.md
+          node scripts/security-scan.mjs --repos-from docs/repo_list.txt --out docs/repo-feature-summary.md
+      - name: Run pre-commit
+        run: |
+          pre-commit run --files docs/repo-feature-summary.md || true
+          git add docs/repo-feature-summary.md
+          pre-commit run --files docs/repo-feature-summary.md
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "chore: update security scan"
+          title: "chore: update security scan"
+          body: "Nightly security & dependency health scan"
+          branch: security-scan

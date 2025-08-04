@@ -8,6 +8,7 @@
     "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "playwright": "playwright test",
     "playwright:install": "playwright install --with-deps",
+    "coverage": "npm run jest -- --coverage",
     "test": "npm run playwright:install && npm run jest -- && npm run playwright",
     "docs:dev": "npm --prefix docs-site run dev"
   },
