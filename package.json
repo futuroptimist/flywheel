@@ -6,6 +6,7 @@
     "format": "echo skip",
     "format:check": "echo skip",
     "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "coverage": "npm run jest -- --coverage",
     "playwright": "playwright test",
     "playwright:install": "playwright install --with-deps",
     "test": "npm run playwright:install && npm run jest -- && npm run playwright",
