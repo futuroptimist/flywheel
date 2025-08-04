@@ -17,12 +17,27 @@ The kinetic energy of a rotating wheel is
 $$E = \tfrac{1}{2} I \omega^2$$
 with angular velocity $\omega$ in radians per second.
 
-GitHub automatically displays these formulas when
-LaTeX expressions are wrapped in dollar signs.
+### Example using CAD dimensions
+
+The stock CAD model in [`cad/flywheel.scad`](../cad/flywheel.scad) defines a
+solid cylinder with radius $r=50\,\text{mm}$ and height $h=20\,\text{mm}$.
+For material density $\rho$, the mass is
+
+$$m = \rho\,\pi r^2 h$$
+
+Printing in PLA ($\rho \approx 1.25\,\text{g/cm}^3$) yields $m \approx 0.20\,\text{kg}$ and
+$$I = \tfrac{1}{2} m r^2 \approx 2.5\times10^{-4}\,\text{kg·m}^2.$$ At
+3000\,rpm the angular speed is $\omega = \tfrac{2\pi n}{60} \approx 314\,\text{rad/s}$,
+so the wheel stores roughly $$E \approx 12\,\text{J}.$$
+
+GitHub automatically displays these formulas when LaTeX expressions are wrapped
+in dollar signs.
 
 ## Forces on the adapter
 
-When you spin the wheel, torque $T$ from the motor or handle acts on the adapter. If the adapter slips, the wheel will not accelerate. Approximate the shear stress on the clamp as
+When you spin the wheel, torque $T$ from the motor or handle acts on the
+adapter. If the adapter slips, the wheel will not accelerate. Approximate the
+shear stress on the clamp as
 $$\tau \approx \frac{T}{r A}$$
 where $r$ is the shaft radius and $A$ is the contact area.
 
@@ -33,6 +48,13 @@ Tightening the bolts increases normal force $F_n$ on the shaft. Friction then re
 $$T_{max} = \mu F_n r$$
 with friction coefficient $\mu$ around 0.2--0.3 for plastic on steel.
 Use stronger bolts or more clamp area if you need higher torque capacity.
+
+For the adapter in [`cad/adapter.scad`](../cad/adapter.scad) the shaft diameter
+is $8\,\text{mm}$ and the clamping length is $20\,\text{mm}$.  The contact area
+is therefore $A \approx \pi d h \approx 5\times10^{-4}\,\text{m}^2$.  Under a
+$5\,\text{N·m}$ torque the shear stress is about
+$$\tau \approx \frac{5}{0.004\times 5\times10^{-4}} \approx 2.5\,\text{MPa},$$
+well below the $40\,\text{MPa}$ yield strength of many nylon inserts.
 
 ## Multi-flywheel systems
 
@@ -61,6 +83,12 @@ $$\frac{T_1}{T_2} = e^{\mu \theta}$$
 where $T_1$ is the tight-side tension, $T_2$ the slack side tension,
 $\mu$ the coefficient of friction, and $\theta$ the wrap angle in radians.
 This sets the maximum torque each belt can transmit.
+
+```mermaid
+graph LR
+    A[Flywheel r\_1] -- belt --> B[Pulley r\_2]
+    B -- belt --> C[Flywheel r\_3]
+```
 
 As an example, a 200\,mm wheel driving a 50\,mm pulley quadruples the speed.
 Linking that smaller pulley to a third wheel can multiply storage while
