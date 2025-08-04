@@ -10,7 +10,7 @@ from typing import List
 
 from tabulate import tabulate
 
-from flywheel.repocrawler import RepoCrawler
+from flywheel.repocrawler import RepoCrawler, format_coverage
 
 
 def load_repos(path: Path) -> List[str]:
@@ -51,9 +51,7 @@ def main() -> None:
         commit = f"`{info.latest_commit}`" if info.latest_commit else "n/a"
         basics.append([link, info.branch, commit])
 
-        cov = "❌"
-        if info.coverage:
-            cov = f"✅ ({info.coverage})"
+        cov = format_coverage(info.coverage)
 
         if info.patch_percent is None:
             patch = "—"

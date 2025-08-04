@@ -6,7 +6,7 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk |
 | ---- | ------ | ------ | ----- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `80da57d` | ✅ |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `98bcfaf` | ✅ |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `e7829e7` | ✅ |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `277d494` | ✅ |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `7b5c1b5` | ❌ |
@@ -20,16 +20,16 @@ This table tracks which flywheel features each related repository has adopted.
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer |
 | ---- | -------- | ----- | ------- | --------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ (100%) | — | ✅ | 🚀 uv |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ (100%) | — | ✅ | 🚀 uv |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ (100%) | — | ✅ | 🚀 uv |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ (100%) | — | ✅ | 🚀 uv |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ (100%) | — | ✅ | pip |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✔️ | — | ✅ | 🚀 uv |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✔️ | — | ✅ | 🚀 uv |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✔️ | — | ✅ | 🚀 uv |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✔️ | — | ✅ | 🚀 uv |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✔️ | — | ✅ | pip |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ❌ | — | ✅ | 🔶 partial |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | — | ❌ | 🚀 uv |
-| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ (100%) | — | ✅ | 🚀 uv |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ (100%) | — | ✅ | pip |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ (57%) | — | ✅ | 🚀 uv |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✔️ | — | ✅ | 🚀 uv |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✔️ | — | ✅ | pip |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 57 % | — | ✅ | 🚀 uv |
 
 ## Policies & Automation
 | Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit |

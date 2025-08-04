@@ -16,6 +16,25 @@ BADGE_PATCH = "https://img.shields.io/codecov/patch/github/{repo}/{branch}.svg"
 BADGE_TOTAL = "https://codecov.io/gh/{repo}/branch/{branch}/graph/badge.svg"
 
 
+def format_coverage(value: Optional[str]) -> str:
+    """Return a coverage display string given a Codecov badge value.
+
+    * ``value`` may look like ``"100%"`` or ``"(57%)"``.
+    * ``✔️`` is returned for full coverage, ``"N %"`` for partial,
+      and ``❌`` when no percentage can be determined.
+    """
+
+    if not value:
+        return "❌"
+    match = re.search(r"(\d+)", value)
+    if not match:
+        return "❌"
+    pct = int(match.group(1))
+    if pct == 100:
+        return "✔️"
+    return f"{pct} %"
+
+
 @dataclass
 class RepoInfo:
     name: str
@@ -639,9 +658,7 @@ class RepoCrawler:
         pattern_rows = []
 
         for idx, info in enumerate(repos):
-            coverage = "❌"
-            if info.coverage:
-                coverage = f"✅ ({info.coverage})"
+            coverage = format_coverage(info.coverage)
             if info.patch_percent is None:
                 patch = "—"
             else:
