@@ -1,6 +1,11 @@
 # Codex Custom Instructions – v3 (2025-08-02)
 
-Mirror of the text placed in the [OpenAI Codex custom instructions panel](https://chatgpt.com/codex/settings/general). It unifies **AGENTS.md**, **llms.txt**, and **CLAUDE.md** into one playbook for autonomous or semi‑autonomous LLM agents. Our philosophy is **"move fast, fix‑forward, and keep trunk green."** If a change causes breakage, ship a patch PR instead of reverting.
+Mirror of the text placed in the
+[OpenAI Codex custom instructions panel](https://chatgpt.com/codex/settings/general).
+It unifies **AGENTS.md**, **llms.txt**, and **CLAUDE.md** into one playbook for
+autonomous or semi‑autonomous LLM agents. Our philosophy is **"move fast,
+fix‑forward, and keep trunk green."** If a change causes breakage, ship a patch
+PR instead of reverting.
 
 > **Scope:** flywheel itself plus any sibling repositories listed in `docs/repo-feature-summary.md`.
 
@@ -9,15 +14,25 @@ Mirror of the text placed in the [OpenAI Codex custom instructions panel](https:
 ## 0. Quick-Start Checklist (≤3 min)
 
 1. **Bootstrap**
-   - Parse `AGENTS.md`, `README.md`, repo root, and `docs/` to build an index of prompts and workflows.
+   - Parse `AGENTS.md`, `README.md`, repo root, and `docs/` to build an index of
+     prompts and workflows. If `AGENTS.md`, `llms.txt`, or `CLAUDE.md` are
+     missing, create them from scratch using
+     [agentsmd.net](https://agentsmd.net/),
+     [llmstxt.org](https://llmstxt.org/), and
+     [Anthropic's guide](https://docs.anthropic.com/en/docs/claude-code/overview).
 2. **Run quality gates**
+   - `npm run lint`
+   - `npm run test:ci`
    - `pre-commit run --all-files`
    - `pytest -q`
    - `npm test -- --coverage`
    - `python -m flywheel.fit`
+   - Review the repo's CI config to anticipate PR checks and run their local
+     equivalents; fix failures before pushing.
    - Failures? Open an issue titled “🚨 Gate fails on fresh clone”.
 3. **Select a micro‑win**
-   - Pick one change ≤50 lines of code or ≤100 words of docs. Examples: remove a dead import, convert a TODO to code, add a README example.
+   - Pick one change ≤50 lines of code or ≤100 words of docs. Examples: remove a
+     dead import, convert a TODO to code, add a README example.
 
 ---
 
@@ -26,10 +41,11 @@ Mirror of the text placed in the [OpenAI Codex custom instructions panel](https:
 | Rule | Why |
 |------|-----|
 | **Atomic commits**: one intent per commit | Speeds up `git bisect` & review |
-| **Conventional Commits** (`feat: …`, `fix: …`, `docs: …`) | Keeps changelogs and semantic versioning automatic |
+| **Conventional Commits** (`feat:…`, `fix:…`, `docs:…`) | Enables automated changelogs and semver |
 | **Tiny PRs (≤400 lines of code or <5 files)** | Review stays <15 min |
 
-A PR template lives at `.github/pull_request_template.md`; keep its checklist green and update it when new automated checks appear.
+A PR template lives at `.github/pull_request_template.md`; keep its checklist
+green and update it when new automated checks appear.
 
 ---
 
@@ -51,7 +67,8 @@ A PR template lives at `.github/pull_request_template.md`; keep its checklist gr
 | Coverage per commit | ≥95 % of the figure from the previous commit | Prevents regressions |
 | ESLint / Flake8 errors | 0 | Custom rules live in `tools/lint-rules/` |
 
-When coverage is low, agents should auto‑generate minimal tests that assert public contracts only—never snapshot private state.
+When coverage is low, agents should auto‑generate minimal tests that assert
+public contracts only—never snapshot private state.
 
 ---
 
@@ -59,8 +76,10 @@ When coverage is low, agents should auto‑generate minimal tests that assert pu
 
 ### 4.1 Codex / Cursor (code‑first)
 
-1. Search for `PROMPT = """` blocks; standardize to **purpose / context / request** format.
-2. Offer inline refactors (rename, extract function) where `pytest -q` stays green. See MANTRA for agent‑driven refactor patterns.
+1. Search for `PROMPT = """` blocks; standardize to **purpose / context /
+   request** format.
+2. Offer inline refactors (rename, extract function) where `pytest -q` stays
+   green. See MANTRA for agent‑driven refactor patterns.
 
 ### 4.2 Windsurf (user interface focused)
 
@@ -100,4 +119,5 @@ On every push, agents must:
 | Tests fail but cause obvious typo | Patch and add regression test |
 | Ambiguous spec | Open issue titled “❓ Spec Clarification: <area>” |
 
-> **Tip:** Unsure? Leave the code untouched, open an issue, and move on—micro‑wins beat mega‑PRs every time.
+> **Tip:** Unsure? Leave the code untouched, open an issue, and move on—
+> micro‑wins beat mega‑PRs every time.
