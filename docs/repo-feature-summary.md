@@ -6,16 +6,16 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `eb51545` | ✅ | 2025-08-06 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `ef43dbf` | ✅ | 2025-08-06 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `42e1edc` | ✅ | 2025-08-06 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `9467bdb` | ✅ | 2025-08-06 |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `8c8634a` | ✅ | 2025-08-06 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `c1d7334` | ✅ | 2025-08-04 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `1d110d7` | ✅ | 2025-08-06 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `dbbe7b9` | ❌ | 2025-08-06 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `600f93b` | ✅ | 2025-08-06 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `350c72a` | ✅ | 2025-08-06 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `570cdf1` | ✅ | 2025-08-06 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `42d5bfa` | ✅ | 2025-08-06 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | n/a | n/a | n/a |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |
@@ -29,7 +29,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | — | ❌ | 🚀 uv | 2025-08-06 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ (100%) | — | ✅ | 🚀 uv | 2025-08-06 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ (100%) | — | ✅ | pip | 2025-08-06 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ (57%) | — | ✅ | 🚀 uv | 2025-08-06 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ (57%) | — | ✅ | 🚀 uv | n/a |
 
 ## Policies & Automation
 | Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Last-Updated (UTC) |
@@ -43,7 +43,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-06 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-06 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2025-08-06 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 5 | ✅ | ❌ | ❌ | ✅ | 2025-08-06 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 5 | ✅ | ❌ | ❌ | ✅ | n/a |
 
 ## Dark & Bright Pattern Scan
 | Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |
@@ -57,7 +57,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | 0 | 0 | 2025-08-06 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | 0 | 0 | 2025-08-06 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | 0 | 0 | 2025-08-06 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 0 | 0 | 2025-08-06 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 0 | 0 | n/a |
 
 Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip.
 Coverage percentages are parsed from their badges where available. Codecov shows ✅ when a Codecov config or badge is present. Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses.
