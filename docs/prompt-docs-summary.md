@@ -35,4 +35,4 @@ using RepoCrawler to discover prompt documents across repositories.
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)         | [prompts-codex-docs.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-docs.md)                     | Sugarkube Codex Docs Prompt    |
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)         | [prompts-codex.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex.md)                               | Sugarkube Codex Prompt         |
 
-_Updated automatically: 2025-08-04_
+_Updated automatically: 2025-08-06_
