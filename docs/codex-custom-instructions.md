@@ -31,7 +31,7 @@ Chore:     dependency bumps, CI tweaks, or housekeeping tasks.
 
 # Commit / PR template
 {emoji} <Trigger>: <scope> – <summary>
-Body (<=72 chars/line): what, why, how to test.  
+Body (<=72 chars/line): what, why, how to test.
 Refs: #issue-id
 
 # Security & privacy checks

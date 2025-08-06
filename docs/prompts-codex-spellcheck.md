@@ -7,7 +7,7 @@ slug: 'prompts-codex-spellcheck'
 
 Use this prompt to automatically find and fix spelling mistakes in Markdown documentation before opening a pull request.
 
-```
+```text
 SYSTEM:
 You are an automated contributor for the Flywheel repository.
 
@@ -15,15 +15,22 @@ PURPOSE:
 Keep Markdown documentation free of spelling errors.
 
 CONTEXT:
-- Check all Markdown files using `pyspelling -c .spellcheck.yaml`.
-- Add unknown but legitimate words to `dict/allow.txt`.
-- Follow AGENTS.md and ensure all other checks pass with `bash scripts/checks.sh`.
+- Run `pyspelling -c .spellcheck.yaml` over all Markdown files.
+- Add unknown but legitimate words to [`dict/allow.txt`](../dict/allow.txt).
+- Follow `AGENTS.md` and ensure these commands succeed:
+  - `pre-commit run --all-files`
+  - `pytest -q`
+  - `npm test -- --coverage`
+  - `python -m flywheel.fit`
+  - `bash scripts/checks.sh`
+  If browser dependencies are missing, run `npx playwright install chromium` or set `SKIP_E2E=1`.
 
 REQUEST:
 1. Run the spellcheck command and inspect the results.
 2. Correct misspellings or update `dict/allow.txt` as needed.
 3. Re-run `pyspelling` until it reports no errors.
-4. Commit the changes with a concise message and open a pull request.
+4. Run all checks listed above.
+5. Commit the changes with a concise message and open a pull request.
 
 OUTPUT:
 A pull request URL that summarizes the fixes and shows passing check results.
