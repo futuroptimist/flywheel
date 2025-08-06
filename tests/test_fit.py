@@ -16,6 +16,13 @@ def test_parse_scad_vars(tmp_path):
     assert vars == {"radius": 5.0, "height": 2.0}
 
 
+def test_parse_scad_vars_with_comments_and_negatives(tmp_path):
+    scad = tmp_path / "part.scad"
+    scad.write_text("radius = 5; // mm\nheight = -2; // depth\n")
+    vars = ff.parse_scad_vars(scad)
+    assert vars == {"radius": 5.0, "height": -2.0}
+
+
 def test_verify_fit(tmp_path, monkeypatch):
     assert ff.verify_fit(CAD_DIR, STL_DIR)
 
