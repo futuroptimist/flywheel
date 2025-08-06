@@ -20,10 +20,13 @@ CONTEXT:
 - Follow `AGENTS.md` and ensure these commands succeed:
   - `pre-commit run --all-files`
   - `pytest -q`
+  - `npm run lint`
+  - `npm run test:ci`
   - `npm test -- --coverage`
   - `python -m flywheel.fit`
   - `bash scripts/checks.sh`
-  If browser dependencies are missing, run `npx playwright install chromium` or set `SKIP_E2E=1`.
+  If browser dependencies are missing, run `npx playwright install chromium`
+  or prefix `SKIP_E2E=1` to tests.
 
 REQUEST:
 1. Run the spellcheck command and inspect the results.
