@@ -166,6 +166,9 @@ A successful run prints:
 All parts fit together.
 ```
 
+Lines may include inline ``//`` comments and negative values; the checker
+ignores the comments when parsing.
+
 Below is a simplified view of how the pieces stack:
 
 ```mermaid
