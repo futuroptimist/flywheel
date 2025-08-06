@@ -137,6 +137,7 @@ py
 pyspelling
 yaml
 GraphQL
+JSDoc
 octokit
 Snyk
 mjs
@@ -146,3 +147,9 @@ MPa
 rpm
 
 pytest
+Futuroptimist
+composable
+ts-node
+ripsecrets
+fix-forward
+needs-triage
