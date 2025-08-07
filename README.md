@@ -166,8 +166,9 @@ A successful run prints:
 All parts fit together.
 ```
 
-Lines may include inline ``//`` comments, negative values, and decimals without a
-leading zero; the checker ignores the comments when parsing.
+Lines may include inline ``//`` comments, negative values, decimals without a
+leading zero, or trailing decimal points; the checker ignores the comments when
+parsing.
 
 Below is a simplified view of how the pieces stack:
 
