@@ -272,7 +272,7 @@ class RepoCrawler:
                         except Exception:  # pragma: no cover - parsing errors
                             date = None
                     else:
-                        date = None
+                        date = None  # pragma: no cover - missing date
                     return sha[:7] if sha else None, date
         except RequestException:
             return None, None

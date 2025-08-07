@@ -180,7 +180,7 @@ graph TD
 
 ### Regenerating CAD meshes
 
-Re-export STLs and OBJs whenever a SCAD file changes:
+Re-export STL and OBJ files whenever a SCAD file changes:
 
 ```bash
 scripts/build_stl.sh

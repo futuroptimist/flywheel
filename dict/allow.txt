@@ -153,3 +153,5 @@ ts-node
 ripsecrets
 fix-forward
 needs-triage
+LGTM
+msg
