@@ -5,7 +5,7 @@ slug: 'prompts-codex-spellcheck'
 
 # Codex Spellcheck Prompt
 
-Use this prompt to automatically find and fix spelling mistakes in Markdown documentation before opening a pull request.
+Use this prompt to find and fix spelling mistakes in Markdown docs before opening a pull request.
 
 ```text
 SYSTEM:
@@ -16,12 +16,11 @@ Keep Markdown documentation free of spelling errors.
 
 CONTEXT:
 - Run `pyspelling -c .spellcheck.yaml` over all Markdown files.
-- Add unknown but legitimate words to [`dict/allow.txt`](../dict/allow.txt).
-- Follow `AGENTS.md` and ensure these commands succeed:
+- Add unknown but legitimate words to [dict/allow.txt](../dict/allow.txt).
+- Follow [AGENTS.md](../AGENTS.md) and ensure these commands succeed:
   - `pre-commit run --all-files`
   - `pytest -q`
   - `npm run lint`
-  - `npm run test:ci`
   - `npm test -- --coverage`
   - `python -m flywheel.fit`
   - `bash scripts/checks.sh`
