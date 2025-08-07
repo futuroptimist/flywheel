@@ -178,6 +178,19 @@ graph TD
   Adapter --> Flywheel
 ```
 
+### Regenerating CAD meshes
+
+Re-export STLs and OBJs whenever a SCAD file changes:
+
+```bash
+scripts/build_stl.sh
+python - <<'PY'
+from webapp.app import ensure_obj_models
+ensure_obj_models()
+PY
+python -m flywheel.fit
+```
+
 ## Values
 
 We aim for a positive-sum, empathetic community. The flywheel embraces regenerative and open-source principles to keep energy cycling back into every project.
