@@ -26,6 +26,19 @@ describe('scanRepo', () => {
     const result = await scanRepo('owner/repo');
     expect(result).toEqual({ repo: 'owner/repo', dependabot: false, secretScanning: false, codeql: false, snyk: false });
   });
+
+  test('handles fetch errors gracefully', async () => {
+    global.fetch = jest
+      .fn()
+      // dependabot fetch fails
+      .mockRejectedValueOnce(new Error('network'))
+      // repo info 404
+      .mockResolvedValueOnce({ ok: false, status: 404 })
+      // readme fetch fails
+      .mockRejectedValueOnce(new Error('network'));
+    const result = await scanRepo('owner/repo');
+    expect(result).toEqual({ repo: 'owner/repo', dependabot: false, secretScanning: false, codeql: false, snyk: false });
+  });
 });
 
 describe('renderTable & updateMarkdown', () => {

@@ -1,4 +1,5 @@
 name: Security Scan
+# Rebuilds Security & Dependency Health table nightly
 on:
   schedule:
     - cron: '0 2 * * *'

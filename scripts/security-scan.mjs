@@ -9,10 +9,14 @@ export function authHeaders() {
 }
 
 async function fetchJSON(url) {
-  const res = await fetch(url, { headers: authHeaders() });
-  if (res.status === 404) return null;
-  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
-  return res.json();
+  try {
+    const res = await fetch(url, { headers: authHeaders() });
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
+    return res.json();
+  } catch {
+    return null;
+  }
 }
 
 function badgeInReadme(readme, keyword) {
@@ -31,8 +35,13 @@ export async function scanRepo(identifier) {
   const secretScanning = repoData?.security_and_analysis?.secret_scanning?.status === 'enabled';
   const branch = ref || repoData?.default_branch || 'main';
 
-  const readmeRes = await fetch(`https://raw.githubusercontent.com/${owner}/${name}/${branch}/README.md`);
-  const readme = readmeRes.ok ? await readmeRes.text() : '';
+  let readme = '';
+  try {
+    const readmeRes = await fetch(`https://raw.githubusercontent.com/${owner}/${name}/${branch}/README.md`);
+    readme = readmeRes.ok ? await readmeRes.text() : '';
+  } catch {
+    readme = '';
+  }
   const codeql = badgeInReadme(readme, 'codeql');
   const snyk = badgeInReadme(readme, 'snyk');
 
