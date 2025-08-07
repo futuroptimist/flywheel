@@ -562,14 +562,46 @@ class RepoCrawler:
                 return True
         return False
 
-    def _check_repo(self, repo: str) -> RepoInfo:
+    # ---------------------------- Crawl helpers ---------------------------- #
+    def _basic_repo(self, repo: str) -> RepoInfo:
+        """Fetch branch and commit info with minimal requests."""
+
         branch = self._branch_overrides.get(repo) or self._default_branch(repo)
+        latest_commit, commit_date = self._latest_commit(repo, branch)
+        if latest_commit:
+            trunk_green = self._branch_green(repo, branch, latest_commit)
+        else:
+            trunk_green = None
+        return RepoInfo(
+            name=repo,
+            branch=branch,
+            coverage=None,
+            patch_percent=None,
+            uses_codecov=False,
+            has_license=False,
+            has_ci=False,
+            has_agents=False,
+            has_coc=False,
+            has_contributing=False,
+            has_precommit=False,
+            installer="",
+            latest_commit=latest_commit,
+            workflow_count=0,
+            trunk_green=trunk_green,
+            commit_date=commit_date,
+        )
+
+    def _augment_repo(self, info: RepoInfo) -> None:
+        """Populate remaining fields for ``info`` in-place."""
+
+        repo = info.name
+        branch = info.branch
         readme = self._fetch_file(repo, "README.md", branch)
-        coverage = self._parse_coverage(readme, repo, branch)
-        uses_codecov = self._uses_codecov(repo, branch, readme)
-        patch_cov = self._patch_coverage_from_codecov(repo, branch)
+        info.coverage = self._parse_coverage(readme, repo, branch)
+        info.uses_codecov = self._uses_codecov(repo, branch, readme)
+        info.patch_percent = self._patch_coverage_from_codecov(repo, branch)
         workflow_files = self._list_workflows(repo, branch)
-        workflow_count = len(workflow_files)
+        info.workflow_count = len(workflow_files)
         workflows_txt = "".join(
             [
                 self._fetch_file(
@@ -597,44 +629,27 @@ class RepoCrawler:
             or ""
         )
         npm_scripts_txt = pkg_txt + frontend_txt
-
-        installer = self._detect_installer(
+        info.installer = self._detect_installer(
             workflows_txt + docker_txt + npm_scripts_txt
         )  # noqa: E501
-        latest_commit, commit_date = self._latest_commit(repo, branch)
-        if latest_commit:
-            trunk_green = self._branch_green(repo, branch, latest_commit)
-        else:
-            trunk_green = None
-        dark_count = self._detect_dark_patterns(repo, branch)
-        bright_count = self._detect_bright_patterns(repo, branch)
-        return RepoInfo(
-            name=repo,
-            branch=branch,
-            coverage=coverage,
-            patch_percent=patch_cov,
-            uses_codecov=uses_codecov,
-            has_license=self._has_file(repo, "LICENSE", branch),
-            has_ci=self._has_ci(workflow_files),
-            has_agents=self._has_file(repo, "AGENTS.md", branch),
-            has_coc=self._has_file(repo, "CODE_OF_CONDUCT.md", branch),
-            has_contributing=self._has_file(repo, "CONTRIBUTING.md", branch),
-            has_precommit=self._has_file(
-                repo,
-                ".pre-commit-config.yaml",
-                branch,
-            ),
-            installer=installer,
-            latest_commit=latest_commit,
-            workflow_count=workflow_count,
-            trunk_green=trunk_green,
-            commit_date=commit_date,
-            dark_pattern_count=dark_count,
-            bright_pattern_count=bright_count,
+        info.has_license = self._has_file(repo, "LICENSE", branch)
+        info.has_ci = self._has_ci(workflow_files)
+        info.has_agents = self._has_file(repo, "AGENTS.md", branch)
+        info.has_coc = self._has_file(repo, "CODE_OF_CONDUCT.md", branch)
+        info.has_contributing = self._has_file(repo, "CONTRIBUTING.md", branch)
+        info.has_precommit = self._has_file(
+            repo,
+            ".pre-commit-config.yaml",
+            branch,
         )
+        info.dark_pattern_count = self._detect_dark_patterns(repo, branch)
+        info.bright_pattern_count = self._detect_bright_patterns(repo, branch)
 
     def crawl(self) -> List[RepoInfo]:
-        return [self._check_repo(r) for r in self.repos]
+        infos = [self._basic_repo(r) for r in self.repos]
+        for info in infos:
+            self._augment_repo(info)
+        return infos
 
     def generate_summary(self) -> str:
         repos = self.crawl()
