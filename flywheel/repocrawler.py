@@ -56,6 +56,16 @@ class RepoCrawler:
     _UV = re.compile(r"setup-uv|uv venv", re.I)
     _PIP = re.compile(r"pip install", re.I)
     _POETRY = re.compile(r"poetry\s+install", re.I)
+    SCAN_SUFFIXES = (
+        ".js",
+        ".ts",
+        ".tsx",
+        ".py",
+        ".html",
+        ".md",
+        ".json",
+    )
+
     DARK_PATTERNS = [
         re.compile(r"onbeforeunload", re.I),
         re.compile(r"navigator\.clipboard\.writeText", re.I),
@@ -105,17 +115,7 @@ class RepoCrawler:
         count = 0
         files = self._list_files(repo, branch)[:50]
         for path in files:
-            if not path.endswith(
-                (
-                    ".js",
-                    ".ts",
-                    ".tsx",
-                    ".py",
-                    ".html",
-                    ".md",
-                    ".json",
-                )
-            ):
+            if not path.endswith(self.SCAN_SUFFIXES):
                 continue
             text = self._fetch_file(repo, path, branch)
             if not text:
@@ -130,17 +130,7 @@ class RepoCrawler:
         count = 0
         files = self._list_files(repo, branch)[:50]
         for path in files:
-            if not path.endswith(
-                (
-                    ".js",
-                    ".ts",
-                    ".tsx",
-                    ".py",
-                    ".html",
-                    ".md",
-                    ".json",
-                )
-            ):
+            if not path.endswith(self.SCAN_SUFFIXES):
                 continue
             text = self._fetch_file(repo, path, branch)
             if not text:

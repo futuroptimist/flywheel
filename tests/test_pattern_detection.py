@@ -37,6 +37,14 @@ def test_pattern_detection_skips(monkeypatch):
     assert crawler._detect_bright_patterns("foo/bar", "main") == 1
 
 
+def test_bright_patterns_count_once_per_file(monkeypatch):
+    crawler = rc.RepoCrawler([])
+    monkeypatch.setattr(crawler, "_list_files", lambda r, b: ["script.js"])
+    text = "unsubscribe opt-out delete account"
+    monkeypatch.setattr(crawler, "_fetch_file", lambda r, p, b: text)
+    assert crawler._detect_bright_patterns("foo/bar", "main") == 1
+
+
 def test_list_files_errors(monkeypatch):
     crawler = rc.RepoCrawler([])
 
