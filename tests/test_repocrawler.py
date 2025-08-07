@@ -23,9 +23,19 @@ class DummySession:
 
         if url.startswith("https://api.github.com/repos/"):
             if url.endswith("/commits?per_page=1&sha=main"):
-                return Resp('[{"sha": "deadbeef"}]', 200)
+                return Resp(
+                    '[{"sha": "deadbeef", "commit": {"author": {"date": '
+                    '"2024-01-01T00:00:00Z"}}}]',
+                    200,
+                )
             if url.endswith("/commits?per_page=2&sha=main"):
-                return Resp('[{"sha": "cafecafe"}, {"sha": "deadbeef"}]', 200)
+                return Resp(
+                    '[{"sha": "cafecafe", "commit": {"author": {"date": '
+                    '"2024-01-02T00:00:00Z"}}},'
+                    '{"sha": "deadbeef", "commit": {"author": {"date": '
+                    '"2024-01-01T00:00:00Z"}}}]',
+                    200,
+                )
             if "/contents/.github/workflows" in url:
                 import json
 
@@ -183,6 +193,7 @@ def test_generate_summary_installer_variants(monkeypatch):
         latest_commit="cafec0d",
         workflow_count=1,
         trunk_green=True,
+        commit_date="2024-01-01",
     )
     info_partial = info_uv.__class__(
         **{**info_uv.__dict__, "name": "demo/partial", "installer": "partial"}
@@ -211,6 +222,7 @@ def test_generate_summary_other_installer(monkeypatch):
         latest_commit="1234567",
         workflow_count=1,
         trunk_green=True,
+        commit_date="2024-01-01",
     )
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
@@ -235,6 +247,7 @@ def test_summary_column_order(monkeypatch):
         latest_commit="abcdef0",
         workflow_count=1,
         trunk_green=True,
+        commit_date="2024-01-01",
     )
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
@@ -287,6 +300,7 @@ def test_generate_summary_with_patch(monkeypatch):
         latest_commit="abcdef1",
         workflow_count=1,
         trunk_green=False,
+        commit_date="2024-01-01",
     )
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])

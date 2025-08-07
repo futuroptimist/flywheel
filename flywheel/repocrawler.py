@@ -654,6 +654,15 @@ class RepoCrawler:
 
     def generate_summary(self) -> str:
         repos = self.crawl()
+        missing = []
+        for r in repos:
+            if not r.latest_commit or not r.commit_date:
+                missing.append(r.name)
+        if missing:
+            raise RuntimeError(
+                "Missing commit data for: {}. Pass a GitHub token via "
+                "GITHUB_TOKEN to avoid rate limits.".format(", ".join(missing))
+            )
         lines = [
             "# Repo Feature Summary",
             "",

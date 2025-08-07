@@ -1,3 +1,5 @@
+import pytest
+
 from flywheel.repocrawler import RepoCrawler
 
 
@@ -31,3 +33,14 @@ def test_summary_generation(monkeypatch):
         "| Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |"  # noqa: E501
         in summary
     )
+
+
+def test_summary_generation_missing_commit(monkeypatch):
+    crawler = RepoCrawler(["foo/bar"])
+    monkeypatch.setattr(
+        crawler,
+        "_latest_commit",
+        lambda *a, **kw: (None, None),
+    )
+    with pytest.raises(RuntimeError):
+        crawler.generate_summary()
