@@ -4,18 +4,18 @@ This table tracks which flywheel features each related repository has adopted.
 
 <!-- spellchecker: disable -->
 ## Basics
-| Repo | Branch | Commit | Trunk | Last-Updated (UTC) |
-| ---- | ------ | ------ | ----- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `2c9ba51` | ✅ | 2025-08-07 |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | n/a | n/a | n/a |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | n/a | n/a | n/a |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | n/a | n/a | n/a |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | n/a | n/a | n/a |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | n/a | n/a | n/a |
-| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | n/a | n/a | n/a |
-| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | n/a | n/a | n/a |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | n/a | n/a | n/a |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | n/a | n/a | n/a |
+| Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
+| ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `2c9ba51` | ✅ | 0 | 1 | 2025-08-07 |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | n/a | n/a | 0 | 0 | n/a |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | n/a | n/a | 0 | 0 | n/a |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | n/a | n/a | 0 | 1 | n/a |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | n/a | n/a | 6 | 3 | n/a |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | n/a | n/a | 3 | 42 | n/a |
+| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | n/a | n/a | 1 | 1 | n/a |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | n/a | n/a | 0 | 1 | n/a |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | n/a | n/a | 0 | 0 | n/a |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | n/a | n/a | 0 | 0 | n/a |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |

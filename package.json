@@ -9,15 +9,21 @@
     "coverage": "npm run jest -- --coverage",
     "playwright": "playwright test",
     "playwright:install": "playwright install --with-deps",
-    "test": "npm run playwright:install && npm run jest -- && npm run playwright",
+    "vitest": "vitest run --coverage",
+    "test": "npm run playwright:install && npm run jest -- --coverage --coverageReporters=lcov && npm run vitest && npm run playwright",
+    "test:ci": "npm test",
     "docs:dev": "npm --prefix docs-site run dev"
   },
   "devDependencies": {
     "@playwright/test": "^1.43.1",
     "cross-env": "^10.0.0",
-    "jest": "^30.0.5"
+    "jest": "^30.0.5",
+    "vitest": "^1.6.0",
+    "@vitest/coverage-v8": "^1.6.0",
+    "ts-node": "^10.9.2"
   },
   "dependencies": {
-    "three": "^0.178.0"
+    "three": "^0.178.0",
+    "octokit": "^4.0.0"
   }
 }
