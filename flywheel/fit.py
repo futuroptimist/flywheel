@@ -56,7 +56,7 @@ def verify_fit(
     assert any(abs(d - shaft["shaft_diameter"]) < tol for d in shaft_dims[:2])
 
     wheel_dims = _dims(stl_dir / "flywheel.stl")
-    assert abs(wheel_dims[0] - 2 * wheel["radius"]) < 1.0
+    assert abs(wheel_dims[0] - wheel["diameter"]) < 1.0
     assert abs(wheel_dims[2] - wheel["height"]) < tol
 
     adapter_dims = _dims(stl_dir / "adapter.stl")
