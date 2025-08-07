@@ -38,6 +38,7 @@
 - Cross-repo prompt index in `docs/prompt-docs-summary.md` listing `prompts-items.md`, `prompts-quests.md`, and `prompts-codex.md` across repos
 - Axel integration guide in `docs/axel-integration.md`
 - DSPACE synergy doc in `docs/dspace-integration.md`
+- Cross-repo roadmap in `docs/REPOS_ROADMAP.md`
 - token.place roadmap in `docs/tokenplace-roadmap.md`
 - local environment guide in `docs/local-environments.md`
 - token.place features in `docs/tokenplace-features.md`
