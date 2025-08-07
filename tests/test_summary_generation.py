@@ -26,6 +26,7 @@ def test_summary_generation(monkeypatch):
     )
     assert "(95%)" in summary
     assert "—" not in summary
+    assert "n/a" not in summary
     assert (
         "| Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |"  # noqa: E501
         in summary
