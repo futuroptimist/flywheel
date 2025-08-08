@@ -33,6 +33,20 @@ so the wheel stores roughly $$E \approx 12\,\text{J}.$$
 GitHub automatically displays these formulas when LaTeX expressions are wrapped
 in dollar signs.
 
+## Spin-up time
+
+A constant torque $T$ causes angular acceleration $\alpha$ according to
+
+$$\alpha = \frac{T}{I}$$
+
+Starting from rest, the time to reach speed $\omega$ is therefore
+
+$$t = \frac{\omega}{\alpha} = \frac{I\omega}{T}$$
+
+Using the same CAD dimensions as above ($I \approx 2.5\times10^{-4}\,\text{kg·m}^2$),
+a modest $0.5\,\text{N·m}$ motor torque spins the wheel to
+3000\,rpm ($\omega \approx 314\,\text{rad/s}$) in about $t \approx 0.16\,\text{s}$.
+
 ## Forces on the adapter
 
 When you spin the wheel, torque $T$ from the motor or handle acts on the
