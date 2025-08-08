@@ -1,6 +1,8 @@
 # Repo Feature Summary
 
 This table tracks which flywheel features each related repository has adopted.
+For v0.1 readiness tasks, see [feature-summary.md](feature-summary.md).
+Longer-term plans live in [REPOS_ROADMAP.md](REPOS_ROADMAP.md).
 
 <!-- spellchecker: disable -->
 ## Basics
