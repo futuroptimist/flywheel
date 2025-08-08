@@ -20,10 +20,10 @@ CONTEXT:
 - Follow [AGENTS.md](../AGENTS.md) and ensure these commands succeed:
   - `pre-commit run --all-files`
   - `pytest -q`
-  - `npm test -- --coverage`
+  - `npm test -- --coverage --coverageReporters=lcov`
   - `python -m flywheel.fit`
   - `bash scripts/checks.sh`
-  If browser dependencies are missing, run `npx playwright install chromium`
+  If browser dependencies are missing, run `npx playwright install --with-deps`
   or prefix tests with `SKIP_E2E=1`.
 
 REQUEST:
