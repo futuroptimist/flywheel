@@ -1,0 +1,45 @@
+name: Build Spool Core Sleeve (STL)
+
+on:
+  push:
+    paths:
+      - 'cad/utils/spool_core_sleeve.scad'
+      - 'cad/examples/spool_core_sleeve_example.scad'
+      - 'scripts/openscad_render_spool_core_sleeve.sh'
+      - 'tests/cad/test_spool_core_sleeve.sh'
+      - '.github/workflows/cad-spool-core-sleeve.yml'
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install OpenSCAD (headless)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openscad xvfb
+
+      - name: Make scripts executable
+        run: |
+          chmod +x scripts/*.sh tests/cad/*.sh
+
+      - name: Run minimal fit/test
+        run: tests/cad/test_spool_core_sleeve.sh
+
+      - name: Matrix render (common variants)
+        run: |
+          set -euo pipefail
+          PRESET="sunlu55_to73_len60" bash scripts/openscad_render_spool_core_sleeve.sh
+          # Add more presets here as you collect measurements:
+          # PRESET="brandX54_to73_len60" bash scripts/openscad_render_spool_core_sleeve.sh
+          # bash scripts/openscad_render_spool_core_sleeve.sh 55 73 60 0.15
+          # bash scripts/openscad_render_spool_core_sleeve.sh 55 73 60 0.25
+
+      - name: Upload STLs
+        uses: actions/upload-artifact@v4
+        with:
+          name: spool_core_sleeve-stl
+          path: stl/spool_core_sleeve/*.stl
+          if-no-files-found: error
