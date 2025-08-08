@@ -33,6 +33,30 @@ so the wheel stores roughly $$E \approx 12\,\text{J}.$$
 GitHub automatically displays these formulas when LaTeX expressions are wrapped
 in dollar signs.
 
+## Rim speed and material limits
+
+The rim's tangential velocity is
+$$v = \omega r$$
+where $r$ is the wheel radius.  Using the CAD value $r=50\,\text{mm}$ and
+3000\,rpm ($\omega \approx 314\,\text{rad/s}$) gives $v \approx 16\,\text{m/s}$.  Plastic
+parts have a maximum safe speed set by hoop stress.  Approximating the wheel as
+a thin rim,
+$$\sigma \approx \rho r^2 \omega^2$$
+with material density $\rho$ and yield strength $\sigma_y$.  Solving for the
+upper speed limit,
+$$\omega_{max} \approx \sqrt{\frac{\sigma_y}{\rho r^2}}$$
+For PLA ($\rho \approx 1.25\,\text{g/cm}^3$, $\sigma_y \approx 60\,\text{MPa}$) and the
+same radius, $\omega_{max} \approx 4.4\times10^3\,\text{rad/s}$ or about
+42\,000\,rpm.  Designers typically apply a safety factor of at least two and
+operate well below this bound.
+
+```mermaid
+graph TD
+    R[Radius r = 50 mm] --> V[v = \omega r]
+    R --> S[\sigma \approx \rho r^2 \omega^2]
+    S --> W[\omega_{max} = \sqrt{\sigma_y/(\rho r^2)}]
+```
+
 ## Forces on the adapter
 
 When you spin the wheel, torque $T$ from the motor or handle acts on the
@@ -44,7 +68,8 @@ where $r$ is the shaft radius and $A$ is the contact area.
 Choose an adapter material with yield strength safely above $\tau$.
 Nylon or metal inserts work for higher torques, while PETG suffices for lighter loads.
 
-Tightening the bolts increases normal force $F_n$ on the shaft. Friction then resists the twisting force:
+Tightening the bolts increases normal force $F_n$ on the shaft.
+Friction then resists the twisting force:
 $$T_{max} = \mu F_n r$$
 with friction coefficient $\mu$ around 0.2--0.3 for plastic on steel.
 Use stronger bolts or more clamp area if you need higher torque capacity.
