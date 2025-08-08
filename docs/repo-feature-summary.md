@@ -6,12 +6,12 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `df6e7a6` | ✅ | 2025-08-08 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `f309f5d` | ✅ | 2025-08-08 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `eb6f4b9` | ✅ | 2025-08-08 |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `a73fe59` | ✅ | 2025-08-08 |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `a73fe59` | ❌ | 2025-08-08 |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `0411b4f` | ✅ | 2025-08-08 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `6282158` | ❌ | 2025-08-08 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `dca8b3c` | ✅ | 2025-08-08 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `fa9e275` | ✅ | 2025-08-08 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `f4b7410` | ✅ | 2025-08-08 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `2d1c7dc` | ✅ | 2025-08-08 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `8c4c33c` | ✅ | 2025-08-08 |
@@ -20,30 +20,30 @@ This table tracks which flywheel features each related repository has adopted.
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |
 | ---- | -------- | ----- | ------- | --------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ (100%) | — | ✅ | 🚀 uv | 2025-08-08 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ❌ | — | ✅ | 🚀 uv | 2025-08-08 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ (100%) | — | ✅ | 🚀 uv | 2025-08-08 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ (100%) | — | ✅ | 🚀 uv | 2025-08-08 |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ (100%) | — | ✅ | 🚀 uv | 2025-08-08 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ (100%) | — | ✅ | pip | 2025-08-08 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✅ (100%) | — | ✅ | 🔶 partial | 2025-08-08 |
-| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | — | ❌ | 🔶 partial | 2025-08-08 |
-| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ (100%) | — | ✅ | 🔶 partial | 2025-08-08 |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ (100%) | — | ✅ | 🔶 partial | 2025-08-08 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ (57%) | — | ✅ | 🔶 partial | 2025-08-08 |
+| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | — | ❌ | 🚀 uv | 2025-08-08 |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ (100%) | — | ✅ | 🚀 uv | 2025-08-08 |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ (100%) | — | ✅ | pip | 2025-08-08 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ (57%) | — | ✅ | 🚀 uv | 2025-08-08 |
 
 ## Policies & Automation
 | Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Last-Updated (UTC) |
 | ---- | ------- | -- | --------- | --------- | --------------- | ------------ | ---------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ | ✅ | 14 | ✅ | ✅ | ✅ | ✅ | 2025-08-08 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ | ✅ | 15 | ✅ | ✅ | ✅ | ✅ | 2025-08-08 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ | ✅ | 3 | ✅ | ✅ | ✅ | ✅ | 2025-08-08 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | 2025-08-08 |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-08 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | 2025-08-08 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✅ | ✅ | 8 | ✅ | ✅ | ✅ | ❌ | 2025-08-08 |
-| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ✅ | ❌ | 0 | ✅ | ✅ | ✅ | ✅ | 2025-08-08 |
-| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ | ❌ | 0 | ✅ | ✅ | ✅ | ✅ | 2025-08-08 |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ❌ | 0 | ✅ | ✅ | ✅ | ✅ | 2025-08-08 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ❌ | 0 | ✅ | ❌ | ❌ | ✅ | 2025-08-08 |
+| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-08 |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-08 |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2025-08-08 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 5 | ✅ | ❌ | ❌ | ✅ | 2025-08-08 |
 
 ## Dark & Bright Pattern Scan
 | Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |
