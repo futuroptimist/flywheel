@@ -182,3 +182,9 @@ prebuilt
 walkthrough
 params
 analytics
+sunlu
+sqrt
+len
+od
+fn
+utils
