@@ -1,4 +1,4 @@
-# Core‑Sleeve Spool Adapter (OpenSCAD utils module)
+# Core‑Sleeve Spool Adapter (OpenSCAD utility module)
 
 A tiny, reusable OpenSCAD module for adapting filament spools: it slides into the
 spool’s bore (`inner_id`) and expands the wall to a desired outer diameter (`target_od`),
@@ -8,7 +8,7 @@ sanity‑check builds.
 ## Quick start
 
 ```scad
-use <../utils/spool_core_sleeve.scad>;
+use "../utils/spool_core_sleeve.scad";
 
 // direct parameters
 spool_core_sleeve(inner_id=55, target_od=73, length=60, clearance=0.20);
@@ -19,14 +19,14 @@ spool_core_sleeve_preset("sunlu55_to73_len60");
 
 ### Parameters
 
-| Name      | Type | Default | Notes                             |
-|-----------|------|---------|-----------------------------------|
-| inner_id  | mm   | 55      | Measured bore (ID) of the spool   |
-| target_od | mm   | 73      | Desired sleeve OD                 |
-| length    | mm   | 60      | Axial length (match spool width)  |
-| clearance | mm   | 0.20    | Added to diameter of bore (total) |
-| $fn_outer | —    | 200     | Facets for outer cylinder         |
-| $fn_inner | —    | 150     | Facets for inner bore             |
+| Name        | Type | Default | Notes                               |
+|-------------|------|---------|-------------------------------------|
+| `inner_id`  | mm   | 55      | Measured bore (ID) of the spool     |
+| `target_od` | mm   | 73      | Desired sleeve outer diameter (OD)  |
+| `length`    | mm   | 60      | Axial length (match spool width)    |
+| `clearance` | mm   | 0.20    | Added to diameter of bore (total)   |
+| `$fn_outer` | —    | 200     | Facets for outer cylinder           |
+| `$fn_inner` | —    | 150     | Facets for inner bore               |
 
 Tip: If a print is too tight or loose, re‑export with a slightly different
 clearance (e.g., 0.15–0.30).
