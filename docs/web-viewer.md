@@ -9,16 +9,12 @@ them to `stl/`. GitHub renders `.stl` files with a built‑in 3D viewer so you c
 inspect the geometry right in the browser.
 
 To regenerate the OBJ assets locally, export fresh STLs with `openscad` and
-convert them using `trimesh`:
+convert them using the [`assimp`](https://github.com/assimp/assimp) command-line
+utility. This will emit `.obj` files along with matching `.mtl` material files:
 
 ```bash
 openscad -o stl/stand.stl cad/stand.scad
-python - <<'PY'
-import glob, os, trimesh
-for path in glob.glob('stl/*.stl'):
-    mesh = trimesh.load_mesh(path)
-    mesh.export(os.path.join('webapp/static/models', os.path.basename(path).replace('.stl', '.obj')))
-PY
+assimp export stl/stand.stl webapp/static/models/stand.obj
 ```
 
 ## Running Locally
