@@ -19,7 +19,7 @@
 - Diff display: unified
 - Line length: 100 chars
 - Package manager: npm (`npm ci`)
-- Test script: `npm run test:ci`
+- Test script: `npm run test:ci` (runs Jest and Playwright with coverage)
 
 # Standard Operating Procedures  (trigger ➔ instruction)
 Feature:   create a minimal PR containing (1) failing test, (2) code to pass, (3) doc update.
