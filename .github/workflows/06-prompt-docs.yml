@@ -1,0 +1,48 @@
+name: Update Prompt Docs Summary
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+jobs:
+  crawl:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v1
+      - name: Install dependencies
+        run: |
+          uv pip install --system -r requirements.txt
+          uv pip install --system pre-commit
+      - name: Generate summary
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --out docs/prompt-docs-summary.md --token $GITHUB_TOKEN
+      - name: Run pre-commit
+        run: |
+          pre-commit run --files docs/prompt-docs-summary.md || true
+          git add docs/prompt-docs-summary.md
+          pre-commit run --files docs/prompt-docs-summary.md
+      - name: Commit changes
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add docs/prompt-docs-summary.md
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update prompt docs summary"
+            git push
+          fi
+      - name: Publish summary
+        run: cat docs/prompt-docs-summary.md >> "$GITHUB_STEP_SUMMARY"

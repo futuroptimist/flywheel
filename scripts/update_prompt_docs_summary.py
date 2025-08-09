@@ -6,7 +6,7 @@ import argparse
 import sys
 from datetime import date
 from pathlib import Path
-from typing import List
+from typing import List, Set
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
@@ -34,6 +34,19 @@ def extract_title(text: str) -> str:
     return ""
 
 
+def _parse_existing(path: Path) -> Set[str]:
+    if not path.exists():
+        return set()
+    existing: Set[str] = set()
+    for line in path.read_text().splitlines():
+        if not line.startswith("|"):
+            continue
+        parts = [p.strip() for p in line.split("|")[1:-1]]
+        if len(parts) >= 2:
+            existing.add(parts[1])
+    return existing
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repos-from", type=Path, required=True)
@@ -44,12 +57,16 @@ def main() -> None:
     repos = load_repos(args.repos_from)
     crawler = RepoCrawler(repos, token=args.token)
 
+    existing_docs = _parse_existing(args.out)
     rows: list[list[str]] = []
+    new_rows: list[list[str]] = []
 
     # Include prompt docs from the local repository (first entry)
     local_repo = repos[0].split("@")[0]
     docs_dir = Path(__file__).resolve().parents[1] / "docs"
-    for path in sorted(docs_dir.glob("prompts-*.md")):
+    for path in sorted(docs_dir.glob("*prompt*.md")):
+        if path.name == "prompt-docs-summary.md":
+            continue
         text = path.read_text()
         title = extract_title(text)
         repo_link = f"**[{local_repo}](https://github.com/{local_repo})**"
@@ -58,7 +75,10 @@ def main() -> None:
             f"[{file_name}](https://github.com/{local_repo}/blob/main/docs/"
             f"{file_name})"
         )
-        rows.append([repo_link, doc_link, title])
+        row = [repo_link, doc_link, title]
+        rows.append(row)
+        if doc_link not in existing_docs:
+            new_rows.append(row)
 
     # Add prompt docs from remote repositories (skip local repo)
     for spec in repos[1:]:
@@ -69,7 +89,11 @@ def main() -> None:
             branch = crawler._default_branch(name)
         files = crawler._list_files(name, branch)
         for path in files:
-            if "prompts-" in path and path.endswith(".md"):
+            if (
+                "prompt" in path
+                and path.endswith(".md")
+                and not path.endswith("prompt-docs-summary.md")
+            ):
                 text = crawler._fetch_file(name, path, branch) or ""
                 title = extract_title(text)
                 repo_link = f"[{name}](https://github.com/{name})"
@@ -80,7 +104,10 @@ def main() -> None:
                     branch,
                     path,
                 )
-                rows.append([repo_link, doc_link, title])
+                row = [repo_link, doc_link, title]
+                rows.append(row)
+                if doc_link not in existing_docs:
+                    new_rows.append(row)
 
     table = tabulate(
         rows,
@@ -92,14 +119,29 @@ def main() -> None:
         "",
         "This index is auto-generated with "
         "[scripts/update_prompt_docs_summary.py]"
-        "(../scripts/update_prompt_docs_summary.py)",
+        "(../scripts/update_prompt_docs_summary.py) "
         "using RepoCrawler to discover prompt documents across repositories.",
         "",
         table,
-        "",
-        f"_Updated automatically: {date.today()}_",
-        "",
     ]
+
+    if new_rows:
+        lines.extend(
+            [
+                "",
+                "## Untriaged Prompt Docs",
+                "",
+                tabulate(
+                    new_rows,
+                    headers=["Repo", "Document", "Title"],
+                    tablefmt="github",
+                ),
+            ]
+        )
+    else:
+        lines.extend(["", "## Untriaged Prompt Docs", "", "None detected."])
+
+    lines.extend(["", f"_Updated automatically: {date.today()}_", ""])
     args.out.write_text("\n".join(lines))
 
 
