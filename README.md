@@ -15,6 +15,21 @@
 2. Clone your new repo and run `./scripts/setup.sh YOURNAME NEWREPO` to personalize placeholders.
 3. Commit and push to start the flywheel.
 
+## Testing
+
+Run the full test suite before committing:
+
+```bash
+pre-commit run --all-files
+pytest -q
+npm test -- --coverage
+python -m flywheel.fit
+bash scripts/checks.sh
+```
+
+If browser dependencies are missing, install them via `npx playwright install chromium`
+or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
+
 ## Contents
 
 - CI workflows for linting, tests, and docs
