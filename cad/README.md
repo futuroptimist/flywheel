@@ -24,3 +24,10 @@ ensure_obj_models()
 PY
 python -m flywheel.fit
 ```
+
+Use `scripts/openscad_render_spool_core_sleeve.sh` with a `PRESET` to export
+parametric spool core sleeves, for example:
+
+```bash
+PRESET=sunlu55_to73_len60 scripts/openscad_render_spool_core_sleeve.sh
+```
