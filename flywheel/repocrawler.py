@@ -70,6 +70,16 @@ class RepoCrawler:
         re.compile(r"no[-_ ]?tracking", re.I),
     ]
 
+    CODE_EXTENSIONS = (
+        ".js",
+        ".ts",
+        ".tsx",
+        ".py",
+        ".html",
+        ".md",
+        ".json",
+    )
+
     DOCKER_FILES = (
         "Dockerfile",
         "Dockerfile.dev",
@@ -102,20 +112,15 @@ class RepoCrawler:
         return []
 
     def _detect_dark_patterns(self, repo: str, branch: str) -> int:
+        """Count dark UX patterns in code and docs.
+
+        File extension checks are case-insensitive.
+        """
+
         count = 0
         files = self._list_files(repo, branch)[:50]
         for path in files:
-            if not path.endswith(
-                (
-                    ".js",
-                    ".ts",
-                    ".tsx",
-                    ".py",
-                    ".html",
-                    ".md",
-                    ".json",
-                )
-            ):
+            if not path.lower().endswith(self.CODE_EXTENSIONS):
                 continue
             text = self._fetch_file(repo, path, branch)
             if not text:
@@ -127,20 +132,15 @@ class RepoCrawler:
         return count
 
     def _detect_bright_patterns(self, repo: str, branch: str) -> int:
+        """Count positive UX patterns in code and docs.
+
+        File extension checks are case-insensitive.
+        """
+
         count = 0
         files = self._list_files(repo, branch)[:50]
         for path in files:
-            if not path.endswith(
-                (
-                    ".js",
-                    ".ts",
-                    ".tsx",
-                    ".py",
-                    ".html",
-                    ".md",
-                    ".json",
-                )
-            ):
+            if not path.lower().endswith(self.CODE_EXTENSIONS):
                 continue
             text = self._fetch_file(repo, path, branch)
             if not text:
