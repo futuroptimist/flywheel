@@ -11,6 +11,12 @@ $$I = \tfrac{1}{2} m r^2$$
 where $m$ is mass and $r$ is radius.
 Larger and heavier wheels have more inertia.
 
+Integrating the mass distribution shows where this expression comes from:
+
+$$I = \int_0^r r'^2\, \mathrm{d}m = \int_0^r r'^2 (2\pi \rho h r'\, \mathrm{d}r') = \tfrac{1}{2}\pi \rho h r^4 = \tfrac{1}{2} m r^2$$
+
+where $\rho$ is the material density and $h$ the cylinder height.
+
 ## Stored energy
 
 The kinetic energy of a rotating wheel is
@@ -73,27 +79,44 @@ a modest $0.5\,\text{N·m}$ motor torque spins the wheel to
 
 ## Angular momentum and gyroscopic effects
 
-A spinning wheel also carries angular momentum,
+The flywheel's angular momentum is
 
-$$L = I \omega.$$
+$$L = I\omega$$
 
-Changing the direction of the spin axis requires an applied torque,
+which resists changes in orientation. Using the CAD values above
+($I \approx 2.5\times10^{-4}\,\text{kg·m}^2$, $\omega \approx 314\,\text{rad/s}$)
+gives $L \approx 7.8\times10^{-2}\,\text{kg·m}^2/\text{s}$.
 
-$$\tau = \frac{dL}{dt}.$$
+Applying a torque $\tau$ perpendicular to the spin axis causes the wheel to
+undergo precession at rate
 
-For a slow precession at rate $\Omega$ about a perpendicular axis the resisting
-torque is approximately $\tau \approx L\Omega$. Using the CAD dimensions in
-[`cad/flywheel.scad`](../cad/flywheel.scad) ($I \approx 2.5\times10^{-4}\,\text{kg·m}^2$,
-$\omega \approx 314\,\text{rad/s}$) gives $L \approx 0.08\,\text{kg·m}^2/\text{s}$. Tilting at
-1\,\text{rad/s} therefore needs about $0.08\,\text{N·m}$.
+$$\Omega = \frac{\tau}{L}.$$
 
 ```mermaid
 graph TD
-    I[Inertia I] --> L[L = I\omega]
-    L --> T[\tau = L\Omega]
+    L[Angular momentum L] --> O[Precession \Omega = \tau/L]
 ```
 
-## Forces on the adapter
+Even small hobbyist wheels can exhibit noticeable gyroscopic behavior when spun
+at high speed.
+
+## Spin-down from friction
+
+Even unloaded, bearing and air drag slowly bleed energy from the wheel. Approximating a
+constant friction torque $T_f$ gives the angular deceleration
+
+$$\alpha = -\frac{T_f}{I}$$
+
+so the coasting time from speed $\omega_0$ to rest is
+
+$$t = \frac{I\omega_0}{T_f}$$
+
+The stand in [`cad/stand.scad`](../cad/stand.scad) holds standard 608 bearings (22\,mm outer
+diameter, 7\,mm thick) around the 8\,mm shaft from
+[`cad/shaft.scad`](../cad/shaft.scad).  A typical 608 bearing produces
+$T_f \approx 10^{-3}\,\text{N·m}$, so the example wheel ($I \approx
+2.5\times10^{-4}\,\text{kg·m}^2$) coasts from 3000\,rpm ($\omega_0 \approx
+314\,\text{rad/s}$) for roughly $t \approx 80\,\text{s}$.
 
 When you spin the wheel, torque $T$ from the motor or handle acts on the
 adapter. If the adapter slips, the wheel will not accelerate. Approximate the

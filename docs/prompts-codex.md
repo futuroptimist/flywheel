@@ -98,55 +98,11 @@ OUTPUT
 A PR adding the new table, scan script and workflow.
 ```
 
-### 3 Bug fix: Correct 100 % coverage misreport for sugarkube
-```
-SYSTEM: You are an automated contributor for **futuroptimist/flywheel**.
-
-GOAL
-`docs/repo-feature-summary.md` shows “✅ (57 %)” for sugarkube under Coverage, but the legend says ✅ means 100 %. Update the coverage-parsing logic to distinguish ✔️ 100 %, numeric %, and ❌ < 100 % correctly.
-
-FILES OF INTEREST
-- scripts/gen-repo-feature-summary.ts
-
-REQUIREMENTS
-1. Parse badge patterns `(100%)`, `(57%)`, etc.
-2. Output ✔️ only when value === 100; otherwise show raw percentage.
-3. Update existing unit tests and add a regression test.
-4. Ensure no table cell contains both emoji and percentage.
-
-ACCEPTANCE CHECK
-`npm run coverage` > 90 % and repo-feature-summary.md shows “57 %” (no emoji) for sugarkube.
-
-OUTPUT
-Return the diff.
-```
-
-### 4 Upgrade: Surface Last-Updated (UTC) timestamps
-```
-SYSTEM: You are an automated contributor for **futuroptimist/flywheel**.
-
-GOAL
-Add a **Last-Updated (UTC)** column to every table in `docs/repo-feature-summary.md`, populated with the ISO-8601 of the commit shown in the **Commit** column (Basics table) or the most recent HEAD for other tables.
-
-CONSTRAINTS
-- Reuse the existing GitHub API call cache if present.
-- Display timestamps in yyyy-MM-dd format to keep width manageable.
-- Ensure markdown line length ≤ 120 chars.
-
-ACCEPTANCE CHECK
-All CI and coverage gates green. Visual diff limited to expected column adds.
-
-OUTPUT
-A single PR implementing the change.
-```
-
 ### How to choose a prompt
 
-| When you want to…                         | Use prompt |
-|-------------------------------------------|-----------|
-| Add new insights (metrics, health scans)  | 1 or 2    |
-| Correct data errors / parsing bugs        | 3         |
-| Enrich existing rows with metadata        | 4         |
+| When you want to…                        | Use prompt |
+|------------------------------------------|-----------|
+| Add new insights (metrics, health scans) | 1 or 2    |
 
 ### Notes for human contributors
 

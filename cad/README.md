@@ -8,6 +8,8 @@ Source OpenSCAD files for the flywheel project.
 - `shaft.scad` – straight shaft sized for 608 bearings
 - `adapter.scad` – clamp adapter that attaches the flywheel to the shaft
 - `flywheel.scad` – simple cylindrical flywheel with center bore
+- `utils/spool_core_sleeve.scad` – parametric spool core sleeve library
+  (see `examples/spool_core_sleeve_example.scad`)
 
 ## Regenerating meshes
 

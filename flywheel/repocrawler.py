@@ -51,7 +51,7 @@ class RepoCrawler:
     # Filenames whose presence in `.github/workflows/` signals that the repo
     # runs some form of continuous integration. This keeps the heuristic broad
     # so repos with custom workflow names still count.
-    CI_KEYWORDS = ("ci", "test", "lint", "build", "docs")
+    CI_KEYWORDS = ("ci", "test", "lint", "build", "docs", "qa")
 
     _UV = re.compile(r"setup-uv|uv venv", re.I)
     _PIP = re.compile(r"pip install", re.I)
@@ -445,8 +445,12 @@ class RepoCrawler:
         return set()
 
     def _has_ci(self, workflow_files: set[str]) -> bool:
-        """Return True if the repo defines any workflows."""
-        return len(workflow_files) > 0
+        """Return True if workflow names suggest continuous integration."""
+        for name in workflow_files:
+            lower = name.lower()
+            if any(key in lower for key in self.CI_KEYWORDS):
+                return True
+        return False
 
     def _detect_installer(self, text: str) -> str:
         """Return installer hint based on workflow snippets."""
@@ -698,7 +702,10 @@ class RepoCrawler:
         for idx, info in enumerate(repos):
             coverage = "❌"
             if info.coverage:
-                coverage = f"✅ ({info.coverage})"
+                if info.coverage == "100%":
+                    coverage = "✔️"
+                else:
+                    coverage = info.coverage
             if info.patch_percent is None:
                 patch = "—"
             else:

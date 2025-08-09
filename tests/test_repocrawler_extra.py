@@ -148,9 +148,9 @@ def test_coverage_from_codecov_non_200():
     assert crawler._project_coverage_from_codecov("demo/repo", "main") is None
 
 
-def test_has_ci_false():
+def test_has_ci_only_deploy_returns_false():
     crawler = RepoCrawler([])
-    assert crawler._has_ci({"deploy.yml"}) is True
+    assert crawler._has_ci({"deploy.yml"}) is False
 
 
 @pytest.mark.parametrize(

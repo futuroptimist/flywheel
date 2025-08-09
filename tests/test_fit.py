@@ -30,6 +30,13 @@ def test_parse_scad_vars_without_leading_zero(tmp_path):
     assert vars == {"radius": 0.5}
 
 
+def test_parse_scad_vars_scientific_notation(tmp_path):
+    scad = tmp_path / "part.scad"
+    scad.write_text("radius = 1e-3;")
+    vars = ff.parse_scad_vars(scad)
+    assert vars == {"radius": 0.001}
+
+
 def test_verify_fit(tmp_path, monkeypatch):
     assert ff.verify_fit(CAD_DIR, STL_DIR)
 

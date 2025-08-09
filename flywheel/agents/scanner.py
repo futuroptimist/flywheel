@@ -24,7 +24,12 @@ def clone_repo(repo: str, dest: Path) -> None:
 
 
 def analyze_repo(path: Path) -> str:
-    files = sorted(p.name for p in path.iterdir())
+    """Return a simple report listing top-level files.
+
+    Only regular files in ``path`` are included; directories are ignored.
+    """
+
+    files = sorted(p.name for p in path.iterdir() if p.is_file())
     report_lines = [
         f"# Report for {path.name}",
         "",
