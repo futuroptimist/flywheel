@@ -9,6 +9,10 @@ mkdir -p "$STL_DIR"
 while IFS= read -r -d '' scad; do
   rel="${scad#$SCAD_DIR/}"
   stl="$STL_DIR/${rel%.scad}.stl"
+  if [[ "$rel" == utils/* ]]; then
+    echo "[INFO] Skipping library $scad"
+    continue
+  fi
   mkdir -p "$(dirname "$stl")"
   if [ -f "$stl" ] && [ "$stl" -nt "$scad" ]; then
     echo "[INFO] Skipping $scad; STL up to date"

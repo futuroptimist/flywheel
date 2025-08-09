@@ -13,7 +13,8 @@ Source OpenSCAD files for the flywheel project.
 
 ## Regenerating meshes
 
-Rebuild STL outputs and OBJ viewer models whenever a SCAD file changes:
+Rebuild STL outputs and OBJ viewer models whenever a SCAD file changes. Library
+modules in `cad/utils/` are skipped because they don't render standalone parts:
 
 ```bash
 scripts/build_stl.sh
