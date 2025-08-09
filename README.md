@@ -148,7 +148,8 @@ Clone a set of repos and generate Markdown reports:
 python -m flywheel.agents.scanner
 ```
 
-Reports are written to `reports/`.
+Reports are written to `reports/`. Each report lists only top-level files and ignores
+directories.
 
 ### Viewing the 3D flywheel
 
