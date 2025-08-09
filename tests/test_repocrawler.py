@@ -66,7 +66,7 @@ class DummySession:
         return Resp("", 404)
 
 
-def test_generate_summary():
+def test_generate_summary(monkeypatch):
     files = {
         "foo/bar/main/README.md": "100% coverage",
         "foo/bar/main/LICENSE": "",
@@ -78,7 +78,12 @@ def test_generate_summary():
     }
     session = DummySession(files)
     crawler = rc.RepoCrawler(["foo/bar"], session=session)
+    monkeypatch.setattr(crawler, "_parse_coverage", lambda *a, **kw: "100%")
     out = crawler.generate_summary()
+    lines = out.splitlines()
+    idx = lines.index("## Coverage & Installer")
+    first_row = lines[idx + 3]
+    assert "| ✔️ |" in first_row
     assert "100%" not in out
     assert "**[foo/bar](https://github.com/foo/bar)**" in out
     assert "main" in out
@@ -88,6 +93,39 @@ def test_generate_summary():
         "| Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |"
         in out  # noqa: E501
     )
+
+
+def test_generate_summary_partial_coverage(monkeypatch):
+    crawler = rc.RepoCrawler(["foo/bar"])
+    monkeypatch.setattr(
+        crawler,
+        "_parse_coverage",
+        lambda *a, **kw: "57%",
+    )
+    monkeypatch.setattr(
+        crawler,
+        "_patch_coverage_from_codecov",
+        lambda *a, **kw: None,
+    )
+    monkeypatch.setattr(
+        crawler,
+        "_default_branch",
+        lambda *a, **kw: "main",
+    )
+    monkeypatch.setattr(crawler, "_fetch_file", lambda *a, **kw: "")
+    monkeypatch.setattr(crawler, "_list_workflows", lambda *a, **kw: set())
+    monkeypatch.setattr(
+        crawler, "_latest_commit", lambda *a, **kw: ("deadbee", "2024-01-01")
+    )
+    monkeypatch.setattr(crawler, "_branch_green", lambda *a, **kw: True)
+    monkeypatch.setattr(crawler, "_detect_installer", lambda *a, **kw: "uv")
+    monkeypatch.setattr(crawler, "_has_file", lambda *a, **kw: True)
+    summary = crawler.generate_summary()
+    lines = summary.splitlines()
+    idx = lines.index("## Coverage & Installer")
+    first_row = lines[idx + 3]
+    assert "| 57% |" in first_row
+    assert "✔️" not in first_row
 
 
 def test_parse_coverage_none():

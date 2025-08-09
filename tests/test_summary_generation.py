@@ -26,7 +26,9 @@ def test_summary_generation(monkeypatch):
         "| Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |"  # noqa: E501
         in summary
     )
+    assert "88%" in summary
     assert "(95%)" in summary
+    assert "✅ (88%)" not in summary
     assert "—" not in summary
     assert "n/a" not in summary
     assert (
