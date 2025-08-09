@@ -25,10 +25,18 @@ For material density $\rho$, the mass is
 
 $$m = \rho\,\pi r^2 h$$
 
-Printing in PLA ($\rho \approx 1.25\,\text{g/cm}^3$) yields $m \approx 0.20\,\text{kg}$ and
+Converting the CAD dimensions to SI units gives $r = 0.05\,\text{m}$ and
+$h = 0.02\,\text{m}$.  PLA has density
+$\rho \approx 1.25\,\text{g/cm}^3 = 1.25\times10^3\,\text{kg/m}^3$.
+The volume is $V = \pi r^2 h \approx 1.6\times10^{-4}\,\text{m}^3$, so the mass is
+$m = \rho V \approx 0.20\,\text{kg}$.
+
 $$I = \tfrac{1}{2} m r^2 \approx 2.5\times10^{-4}\,\text{kg·m}^2.$$ At
 3000\,rpm the angular speed is $\omega = \tfrac{2\pi n}{60} \approx 314\,\text{rad/s}$,
 so the wheel stores roughly $$E \approx 12\,\text{J}.$$
+
+If the wheel were a thin rim of the same mass, the inertia would double:
+$$I_{rim} = m r^2.$$
 
 GitHub automatically displays these formulas when LaTeX expressions are wrapped
 in dollar signs.
@@ -88,6 +96,22 @@ diameter, 7\,mm thick) around the 8\,mm shaft from
 $T_f \approx 10^{-3}\,\text{N·m}$, so the example wheel ($I \approx
 2.5\times10^{-4}\,\text{kg·m}^2$) coasts from 3000\,rpm ($\omega_0 \approx
 314\,\text{rad/s}$) for roughly $t \approx 80\,\text{s}$.
+
+## Angular momentum and precession
+
+The spinning wheel also carries angular momentum
+$$L = I \omega$$
+which resists changes in orientation.  With the CAD inertia above and
+$\omega \approx 314\,\text{rad/s}$, the wheel has
+$L \approx 0.078\,\text{kg·m}^2/\text{s}$.  A torque $\tau$ applied
+perpendicular to $L$ induces precession at
+$$\Omega = \frac{\tau}{L}$$
+on the stand in [`cad/stand.scad`](../cad/stand.scad).
+
+```mermaid
+graph TD
+    T[Torque \tau] --> P[Precession \Omega = \tau / L]
+```
 
 ## Forces on the adapter
 
