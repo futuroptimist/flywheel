@@ -9,7 +9,23 @@ and how GitHub renders formulas using LaTeX.
 For a solid cylinder,
 $$I = \tfrac{1}{2} m r^2$$
 where $m$ is mass and $r$ is radius.
-Larger and heavier wheels have more inertia.
+Most flywheels include a bore for the shaft.  Treating the wheel as a
+thick-walled cylinder with inner radius $r_i$ and outer radius $r_o$ gives
+$$I = \tfrac{1}{2} m (r_o^2 + r_i^2)$$
+Setting $r_i \to 0$ recovers the solid-disk formula, while the thin-rim limit
+($r_i \approx r_o$) approaches $$I = m r_o^2,$$ doubling inertia for the same mass.
+
+```mermaid
+graph LR
+    A[Solid disk] -->|I = \tfrac{1}{2} m r^2| B[Inertia]
+    C[Thin rim] -->|I = m r^2| B
+```
+
+Integrating the mass distribution shows where this expression comes from:
+
+$$I = \int_0^r r'^2\, \mathrm{d}m = \int_0^r r'^2 (2\pi \rho h r'\, \mathrm{d}r') = \tfrac{1}{2}\pi \rho h r^4 = \tfrac{1}{2} m r^2$$
+
+where $\rho$ is the material density and $h$ the cylinder height.
 
 ## Stored energy
 
@@ -20,29 +36,40 @@ with angular velocity $\omega$ in radians per second.
 ### Example using CAD dimensions
 
 The stock CAD model in [`cad/flywheel.scad`](../cad/flywheel.scad) defines a
-solid cylinder with radius $r=50\,\text{mm}$ and height $h=20\,\text{mm}$.
-For material density $\rho$, the mass is
+thick disk with outer radius $r_o=50\,\text{mm}$, inner radius $r_i=5\,\text{mm}$ for
+the shaft, and height $h=20\,\text{mm}$.  For material density $\rho$, the mass is
 
-$$m = \rho\,\pi r^2 h$$
+$$m = \rho\pi (r_o^2 - r_i^2) h$$
 
-Printing in PLA ($\rho \approx 1.25\,\text{g/cm}^3$) yields $m \approx 0.20\,\text{kg}$ and
+Converting the CAD dimensions to SI units gives $r = 0.05\,\text{m}$ and
+$h = 0.02\,\text{m}$.  PLA has density
+$\rho \approx 1.25\,\text{g/cm}^3 = 1.25\times10^3\,\text{kg/m}^3$.
+The volume is $V = \pi r^2 h \approx 1.6\times10^{-4}\,\text{m}^3$, so the mass is
+$m = \rho V \approx 0.20\,\text{kg}$.
+
 $$I = \tfrac{1}{2} m r^2 \approx 2.5\times10^{-4}\,\text{kg·m}^2.$$ At
 3000\,rpm the angular speed is $\omega = \tfrac{2\pi n}{60} \approx 314\,\text{rad/s}$,
 so the wheel stores roughly $$E \approx 12\,\text{J}.$$
 
+If the wheel were a thin rim of the same mass, the inertia would double:
+$$I_{rim} = m r^2.$$
+
 GitHub automatically displays these formulas when LaTeX expressions are wrapped
 in dollar signs.
 
-## Angular momentum
+## Angular momentum and precession
 
-Angular momentum measures how strongly a spinning wheel resists changes in
-orientation:
+The wheel's angular momentum is
 $$L = I \omega$$
-Using the inertia from [`cad/flywheel.scad`](../cad/flywheel.scad)
-($I \approx 2.5\times10^{-4}\,\text{kg·m}^2$) and the 3000\,rpm example
-($\omega \approx 314\,\text{rad/s}$) gives
-$$L \approx 0.08\,\text{kg·m}^2/\text{s}.$$
-Heavier or faster wheels therefore exhibit stronger gyroscopic stability.
+which resists changes in orientation. For the CAD dimensions above
+($I \approx 2.5\times10^{-4}\,\text{kg·m}^2$) spinning at 3000\,rpm
+($\omega \approx 314\,\text{rad/s}$) gives $L \approx 7.8\times10^{-2}\,\text{kg·m}^2/\text{s}$.
+
+An off-axis torque $\tau$ causes the spin axis to precess at
+$$\Omega = \frac{\tau}{L}$$
+Perpendicular disturbances of $0.1\,\text{N·m}$ therefore produce
+$$\Omega \approx \frac{0.1}{7.8\times10^{-2}} \approx 1.3\,\text{rad/s}$$
+about $75^\circ/\text{s}$, which can twist the stand or mounts.
 
 ## Rim speed and material limits
 
@@ -91,6 +118,29 @@ Using the same CAD dimensions as above ($I \approx 2.5\times10^{-4}\,\text{kg·m
 a modest $0.5\,\text{N·m}$ motor torque spins the wheel to
 3000\,rpm ($\omega \approx 314\,\text{rad/s}$) in about $t \approx 0.16\,\text{s}$.
 
+## Angular momentum and gyroscopic effects
+
+The flywheel's angular momentum is
+
+$$L = I\omega$$
+
+which resists changes in orientation. Using the CAD values above
+($I \approx 2.5\times10^{-4}\,\text{kg·m}^2$, $\omega \approx 314\,\text{rad/s}$)
+gives $L \approx 7.8\times10^{-2}\,\text{kg·m}^2/\text{s}$.
+
+Applying a torque $\tau$ perpendicular to the spin axis causes the wheel to
+undergo precession at rate
+
+$$\Omega = \frac{\tau}{L}.$$
+
+```mermaid
+graph TD
+    L[Angular momentum L] --> O[Precession \Omega = \tau/L]
+```
+
+Even small hobbyist wheels can exhibit noticeable gyroscopic behavior when spun
+at high speed.
+
 ## Spin-down from friction
 
 Even unloaded, bearing and air drag slowly bleed energy from the wheel. Approximating a
@@ -108,6 +158,22 @@ diameter, 7\,mm thick) around the 8\,mm shaft from
 $T_f \approx 10^{-3}\,\text{N·m}$, so the example wheel ($I \approx
 2.5\times10^{-4}\,\text{kg·m}^2$) coasts from 3000\,rpm ($\omega_0 \approx
 314\,\text{rad/s}$) for roughly $t \approx 80\,\text{s}$.
+
+## Angular momentum and precession
+
+The spinning wheel also carries angular momentum
+$$L = I \omega$$
+which resists changes in orientation.  With the CAD inertia above and
+$\omega \approx 314\,\text{rad/s}$, the wheel has
+$L \approx 0.078\,\text{kg·m}^2/\text{s}$.  A torque $\tau$ applied
+perpendicular to $L$ induces precession at
+$$\Omega = \frac{\tau}{L}$$
+on the stand in [`cad/stand.scad`](../cad/stand.scad).
+
+```mermaid
+graph TD
+    T[Torque \tau] --> P[Precession \Omega = \tau / L]
+```
 
 ## Forces on the adapter
 

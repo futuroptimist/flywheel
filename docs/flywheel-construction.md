@@ -16,6 +16,7 @@ mounted to the shaft.
 ## Printing / Machining
 
 1. Adjust `diameter`, `height`, and `shaft_diameter` in the SCAD file as needed.
+   Inline `//` or block `/* ... */` comments are ignored by the CAD parser.
 2. Export to STL and slice with your preferred software.
 3. If using wood or metal, replicate the dimensions and center bore.
 
