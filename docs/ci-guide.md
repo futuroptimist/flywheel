@@ -9,6 +9,13 @@ The workflow now commits `docs/repo-feature-summary.md` only when it runs on the
 2. Run `flywheel crawl --repos-file docs/repo_list.txt --output docs/repo-feature-summary.md`.
 3. Commit the updated `docs/repo-feature-summary.md` yourself.
 
+## Workflow naming for CI detection
+`flywheel crawl` marks a repository as having CI only when a workflow file
+name contains common keywords like `ci`, `test`, `lint`, `build`, `docs`, or
+`qa`. A lone `deploy.yml` will be treated as missing CI. Include one of these
+keywords in at least one workflow filename so the feature summary reflects your
+setup accurately.
+
 ## CI best practices
 | Scenario | Recommended approach |
 |----------|---------------------|

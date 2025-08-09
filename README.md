@@ -15,6 +15,21 @@
 2. Clone your new repo and run `./scripts/setup.sh YOURNAME NEWREPO` to personalize placeholders.
 3. Commit and push to start the flywheel.
 
+## Testing
+
+Run the full test suite before committing:
+
+```bash
+pre-commit run --all-files
+pytest -q
+npm test -- --coverage
+python -m flywheel.fit
+bash scripts/checks.sh
+```
+
+If browser dependencies are missing, install them via `npx playwright install chromium`
+or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
+
 ## Contents
 
 - CI workflows for linting, tests, and docs
@@ -133,7 +148,8 @@ Clone a set of repos and generate Markdown reports:
 python -m flywheel.agents.scanner
 ```
 
-Reports are written to `reports/`.
+Reports are written to `reports/`. Each report lists only top-level files and ignores
+directories.
 
 ### Viewing the 3D flywheel
 
@@ -167,8 +183,9 @@ A successful run prints:
 All parts fit together.
 ```
 
-Lines may include inline ``//`` comments, negative values, and decimals without a
-leading zero; the checker ignores the comments when parsing.
+Lines may include inline ``//`` comments, negative values, decimals without a
+leading zero, and scientific notation; the checker ignores the comments when
+parsing.
 
 Below is a simplified view of how the pieces stack:
 

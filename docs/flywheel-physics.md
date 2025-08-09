@@ -100,7 +100,23 @@ graph TD
 Even small hobbyist wheels can exhibit noticeable gyroscopic behavior when spun
 at high speed.
 
-## Forces on the adapter
+## Spin-down from friction
+
+Even unloaded, bearing and air drag slowly bleed energy from the wheel. Approximating a
+constant friction torque $T_f$ gives the angular deceleration
+
+$$\alpha = -\frac{T_f}{I}$$
+
+so the coasting time from speed $\omega_0$ to rest is
+
+$$t = \frac{I\omega_0}{T_f}$$
+
+The stand in [`cad/stand.scad`](../cad/stand.scad) holds standard 608 bearings (22\,mm outer
+diameter, 7\,mm thick) around the 8\,mm shaft from
+[`cad/shaft.scad`](../cad/shaft.scad).  A typical 608 bearing produces
+$T_f \approx 10^{-3}\,\text{N·m}$, so the example wheel ($I \approx
+2.5\times10^{-4}\,\text{kg·m}^2$) coasts from 3000\,rpm ($\omega_0 \approx
+314\,\text{rad/s}$) for roughly $t \approx 80\,\text{s}$.
 
 When you spin the wheel, torque $T$ from the motor or handle acts on the
 adapter. If the adapter slips, the wheel will not accelerate. Approximate the
