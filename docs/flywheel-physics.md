@@ -71,6 +71,24 @@ Using the same CAD dimensions as above ($I \approx 2.5\times10^{-4}\,\text{kg·m
 a modest $0.5\,\text{N·m}$ motor torque spins the wheel to
 3000\,rpm ($\omega \approx 314\,\text{rad/s}$) in about $t \approx 0.16\,\text{s}$.
 
+## Spin-down from friction
+
+Even unloaded, bearing and air drag slowly bleed energy from the wheel. Approximating a
+constant friction torque $T_f$ gives the angular deceleration
+
+$$\alpha = -\frac{T_f}{I}$$
+
+so the coasting time from speed $\omega_0$ to rest is
+
+$$t = \frac{I\omega_0}{T_f}$$
+
+The stand in [`cad/stand.scad`](../cad/stand.scad) holds standard 608 bearings (22\,mm outer
+diameter, 7\,mm thick) around the 8\,mm shaft from
+[`cad/shaft.scad`](../cad/shaft.scad).  A typical 608 bearing produces
+$T_f \approx 10^{-3}\,\text{N·m}$, so the example wheel ($I \approx
+2.5\times10^{-4}\,\text{kg·m}^2$) coasts from 3000\,rpm ($\omega_0 \approx
+314\,\text{rad/s}$) for roughly $t \approx 80\,\text{s}$.
+
 ## Forces on the adapter
 
 When you spin the wheel, torque $T$ from the motor or handle acts on the
