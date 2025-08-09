@@ -54,7 +54,7 @@ class RepoCrawler:
     CI_KEYWORDS = ("ci", "test", "lint", "build", "docs", "qa")
 
     _UV = re.compile(r"setup-uv|uv venv", re.I)
-    _PIP = re.compile(r"pip install", re.I)
+    _PIP = re.compile(r"\bpip(?:3)?\s+install", re.I)
     _POETRY = re.compile(r"poetry\s+install", re.I)
     DARK_PATTERNS = [
         re.compile(r"onbeforeunload", re.I),
