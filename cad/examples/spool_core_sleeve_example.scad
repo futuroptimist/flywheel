@@ -30,4 +30,3 @@ if (!is_undef(PRESET)) {
         clearance = CLEARANCE
     );
 }
-
