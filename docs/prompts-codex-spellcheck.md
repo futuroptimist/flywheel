@@ -20,11 +20,11 @@ CONTEXT:
 - Follow [AGENTS.md](../AGENTS.md) and ensure these commands succeed:
   - `pre-commit run --all-files`
   - `pytest -q`
-  - `npm test -- --coverage --coverageReporters=lcov`
+  - `npm test -- --coverage`
   - `python -m flywheel.fit`
   - `bash scripts/checks.sh`
-  If browser dependencies are missing, run `npx playwright install --with-deps`
-  or prefix tests with `SKIP_E2E=1`.
+  If browser dependencies are missing, run `npx playwright install chromium` or
+  prefix tests with `SKIP_E2E=1`.
 
 REQUEST:
 1. Run the spellcheck command and inspect the results.
