@@ -18,3 +18,9 @@ def test_checks_script_skips_missing_security_tools(tmp_path):
     assert result.returncode == 0
     assert "bandit not installed" in result.stdout
     assert "safety not installed" in result.stdout
+
+
+def test_checks_script_handles_missing_linkchecker():
+    script = Path(__file__).resolve().parents[1] / "scripts" / "checks.sh"
+    content = script.read_text()
+    assert "linkchecker not installed" in content
