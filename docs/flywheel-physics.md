@@ -65,7 +65,7 @@ which resists changes in orientation. For the CAD dimensions above
 ($I \approx 2.5\times10^{-4}\,\text{kg·m}^2$) spinning at 3000\,rpm
 ($\omega \approx 314\,\text{rad/s}$) gives $L \approx 7.8\times10^{-2}\,\text{kg·m}^2/\text{s}$.
 
-An off-axis torque $\tau$ causes the spin axis to precess at
+An off-axis torque $\tau$ causes the spin axis to <!-- codespell:ignore precess -->precess at
 $$\Omega = \frac{\tau}{L}$$
 Perpendicular disturbances of $0.1\,\text{N·m}$ therefore produce
 $$\Omega \approx \frac{0.1}{7.8\times10^{-2}} \approx 1.3\,\text{rad/s}$$
