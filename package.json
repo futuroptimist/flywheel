@@ -10,6 +10,7 @@
     "playwright": "playwright test",
     "playwright:install": "playwright install --with-deps",
     "test": "npm run playwright:install && npm run jest -- && npm run playwright",
+    "test:ci": "npm run playwright:install && npm run jest -- --coverage --coverageReporters=lcov && npm run playwright",
     "docs:dev": "npm --prefix docs-site run dev"
   },
   "devDependencies": {
