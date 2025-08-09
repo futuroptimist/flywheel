@@ -7,8 +7,9 @@ from typing import Dict, Tuple
 import trimesh
 
 _DEF_RE = re.compile(
-    r"^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*([-+]?(?:\d+(?:\.\d+)?|\.\d+))"
-    r"\s*;(?:\s*//.*)?$"
+    r"^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*"
+    r"([-+]?(?:\d+(?:\.\d+)?|\.\d+)(?:[eE][-+]?\d+)?)\s*"
+    r";(?:\s*//.*)?$"
 )
 
 
@@ -16,7 +17,7 @@ def parse_scad_vars(path: Path) -> Dict[str, float]:
     """Return variable assignments parsed from a SCAD file.
 
     Inline ``//`` comments after the semicolon are ignored. The parser supports
-    negative values and decimals without a leading zero.
+    negative values, decimals without a leading zero, and scientific notation.
     """
     vars: Dict[str, float] = {}
     for line in Path(path).read_text().splitlines():
