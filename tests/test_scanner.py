@@ -25,6 +25,13 @@ def test_analyze_repo(tmp_path):
     assert "- b.md" in report
 
 
+def test_analyze_repo_skips_directories(tmp_path):
+    (tmp_path / "a.txt").write_text("hi")
+    (tmp_path / "sub").mkdir()
+    report = scanner.analyze_repo(tmp_path)
+    assert "- sub" not in report
+
+
 def test_main(monkeypatch, tmp_path):
     monkeypatch.chdir(tmp_path)
 
