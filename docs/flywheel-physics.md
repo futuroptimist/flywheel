@@ -11,6 +11,12 @@ $$I = \tfrac{1}{2} m r^2$$
 where $m$ is mass and $r$ is radius.
 Larger and heavier wheels have more inertia.
 
+Integrating the mass distribution shows where this expression comes from:
+
+$$I = \int_0^r r'^2\, \mathrm{d}m = \int_0^r r'^2 (2\pi \rho h r'\, \mathrm{d}r') = \tfrac{1}{2}\pi \rho h r^4 = \tfrac{1}{2} m r^2$$
+
+where $\rho$ is the material density and $h$ the cylinder height.
+
 ## Stored energy
 
 The kinetic energy of a rotating wheel is
@@ -71,6 +77,29 @@ Using the same CAD dimensions as above ($I \approx 2.5\times10^{-4}\,\text{kg·m
 a modest $0.5\,\text{N·m}$ motor torque spins the wheel to
 3000\,rpm ($\omega \approx 314\,\text{rad/s}$) in about $t \approx 0.16\,\text{s}$.
 
+## Angular momentum and gyroscopic effects
+
+The flywheel's angular momentum is
+
+$$L = I\omega$$
+
+which resists changes in orientation. Using the CAD values above
+($I \approx 2.5\times10^{-4}\,\text{kg·m}^2$, $\omega \approx 314\,\text{rad/s}$)
+gives $L \approx 7.8\times10^{-2}\,\text{kg·m}^2/\text{s}$.
+
+Applying a torque $\tau$ perpendicular to the spin axis causes the wheel to
+undergo precession at rate
+
+$$\Omega = \frac{\tau}{L}.$$
+
+```mermaid
+graph TD
+    L[Angular momentum L] --> O[Precession \Omega = \tau/L]
+```
+
+Even small hobbyist wheels can exhibit noticeable gyroscopic behavior when spun
+at high speed.
+
 ## Spin-down from friction
 
 Even unloaded, bearing and air drag slowly bleed energy from the wheel. Approximating a
@@ -88,8 +117,6 @@ diameter, 7\,mm thick) around the 8\,mm shaft from
 $T_f \approx 10^{-3}\,\text{N·m}$, so the example wheel ($I \approx
 2.5\times10^{-4}\,\text{kg·m}^2$) coasts from 3000\,rpm ($\omega_0 \approx
 314\,\text{rad/s}$) for roughly $t \approx 80\,\text{s}$.
-
-## Forces on the adapter
 
 When you spin the wheel, torque $T$ from the motor or handle acts on the
 adapter. If the adapter slips, the wheel will not accelerate. Approximate the
