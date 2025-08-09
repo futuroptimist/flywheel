@@ -37,6 +37,22 @@ def test_pattern_detection_skips(monkeypatch):
     assert crawler._detect_bright_patterns("foo/bar", "main") == 1
 
 
+def test_pattern_detection_case_insensitive_extensions(monkeypatch):
+    crawler = rc.RepoCrawler([])
+    monkeypatch.setattr(
+        crawler,
+        "_list_files",
+        lambda repo, branch: ["INDEX.JS", "README.MD"],
+    )
+
+    def fetch(repo, path, branch):
+        return "onbeforeunload" if path == "INDEX.JS" else "delete account"
+
+    monkeypatch.setattr(crawler, "_fetch_file", fetch)
+    assert crawler._detect_dark_patterns("foo/bar", "main") == 1
+    assert crawler._detect_bright_patterns("foo/bar", "main") == 1
+
+
 def test_list_files_errors(monkeypatch):
     crawler = rc.RepoCrawler([])
 

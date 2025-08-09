@@ -23,7 +23,8 @@ CONTEXT:
   - `npm test -- --coverage`
   - `python -m flywheel.fit`
   - `bash scripts/checks.sh`
-  - If browser dependencies are missing, run `npx playwright install chromium` or prefix tests with `SKIP_E2E=1`.
+  - If browser dependencies are missing, run `npx playwright install --with-deps` or set
+    `SKIP_E2E=1` before running tests.
 
 REQUEST:
 1. Run the spellcheck command and inspect the results.

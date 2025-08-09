@@ -160,6 +160,7 @@ def test_has_ci_only_deploy_returns_false():
         ("uv pip install && pip install black", "pip"),
         ("python -m pip install -r requirements.txt", "pip"),
         ("RUN pip3 install uv && uv pip install .", "pip"),
+        ("pip3 install -r requirements.txt", "pip"),
     ],
 )
 def test_installer_strict(snippet, expected):
