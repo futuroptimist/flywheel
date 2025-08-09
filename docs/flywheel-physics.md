@@ -33,6 +33,17 @@ so the wheel stores roughly $$E \approx 12\,\text{J}.$$
 GitHub automatically displays these formulas when LaTeX expressions are wrapped
 in dollar signs.
 
+## Angular momentum
+
+Angular momentum measures how strongly a spinning wheel resists changes in
+orientation:
+$$L = I \omega$$
+Using the inertia from [`cad/flywheel.scad`](../cad/flywheel.scad)
+($I \approx 2.5\times10^{-4}\,\text{kg·m}^2$) and the 3000\,rpm example
+($\omega \approx 314\,\text{rad/s}$) gives
+$$L \approx 0.08\,\text{kg·m}^2/\text{s}.$$
+Heavier or faster wheels therefore exhibit stronger gyroscopic stability.
+
 ## Rim speed and material limits
 
 The rim's tangential velocity is
@@ -56,6 +67,15 @@ graph TD
     R --> S[\sigma \approx \rho r^2 \omega^2]
     S --> W[\omega_{max} = \sqrt{\sigma_y/(\rho r^2)}]
 ```
+
+## Rim acceleration
+
+The rim experiences centripetal acceleration as it spins:
+$$a = r \omega^2$$
+With the CAD radius $r = 50\,\text{mm}$ and $\omega \approx 314\,\text{rad/s}$,
+$$a \approx 5\times10^3\,\text{m/s}^2$$
+which is roughly 500\,$g$.  Spokes and hubs must withstand this load to keep
+the wheel intact.
 
 ## Spin-up time
 
