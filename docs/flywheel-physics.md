@@ -71,6 +71,28 @@ Using the same CAD dimensions as above ($I \approx 2.5\times10^{-4}\,\text{kg·m
 a modest $0.5\,\text{N·m}$ motor torque spins the wheel to
 3000\,rpm ($\omega \approx 314\,\text{rad/s}$) in about $t \approx 0.16\,\text{s}$.
 
+## Angular momentum and gyroscopic effects
+
+A spinning wheel also carries angular momentum,
+
+$$L = I \omega.$$
+
+Changing the direction of the spin axis requires an applied torque,
+
+$$\tau = \frac{dL}{dt}.$$
+
+For a slow precession at rate $\Omega$ about a perpendicular axis the resisting
+torque is approximately $\tau \approx L\Omega$. Using the CAD dimensions in
+[`cad/flywheel.scad`](../cad/flywheel.scad) ($I \approx 2.5\times10^{-4}\,\text{kg·m}^2$,
+$\omega \approx 314\,\text{rad/s}$) gives $L \approx 0.08\,\text{kg·m}^2/\text{s}$. Tilting at
+1\,\text{rad/s} therefore needs about $0.08\,\text{N·m}$.
+
+```mermaid
+graph TD
+    I[Inertia I] --> L[L = I\omega]
+    L --> T[\tau = L\Omega]
+```
+
 ## Forces on the adapter
 
 When you spin the wheel, torque $T$ from the motor or handle acts on the
