@@ -95,6 +95,15 @@ graph TD
     S --> W[\omega_{max} = \sqrt{\sigma_y/(\rho r^2)}]
 ```
 
+## Rim acceleration
+
+The rim experiences centripetal acceleration as it spins:
+$$a = r \omega^2$$
+With the CAD radius $r = 50\,\text{mm}$ and $\omega \approx 314\,\text{rad/s}$,
+$$a \approx 5\times10^3\,\text{m/s}^2$$
+which is roughly 500\,$g$.  Spokes and hubs must withstand this load to keep
+the wheel intact.
+
 ## Spin-up time
 
 A constant torque $T$ causes angular acceleration $\alpha$ according to
