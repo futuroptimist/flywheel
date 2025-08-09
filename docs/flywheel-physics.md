@@ -9,7 +9,17 @@ and how GitHub renders formulas using LaTeX.
 For a solid cylinder,
 $$I = \tfrac{1}{2} m r^2$$
 where $m$ is mass and $r$ is radius.
-Larger and heavier wheels have more inertia.
+Most flywheels include a bore for the shaft.  Treating the wheel as a
+thick-walled cylinder with inner radius $r_i$ and outer radius $r_o$ gives
+$$I = \tfrac{1}{2} m (r_o^2 + r_i^2)$$
+Setting $r_i \to 0$ recovers the solid-disk formula, while the thin-rim limit
+($r_i \approx r_o$) approaches $$I = m r_o^2,$$ doubling inertia for the same mass.
+
+```mermaid
+graph LR
+    A[Solid disk] -->|I = \tfrac{1}{2} m r^2| B[Inertia]
+    C[Thin rim] -->|I = m r^2| B
+```
 
 Integrating the mass distribution shows where this expression comes from:
 
@@ -26,13 +36,13 @@ with angular velocity $\omega$ in radians per second.
 ### Example using CAD dimensions
 
 The stock CAD model in [`cad/flywheel.scad`](../cad/flywheel.scad) defines a
-solid cylinder with radius $r=50\,\text{mm}$ and height $h=20\,\text{mm}$.
-For material density $\rho$, the mass is
+thick disk with outer radius $r_o=50\,\text{mm}$, inner radius $r_i=5\,\text{mm}$ for
+the shaft, and height $h=20\,\text{mm}$.  For material density $\rho$, the mass is
 
-$$m = \rho\,\pi r^2 h$$
+$$m = \rho\pi (r_o^2 - r_i^2) h$$
 
-Printing in PLA ($\rho \approx 1.25\,\text{g/cm}^3$) yields $m \approx 0.20\,\text{kg}$ and
-$$I = \tfrac{1}{2} m r^2 \approx 2.5\times10^{-4}\,\text{kg·m}^2.$$ At
+Printing in PLA ($\rho \approx 1.25\,\text{g/cm}^3$) yields $m \approx 0.19\,\text{kg}$ and
+$$I = \tfrac{1}{2} m (r_o^2 + r_i^2) \approx 2.5\times10^{-4}\,\text{kg·m}^2.$$ At
 3000\,rpm the angular speed is $\omega = \tfrac{2\pi n}{60} \approx 314\,\text{rad/s}$,
 so the wheel stores roughly $$E \approx 12\,\text{J}.$$
 
