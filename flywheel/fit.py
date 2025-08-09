@@ -16,11 +16,14 @@ _DEF_RE = re.compile(
 def parse_scad_vars(path: Path) -> Dict[str, float]:
     """Return variable assignments parsed from a SCAD file.
 
-    Inline ``//`` comments after the semicolon are ignored. The parser supports
-    negative values, decimals without a leading zero, and scientific notation.
+    Block comments ``/* ... */`` and inline ``//`` comments after the
+    semicolon are ignored. The parser supports negative values, decimals
+    without a leading zero, and scientific notation.
     """
+    text = Path(path).read_text()
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
     vars: Dict[str, float] = {}
-    for line in Path(path).read_text().splitlines():
+    for line in text.splitlines():
         m = _DEF_RE.match(line.strip())
         if m:
             vars[m.group(1)] = float(m.group(2))

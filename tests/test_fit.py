@@ -23,6 +23,13 @@ def test_parse_scad_vars_with_comments_and_negatives(tmp_path):
     assert vars == {"radius": 5.0, "height": -2.0}
 
 
+def test_parse_scad_vars_ignores_block_comments(tmp_path):
+    scad = tmp_path / "part.scad"
+    scad.write_text("/*\n radius = 5;\n*/\nheight = 2;")
+    vars = ff.parse_scad_vars(scad)
+    assert vars == {"height": 2.0}
+
+
 def test_parse_scad_vars_without_leading_zero(tmp_path):
     scad = tmp_path / "part.scad"
     scad.write_text("radius = .5;")
