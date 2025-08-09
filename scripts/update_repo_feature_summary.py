@@ -64,7 +64,10 @@ def main() -> None:
 
         cov = "❌"
         if info.coverage:
-            cov = f"✅ ({info.coverage})"
+            if info.coverage == "100%":
+                cov = "✔️"
+            else:
+                cov = info.coverage
 
         if info.patch_percent is None:
             patch = "—"

@@ -702,7 +702,10 @@ class RepoCrawler:
         for idx, info in enumerate(repos):
             coverage = "❌"
             if info.coverage:
-                coverage = f"✅ ({info.coverage})"
+                if info.coverage == "100%":
+                    coverage = "✔️"
+                else:
+                    coverage = info.coverage
             if info.patch_percent is None:
                 patch = "—"
             else:
