@@ -21,3 +21,8 @@ setup accurately.
 |----------|---------------------|
 | Internal commits | The workflow will commit the summary when `main` is updated. |
 | Dependabot / external PRs | The push step is skipped; merge the PR and let `main` update the summary. |
+
+### Status interpretation
+
+`ci_state` treats GitHub's `EXPECTED` rollup status as green so pending required
+checks don't appear as failures on the dashboard.

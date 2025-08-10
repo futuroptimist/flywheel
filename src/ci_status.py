@@ -69,11 +69,13 @@ def ci_state(owner: str, repo: str, sha: str) -> str:
     Logic order:
       1. GraphQL rollup
       2. REST checks fall-back
+    The GitHub GraphQL API may return ``EXPECTED`` when required checks haven't
+    completed yet; this is treated as green to avoid false negatives.
     """
     state = _query_graphql(owner, repo, sha)
     if state is None:
         state = _query_rest(owner, repo, sha)
 
-    if state in ("SUCCESS", "PENDING", "NO_CI"):
+    if state in ("SUCCESS", "PENDING", "NO_CI", "EXPECTED"):
         return "green"
     return "red"
