@@ -8,7 +8,7 @@ import trimesh
 
 _DEF_RE = re.compile(
     r"^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*"
-    r"([-+]?(?:\d+(?:\.\d+)?|\.\d+)(?:[eE][-+]?\d+)?)\s*"
+    r"([-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)\s*"
     r";(?:\s*//.*)?$"
 )
 
@@ -18,7 +18,7 @@ def parse_scad_vars(path: Path) -> Dict[str, float]:
 
     Block comments ``/* ... */`` and inline ``//`` comments after the
     semicolon are ignored. The parser supports negative values, decimals
-    without a leading zero, and scientific notation.
+    without a leading zero, trailing decimal points, and scientific notation.
     """
     text = Path(path).read_text()
     text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
