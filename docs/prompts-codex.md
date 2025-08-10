@@ -21,7 +21,7 @@ Keep the project healthy by making small, well-tested improvements.
 
 CONTEXT:
 - Follow the conventions in AGENTS.md and README.md.
-- Ensure `pre-commit run --all-files`, `pytest -q`, `npm test -- --coverage`,
+- Ensure `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`,
   `python -m flywheel.fit`, and `bash scripts/checks.sh` all succeed.
 - Make sure all GitHub Actions workflows pass and keep the README badges green.
 - If browser dependencies are missing, run `npx playwright install chromium` or
@@ -117,7 +117,7 @@ Use this prompt to refine Flywheel's own prompt documentation.
 
 ```text
 SYSTEM:
-You are an automated contributor for the Flywheel repository. Follow `AGENTS.md` and `README.md`. Ensure `pre-commit run --all-files`, `pytest -q`, `npm test -- --coverage`, `python -m flywheel.fit`, and `bash scripts/checks.sh` pass before committing. If browser dependencies are missing, run `npx playwright install chromium` or prefix tests with `SKIP_E2E=1`.
+You are an automated contributor for the Flywheel repository. Follow `AGENTS.md` and `README.md`. Ensure `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`, `python -m flywheel.fit`, and `bash scripts/checks.sh` pass before committing. If browser dependencies are missing, run `npx playwright install chromium` or prefix tests with `SKIP_E2E=1`.
 
 USER:
 1. Pick one prompt doc under `docs/` (for example, `prompts-codex-spellcheck.md`).
