@@ -32,7 +32,7 @@ if [ -f package.json ]; then
     npx playwright install --with-deps
     npm run lint
     npm run format:check
-    npm test -- --coverage
+    npm run test:ci
   else
     echo "SKIP_E2E set; skipping Playwright installation and e2e tests" >&2
     npm run lint

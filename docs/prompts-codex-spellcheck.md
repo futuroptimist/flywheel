@@ -21,7 +21,7 @@ CONTEXT:
   - `pre-commit run --all-files`
   - `npm run lint`
   - `pytest -q`
-  - `npm test -- --coverage`
+  - `npm run test:ci`
   - `python -m flywheel.fit`
   - `bash scripts/checks.sh`
   If browser dependencies are missing, run `npx playwright install --with-deps` or
