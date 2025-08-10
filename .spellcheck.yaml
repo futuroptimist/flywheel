@@ -4,6 +4,8 @@ matrix:
     sources:
       - README.md
       - docs/**/*.md
+    exclude:
+      - docs/prompt-docs-summary.md
     dictionary:
       wordlists:
         - dict/allow.txt
