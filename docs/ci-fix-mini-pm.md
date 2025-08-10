@@ -1,13 +1,14 @@
-# CI Fix Mini Postmortem
+# CI Mini Postmortem
 
 ## What went wrong
-The CI fix prompt lacked guidance to create postmortems after failures.
+Spellcheck failed on `docs/prompt-docs-summary.md` due to the word "Untriaged".
 
 ## Root cause
-No instruction directed contributors to document background, impact, and follow-up steps.
+The term "Untriaged" was missing from the spellcheck allow list, causing a false positive.
 
 ## Impact
-Teams missed context from past failures, slowing diagnosis of future CI issues.
+CI runs were blocked by the spellcheck job.
 
-## Actions
-Document future CI fixes with a mini postmortem and track follow-up items in `docs/ci-fix-action-items.md`.
+## Actions to take
+- [x] Add "Untriaged" to the spellcheck dictionary.
+- [ ] Regenerate `docs/prompt-docs-summary.md` with sanitized headings.
