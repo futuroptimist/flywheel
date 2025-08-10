@@ -6,7 +6,7 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `2977ec3` | ✅ | 2025-08-10 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `84ecd32` | ✅ | 2025-08-10 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `a31189b` | ✅ | 2025-08-10 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `2f98c16` | ✅ | 2025-08-09 |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `83a6dec` | ✅ | 2025-08-10 |
@@ -29,7 +29,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | — | ❌ | 🚀 uv | 2025-08-09 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✔️ | — | ✅ | 🚀 uv | 2025-08-09 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✔️ | — | ✅ | pip | 2025-08-09 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 57% | — | ✅ | 🚀 uv | 2025-08-09 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 57% | — | ✅ | 🔶 partial | 2025-08-09 |
 
 ## Policies & Automation
 | Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Last-Updated (UTC) |
@@ -43,7 +43,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-09 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-09 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2025-08-09 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 5 | ✅ | ❌ | ❌ | ✅ | 2025-08-09 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ❌ | 0 | ✅ | ❌ | ❌ | ✅ | 2025-08-09 |
 
 ## Dark & Bright Pattern Scan
 | Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |
