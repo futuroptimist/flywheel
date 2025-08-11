@@ -4,4 +4,8 @@
 shaft_diameter = 8;   // mm
 shaft_length = 150;   // mm
 
-cylinder(r=shaft_diameter/2, h=shaft_length, $fs=0.5);
+module shaft(shaft_d, shaft_len) {
+    cylinder(r = shaft_d / 2, h = shaft_len, $fs = 0.5);
+}
+
+shaft(shaft_diameter, shaft_length);
