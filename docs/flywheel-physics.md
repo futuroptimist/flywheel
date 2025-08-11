@@ -144,6 +144,11 @@ Using the same CAD dimensions as above ($I \approx 2.5\times10^{-4}\,\text{kg·m
 a modest $0.5\,\text{N·m}$ motor torque spins the wheel to
 3000\,rpm ($\omega \approx 314\,\text{rad/s}$) in about $t \approx 0.16\,\text{s}$.
 
+The work required is $W = \tfrac{1}{2} I \omega^2$.  Constant torque means the
+instantaneous power is $P = T\omega$, rising linearly with speed.  For the
+[`cad/flywheel.scad`](../cad/flywheel.scad) example, power peaks near
+$P \approx 0.5\times314 \approx 160\,\text{W}$ at 3000\,rpm.
+
 ## Spin-down from friction
 
 Even unloaded, bearing and air drag slowly bleed energy from the wheel. Approximating a
@@ -161,6 +166,10 @@ diameter, 7\,mm thick) around the 8\,mm shaft from
 $T_f \approx 10^{-3}\,\text{N·m}$, so the example wheel ($I \approx
 2.5\times10^{-4}\,\text{kg·m}^2$) coasts from 3000\,rpm ($\omega_0 \approx
 314\,\text{rad/s}$) for roughly $t \approx 80\,\text{s}$.
+
+Speed falls linearly as $\omega(t) = \omega_0 - (T_f/I) t$.  Friction converts
+mechanical energy to heat at rate $P = T_f \omega$, about
+$0.3\,\text{W}$ for the same bearing and speed.
 
 ## Forces on the adapter
 
