@@ -16,7 +16,7 @@ PURPOSE:
 Keep Markdown documentation free of spelling errors.
 
 CONTEXT:
-- Run `codespell --ignore-words dict/allow.txt` over all Markdown files.
+- Run `pre-commit run codespell --files $(git ls-files '*.md')` to spell-check Markdown.
 - Add unknown but legitimate words to [dict/allow.txt](../dict/allow.txt).
 - Follow [AGENTS.md](../AGENTS.md) and [README.md](../README.md); ensure these commands succeed:
   - `pre-commit run --all-files`
@@ -24,13 +24,12 @@ CONTEXT:
   - `npm run test:ci`
   - `python -m flywheel.fit`
   - `bash scripts/checks.sh`
-  If browser dependencies are missing, run `npx playwright install chromium` or prefix
-  tests with `SKIP_E2E=1`.
+- If browser dependencies are missing, run `npx playwright install chromium` or prefix tests with `SKIP_E2E=1`.
 
 REQUEST:
 1. Run the spellcheck command and inspect the results.
 2. Correct misspellings or update `dict/allow.txt` as needed.
-3. Re-run `codespell` until it reports no errors.
+3. Re-run the spellcheck until it reports no errors.
 4. Run all checks listed above.
 5. Commit the changes with a concise message and open a pull request.
 
