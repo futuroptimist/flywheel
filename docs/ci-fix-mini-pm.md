@@ -27,3 +27,17 @@ Template checks in CI failed, blocking the pipeline.
 ## Actions to take
 - [x] Add `package-lock.json` to `templates/javascript`.
 - [x] Add test to ensure all templates include a lock file.
+---
+
+## What went wrong
+`01-lint-format` workflow failed because `docs/prompt-docs-todos.md` contained trailing whitespace and `webapp/static/models/examples/spool_core_sleeve_example.obj` lacked a final newline.
+
+## Root cause
+Formatting drift in rarely-edited static files bypassed local checks and triggered pre-commit's `trailing-whitespace` and `end-of-file-fixer` hooks.
+
+## Impact
+The lint job blocked CI for all contributors until the files were corrected.
+
+## Actions to take
+- [x] Trim trailing whitespace and add missing newline.
+- [x] Add regression test to guard against format regressions.
