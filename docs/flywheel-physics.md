@@ -77,6 +77,29 @@ $$I_{rim} = m r^2.$$
 GitHub automatically displays these formulas when LaTeX expressions are wrapped
 in dollar signs.
 
+### Energy scaling with size
+
+For a solid disk with density $\rho$ and height $h$, the inertia grows with the
+fourth power of radius:
+
+$$I = \tfrac{1}{2} \rho \pi r^4 h.$$
+
+The stored energy therefore scales as
+
+$$E = \tfrac{1}{4} \rho \pi r^4 h \omega^2.$$
+
+Doubling the `diameter` in [`cad/flywheel.scad`](../cad/flywheel.scad) from
+100\,mm to 200\,mm doubles the radius and multiplies the stored energy by 16 at
+the same speed, while mass only quadruples. Increasing `height` scales mass and
+energy linearly.
+
+```mermaid
+graph TD
+    R[Radius r] -->|r^2| M[Mass m]
+    M -->|m r^2| I[Inertia I]
+    I -->|\tfrac{1}{2}I\omega^2| E[Energy E]
+```
+
 ## Angular momentum and precession
 
 The wheel's angular momentum is
