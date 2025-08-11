@@ -7,7 +7,8 @@ Source OpenSCAD files for the flywheel project.
 - `stand.scad` – stand for a flywheel shaft using 608 bearings
 - `shaft.scad` – straight shaft sized for 608 bearings (exposes `shaft()` module for easy
   customization)
-- `adapter.scad` – clamp adapter that attaches the flywheel to the shaft
+- `adapter.scad` – clamp adapter that attaches the flywheel to the shaft with configurable
+  bore clearance
 - `flywheel.scad` – cylindrical flywheel with center bore and optional shaft clearance
 - `utils/spool_core_sleeve.scad` – parametric spool core sleeve library
   (see `examples/spool_core_sleeve_example.scad`)
