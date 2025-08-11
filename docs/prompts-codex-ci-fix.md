@@ -46,12 +46,13 @@ A GitHub pull request URL. The PR must include:
 * Evidence that **all** checks are now passing (`✔️`).
 * Links to any new or updated tests.
 Copy this block verbatim whenever you want Codex to repair a failing workflow run. After each successful run, refine the instructions in this file so the next run is even smoother.
-After opening the pull request, add `docs/ci-fix-mini-pm.md` capturing:
+After opening the pull request, create a new mini postmortem at
+`docs/pms/YYYY-MM-DD-<short-slug>.md` capturing:
 - What went wrong
 - Root cause
 - Impact
 - Actions to take
-Record the actions as a markdown checklist in `docs/ci-fix-action-items.md`.
+Each regression gets its own postmortem and the action items live in that file.
 ```
 
 ### Why this mirrors the existing pattern
