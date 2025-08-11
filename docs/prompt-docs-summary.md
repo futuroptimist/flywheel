@@ -47,4 +47,4 @@ This index is auto-generated with [scripts/update_prompt_docs_summary.py](../scr
 
 None detected.
 
-_Updated automatically: 2025-08-10_
+_Updated automatically: 2025-08-11_
