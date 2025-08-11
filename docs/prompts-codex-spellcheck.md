@@ -21,9 +21,11 @@ CONTEXT:
 - Follow [AGENTS.md](../AGENTS.md) and [README.md](../README.md); ensure these commands succeed:
   - `pre-commit run --all-files`
   - `pytest -q`
+  - `npm run lint`
   - `npm run test:ci`
   - `python -m flywheel.fit`
   - `bash scripts/checks.sh`
+  - `git diff --cached | ./scripts/scan-secrets.py`
   If browser dependencies are missing, run `npx playwright install chromium` or prefix
   tests with `SKIP_E2E=1`.
 
