@@ -13,88 +13,79 @@ This index is auto-generated with [scripts/update_prompt_docs_summary.py](../scr
 | [Codex Prompt Propagation Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex-propagate.md#codex-prompt-propagation-prompt)                 | evergreen |
 | [Codex Spellcheck Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex-spellcheck.md#codex-spellcheck-prompt)                                | evergreen |
 | [Codex Automation Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#codex-automation-prompt)                                           | evergreen |
-| [Implementation prompts](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#implementation-prompts)                                             | one       |
-| [1 Add ⭐ Stars & 🐞 Open-Issues columns](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#1-add-stars-open-issues-columns)                     | one       |
-| [2 Create a Security & Dependency Health table](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#2-create-a-security-dependency-health-table) | one       |
+| [Implementation prompts](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#implementation-prompts)                                             | one-off       |
+| [1 Add ⭐ Stars & 🐞 Open-Issues columns](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#1-add-stars-open-issues-columns)                     | one-off       |
+| [2 Create a Security & Dependency Health table](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#2-create-a-security-dependency-health-table) | one-off       |
 | [Upgrade Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#upgrade-prompt)                                                             | evergreen |
 
 ## [futuroptimist/axel](https://github.com/futuroptimist/axel)
 
 | Prompt                                                                                                      | Type   |
 |-------------------------------------------------------------------------------------------------------------|--------|
-| [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/code.md)                         |        |
-| [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/critique.md)                     |        |
-| [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/plan.md)                         |        |
-| [Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex-ci-fix.md) |        |
-| [Codex Spellcheck Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex-spellcheck.md) |        |
-| [Axel Codex Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex.md)                  |        |
-
+| [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/code.md)                         | evergreen |
+| [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/critique.md)                     | evergreen |
+| [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/plan.md)                         | evergreen |
+| [Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex-ci-fix.md) | evergreen |
+| [Codex Spellcheck Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex-spellcheck.md) | evergreen |
+| [Axel Codex Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex.md)                  | evergreen |
 ## [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel)
 
 | Prompt                                                                                                                       | Type   |
 |------------------------------------------------------------------------------------------------------------------------------|--------|
-| [Gabriel Codex Prompt](https://github.com/futuroptimist/gabriel/blob/main/docs/prompts-codex.md)                             |        |
-| [Prompt Templates](https://github.com/futuroptimist/gabriel/blob/main/prompts/README.md)                                     |        |
-| [Generate Improvement Checklist Items](https://github.com/futuroptimist/gabriel/blob/main/prompts/generate-improvements.md)  |        |
-| [Scan for Bright and Dark Patterns](https://github.com/futuroptimist/gabriel/blob/main/prompts/scan-bright-dark-patterns.md) |        |
-| [Update Flywheel Risk Model](https://github.com/futuroptimist/gabriel/blob/main/prompts/update-risk-model.md)                |        |
-
+| [Gabriel Codex Prompt](https://github.com/futuroptimist/gabriel/blob/main/docs/prompts-codex.md)                             | evergreen |
+| [Prompt Templates](https://github.com/futuroptimist/gabriel/blob/main/prompts/README.md)                                     | evergreen |
+| [Generate Improvement Checklist Items](https://github.com/futuroptimist/gabriel/blob/main/prompts/generate-improvements.md)  | evergreen |
+| [Scan for Bright and Dark Patterns](https://github.com/futuroptimist/gabriel/blob/main/prompts/scan-bright-dark-patterns.md) | evergreen |
+| [Update Flywheel Risk Model](https://github.com/futuroptimist/gabriel/blob/main/prompts/update-risk-model.md)                | evergreen |
 ## [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist)
 
 | Prompt                                                                                                                   | Type   |
 |--------------------------------------------------------------------------------------------------------------------------|--------|
-| [Codex Spellcheck Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-spellcheck.md)     |        |
-| [Codex Video Script Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-video-script.md) |        |
-| [Futuroptimist Codex Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex.md)             |        |
-
+| [Codex Spellcheck Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-spellcheck.md)     | evergreen |
+| [Codex Video Script Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-video-script.md) | evergreen |
+| [Futuroptimist Codex Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex.md)             | evergreen |
 ## [futuroptimist/token.place](https://github.com/futuroptimist/token.place)
 
 | Prompt                                                                                                                | Type   |
 |-----------------------------------------------------------------------------------------------------------------------|--------|
-| [Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-ci-fix.md)    |        |
-| [Codex Security Review Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-security.md) |        |
-| [token.place Codex Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex.md)              |        |
-
+| [Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-ci-fix.md)    | evergreen |
+| [Codex Security Review Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-security.md) | evergreen |
+| [token.place Codex Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex.md)              | evergreen |
 ## [democratizedspace/dspace](https://github.com/democratizedspace/dspace)
 
 | Prompt                                                                                                                                | Type   |
 |---------------------------------------------------------------------------------------------------------------------------------------|--------|
-| [Codex CI-Failure Fix Prompt](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex-ci-fix.md) |        |
-| [Codex Prompts](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex.md)                      |        |
-| [Item Prompts](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-items.md)                       |        |
-| [Process Prompts](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-processes.md)                |        |
-| [Quest Prompts](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-quests.md)                     |        |
-
+| [Codex CI-Failure Fix Prompt](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex-ci-fix.md) | evergreen |
+| [Codex Prompts](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex.md)                      | evergreen |
+| [Item Prompts](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-items.md)                       | evergreen |
+| [Process Prompts](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-processes.md)                | evergreen |
+| [Quest Prompts](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-quests.md)                     | evergreen |
 ## [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard)
 
 | Prompt                                                                                        | Type   |
 |-----------------------------------------------------------------------------------------------|--------|
-| [Codex Prompts](https://github.com/futuroptimist/f2clipboard/blob/main/docs/prompts-codex.md) |        |
-
+| [Codex Prompts](https://github.com/futuroptimist/f2clipboard/blob/main/docs/prompts-codex.md) | evergreen |
 ## [futuroptimist/sigma](https://github.com/futuroptimist/sigma)
 
 | Prompt                                                                                                       | Type   |
 |--------------------------------------------------------------------------------------------------------------|--------|
-| [Codex CAD Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-cad.md)               |        |
-| [Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-ci-fix.md) |        |
-| [Codex Spellcheck Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-spellcheck.md) |        |
-| [Sigma Codex Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex.md)                 |        |
-
+| [Codex CAD Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-cad.md)               | evergreen |
+| [Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-ci-fix.md) | evergreen |
+| [Codex Spellcheck Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-spellcheck.md) | evergreen |
+| [Sigma Codex Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex.md)                 | evergreen |
 ## [futuroptimist/wove](https://github.com/futuroptimist/wove)
 
 | Prompt                                                                                        | Type   |
 |-----------------------------------------------------------------------------------------------|--------|
-| [Codex CAD Prompt](https://github.com/futuroptimist/wove/blob/main/docs/prompts-codex-cad.md) |        |
-| [Wove Codex Prompt](https://github.com/futuroptimist/wove/blob/main/docs/prompts-codex.md)    |        |
-
+| [Codex CAD Prompt](https://github.com/futuroptimist/wove/blob/main/docs/prompts-codex-cad.md) | evergreen |
+| [Wove Codex Prompt](https://github.com/futuroptimist/wove/blob/main/docs/prompts-codex.md)    | evergreen |
 ## [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)
 
 | Prompt                                                                                                         | Type   |
 |----------------------------------------------------------------------------------------------------------------|--------|
-| [Sugarkube Codex CAD Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-cad.md)   |        |
-| [Sugarkube Codex Docs Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-docs.md) |        |
-| [Sugarkube Codex Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex.md)           |        |
-
+| [Sugarkube Codex CAD Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-cad.md)   | evergreen |
+| [Sugarkube Codex Docs Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-docs.md) | evergreen |
+| [Sugarkube Codex Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex.md)           | evergreen |
 ## Untriaged Prompt Docs
 
 | Repo                                                                          | Prompt                                                                                                                                                                 | Type      |
@@ -106,30 +97,29 @@ This index is auto-generated with [scripts/update_prompt_docs_summary.py](../scr
 | **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [Codex Prompt Propagation Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex-propagate.md#codex-prompt-propagation-prompt)                 | evergreen |
 | **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [Codex Spellcheck Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex-spellcheck.md#codex-spellcheck-prompt)                                | evergreen |
 | **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [Codex Automation Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#codex-automation-prompt)                                           | evergreen |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [Implementation prompts](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#implementation-prompts)                                             | one       |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [1 Add ⭐ Stars & 🐞 Open-Issues columns](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#1-add-stars-open-issues-columns)                     | one       |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [2 Create a Security & Dependency Health table](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#2-create-a-security-dependency-health-table) | one       |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [Implementation prompts](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#implementation-prompts)                                             | one-off       |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [1 Add ⭐ Stars & 🐞 Open-Issues columns](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#1-add-stars-open-issues-columns)                     | one-off       |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [2 Create a Security & Dependency Health table](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#2-create-a-security-dependency-health-table) | one-off       |
 | **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [Upgrade Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#upgrade-prompt)                                                             | evergreen |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/code.md)                                                                                    |           |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/critique.md)                                                                                |           |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/plan.md)                                                                                    |           |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex-ci-fix.md)                                                            |           |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [Codex Spellcheck Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex-spellcheck.md)                                                            |           |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | [Codex Spellcheck Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-spellcheck.md)                                                   |           |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | [Codex Video Script Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-video-script.md)                                               |           |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | [Futuroptimist Codex Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex.md)                                                           |           |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place)     | [Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-ci-fix.md)                                                     |           |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place)     | [Codex Security Review Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-security.md)                                                  |           |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace)       | [Codex CI-Failure Fix Prompt](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex-ci-fix.md)                                  |           |
-| [futuroptimist/sigma](https://github.com/futuroptimist/sigma)                 | [Codex CAD Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-cad.md)                                                                         |           |
-| [futuroptimist/sigma](https://github.com/futuroptimist/sigma)                 | [Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-ci-fix.md)                                                           |           |
-| [futuroptimist/sigma](https://github.com/futuroptimist/sigma)                 | [Codex Spellcheck Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-spellcheck.md)                                                           |           |
-| [futuroptimist/sigma](https://github.com/futuroptimist/sigma)                 | [Sigma Codex Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex.md)                                                                           |           |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove)                   | [Codex CAD Prompt](https://github.com/futuroptimist/wove/blob/main/docs/prompts-codex-cad.md)                                                                          |           |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)         | [Sugarkube Codex CAD Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-cad.md)                                                           |           |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)         | [Sugarkube Codex Docs Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-docs.md)                                                         |           |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)         | [Sugarkube Codex Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex.md)                                                                   |           |
-
+| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/code.md)                                                                                    | evergreen |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/critique.md)                                                                                | evergreen |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/plan.md)                                                                                    | evergreen |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex-ci-fix.md)                                                            | evergreen |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [Codex Spellcheck Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex-spellcheck.md)                                                            | evergreen |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | [Codex Spellcheck Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-spellcheck.md)                                                   | evergreen |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | [Codex Video Script Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-video-script.md)                                               | evergreen |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | [Futuroptimist Codex Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex.md)                                                           | evergreen |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place)     | [Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-ci-fix.md)                                                     | evergreen |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place)     | [Codex Security Review Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-security.md)                                                  | evergreen |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace)       | [Codex CI-Failure Fix Prompt](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex-ci-fix.md)                                  | evergreen |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma)                 | [Codex CAD Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-cad.md)                                                                         | evergreen |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma)                 | [Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-ci-fix.md)                                                           | evergreen |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma)                 | [Codex Spellcheck Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-spellcheck.md)                                                           | evergreen |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma)                 | [Sigma Codex Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex.md)                                                                           | evergreen |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove)                   | [Codex CAD Prompt](https://github.com/futuroptimist/wove/blob/main/docs/prompts-codex-cad.md)                                                                          | evergreen |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)         | [Sugarkube Codex CAD Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-cad.md)                                                           | evergreen |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)         | [Sugarkube Codex Docs Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-docs.md)                                                         | evergreen |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)         | [Sugarkube Codex Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex.md)                                                                   | evergreen |
 ## TODO Prompts for Other Repos
 
 | Repo | Suggested Prompt | Type | Notes |
