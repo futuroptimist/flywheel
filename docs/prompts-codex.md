@@ -43,9 +43,9 @@ The DEV assistant must output the JSON object first, then the diff in a fenced d
 
 Copy this entire block into Codex when you want the agent to automatically improve Flywheel. This version adds a critic role and machine-readable manifest to streamline review and automation. Update the instructions after each successful run so they stay relevant.
 
-## Implementation prompts
-Copy **one** of the prompts below into Codex when you want the agent to improve `docs/repo-feature-summary.md`.
-Each prompt is file-scoped, single-purpose and immediately actionable.
+## Implementation prompt
+Copy the prompt below into Codex when you want the agent to improve `docs/repo-feature-summary.md`.
+This prompt is file-scoped, single-purpose and immediately actionable.
 
 ### 1 Add ⭐ Stars & 🐞 Open-Issues columns
 Type: one-off
@@ -73,39 +73,11 @@ OUTPUT
 Return **only** the patch (diff) required.
 ```
 
-### 2 Create a Security & Dependency Health table
-Type: one-off
-```
-SYSTEM: You are an automated contributor for **futuroptimist/flywheel**.
-
-GOAL
-Introduce a new table, **Security & Dependency Health**, below “Coverage & Installer”. Columns:
-
-| Repo | Dependabot | Secret-Scanning | CodeQL | Snyk (badge) |
-
-FILES OF INTEREST
-- docs/repo-feature-summary.md
-- scripts/security-scan.mjs (new helper, can call GitHub API)
-- .github/workflows/security-scan.yml (new)
-
-REQUIREMENTS
-1. Detect presence of `.github/dependabot.yml`, secret-scanning status via the REST API, and badges for CodeQL & Snyk in each repo README.
-2. Count ✔️/❌ per repo and render the table.
-3. Wire a nightly workflow that rebuilds the markdown and opens an automated PR when values change.
-4. Maintain > 90 % test coverage for the new script.
-
-ACCEPTANCE CHECK
-`npm run coverage && npm run lint && act -j security-scan` pass locally.
-
-OUTPUT
-A PR adding the new table, scan script and workflow.
-```
-
 ### How to choose a prompt
 
 | When you want to…                        | Use prompt |
 |------------------------------------------|-----------|
-| Add new insights (metrics, health scans) | 1 or 2    |
+| Add new insights (metrics, health scans) | 1         |
 
 ### Notes for human contributors
 
