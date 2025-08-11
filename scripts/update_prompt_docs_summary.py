@@ -12,8 +12,6 @@ from typing import DefaultDict, List, Set
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from tabulate import tabulate  # noqa: E402
-
 from flywheel.repocrawler import RepoCrawler  # noqa: E402
 
 
@@ -91,6 +89,16 @@ def extract_prompts(text: str, base_url: str) -> List[List[str]]:
     return prompts
 
 
+def markdown_table(rows: List[List[str]], headers: List[str]) -> str:
+    """Render a GitHub-flavored Markdown table without automatic wrapping."""
+    header_line = "| " + " | ".join(headers) + " |"
+    separator_line = "| " + " | ".join(["---"] * len(headers)) + " |"
+    lines = [header_line, separator_line]
+    for row in rows:
+        lines.append("| " + " | ".join(row) + " |")
+    return "\n".join(lines)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repos-from", type=Path, required=True)
@@ -160,9 +168,7 @@ def main() -> None:
     for repo_link, prompts in grouped.items():
         lines.append(f"## {repo_link}")
         lines.append("")
-        lines.append(
-            tabulate(prompts, headers=["Prompt", "Type"], tablefmt="github")
-        )  # noqa: E501
+        lines.append(markdown_table(prompts, ["Prompt", "Type"]))
         lines.append("")
 
     if new_rows:
@@ -170,11 +176,7 @@ def main() -> None:
             [
                 "## Untriaged Prompt Docs",
                 "",
-                tabulate(
-                    new_rows,
-                    headers=["Repo", "Prompt", "Type"],
-                    tablefmt="github",
-                ),
+                markdown_table(new_rows, ["Repo", "Prompt", "Type"]),
                 "",
             ]
         )
