@@ -4,6 +4,7 @@ slug: 'prompts-codex-propagate'
 ---
 
 # Codex Prompt Propagation Prompt
+Type: evergreen
 
 Use this prompt to ask Codex to seed missing `prompts-*.md` files across repositories listed in
 [`docs/repo-feature-summary.md`](repo-feature-summary.md).

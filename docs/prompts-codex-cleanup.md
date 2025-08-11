@@ -1,0 +1,31 @@
+---
+title: 'Codex Prompt Cleanup'
+slug: 'prompts-codex-cleanup'
+---
+
+# Obsolete Prompt Cleanup
+Type: evergreen
+
+Use this prompt to remove one-off prompts that have already been implemented and to prune TODO entries targeting other repositories.
+
+```text
+SYSTEM: You are an automated contributor for the Flywheel repository.
+
+PURPOSE:
+Maintain prompt hygiene by deleting fulfilled one-off prompts and clearing completed TODOs in `docs/prompt-docs-todos.md`.
+
+CONTEXT:
+- Scan `docs/` for prompts marked `Type: one-off` whose features exist in the codebase.
+- Delete those prompt sections or files.
+- Remove matching rows from `docs/prompt-docs-todos.md`.
+- Regenerate `docs/prompt-docs-summary.md` using `python scripts/update_prompt_docs_summary.py`.
+- Follow `AGENTS.md` for testing requirements.
+
+REQUEST:
+1. Identify an obsolete prompt or external TODO entry.
+2. Remove it and update references.
+3. Run all required checks before committing.
+
+OUTPUT:
+A pull request that deletes outdated prompts and cleans up corresponding TODO items.
+```

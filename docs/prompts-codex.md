@@ -4,6 +4,7 @@ slug: 'prompts-codex'
 ---
 
 # Codex Automation Prompt
+Type: evergreen
 
 This document stores the baseline prompt used when instructing OpenAI Codex (or
 compatible agents) to contribute to the Flywheel repository. Keeping the prompt
@@ -47,6 +48,7 @@ Copy **one** of the prompts below into Codex when you want the agent to improve 
 Each prompt is file-scoped, single-purpose and immediately actionable.
 
 ### 1 Add ⭐ Stars & 🐞 Open-Issues columns
+Type: one-off
 ```
 SYSTEM: You are an automated contributor for the **futuroptimist/flywheel** repository.
 
@@ -72,6 +74,7 @@ Return **only** the patch (diff) required.
 ```
 
 ### 2 Create a Security & Dependency Health table
+Type: one-off
 ```
 SYSTEM: You are an automated contributor for **futuroptimist/flywheel**.
 
@@ -112,6 +115,7 @@ A PR adding the new table, scan script and workflow.
 - Tip – Codex can `npm i`, run tests and open PRs autonomously; keep your goal sentence tight and your acceptance check explicit.
 
 ## Upgrade Prompt
+Type: evergreen
 
 Use this prompt to refine Flywheel's own prompt documentation.
 
