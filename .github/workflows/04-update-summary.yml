@@ -4,7 +4,7 @@ on:
 jobs:
   crawl:
     permissions:
-      contents: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,7 +20,15 @@ jobs:
         run: |
           uv pip install --system -r requirements.txt
           uv pip install --system pre-commit
+      - name: Check GitHub API rate limit
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          curl -s -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/rate_limit
       - name: Generate summary
+        env:
+          # Replace with secrets.CRAWL_PAT if higher limits or private repos are needed
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           python -m flywheel crawl --repos-file docs/repo_list.txt --output docs/repo-feature-summary.md
       - name: Run pre-commit
@@ -28,17 +36,5 @@ jobs:
           pre-commit run --files docs/repo-feature-summary.md || true
           git add docs/repo-feature-summary.md
           pre-commit run --files docs/repo-feature-summary.md
-      - name: Commit changes
-        if: github.ref == 'refs/heads/main'
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add docs/repo-feature-summary.md
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "chore: update repo feature summary"
-            git push
-          fi
       - name: Publish summary
         run: cat docs/repo-feature-summary.md >> "$GITHUB_STEP_SUMMARY"
