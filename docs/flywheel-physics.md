@@ -20,6 +20,7 @@ I &= \int_{r_i}^{r_o} r'^2 (2\pi\rho h r'\,\mathrm{d}r') \\
   &= \tfrac{1}{2} m (r_o^2 + r_i^2)
 \end{aligned}
 $$
+Here $m = \rho \pi h (r_o^2 - r_i^2)$ is the wheel's mass for density $\rho$ and height $h$.
 Setting $r_i \to 0$ recovers the solid-disk formula, while the thin-rim limit
 ($r_i \approx r_o$) approaches $$I = m r_o^2,$$ doubling inertia for the same mass.
 
@@ -48,6 +49,8 @@ where $\rho$ is the material density and $h$ the cylinder height.
 The kinetic energy of a rotating wheel is
 $$E = \tfrac{1}{2} I \omega^2$$
 with angular velocity $\omega$ in radians per second.
+Expressed in revolutions per minute (rpm) $n$,
+$$E = \tfrac{1}{2} I \left(\tfrac{2\pi n}{60}\right)^2 = \tfrac{\pi^2 I n^2}{1800}$$
 
 ### Example using CAD dimensions
 
@@ -151,7 +154,9 @@ constant friction torque $T_f$ gives the angular deceleration
 
 $$\alpha = -\frac{T_f}{I}$$
 
-so the coasting time from speed $\omega_0$ to rest is
+so the angular speed falls linearly:
+$$\omega(t) = \omega_0 - \frac{T_f}{I} t$$
+and the coasting time from speed $\omega_0$ to rest is
 
 $$t = \frac{I\omega_0}{T_f}$$
 
