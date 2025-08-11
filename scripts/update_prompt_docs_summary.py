@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import argparse
+import re
 import sys
+from collections import defaultdict
 from datetime import date
 from pathlib import Path
-from typing import List, Set
+from typing import DefaultDict, List, Set
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
@@ -47,6 +49,48 @@ def _parse_existing(path: Path) -> Set[str]:
     return existing
 
 
+def slugify(text: str) -> str:
+    text = text.strip().lower()
+    text = re.sub(r"[^a-z0-9\s-]", "", text)
+    text = re.sub(r"\s+", "-", text)
+    return text
+
+
+def find_type(lines: List[str], start: int) -> str:
+    for idx in range(start, min(start + 5, len(lines))):
+        match = re.search(r"Type:\s*(\w+)", lines[idx], re.IGNORECASE)
+        if match:
+            return match.group(1).lower()
+    return ""
+
+
+def is_prompt_heading(title: str) -> bool:
+    return "prompt" in title.lower() or title[:1].isdigit()
+
+
+def extract_prompts(text: str, base_url: str) -> List[List[str]]:
+    lines = text.splitlines()
+    prompts: List[List[str]] = []
+    for i, line in enumerate(lines):
+        if line.startswith("# ") and not line.startswith("##"):
+            title = line[2:].strip()
+            ptype = find_type(lines, i + 1)
+            anchor = slugify(title)
+            if ptype:
+                prompts.append([f"[{title}]({base_url}#{anchor})", ptype])
+        elif line.startswith("## ") or line.startswith("### "):
+            title = line.lstrip("#").strip()
+            if is_prompt_heading(title):
+                ptype = find_type(lines, i + 1)
+                anchor = slugify(title)
+                if ptype:
+                    prompts.append([f"[{title}]({base_url}#{anchor})", ptype])
+    if not prompts:
+        title = extract_title(text)
+        prompts.append([f"[{title}]({base_url})", ""])
+    return prompts
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repos-from", type=Path, required=True)
@@ -58,27 +102,25 @@ def main() -> None:
     crawler = RepoCrawler(repos, token=args.token)
 
     existing_docs = _parse_existing(args.out)
-    rows: list[list[str]] = []
+    grouped: DefaultDict[str, List[List[str]]] = defaultdict(list)
     new_rows: list[list[str]] = []
 
     # Include prompt docs from the local repository (first entry)
     local_repo = repos[0].split("@")[0]
     docs_dir = Path(__file__).resolve().parents[1] / "docs"
     for path in sorted(docs_dir.glob("*prompt*.md")):
-        if path.name == "prompt-docs-summary.md":
+        if path.name in {"prompt-docs-summary.md", "prompt-docs-todos.md"}:
             continue
         text = path.read_text()
-        title = extract_title(text)
         repo_link = f"**[{local_repo}](https://github.com/{local_repo})**"
-        file_name = path.name
-        doc_link = (
-            f"[{file_name}](https://github.com/{local_repo}/blob/main/docs/"
-            f"{file_name})"
-        )
-        row = [repo_link, doc_link, title]
-        rows.append(row)
-        if doc_link not in existing_docs:
-            new_rows.append(row)
+        base_url = (
+            f"https://github.com/{local_repo}/blob/main/docs/" f"{path.name}"
+        )  # noqa: E501
+        prompts = extract_prompts(text, base_url)
+        for prompt_link, ptype in prompts:
+            grouped[repo_link].append([prompt_link, ptype])
+            if prompt_link not in existing_docs:
+                new_rows.append([repo_link, prompt_link, ptype])
 
     # Add prompt docs from remote repositories (skip local repo)
     for spec in repos[1:]:
@@ -95,25 +137,16 @@ def main() -> None:
                 and not path.endswith("prompt-docs-summary.md")
             ):
                 text = crawler._fetch_file(name, path, branch) or ""
-                title = extract_title(text)
                 repo_link = f"[{name}](https://github.com/{name})"
-                file_name = path.split("/")[-1]
-                doc_link = "[{0}](https://github.com/{1}/blob/{2}/{3})".format(
-                    file_name,
-                    name,
-                    branch,
-                    path,
-                )
-                row = [repo_link, doc_link, title]
-                rows.append(row)
-                if doc_link not in existing_docs:
-                    new_rows.append(row)
+                base_url = (
+                    f"https://github.com/{name}/blob/{branch}/" f"{path}"
+                )  # noqa: E501
+                prompts = extract_prompts(text, base_url)
+                for prompt_link, ptype in prompts:
+                    grouped[repo_link].append([prompt_link, ptype])
+                    if prompt_link not in existing_docs:
+                        new_rows.append([repo_link, prompt_link, ptype])
 
-    table = tabulate(
-        rows,
-        headers=["Repo", "Document", "Title"],
-        tablefmt="github",
-    )
     lines = [
         "# Prompt Docs Summary",
         "",
@@ -122,26 +155,45 @@ def main() -> None:
         "(../scripts/update_prompt_docs_summary.py) "
         "using RepoCrawler to discover prompt documents across repositories.",
         "",
-        table,
     ]
+
+    for repo_link, prompts in grouped.items():
+        lines.append(f"## {repo_link}")
+        lines.append("")
+        lines.append(
+            tabulate(prompts, headers=["Prompt", "Type"], tablefmt="github")
+        )  # noqa: E501
+        lines.append("")
 
     if new_rows:
         lines.extend(
             [
-                "",
                 "## Untriaged Prompt Docs",
                 "",
                 tabulate(
                     new_rows,
-                    headers=["Repo", "Document", "Title"],
+                    headers=["Repo", "Prompt", "Type"],
                     tablefmt="github",
                 ),
+                "",
             ]
         )
     else:
-        lines.extend(["", "## Untriaged Prompt Docs", "", "None detected."])
+        lines.extend(["## Untriaged Prompt Docs", "", "None detected.", ""])
 
-    lines.extend(["", f"_Updated automatically: {date.today()}_", ""])
+    todo_file = docs_dir / "prompt-docs-todos.md"
+    if todo_file.exists() and todo_file.read_text().strip():
+        todo_content = todo_file.read_text().strip()
+        lines.extend(
+            [
+                "## TODO Prompts for Other Repos",
+                "",
+                todo_content,
+                "",
+            ]
+        )
+
+    lines.extend([f"_Updated automatically: {date.today()}_", ""])
     args.out.write_text("\n".join(lines))
 
 

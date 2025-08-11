@@ -4,6 +4,7 @@ slug: 'prompts-codex-physics'
 ---
 
 # OpenAI Codex Physics Explainer Prompt
+Type: evergreen
 
 Use this prompt to automatically expand Flywheel's physics documentation. The
 agent pulls formulas or explanations from the codebase and updates relevant

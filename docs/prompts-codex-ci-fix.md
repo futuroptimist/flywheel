@@ -4,6 +4,7 @@ slug:  'prompts-codex-ci-fix'
 ---
 
 # OpenAI Codex CI-Failure Fix Prompt
+Type: evergreen
 
 Use this prompt whenever a GitHub Actions run in *any* repository fails and you want Codex to diagnose and repair the problem automatically.
 **Human set-up steps (do these *before* switching ChatGPT into “Code” mode):**

@@ -4,6 +4,7 @@ slug: 'prompts-codex-cad'
 ---
 
 # OpenAI Codex CAD Prompt
+Type: evergreen
 
 Use this prompt whenever CAD models or STL exports need updating. It mirrors the
 style of DSPACE's `prompts-codex.md` so the automation workflows stay

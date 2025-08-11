@@ -4,6 +4,7 @@ slug: 'prompts-codex-spellcheck'
 ---
 
 # Codex Spellcheck Prompt
+Type: evergreen
 
 Use this prompt to find and fix spelling mistakes in Markdown docs before opening a pull request.
 
