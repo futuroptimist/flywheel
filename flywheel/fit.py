@@ -18,15 +18,21 @@ def parse_scad_vars(path: Path) -> Dict[str, float]:
 
     Block comments ``/* ... */`` and inline ``//`` comments after the
     semicolon are ignored. The parser supports negative values, decimals
-    without a leading zero, trailing decimal points, and scientific notation.
+    without a leading zero, trailing decimal points, scientific notation,
+    and multiple assignments on the same line.
     """
     text = Path(path).read_text()
     text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
     vars: Dict[str, float] = {}
-    for line in text.splitlines():
-        m = _DEF_RE.match(line.strip())
-        if m:
-            vars[m.group(1)] = float(m.group(2))
+    for raw_line in text.splitlines():
+        line = raw_line.split("//", 1)[0]
+        for part in line.split(";"):
+            part = part.strip()
+            if not part:
+                continue
+            m = _DEF_RE.match(part + ";")
+            if m:
+                vars[m.group(1)] = float(m.group(2))
     return vars
 
 
