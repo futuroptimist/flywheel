@@ -23,7 +23,12 @@ graph LR
 
 Integrating the mass distribution shows where this expression comes from:
 
-$$I = \int_0^r r'^2\, \mathrm{d}m = \int_0^r r'^2 (2\pi \rho h r'\, \mathrm{d}r') = \tfrac{1}{2}\pi \rho h r^4 = \tfrac{1}{2} m r^2$$
+$$
+I = \int_{r_i}^{r_o} r'^2\, \mathrm{d}m
+  = \int_{r_i}^{r_o} r'^2(2\pi \rho h r' \,\mathrm{d}r')
+  = \tfrac{1}{2}\pi \rho h (r_o^4 - r_i^4)
+  = \tfrac{1}{2} m (r_o^2 + r_i^2)
+$$
 
 where $\rho$ is the material density and $h$ the cylinder height.
 
@@ -41,13 +46,13 @@ the shaft, and height $h=20\,\text{mm}$.  For material density $\rho$, the mass 
 
 $$m = \rho\pi (r_o^2 - r_i^2) h$$
 
-Converting the CAD dimensions to SI units gives $r = 0.05\,\text{m}$ and
-$h = 0.02\,\text{m}$.  PLA has density
+Converting the CAD dimensions to SI units gives $r_o = 0.05\,\text{m}$,
+$r_i = 0.005\,\text{m}$, and $h = 0.02\,\text{m}$.  PLA has density
 $\rho \approx 1.25\,\text{g/cm}^3 = 1.25\times10^3\,\text{kg/m}^3$.
-The volume is $V = \pi r^2 h \approx 1.6\times10^{-4}\,\text{m}^3$, so the mass is
-$m = \rho V \approx 0.20\,\text{kg}$.
+The volume is $V = \pi (r_o^2 - r_i^2) h \approx 1.6\times10^{-4}\,\text{m}^3$, so the mass is
+$m = \rho V \approx 0.19\,\text{kg}$.
 
-$$I = \tfrac{1}{2} m r^2 \approx 2.5\times10^{-4}\,\text{kg·m}^2.$$ At
+$$I = \tfrac{1}{2} m (r_o^2 + r_i^2) \approx 2.5\times10^{-4}\,\text{kg·m}^2.$$ At
 3000\,rpm the angular speed is $\omega = \tfrac{2\pi n}{60} \approx 314\,\text{rad/s}$,
 so the wheel stores roughly $$E \approx 12\,\text{J}.$$
 
