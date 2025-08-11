@@ -144,6 +144,27 @@ Using the same CAD dimensions as above ($I \approx 2.5\times10^{-4}\,\text{kg·m
 a modest $0.5\,\text{N·m}$ motor torque spins the wheel to
 3000\,rpm ($\omega \approx 314\,\text{rad/s}$) in about $t \approx 0.16\,\text{s}$.
 
+## Power requirements
+
+Torque and angular velocity set the instantaneous mechanical power:
+
+$$P = T\omega$$
+
+With the CAD model in [`cad/flywheel.scad`](../cad/flywheel.scad) the example torque
+$T = 0.5\,\text{N·m}$ at 3000\,rpm ($\omega \approx 314\,\text{rad/s}$) requires
+
+$$P \approx 0.5 \times 314 \approx 1.6\times10^2\,\text{W}.$$
+The average power over the $t \approx 0.16\,\text{s}$ spin-up interval is
+
+$$P_{avg} = \frac{E}{t} = \frac{\tfrac{1}{2} I \omega^2}{t} \approx \frac{12}{0.16}
+\approx 75\,\text{W}.$$
+Sizing a motor or crank becomes easier when both peak and average power are known.
+
+```mermaid
+graph TD
+    T[Torque T] -->|P = T \omega| Pwr[Power P]
+```
+
 ## Spin-down from friction
 
 Even unloaded, bearing and air drag slowly bleed energy from the wheel. Approximating a
