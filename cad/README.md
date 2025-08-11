@@ -11,6 +11,8 @@ Source OpenSCAD files for the flywheel project.
 - `flywheel.scad` – simple cylindrical flywheel with center bore
 - `utils/spool_core_sleeve.scad` – parametric spool core sleeve library
   (see `examples/spool_core_sleeve_example.scad`)
+- `examples/spool_core_sleeve_example.scad` – demo spool core sleeve; the
+  corresponding OBJ lives in `webapp/static/models/examples/`
 
 ## Regenerating meshes
 
