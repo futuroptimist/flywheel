@@ -22,9 +22,9 @@ This index is auto-generated with [scripts/update_prompt_docs_summary.py](../scr
 
 | Prompt                                                                                                      | Type   |
 |-------------------------------------------------------------------------------------------------------------|--------|
-| [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/code.md)                         | evergreen |
-| [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/critique.md)                     | evergreen |
-| [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/plan.md)                         | evergreen |
+| [Hillclimb Code Prompt](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/code.md)     | evergreen |
+| [Hillclimb Critique Prompt](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/critique.md) | evergreen |
+| [Hillclimb Plan Prompt](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/plan.md)     | evergreen |
 | [Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex-ci-fix.md) | evergreen |
 | [Codex Spellcheck Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex-spellcheck.md) | evergreen |
 | [Axel Codex Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex.md)                  | evergreen |
@@ -101,9 +101,9 @@ This index is auto-generated with [scripts/update_prompt_docs_summary.py](../scr
 | **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [1 Add ⭐ Stars & 🐞 Open-Issues columns](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#1-add-stars-open-issues-columns)                     | one-off       |
 | **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [2 Create a Security & Dependency Health table](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#2-create-a-security-dependency-health-table) | one-off       |
 | **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [Upgrade Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-codex.md#upgrade-prompt)                                                             | evergreen |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/code.md)                                                                                    | evergreen |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/critique.md)                                                                                | evergreen |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/plan.md)                                                                                    | evergreen |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [Hillclimb Code Prompt](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/code.md)                                                               | evergreen |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [Hillclimb Critique Prompt](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/critique.md)                                                       | evergreen |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [Hillclimb Plan Prompt](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/plan.md)                                                               | evergreen |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex-ci-fix.md)                                                            | evergreen |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel)                   | [Codex Spellcheck Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex-spellcheck.md)                                                            | evergreen |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | [Codex Spellcheck Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-spellcheck.md)                                                   | evergreen |
