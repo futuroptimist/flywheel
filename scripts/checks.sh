@@ -20,6 +20,18 @@ if [ "${RUN_SECURITY_ONLY}" = "1" ]; then
   exit 0
 fi
 
+if [ "${RUN_DOCS_ONLY}" = "1" ]; then
+  if command -v pyspelling >/dev/null 2>&1 && [ -f .spellcheck.yaml ]; then
+    pyspelling -c .spellcheck.yaml || true
+  fi
+  if command -v linkchecker >/dev/null 2>&1; then
+    linkchecker README.md docs/ || true
+  else
+    echo "linkchecker not installed; skipping link check"
+  fi
+  exit 0
+fi
+
 # python checks
 flake8 . --exclude=.venv
 isort --check-only . --skip .venv
@@ -51,4 +63,8 @@ run_security_checks
 if command -v pyspelling >/dev/null 2>&1 && [ -f .spellcheck.yaml ]; then
   pyspelling -c .spellcheck.yaml || true
 fi
-linkchecker README.md docs/ || true
+if command -v linkchecker >/dev/null 2>&1; then
+  linkchecker README.md docs/ || true
+else
+  echo "linkchecker not installed; skipping link check"
+fi
