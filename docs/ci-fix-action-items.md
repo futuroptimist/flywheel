@@ -11,3 +11,4 @@
 ## Mitigate
 - [x] Whitelist "Untriaged" in the spellcheck dictionary.
 - [x] Skip auto-generated docs in spellcheck to prevent false positives.
+- [x] Skip Playwright e2e tests during pre-commit checks by detecting `PRE_COMMIT`.

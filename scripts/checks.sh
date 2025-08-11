@@ -28,13 +28,13 @@ black --check . --exclude ".venv/"
 # js checks
 if [ -f package.json ]; then
   npm ci
-  if [ -z "$SKIP_E2E" ]; then
+  if [ -z "$SKIP_E2E" ] && [ -z "$PRE_COMMIT" ]; then
     npx playwright install --with-deps
     npm run lint
     npm run format:check
     npm test -- --coverage
   else
-    echo "SKIP_E2E set; skipping Playwright installation and e2e tests" >&2
+    echo "Skipping Playwright installation and e2e tests" >&2
     npm run lint
     npm run format:check
     npm run jest -- --coverage
