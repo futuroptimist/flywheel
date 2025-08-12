@@ -1,0 +1,19 @@
+import src.ci_status as cs
+import src.table_builder as tb
+
+
+def test_ci_state_graphql(monkeypatch):
+    monkeypatch.setattr(cs, "_query_graphql", lambda o, r, s: "SUCCESS")
+    assert cs.ci_state("o", "r", "sha") == "green"
+
+
+def test_ci_state_rest_fallback(monkeypatch):
+    monkeypatch.setattr(cs, "_query_graphql", lambda o, r, s: None)
+    monkeypatch.setattr(cs, "_query_rest", lambda o, r, s: "FAILURE")
+    assert cs.ci_state("o", "r", "sha") == "red"
+
+
+def test_trunk_cell(monkeypatch):
+    monkeypatch.setattr(tb, "ci_state", lambda o, r, s: "green")
+    assert tb.trunk_cell("o", "r", "sha") == "✅"
+    assert tb.trunk_cell("o", "r", "") == "n/a"
