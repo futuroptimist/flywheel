@@ -16,3 +16,11 @@ def test_dspace_rows_present():
     doc = Path("docs/prompt-docs-summary.md").read_text()
     msg = "dspace prompt docs missing"
     assert doc.count("democratizedspace/dspace") >= 2, msg
+
+
+def test_no_blank_cells():
+    doc = Path("docs/prompt-docs-summary.md")
+    for line in doc.read_text().splitlines():
+        if line.startswith("|"):
+            cells = [c.strip() for c in line.split("|")[1:-1]]
+            assert all(cells), f"blank cell in line: {line}"

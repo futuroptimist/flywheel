@@ -195,3 +195,5 @@ Untriaged
 TODOs
 whitespace
 EOF
+stdout
+summarise

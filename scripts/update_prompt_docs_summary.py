@@ -74,20 +74,20 @@ def extract_prompts(text: str, base_url: str) -> List[List[str]]:
     for i, line in enumerate(lines):
         if line.startswith("# ") and not line.startswith("##"):
             title = line[2:].strip()
-            ptype = find_type(lines, i + 1)
+            ptype = find_type(lines, i + 1) or "unknown"
             anchor = slugify(title)
-            if ptype:
-                prompts.append([f"[{title}]({base_url}#{anchor})", ptype])
+            prompts.append([f"[{title}]({base_url}#{anchor})", ptype])
         elif line.startswith("## ") or line.startswith("### "):
             title = line.lstrip("#").strip()
             if is_prompt_heading(title):
-                ptype = find_type(lines, i + 1)
+                ptype = find_type(lines, i + 1) or "unknown"
                 anchor = slugify(title)
-                if ptype:
-                    prompts.append([f"[{title}]({base_url}#{anchor})", ptype])
+                prompts.append([f"[{title}]({base_url}#{anchor})", ptype])
     if not prompts:
         title = extract_title(text)
-        prompts.append([f"[{title}]({base_url})", ""])
+        if not title:
+            title = base_url.split("/")[-1]
+        prompts.append([f"[{title}]({base_url})", "unknown"])
     return prompts
 
 
