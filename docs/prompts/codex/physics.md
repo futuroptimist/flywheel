@@ -1,6 +1,6 @@
 ---
 title: 'Codex Physics Explainer Prompt'
-slug: 'prompts-codex-physics'
+slug: 'codex-physics'
 ---
 
 # OpenAI Codex Physics Explainer Prompt

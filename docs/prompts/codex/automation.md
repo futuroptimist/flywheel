@@ -1,6 +1,6 @@
 ---
 title: 'Flywheel Codex Prompt'
-slug: 'prompts-codex'
+slug: 'codex-automation'
 ---
 
 # Codex Automation Prompt
@@ -10,7 +10,7 @@ This document stores the baseline prompt used when instructing OpenAI Codex (or
 compatible agents) to contribute to the Flywheel repository. Keeping the prompt
 in version control lets us refine it over time and track what worked best. It
 serves as the canonical prompt that other repositories can copy to
-`docs/prompts-codex.md` for consistent automation.
+`docs/prompts/codex/automation.md` for consistent automation.
 
 ```
 SYSTEM:
@@ -126,7 +126,8 @@ SYSTEM:
 You are an automated contributor for the Flywheel repository. Follow `AGENTS.md` and `README.md`. Ensure `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`, `python -m flywheel.fit`, and `bash scripts/checks.sh` pass before committing. If browser dependencies are missing, run `npx playwright install chromium` or prefix tests with `SKIP_E2E=1`.
 
 USER:
-1. Pick one prompt doc under `docs/` (for example, `prompts-codex-spellcheck.md`).
+1. Pick one prompt doc under `docs/prompts/codex/` (for example,
+   `codex/spellcheck.md`).
 2. Fix outdated instructions, links or formatting.
 3. Run the checks above.
 

@@ -8,7 +8,7 @@
 The spellcheck job flagged the word "Untriaged" in the generated prompt docs summary, failing the workflow.
 
 ## Root cause
-`docs/prompt-docs-summary.md` includes an "Untriaged" heading not present in the allow list.
+`docs/prompts/summary.md` includes an "Untriaged" heading not present in the allow list.
 
 ## Impact
 Spellcheck CI step failed, blocking merges.
