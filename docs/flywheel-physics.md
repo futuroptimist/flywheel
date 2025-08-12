@@ -156,6 +156,20 @@ $$a \approx 5\times10^3\,\text{m/s}^2$$
 which is roughly 500\,$g$.  Spokes and hubs must withstand this load to keep
 the wheel intact.
 
+The outward force on a rim segment of mass $m$ is
+
+$$F = m a = m r \omega^2$$
+
+For the CAD wheel in [`cad/flywheel.scad`](../cad/flywheel.scad), a
+5\,g screw near the edge sees roughly
+$$F \approx 5\times10^{-3} \times 0.05 \times 314^2 \approx 25\,\text{N}$$
+at 3000\,rpm, so even small fixtures need secure retention.
+
+```mermaid
+graph TD
+    m[mass m] -->|F = m r \omega^2| Fc[Centripetal force]
+```
+
 ## Spin-up time
 
 A constant torque $T$ causes angular acceleration $\alpha$ according to
