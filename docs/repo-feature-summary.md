@@ -45,7 +45,6 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ❌ | ❌ | ❌ | ❌ |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ❌ | ❌ | ❌ |
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ❌ | ❌ | ❌ | ❌ |
-
 ## Policies & Automation
 | Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Last-Updated (UTC) |
 | ---- | ------- | -- | --------- | --------- | --------------- | ------------ | ---------- | ----------------- |
