@@ -5,14 +5,12 @@ from __future__ import annotations
 import argparse
 import re
 import sys
-from collections import defaultdict
 from datetime import date
 from pathlib import Path
-from typing import DefaultDict, List, Set
+from typing import Dict, List, Set, Tuple
+from urllib.parse import urlparse
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-
-from tabulate import tabulate  # noqa: E402
 
 from flywheel.repocrawler import RepoCrawler  # noqa: E402
 
@@ -74,21 +72,33 @@ def extract_prompts(text: str, base_url: str) -> List[List[str]]:
     for i, line in enumerate(lines):
         if line.startswith("# ") and not line.startswith("##"):
             title = line[2:].strip()
-            ptype = find_type(lines, i + 1)
+            ptype = find_type(lines, i + 1) or "unknown"
             anchor = slugify(title)
-            if ptype:
-                prompts.append([f"[{title}]({base_url}#{anchor})", ptype])
+            prompts.append([f"[{title}]({base_url}#{anchor})", ptype])
         elif line.startswith("## ") or line.startswith("### "):
             title = line.lstrip("#").strip()
             if is_prompt_heading(title):
-                ptype = find_type(lines, i + 1)
+                ptype = find_type(lines, i + 1) or "unknown"
                 anchor = slugify(title)
-                if ptype:
-                    prompts.append([f"[{title}]({base_url}#{anchor})", ptype])
+                prompts.append([f"[{title}]({base_url}#{anchor})", ptype])
     if not prompts:
-        title = extract_title(text)
-        prompts.append([f"[{title}]({base_url})", ""])
+        title = extract_title(text) or Path(urlparse(base_url).path).name
+        prompts.append([f"[{title}]({base_url})", "unknown"])
     return prompts
+
+
+def extract_first_codeblock(text: str) -> str:
+    match = re.search(r"```(?:[\w+-]*)\n(.*?)\n```", text, re.DOTALL)
+    return match.group(1).strip() if match else ""
+
+
+def render_table(headers: List[str], rows: List[List[str]]) -> str:
+    header = "| " + " | ".join(headers) + " |"
+    separator = "| " + " | ".join(["---"] * len(headers)) + " |"
+    lines = [header, separator]
+    for row in rows:
+        lines.append("| " + " | ".join(row) + " |")
+    return "\n".join(lines)
 
 
 def main() -> None:
@@ -102,25 +112,18 @@ def main() -> None:
     crawler = RepoCrawler(repos, token=args.token)
 
     existing_docs = _parse_existing(args.out)
-    grouped: DefaultDict[str, List[List[str]]] = defaultdict(list)
+    grouped: Dict[str, Dict[str, List[List[str]]]] = {}
     new_rows: list[list[str]] = []
 
     # Include prompt docs from the local repository (first entry)
     local_repo = repos[0].split("@")[0]
     docs_dir = Path(__file__).resolve().parents[1] / "docs"
-    for path in sorted(docs_dir.glob("*prompt*.md")):
-        if path.name in {"prompt-docs-summary.md", "prompt-docs-todos.md"}:
-            continue
+    template_prompts: List[Tuple[str, str, Path]] = []
+    for path in sorted(docs_dir.glob("prompts-*.md")):
         text = path.read_text()
-        repo_link = f"**[{local_repo}](https://github.com/{local_repo})**"
-        base_url = (
-            f"https://github.com/{local_repo}/blob/main/docs/" f"{path.name}"
-        )  # noqa: E501
-        prompts = extract_prompts(text, base_url)
-        for prompt_link, ptype in prompts:
-            grouped[repo_link].append([prompt_link, ptype])
-            if prompt_link not in existing_docs:
-                new_rows.append([repo_link, prompt_link, ptype])
+        title = extract_title(text) or path.stem.replace("-", " ").title()
+        codeblock = extract_first_codeblock(text)
+        template_prompts.append((title, codeblock, path))
 
     # Add prompt docs from remote repositories (skip local repo)
     for spec in repos[1:]:
@@ -142,27 +145,50 @@ def main() -> None:
                     f"https://github.com/{name}/blob/{branch}/" f"{path}"
                 )  # noqa: E501
                 prompts = extract_prompts(text, base_url)
+                if name not in grouped:
+                    grouped[name] = {"link": repo_link, "prompts": []}
                 for prompt_link, ptype in prompts:
-                    grouped[repo_link].append([prompt_link, ptype])
+                    grouped[name]["prompts"].append([prompt_link, ptype])
                     if prompt_link not in existing_docs:
                         new_rows.append([repo_link, prompt_link, ptype])
 
     lines = [
         "# Prompt Docs Summary",
         "",
-        "This index is auto-generated with "
-        "[scripts/update_prompt_docs_summary.py]"
-        "(../scripts/update_prompt_docs_summary.py) "
-        "using RepoCrawler to discover prompt documents across repositories.",
+        (
+            "This index is auto-generated with "
+            "[scripts/update_prompt_docs_summary.py]"
+            "(../scripts/update_prompt_docs_summary.py) "
+            "using RepoCrawler to discover prompt documents across "
+            "repositories."
+        ),
+        "",
+        f"## Template Prompts ({local_repo})",
         "",
     ]
 
-    for repo_link, prompts in grouped.items():
+    for title, codeblock, path in template_prompts:
+        url = f"https://github.com/{local_repo}/blob/main/docs/{path.name}"
+        lines.append(f"### [{title}]({url})")
+        lines.append("")
+        lines.append("```")
+        lines.append(codeblock)
+        lines.append("```")
+        lines.append("")
+
+    for name, info in grouped.items():
+        repo_link = info["link"]
+        prompts = info["prompts"]
         lines.append(f"## {repo_link}")
         lines.append("")
+        lines.append("```")
         lines.append(
-            tabulate(prompts, headers=["Prompt", "Type"], tablefmt="github")
-        )  # noqa: E501
+            f"Use https://github.com/{local_repo} prompt docs as templates. "
+            f"Align {name}'s prompts in docs/prompts-*.md."
+        )
+        lines.append("```")
+        lines.append("")
+        lines.append(render_table(["Prompt", "Type"], prompts))
         lines.append("")
 
     if new_rows:
@@ -170,11 +196,7 @@ def main() -> None:
             [
                 "## Untriaged Prompt Docs",
                 "",
-                tabulate(
-                    new_rows,
-                    headers=["Repo", "Prompt", "Type"],
-                    tablefmt="github",
-                ),
+                render_table(["Repo", "Prompt", "Type"], new_rows),
                 "",
             ]
         )
