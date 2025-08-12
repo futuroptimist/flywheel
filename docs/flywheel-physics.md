@@ -26,9 +26,9 @@ Setting $r_i \to 0$ recovers the solid-disk formula, while the thin-rim limit
 
 ```mermaid
 graph LR
-    A[Solid disk] -->|I = \tfrac{1}{2} m r^2| B[Inertia]
-    C[Thick wall] -->|I = \tfrac{1}{2} m (r_o^2 + r_i^2)| B
-    D[Thin rim] -->|I = m r^2| B
+    A[Solid disk] -->|"I = 1/2 m r^2"| B[Inertia]
+    C[Thick wall] -->|"I = 1/2 m (ro^2 + ri^2)"| B
+    D[Thin rim] -->|"I = m r^2"| B
 ```
 
 Integrating the mass distribution shows where this expression comes from:
@@ -100,7 +100,7 @@ energy linearly.
 graph TD
     R[Radius r] -->|r^2| M[Mass m]
     M -->|m r^2| I[Inertia I]
-    I -->|\tfrac{1}{2}I\omega^2| E[Energy E]
+    I -->|"0.5 I ω^2"| E[Energy E]
 ```
 
 ## Angular momentum and precession
@@ -142,9 +142,9 @@ operate well below this bound.
 
 ```mermaid
 graph TD
-    R[Radius r = 50 mm] --> V[v = \omega r]
-    R --> S[\sigma \approx \rho r^2 \omega^2]
-    S --> W[\omega_{max} = \sqrt{\sigma_y/(\rho r^2)}]
+    R[Radius r = 50 mm] --> V[v = ω r]
+    R --> S["sigma ≈ rho r^2 ω^2"]
+    S --> W["omega max = sqrt(sigma_y/(rho r^2))"]
 ```
 
 ## Rim acceleration
@@ -193,7 +193,7 @@ Sizing a motor or crank becomes easier when both peak and average power are know
 
 ```mermaid
 graph TD
-    T[Torque T] -->|P = T \omega| Pwr[Power P]
+    T[Torque T] -->|"P = T ω"| Pwr[Power P]
 ```
 
 ## Spin-down from friction
@@ -274,8 +274,8 @@ This sets the maximum torque each belt can transmit.
 
 ```mermaid
 graph LR
-    A[Flywheel r\_1] -- belt --> B[Pulley r\_2]
-    B -- belt --> C[Flywheel r\_3]
+    A[Flywheel r₁] -- belt --> B[Pulley r₂]
+    B -- belt --> C[Flywheel r₃]
 ```
 
 As an example, a 200\,mm wheel driving a 50\,mm pulley quadruples the speed.
