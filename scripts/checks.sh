@@ -21,9 +21,9 @@ if [ "${RUN_SECURITY_ONLY}" = "1" ]; then
 fi
 
 # python checks
-flake8 . --exclude=.venv
-isort --check-only . --skip .venv
-black --check . --exclude ".venv/"
+flake8 . --exclude=.venv,node_modules
+isort --check-only . --skip .venv --skip node_modules
+black --check . --exclude ".venv/|node_modules/"
 
 # js checks
 if [ -f package.json ]; then

@@ -26,8 +26,8 @@ Setting $r_i \to 0$ recovers the solid-disk formula, while the thin-rim limit
 
 ```mermaid
 graph LR
-    A[Solid disk] -->|I = \tfrac{1}{2} m r^2| B[Inertia]
-    C[Thick wall] -->|I = \tfrac{1}{2} m (r_o^2 + r_i^2)| B
+    A[Solid disk] -->|I = 1/2 m r^2| B[Inertia]
+    C[Thick wall] -->|I = 1/2 m (r_o^2 + r_i^2)| B
     D[Thin rim] -->|I = m r^2| B
 ```
 
@@ -100,7 +100,7 @@ energy linearly.
 graph TD
     R[Radius r] -->|r^2| M[Mass m]
     M -->|m r^2| I[Inertia I]
-    I -->|\tfrac{1}{2}I\omega^2| E[Energy E]
+    I -->|1/2 I ω^2| E[Energy E]
 ```
 
 ## Angular momentum and precession
@@ -120,7 +120,7 @@ about $75^\circ/\text{s}$, which can twist the stand or mounts such as the one i
 
 ```mermaid
 graph TD
-    T[Torque \tau] --> P[Precession \Omega = \tau / L]
+    T[Torque τ] --> P[Precession Ω = τ / L]
 ```
 
 ## Rim speed and material limits
@@ -142,9 +142,9 @@ operate well below this bound.
 
 ```mermaid
 graph TD
-    R[Radius r = 50 mm] --> V[v = \omega r]
-    R --> S[\sigma \approx \rho r^2 \omega^2]
-    S --> W[\omega_{max} = \sqrt{\sigma_y/(\rho r^2)}]
+    R[Radius r = 50 mm] --> V[v = ω r]
+    R --> S[σ ≈ ρ r^2 ω^2]
+    S --> W[ω_max = √(σ_y/(ρ r^2))]
 ```
 
 ## Rim acceleration
@@ -167,7 +167,7 @@ at 3000\,rpm, so even small fixtures need secure retention.
 
 ```mermaid
 graph TD
-    m[mass m] -->|F = m r \omega^2| Fc[Centripetal force]
+    m[mass m] -->|F = m r ω^2| Fc[Centripetal force]
 ```
 
 ## Spin-up time
@@ -207,7 +207,7 @@ Sizing a motor or crank becomes easier when both peak and average power are know
 
 ```mermaid
 graph TD
-    T[Torque T] -->|P = T \omega| Pwr[Power P]
+    T[Torque T] -->|P = T ω| Pwr[Power P]
 ```
 
 ## Spin-down from friction
@@ -288,8 +288,8 @@ This sets the maximum torque each belt can transmit.
 
 ```mermaid
 graph LR
-    A[Flywheel r\_1] -- belt --> B[Pulley r\_2]
-    B -- belt --> C[Flywheel r\_3]
+    A[Flywheel r_1] -- belt --> B[Pulley r_2]
+    B -- belt --> C[Flywheel r_3]
 ```
 
 As an example, a 200\,mm wheel driving a 50\,mm pulley quadruples the speed.
