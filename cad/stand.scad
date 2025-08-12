@@ -6,7 +6,7 @@ bearing_thickness = 7; // mm
 base_length = 100; // mm
 base_width = 40;  // mm
 base_thickness = 8; // mm
-post_thickness = 10; // mm
+post_thickness = bearing_thickness + 3; // mm
 post_height = 40; // mm (distance from base to bearing center)
 
 module bearing_post(thk, width, height, base_thk, bore_d) {
