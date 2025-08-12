@@ -4,7 +4,8 @@ Source OpenSCAD files for the flywheel project.
 
 ## Available models
 
-- `stand.scad` – stand for a flywheel shaft using 608 bearings
+- `stand.scad` – stand for a flywheel shaft using 608 bearings; post thickness
+  derives from the bearing width
 - `shaft.scad` – straight shaft sized for 608 bearings (exposes `shaft()` module for easy
   customization; override `$fs` via the `resolution_fs` variable for finer meshes)
 - `adapter.scad` – clamp adapter that attaches the flywheel to the shaft with configurable
