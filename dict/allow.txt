@@ -194,4 +194,6 @@ Lockfile
 Untriaged
 TODOs
 whitespace
+stdout
+summarise
 EOF
