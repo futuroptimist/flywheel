@@ -9,7 +9,7 @@
 
 **flywheel** is a GitHub template for rapid project bootstrapping. It bundles linting, testing, documentation checks, and LLM-powered agents to keep your repo healthy.
 
-The canonical Codex automation prompt lives in [docs/prompts-codex.md](docs/prompts-codex.md).
+The canonical Codex automation prompt lives in [docs/prompts/codex/automation.md](docs/prompts/codex/automation.md).
 
 ## Usage
 
@@ -52,10 +52,10 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - [CLAUDE.md](CLAUDE.md) summarizing Anthropic guidance
 - [codex-custom-instructions.md](docs/codex-custom-instructions.md) for Codex rules
   and a [runbook.yml](runbook.yml) checklist for repo setup
-- Codex automation prompt in `docs/prompts-codex.md`
-- CAD update prompt in `docs/prompts-codex-cad.md`
-- Physics explainer prompt in `docs/prompts-codex-physics.md`
-- Cross-repo prompt index in `docs/prompt-docs-summary.md` listing `prompts-items.md`, `prompts-quests.md`, and `prompts-codex.md` across repos
+- Codex automation prompt in `docs/prompts/codex/automation.md`
+- CAD update prompt in `docs/prompts/codex/cad.md`
+- Physics explainer prompt in `docs/prompts/codex/physics.md`
+- Cross-repo prompt index in `docs/prompts/summary.md` listing `prompts-items.md`, `prompts-quests.md`, and `prompts-codex.md` across repos
 - Axel integration guide in `docs/axel-integration.md`
 - DSPACE synergy doc in `docs/dspace-integration.md`
 - Cross-repo roadmap in `docs/REPOS_ROADMAP.md`

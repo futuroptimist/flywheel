@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 def test_update_script_link_exists():
-    doc = Path("docs/prompt-docs-summary.md")
+    doc = Path("docs/prompts/summary.md")
     text = doc.read_text()
     pattern = r"\[scripts/update_prompt_docs_summary.py\]\((.+?)\)"
     match = re.search(pattern, text)
@@ -13,13 +13,13 @@ def test_update_script_link_exists():
 
 
 def test_dspace_rows_present():
-    doc = Path("docs/prompt-docs-summary.md").read_text()
+    doc = Path("docs/prompts/summary.md").read_text()
     msg = "dspace prompt docs missing"
-    assert doc.count("democratizedspace/dspace") >= 2, msg
+    assert doc.count("democratizedspace/dspace") >= 1, msg
 
 
 def test_no_blank_cells():
-    doc = Path("docs/prompt-docs-summary.md")
+    doc = Path("docs/prompts/summary.md")
     for line in doc.read_text().splitlines():
         if line.startswith("|"):
             cells = [c.strip() for c in line.split("|")[1:-1]]

@@ -107,15 +107,13 @@ def main() -> None:
 
     # Include prompt docs from the local repository (first entry)
     local_repo = repos[0].split("@")[0]
-    docs_dir = Path(__file__).resolve().parents[1] / "docs"
-    for path in sorted(docs_dir.glob("*prompt*.md")):
-        if path.name in {"prompt-docs-summary.md", "prompt-docs-todos.md"}:
-            continue
+    docs_root = Path(__file__).resolve().parents[1] / "docs"
+    prompts_dir = docs_root / "prompts" / "codex"
+    for path in sorted(prompts_dir.glob("*.md")):
         text = path.read_text()
         repo_link = f"**[{local_repo}](https://github.com/{local_repo})**"
-        base_url = (
-            f"https://github.com/{local_repo}/blob/main/docs/" f"{path.name}"
-        )  # noqa: E501
+        rel = Path("docs/prompts/codex") / path.name
+        base_url = f"https://github.com/{local_repo}/blob/main/{rel}"  # noqa: E501
         prompts = extract_prompts(text, base_url)
         for prompt_link, ptype in prompts:
             grouped[repo_link].append([prompt_link, ptype])
@@ -152,7 +150,7 @@ def main() -> None:
         "",
         "This index is auto-generated with "
         "[scripts/update_prompt_docs_summary.py]"
-        "(../scripts/update_prompt_docs_summary.py) "
+        "(../../scripts/update_prompt_docs_summary.py) "
         "using RepoCrawler to discover prompt documents across repositories.",
         "",
     ]
@@ -181,7 +179,7 @@ def main() -> None:
     else:
         lines.extend(["## Untriaged Prompt Docs", "", "None detected.", ""])
 
-    todo_file = docs_dir / "prompt-docs-todos.md"
+    todo_file = docs_root / "prompt-docs-todos.md"
     if todo_file.exists() and todo_file.read_text().strip():
         todo_content = todo_file.read_text().strip()
         lines.extend(

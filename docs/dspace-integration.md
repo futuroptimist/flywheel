@@ -28,5 +28,5 @@ an unchecked item from the September 1, 2025 changelog and fully implement it.
 Each run should tackle a different backlog task and then run
 `npm run test:pr` to verify code style and all tests. Reviewing this prompt helps
 align Flywheel's agents with DSPACE workflows when building shared features.
-Flywheel now provides complementary prompts like `prompts-codex-cad.md` and
-`prompts-codex-physics.md` for CAD updates and physics docs.
+Flywheel now provides complementary prompts like `prompts/codex/cad.md` and
+`prompts/codex/physics.md` for CAD updates and physics docs.

@@ -1,6 +1,6 @@
 ---
 title: 'Codex CI-Failure Fix Prompt'
-slug:  'prompts-codex-ci-fix'
+slug:  'codex-ci-fix'
 ---
 
 # OpenAI Codex CI-Failure Fix Prompt
@@ -56,7 +56,7 @@ Keep action items inside the postmortem so each regression has its own standalon
 ```
 
 ### Why this mirrors the existing pattern
-* Front-matter (`title`, `slug`) and the narrative structure match *prompts-codex.md* in **DSPACE** so that docs render consistently.
+* Front-matter (`title`, `slug`) and the narrative structure match *codex/automation.md* in **DSPACE** so that docs render consistently.
 * Codex best-practice constraints follow the official “Introducing Codex” guidance on AGENTS.md-driven projects.
 * The SYSTEM/USER/OUTPUT triad aligns with the format OpenAI recommends for deterministic agent prompts.
 
@@ -70,14 +70,14 @@ Keep action items inside the postmortem so each regression has its own standalon
 -| Docs | Changelog | Codex Prompts |
 +| Docs | Changelog | Codex Prompts | **CI-Fix Prompt** |
 @@
--| ✅  | ✅ | prompts-codex.md |
-+| ✅  | ✅ | prompts-codex.md | prompts-codex-ci-fix.md |
+-| ✅  | ✅ | prompts/codex/automation.md |
++| ✅  | ✅ | prompts/codex/automation.md | prompts/codex/ci-fix.md |
 ```
 ### b) Why a separate column?
 Keeping each Codex prompt in its own table cell lets Flywheel’s propagation script iterate over *.md prompt files programmatically (e.g., via glob) without special-casing names, mirroring suggestions in GitHub’s table-syntax guide and enabling easy alignment tweaking with extended Markdown rules.
 
 ## 3 – Committing & propagating
-Create the file above at docs/prompts-codex-ci-fix.md.
+Create the file above at docs/prompts/codex/ci-fix.md.
 
 Apply the table patch (or edit manually; don’t forget the pipe alignment).
 
@@ -85,7 +85,7 @@ Run pnpm docs:build (or your docs generator) to ensure no broken links.
 
 Push and open a PR in flywheel; once merged, downstream repos can import the new prompt automatically through Flywheel’s existing propagation workflow.
 
-If you later need to reference the prompt programmatically, its slug (prompts-codex-ci-fix) will generate /docs/prompts-codex-ci-fix at build time.
+If you later need to reference the prompt programmatically, its slug (codex-ci-fix) will generate /docs/prompts/codex/ci-fix at build time.
 
 ## 4 – Further reading & references
 OpenAI Codex overview and prompt design basics

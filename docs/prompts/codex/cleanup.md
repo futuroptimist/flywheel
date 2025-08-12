@@ -1,6 +1,6 @@
 ---
 title: 'Codex Prompt Cleanup'
-slug: 'prompts-codex-cleanup'
+slug: 'codex-cleanup'
 ---
 
 # Obsolete Prompt Cleanup
@@ -18,7 +18,7 @@ CONTEXT:
 - Scan `docs/` for prompts marked `Type: one-off` whose features exist in the codebase.
 - Delete those prompt sections or files.
 - Remove matching rows from `docs/prompt-docs-todos.md`.
-- Regenerate `docs/prompt-docs-summary.md` using `python scripts/update_prompt_docs_summary.py`.
+ - Regenerate `docs/prompts/summary.md` using `python scripts/update_prompt_docs_summary.py`.
 - Follow `AGENTS.md` for testing requirements.
 
 REQUEST:
