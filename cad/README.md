@@ -19,6 +19,7 @@ sudo apt-get install openscad
 - `adapter.scad` – clamp adapter that attaches the flywheel to the shaft with configurable
   bore clearance
 - `flywheel.scad` – cylindrical flywheel with center bore and optional shaft clearance
+  (override `$fs` via the `resolution_fs` variable for finer meshes)
 - `utils/spool_core_sleeve.scad` – parametric spool core sleeve library
   (see `examples/spool_core_sleeve_example.scad`; a pre-generated
   `sunlu55_to73_len60` sleeve lives in `stl/spool_core_sleeve/`)
