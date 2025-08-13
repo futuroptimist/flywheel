@@ -2,6 +2,14 @@
 
 Source OpenSCAD files for the flywheel project.
 
+## Prerequisites
+
+Install the OpenSCAD command-line tools before exporting meshes, for example:
+
+```bash
+sudo apt-get install openscad
+```
+
 ## Available models
 
 - `stand.scad` – stand for a flywheel shaft using 608 bearings; post thickness
