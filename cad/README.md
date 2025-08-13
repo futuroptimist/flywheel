@@ -44,3 +44,8 @@ parametric spool core sleeves, for example:
 ```bash
 PRESET=sunlu55_to73_len60 scripts/openscad_render_spool_core_sleeve.sh
 ```
+
+## Validation
+
+Run `python -m flywheel.fit` after regenerating meshes to verify that all parts
+still fit together.
