@@ -14,8 +14,13 @@ REPOS = [
 
 
 def clone_repo(repo: str, dest: Path) -> None:
+    """Clone ``repo`` into ``dest``, overwriting existing paths."""
+
     if dest.exists():
-        shutil.rmtree(dest)
+        if dest.is_dir():
+            shutil.rmtree(dest)
+        else:
+            dest.unlink()
     url = f"https://github.com/{repo}.git"
     subprocess.run(
         ["git", "clone", "--depth", "1", url, str(dest)],
