@@ -23,6 +23,7 @@ Diagnose a failed GitHub Actions run and produce a fix.
 
 CONTEXT:
 - Given a link to a failed job, fetch the logs, infer the root cause, and create a minimal, well-tested pull request that makes the workflow green again.
+- Consult existing outage entries in `/outages` for similar symptoms.
 - Constraints:
   * Do **not** break existing functionality.
   * Follow the repository’s style guidelines and commit-lint rules.
@@ -36,9 +37,10 @@ REQUEST:
 1. Read the failure logs and locate the first real error.
 2. Explain (in the pull-request body) *why* the failure occurred.
 3. Commit the necessary code, configuration, or documentation changes.
-4. Push to a branch named `codex/ci-fix/<short-description>`.
-5. Open a pull request that – once merged – makes the default branch CI-green.
-6. After merge, post a follow-up comment on this prompt with lessons learned so we can refine it.
+4. Record the incident in `outages/YYYY-MM-DD-<slug>.json` using `outages/schema.json`.
+5. Push to a branch named `codex/ci-fix/<short-description>`.
+6. Open a pull request that – once merged – makes the default branch CI-green.
+7. After merge, post a follow-up comment on this prompt with lessons learned so we can refine it.
 
 OUTPUT:
 A GitHub pull request URL. The PR must include:
@@ -53,6 +55,7 @@ After opening the pull request, create a new postmortem file under `docs/pms/` n
 - Impact
 - Actions to take
 Keep action items inside the postmortem so each regression has its own standalone record.
+Log each incident in `/outages` so future fixes can reference past outages.
 ```
 
 ### Why this mirrors the existing pattern

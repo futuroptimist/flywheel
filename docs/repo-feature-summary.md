@@ -46,18 +46,18 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ❌ | ❌ | ❌ |
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ❌ | ❌ | ❌ | ❌ |
 ## Policies & Automation
-| Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Last-Updated (UTC) |
-| ---- | ------- | -- | --------- | --------- | --------------- | ------------ | ---------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ | ✅ | 16 | ✅ | ✅ | ✅ | ✅ | 2025-08-11 |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-11 |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | 2025-08-11 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | 2025-08-11 |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | 2025-08-11 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✅ | ✅ | 8 | ✅ | ✅ | ✅ | ❌ | 2025-08-11 |
-| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-11 |
-| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-11 |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2025-08-11 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 5 | ✅ | ❌ | ❌ | ✅ | 2025-08-11 |
+| Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Outages | Last-Updated (UTC) |
+| ---- | ------- | -- | --------- | --------- | --------------- | ------------ | ---------- | ------- | ----------------- |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ | ✅ | 16 | ✅ | ✅ | ✅ | ✅ | ✅ | 2025-08-11 |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | ❌ | 2025-08-11 |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | ❌ | 2025-08-11 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | ❌ | 2025-08-11 |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | ❌ | 2025-08-11 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✅ | ✅ | 8 | ✅ | ✅ | ✅ | ❌ | ✅ | 2025-08-11 |
+| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | ❌ | 2025-08-11 |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | ❌ | 2025-08-11 |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | ❌ | 2025-08-11 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 5 | ✅ | ❌ | ❌ | ✅ | ❌ | 2025-08-11 |
 
 ## Dark & Bright Pattern Scan
 | Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |
@@ -75,5 +75,6 @@ This table tracks which flywheel features each related repository has adopted.
 
 Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip.
 Coverage percentages are parsed from their badges where available. Codecov shows ✅ when a Codecov config or badge is present. Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses.
+The Outages column notes whether the repository keeps a structured incident log under `/outages`.
 The commit column shows the short SHA of the latest default branch commit at crawl time. The Trunk column indicates whether CI is green for that commit. Dark Patterns and Bright Patterns list counts of suspicious or positive code snippets detected.
 Last-Updated (UTC) records the date of the commit used for each row.
