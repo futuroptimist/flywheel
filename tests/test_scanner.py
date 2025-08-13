@@ -17,6 +17,20 @@ def test_clone_repo(monkeypatch, tmp_path):
     assert calls[0][:4] == ["git", "clone", "--depth", "1"]
 
 
+def test_clone_repo_overwrites_file(monkeypatch, tmp_path):
+    dest = tmp_path / "dest"
+    dest.write_text("x")
+    calls = []
+
+    def fake_run(cmd, check):
+        calls.append(cmd)
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    scanner.clone_repo("foo/bar", dest)
+    assert calls[0][:4] == ["git", "clone", "--depth", "1"]
+    assert not dest.exists()
+
+
 def test_analyze_repo(tmp_path):
     (tmp_path / "a.txt").write_text("hi")
     (tmp_path / "b.md").write_text("yo")
