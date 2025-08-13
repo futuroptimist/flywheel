@@ -2,6 +2,9 @@ import { test, expect } from '@playwright/test';
 
 // Helper to get available model names from the page context
 async function getModelOptions(page) {
+  await page.waitForFunction(() =>
+    document.querySelectorAll('#model-select option').length > 0,
+  );
   return page.$$eval('#model-select option', opts => opts.map(o => o.value));
 }
 
