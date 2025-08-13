@@ -313,10 +313,67 @@ def test_summary_column_order(monkeypatch):
     assert "`abcdef0`" in row
 
 
-def test_patch_coverage_svg():
+def test_patch_coverage_api_value_used():
     crawler = rc.RepoCrawler([], session=DummySession({}))
     pct = crawler._patch_coverage_from_codecov("foo/bar", "main")
+    assert pct == 73.0
+
+
+def test_patch_coverage_falls_back_to_badge():
+    class NoDiffSession:
+        def __init__(self):
+            self.headers = {}
+
+        def get(self, url, **kwargs):
+            class Resp:
+                def __init__(self, text, status):
+                    self.text = text
+                    self.status_code = status
+
+                def json(self):
+                    import json
+
+                    return json.loads(self.text)
+
+            if url.startswith("https://codecov.io/api/gh/"):
+                return Resp('{"commit": {"totals": {}}}', 200)
+            if url.startswith("https://img.shields.io/codecov"):
+                return Resp("<svg>95%</svg>", 200)
+            return Resp("", 404)
+
+    crawler = rc.RepoCrawler([], session=NoDiffSession())
+    pct = crawler._patch_coverage_from_codecov("foo/bar", "main")
     assert pct == 95.0
+
+
+def test_patch_coverage_badge_exception(monkeypatch):
+    class NoDiffSession:
+        def __init__(self):
+            self.headers = {}
+
+        def get(self, url, **kwargs):
+            class Resp:
+                def __init__(self, text, status):
+                    self.text = text
+                    self.status_code = status
+
+                def json(self):
+                    import json
+
+                    return json.loads(self.text)
+
+            if url.startswith("https://codecov.io/api/gh/"):
+                return Resp('{"commit": {"totals": {}}}', 200)
+            return Resp("", 404)
+
+    crawler = rc.RepoCrawler([], session=NoDiffSession())
+
+    def boom(*_args, **_kw):
+        raise ValueError("boom")
+
+    monkeypatch.setattr(crawler, "_badge_patch_percent", boom)
+    pct = crawler._patch_coverage_from_codecov("foo/bar", "main")
+    assert pct is None
 
 
 def test_generate_summary_with_patch(monkeypatch):
