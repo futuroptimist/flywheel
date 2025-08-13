@@ -31,7 +31,7 @@ jobs:
         if: matrix.language == 'javascript'
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
       - if: matrix.language == 'javascript' && hashFiles('package.json') != ''
         run: |
           npm install --no-audit --no-fund

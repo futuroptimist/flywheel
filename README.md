@@ -19,6 +19,8 @@ The canonical Codex automation prompt lives in [docs/prompts/codex/automation.md
 
 ## Testing
 
+Ensure you have Node.js 20+ installed.
+
 Run the full test suite before committing:
 
 ```bash
