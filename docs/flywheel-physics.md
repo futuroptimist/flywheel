@@ -130,7 +130,8 @@ $$v = \omega r$$
 where $r$ is the wheel radius.  Using the CAD value $r=50\,\text{mm}$ and
 3000\,rpm ($\omega \approx 314\,\text{rad/s}$) gives $v \approx 16\,\text{m/s}$.  Plastic
 parts have a maximum safe speed set by hoop stress.  Approximating the wheel as
-a thin rim,
+a thin rim, balancing the centrifugal force $\rho A r \omega^2$ on a small
+segment with the tensile stress $\sigma A$ it supports gives
 $$\sigma \approx \rho r^2 \omega^2$$
 with material density $\rho$ and yield strength $\sigma_y$.  Solving for the
 upper speed limit,
