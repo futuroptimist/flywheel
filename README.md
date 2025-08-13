@@ -118,6 +118,9 @@ pipx run flywheel init . --language python --save-dev --yes
 
 ### Generating Codex prompts
 
+See [docs/prompts/codex/automation.md](docs/prompts/codex/automation.md) for the
+canonical automation prompt.
+
 Invoke the prompt agent to get repo-aware suggestions:
 
 ```bash
