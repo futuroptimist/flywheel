@@ -12,9 +12,12 @@ Source OpenSCAD files for the flywheel project.
   bore clearance
 - `flywheel.scad` – cylindrical flywheel with center bore and optional shaft clearance
 - `utils/spool_core_sleeve.scad` – parametric spool core sleeve library
-  (see `examples/spool_core_sleeve_example.scad`)
+  (see `examples/spool_core_sleeve_example.scad`; a pre-generated
+  `sunlu55_to73_len60` sleeve lives in `stl/spool_core_sleeve/`)
 - `examples/spool_core_sleeve_example.scad` – demo spool core sleeve; the
-  corresponding OBJ lives in `webapp/static/models/examples/`
+  corresponding OBJ lives in `webapp/static/models/examples/` and the
+  pre-generated sleeve's OBJ is at
+  `webapp/static/models/spool_core_sleeve/sunlu55_to73_len60.obj`
 
 ## Regenerating meshes
 
