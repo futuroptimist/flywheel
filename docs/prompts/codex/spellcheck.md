@@ -17,14 +17,16 @@ Keep Markdown documentation free of spelling errors.
 
 CONTEXT:
 - Run `pre-commit run codespell --files $(git ls-files '*.md')` to spell-check Markdown.
-- Add unknown but legitimate words to [dict/allow.txt](../dict/allow.txt).
-- Follow [AGENTS.md](../AGENTS.md) and [README.md](../README.md); ensure these commands succeed:
+- Add unknown but legitimate words to [dict/allow.txt](../../../dict/allow.txt).
+- Follow [AGENTS.md](../../../AGENTS.md) and [README.md](../../../README.md); ensure these commands
+  succeed:
   - `pre-commit run --all-files`
   - `pytest -q`
   - `npm run test:ci`
   - `python -m flywheel.fit`
   - `bash scripts/checks.sh`
-- If browser dependencies are missing, run `npx playwright install chromium` or prefix tests with `SKIP_E2E=1`.
+- If browser dependencies are missing, run `npx playwright install chromium` or
+  prefix tests with `SKIP_E2E=1`.
 
 REQUEST:
 1. Run the spellcheck command and inspect the results.
