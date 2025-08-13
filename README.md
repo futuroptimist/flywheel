@@ -53,7 +53,7 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - [CLAUDE.md](CLAUDE.md) summarizing Anthropic guidance
 - [codex-custom-instructions.md](docs/codex-custom-instructions.md) for Codex rules
   and a [runbook.yml](runbook.yml) checklist for repo setup
-- Codex automation prompt in `docs/prompts/codex/automation.md`
+- [Codex automation prompt](docs/prompts/codex/automation.md)
 - CAD update prompt in `docs/prompts/codex/cad.md`
 - Physics explainer prompt in `docs/prompts/codex/physics.md`
 - Cross-repo prompt index in `docs/prompts/summary.md` listing `prompts-items.md`, `prompts-quests.md`, and `prompts-codex.md` across repos
