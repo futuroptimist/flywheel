@@ -114,11 +114,12 @@ def main() -> None:
         repo_link = f"**[{local_repo}](https://github.com/{local_repo})**"
         rel = Path("docs/prompts/codex") / path.name
         base_url = f"https://github.com/{local_repo}/blob/main/{rel}"  # noqa: E501
+        path_link = f"[{rel}]({base_url})"
         prompts = extract_prompts(text, base_url)
         for prompt_link, ptype in prompts:
-            grouped[repo_link].append([prompt_link, ptype])
+            grouped[repo_link].append([path_link, prompt_link, ptype])
             if prompt_link not in existing_docs:
-                new_rows.append([repo_link, prompt_link, ptype])
+                new_rows.append([repo_link, path_link, prompt_link, ptype])
 
     # Add prompt docs from remote repositories (skip local repo)
     for spec in repos[1:]:
@@ -139,11 +140,19 @@ def main() -> None:
                 base_url = (
                     f"https://github.com/{name}/blob/{branch}/" f"{path}"
                 )  # noqa: E501
+                path_link = f"[{path}]({base_url})"
                 prompts = extract_prompts(text, base_url)
                 for prompt_link, ptype in prompts:
-                    grouped[repo_link].append([prompt_link, ptype])
+                    grouped[repo_link].append([path_link, prompt_link, ptype])
                     if prompt_link not in existing_docs:
-                        new_rows.append([repo_link, prompt_link, ptype])
+                        new_rows.append(
+                            [
+                                repo_link,
+                                path_link,
+                                prompt_link,
+                                ptype,
+                            ]
+                        )
 
     lines = [
         "# Prompt Docs Summary",
@@ -159,7 +168,11 @@ def main() -> None:
         lines.append(f"## {repo_link}")
         lines.append("")
         lines.append(
-            tabulate(prompts, headers=["Prompt", "Type"], tablefmt="github")
+            tabulate(
+                prompts,
+                headers=["Path", "Prompt", "Type"],
+                tablefmt="github",
+            )
         )  # noqa: E501
         lines.append("")
 
@@ -170,7 +183,7 @@ def main() -> None:
                 "",
                 tabulate(
                     new_rows,
-                    headers=["Repo", "Prompt", "Type"],
+                    headers=["Repo", "Path", "Prompt", "Type"],
                     tablefmt="github",
                 ),
                 "",
