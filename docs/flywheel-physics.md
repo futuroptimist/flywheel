@@ -145,8 +145,10 @@ $$E = \tfrac{1}{2} m r^2 \omega^2$$
 shows that material strength caps the stored energy at
 $$E_{max} = \tfrac{\sigma_y}{2\rho} m$$
 independent of radius. For the CAD wheel in [`cad/flywheel.scad`](../cad/flywheel.scad)
-with $m \approx 0.19\,\text{kg}$, PLA allows roughly $E_{max} \approx 4.5\,\text{kJ}$—
-far above the $12\,\text{J}$ stored at 3000\,rpm.
+with $m \approx 0.19\,\text{kg}$, PLA allows roughly $E_{max} \approx 4.5\,\text{kJ}$
+(about 4.5 kilojoules)—far above the $12\,\text{J}$ stored at 3000\,rpm.  Real prints
+fail sooner from layer adhesion and voids, so treat this limit as a best-case upper
+bound.
 
 ```mermaid
 graph TD

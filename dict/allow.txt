@@ -142,6 +142,7 @@ yyyy
 LTS
 MPa
 rpm
+kJ
 pytest
 Futuroptimist
 composable
