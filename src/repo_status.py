@@ -20,8 +20,12 @@ GITHUB_RE = re.compile(
 
 
 def status_to_emoji(conclusion: str | None) -> str:
-    """Return an emoji representing the run conclusion."""
-    if conclusion == "success":
+    """Return an emoji representing the workflow conclusion.
+
+    GitHub may mark runs as ``neutral`` or ``skipped`` when no jobs execute.
+    Treat those as successful for status reporting purposes.
+    """
+    if conclusion in {"success", "neutral", "skipped"}:
         return "✅"
     if conclusion is None:
         return "❓"

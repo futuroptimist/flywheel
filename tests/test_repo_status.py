@@ -7,6 +7,8 @@ import src.repo_status as rs
 
 def test_status_to_emoji():
     assert rs.status_to_emoji("success") == "✅"
+    assert rs.status_to_emoji("neutral") == "✅"
+    assert rs.status_to_emoji("skipped") == "✅"
     assert rs.status_to_emoji("failure") == "❌"
     assert rs.status_to_emoji(None) == "❓"
 
