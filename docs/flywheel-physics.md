@@ -187,6 +187,19 @@ Starting from rest, the time to reach speed $\omega$ is therefore
 
 $$t = \frac{\omega}{\alpha} = \frac{I\omega}{T}$$
 
+Rearranging for torque gives
+
+$$T = \frac{I\omega}{t}$$
+
+Spinning the CAD wheel to 3000\,rpm in 0.5\,s therefore needs roughly
+$$T \approx \frac{2.5\times10^{-4} \times 314}{0.5} \approx 0.16\,\text{N·m}.$$
+
+```mermaid
+graph TD
+    Tq[Torque T] -->|α = T / I| Acc[Angular accel α]
+    Acc -->|ω = α t| Spd[Speed ω]
+```
+
 Using the same CAD dimensions as above ($I \approx 2.5\times10^{-4}\,\text{kg·m}^2$),
 a modest $0.5\,\text{N·m}$ motor torque spins the wheel to
 3000\,rpm ($\omega \approx 314\,\text{rad/s}$) in about $t \approx 0.16\,\text{s}$.
