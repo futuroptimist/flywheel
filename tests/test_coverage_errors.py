@@ -72,7 +72,7 @@ def test_patch_coverage_compare_on_error(monkeypatch):
 
     crawler = RepoCrawler([], session=Sess())
     pct = crawler._patch_coverage_from_codecov("foo/bar", "main")
-    assert pct is None
+    assert pct == 77.0
 
 
 def test_patch_coverage_compare_request_exception(monkeypatch):

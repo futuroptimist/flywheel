@@ -16,6 +16,11 @@ name contains common keywords like `ci`, `test`, `lint`, `build`, `docs`, or
 keywords in at least one workflow filename so the feature summary reflects your
 setup accurately.
 
+## Patch coverage reporting
+`flywheel crawl` records Codecov patch coverage even when it falls below the
+90% threshold. The summary shows a ❌ with the percentage for low coverage
+instead of omitting the value.
+
 ## CI best practices
 | Scenario | Recommended approach |
 |----------|---------------------|
