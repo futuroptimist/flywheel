@@ -20,6 +20,8 @@ Use this doc when adding automation to new repositories.
 
 ## Testing
 
+Ensure you have Node.js 20+ installed.
+
 Run the full test suite before committing:
 
 ```bash
