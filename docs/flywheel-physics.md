@@ -111,6 +111,12 @@ which resists changes in orientation. For the CAD dimensions above
 ($I \approx 2.5\times10^{-4}\,\text{kg·m}^2$) spinning at 3000\,rpm
 ($\omega \approx 314\,\text{rad/s}$) gives $L \approx 7.8\times10^{-2}\,\text{kg·m}^2/\text{s}$.
 
+Torque is the time derivative of angular momentum,
+
+$$\tau = \frac{\mathrm{d}L}{\mathrm{d}t}$$
+
+so a force applied perpendicular to the spin axis changes the direction of $L$ rather than its magnitude.
+
 An off-axis torque $\tau$ causes the spin axis to <!-- codespell:ignore precess -->precess at
 $$\Omega = \frac{\tau}{L}$$
 Perpendicular disturbances of $0.1\,\text{N·m}$ therefore produce
