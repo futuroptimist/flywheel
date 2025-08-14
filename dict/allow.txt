@@ -144,6 +144,9 @@ yyyy
 LTS
 MPa
 rpm
+kJ
+kilojoule
+kilojoules
 pytest
 Futuroptimist
 composable
@@ -192,7 +195,6 @@ precession
 mathrm
 precess
 circ
-
 Lockfile
 Untriaged
 TODOs

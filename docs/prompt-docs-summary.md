@@ -237,10 +237,4 @@ This index is auto-generated with [scripts/update_prompt_docs_summary.py](../../
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)         | [docs/prompts-codex-docs.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-docs.md)                                                | [Codex Documentation Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-docs.md#codex-documentation-prompt)                                                                     | unknown   |
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)         | [docs/prompts-codex.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex.md)                                                          | [Codex Automation Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex.md#codex-automation-prompt)                                                                                | unknown   |
 
-## TODO Prompts for Other Repos
-
-| Repo | Suggested Prompt | Type | Notes |
-|------|-----------------|------|-------|
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | Add Codex security review prompt | evergreen | TODO: provide security checklist similar to Flywheel's |
-
-_Updated automatically: 2025-08-13_
+_Updated automatically: 2025-08-14_

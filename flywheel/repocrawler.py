@@ -516,7 +516,7 @@ class RepoCrawler:
                     .get("totals", {})
                     .get("coverage_diff")  # noqa: E501
                 )
-                if diff is not None and diff >= 90:
+                if diff is not None:
                     return float(diff)
             except Exception:
                 pass

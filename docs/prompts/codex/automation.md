@@ -10,7 +10,8 @@ This document stores the baseline prompt used when instructing OpenAI Codex (or
 compatible agents) to contribute to the Flywheel repository. Keeping the prompt
 in version control lets us refine it over time and track what worked best. It
 serves as the canonical prompt that other repositories can copy to
-`docs/prompts/codex/automation.md` for consistent automation.
+`docs/prompts/codex/automation.md` for consistent automation. For propagation
+instructions, see [propagate.md](propagate.md).
 
 ```
 SYSTEM:
@@ -75,39 +76,11 @@ OUTPUT
 Return **only** the patch (diff) required.
 ```
 
-### 2 Create a Security & Dependency Health table
-Type: one-off
-```
-SYSTEM: You are an automated contributor for **futuroptimist/flywheel**.
-
-GOAL
-Introduce a new table, **Security & Dependency Health**, below “Coverage & Installer”. Columns:
-
-| Repo | Dependabot | Secret-Scanning | CodeQL | Snyk (badge) |
-
-FILES OF INTEREST
-- docs/repo-feature-summary.md
-- scripts/security-scan.mjs (new helper, can call GitHub API)
-- .github/workflows/security-scan.yml (new)
-
-REQUIREMENTS
-1. Detect presence of `.github/dependabot.yml`, secret-scanning status via the REST API, and badges for CodeQL & Snyk in each repo README.
-2. Count ✔️/❌ per repo and render the table.
-3. Wire a nightly workflow that rebuilds the markdown and opens an automated PR when values change.
-4. Maintain > 90 % test coverage for the new script.
-
-ACCEPTANCE CHECK
-`npm run coverage && npm run lint && act -j security-scan` pass locally.
-
-OUTPUT
-A PR adding the new table, scan script and workflow.
-```
-
 ### How to choose a prompt
 
 | When you want to…                        | Use prompt |
 |------------------------------------------|-----------|
-| Add new insights (metrics, health scans) | 1 or 2    |
+| Add new insights (metrics, health scans) | 1         |
 
 ### Notes for human contributors
 

@@ -10,6 +10,7 @@
 **flywheel** is a GitHub template for rapid project bootstrapping. It bundles linting, testing, documentation checks, and LLM-powered agents to keep your repo healthy.
 
 The canonical Codex automation prompt lives in [docs/prompts/codex/automation.md](docs/prompts/codex/automation.md).
+Use this doc when adding automation to new repositories.
 
 ## Usage
 
@@ -18,6 +19,8 @@ The canonical Codex automation prompt lives in [docs/prompts/codex/automation.md
 3. Commit and push to start the flywheel.
 
 ## Testing
+
+Ensure you have Node.js 20+ installed.
 
 Run the full test suite before committing:
 
@@ -52,7 +55,7 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - [CLAUDE.md](CLAUDE.md) summarizing Anthropic guidance
 - [codex-custom-instructions.md](docs/codex-custom-instructions.md) for Codex rules
   and a [runbook.yml](runbook.yml) checklist for repo setup
-- Codex automation prompt in `docs/prompts/codex/automation.md`
+- [Codex automation prompt](docs/prompts/codex/automation.md)
 - CAD update prompt in `docs/prompts/codex/cad.md`
 - Physics explainer prompt in `docs/prompts/codex/physics.md`
 - Cross-repo prompt index in `docs/prompts/summary.md` listing `prompts-items.md`, `prompts-quests.md`, and `prompts-codex.md` across repos
@@ -154,7 +157,8 @@ python -m flywheel.agents.scanner
 ```
 
 Reports are written to `reports/`. Each report lists only top-level files and ignores
-directories.
+directories. Existing paths under the scanner's work area are removed before each
+clone so reports reflect a fresh snapshot.
 
 ### Viewing the 3D flywheel
 
@@ -223,8 +227,8 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [Axel](https://github.com/futuroptimist/axel) – personal LLM accelerator that manages goals across your repositories. See `docs/axel-integration.md` for how to pair it with flywheel.
 - ✅ [Gabriel](https://github.com/futuroptimist/gabriel) – "guardian angel" LLM focused on security. Its `docs/FLYWHEEL_RISK_MODEL.md` discusses how flywheel-style automation changes your threat model. See `docs/gabriel-integration.md` for ways these repositories will share tooling and evolve together.
 - ✅ [Futuroptimist](https://github.com/futuroptimist/futuroptimist) – YouTube scripts and automation experiments. See `docs/futuroptimist-integration.md` for lessons this repo borrows and improvement ideas.
-- ❌ [token.place](https://github.com/futuroptimist/token.place) – stateless faucet for LLM inference. See `docs/tokenplace-features.md` and related docs.
-- ✅ [DSPACE](https://github.com/democratizedspace/dspace) – offline-first idle simulation with maker quests. See `docs/dspace-integration.md` for quest ideas.
+- ✅ [token.place](https://github.com/futuroptimist/token.place) – stateless faucet for LLM inference. See `docs/tokenplace-features.md` and related docs.
+- ❌ [DSPACE](https://github.com/democratizedspace/dspace) – offline-first idle simulation with maker quests. See `docs/dspace-integration.md` for quest ideas.
 - ✅ [f2clipboard](https://github.com/futuroptimist/f2clipboard) – bulk-copy utility exploring macro workflows. See `docs/f2clipboard-integration.md`.
 - ✅ [Sigma](https://github.com/futuroptimist/sigma) – ESP32 "AI pin" hardware. See `docs/sigma-integration.md`.
 - ✅ [sugarkube](https://github.com/futuroptimist/sugarkube) – accessible k3s platform for Raspberry Pi devices with off-grid solar. See `docs/sugarkube-integration.md`.

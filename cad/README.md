@@ -2,6 +2,14 @@
 
 Source OpenSCAD files for the flywheel project.
 
+## Prerequisites
+
+Install the OpenSCAD command-line tools before exporting meshes, for example:
+
+```bash
+sudo apt-get install openscad
+```
+
 ## Available models
 
 - `stand.scad` – stand for a flywheel shaft using 608 bearings; post thickness
@@ -11,10 +19,14 @@ Source OpenSCAD files for the flywheel project.
 - `adapter.scad` – clamp adapter that attaches the flywheel to the shaft with configurable
   bore clearance
 - `flywheel.scad` – cylindrical flywheel with center bore and optional shaft clearance
+  (override `$fs` via the `resolution_fs` variable for finer meshes)
 - `utils/spool_core_sleeve.scad` – parametric spool core sleeve library
-  (see `examples/spool_core_sleeve_example.scad`)
+  (see `examples/spool_core_sleeve_example.scad`; a pre-generated
+  `sunlu55_to73_len60` sleeve lives in `stl/spool_core_sleeve/`)
 - `examples/spool_core_sleeve_example.scad` – demo spool core sleeve; the
-  corresponding OBJ lives in `webapp/static/models/examples/`
+  corresponding OBJ lives in `webapp/static/models/examples/` and the
+  pre-generated sleeve's OBJ is at
+  `webapp/static/models/spool_core_sleeve/sunlu55_to73_len60.obj`
 
 ## Regenerating meshes
 
@@ -36,3 +48,8 @@ parametric spool core sleeves, for example:
 ```bash
 PRESET=sunlu55_to73_len60 scripts/openscad_render_spool_core_sleeve.sh
 ```
+
+## Validation
+
+Run `python -m flywheel.fit` after regenerating meshes to verify that all parts
+still fit together.

@@ -7,6 +7,7 @@
 - Demonstrates offline-friendly patterns for storing quest data.
 - Provides a concrete target for the `quest-generator` script included here.
 - Shares the same CI and documentation style as Flywheel for frictionless contributions.
+- Maintains a structured outage catalog under `/outages` so fixes propagate across repositories.
 
 ## Quick start
 

@@ -111,6 +111,12 @@ which resists changes in orientation. For the CAD dimensions above
 ($I \approx 2.5\times10^{-4}\,\text{kg·m}^2$) spinning at 3000\,rpm
 ($\omega \approx 314\,\text{rad/s}$) gives $L \approx 7.8\times10^{-2}\,\text{kg·m}^2/\text{s}$.
 
+Torque is the time derivative of angular momentum,
+
+$$\tau = \frac{\mathrm{d}L}{\mathrm{d}t}$$
+
+so a force applied perpendicular to the spin axis changes the direction of $L$ rather than its magnitude.
+
 An off-axis torque $\tau$ causes the spin axis to <!-- codespell:ignore precess -->precess at
 $$\Omega = \frac{\tau}{L}$$
 Perpendicular disturbances of $0.1\,\text{N·m}$ therefore produce
@@ -130,7 +136,8 @@ $$v = \omega r$$
 where $r$ is the wheel radius.  Using the CAD value $r=50\,\text{mm}$ and
 3000\,rpm ($\omega \approx 314\,\text{rad/s}$) gives $v \approx 16\,\text{m/s}$.  Plastic
 parts have a maximum safe speed set by hoop stress.  Approximating the wheel as
-a thin rim,
+a thin rim, balancing the centrifugal force $\rho A r \omega^2$ on a small
+segment with the tensile stress $\sigma A$ it supports gives
 $$\sigma \approx \rho r^2 \omega^2$$
 with material density $\rho$ and yield strength $\sigma_y$.  Solving for the
 upper speed limit,
@@ -139,6 +146,16 @@ For PLA ($\rho \approx 1.25\,\text{g/cm}^3$, $\sigma_y \approx 60\,\text{MPa}$) 
 same radius, $\omega_{max} \approx 4.4\times10^3\,\text{rad/s}$ or about
 42\,000\,rpm.  Designers typically apply a safety factor of at least two and
 operate well below this bound.
+
+Substituting this limit into the thin-rim energy expression
+$$E = \tfrac{1}{2} m r^2 \omega^2$$
+shows that material strength caps the stored energy at
+$$E_{max} = \tfrac{\sigma_y}{2\rho} m$$
+independent of radius. For the CAD wheel in [`cad/flywheel.scad`](../cad/flywheel.scad)
+with $m \approx 0.19\,\text{kg}$, PLA allows roughly $E_{max} \approx 4.5\,\text{kJ}$
+(about 4.5 kilojoules)—far above the $12\,\text{J}$ stored at 3000\,rpm.  Real prints
+fail sooner from layer adhesion and voids, so treat this limit as a best-case upper
+bound.
 
 ```mermaid
 graph TD
@@ -179,6 +196,19 @@ $$\alpha = \frac{T}{I}$$
 Starting from rest, the time to reach speed $\omega$ is therefore
 
 $$t = \frac{\omega}{\alpha} = \frac{I\omega}{T}$$
+
+Rearranging for torque gives
+
+$$T = \frac{I\omega}{t}$$
+
+Spinning the CAD wheel to 3000\,rpm in 0.5\,s therefore needs roughly
+$$T \approx \frac{2.5\times10^{-4} \times 314}{0.5} \approx 0.16\,\text{N·m}.$$
+
+```mermaid
+graph TD
+    Tq[Torque T] -->|α = T / I| Acc[Angular accel α]
+    Acc -->|ω = α t| Spd[Speed ω]
+```
 
 Using the same CAD dimensions as above ($I \approx 2.5\times10^{-4}\,\text{kg·m}^2$),
 a modest $0.5\,\text{N·m}$ motor torque spins the wheel to
