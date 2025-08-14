@@ -124,6 +124,15 @@ $$\Omega \approx \frac{0.1}{7.8\times10^{-2}} \approx 1.3\,\text{rad/s}$$
 about $75^\circ/\text{s}$, which can twist the stand or mounts such as the one in
 [`cad/stand.scad`](../cad/stand.scad).
 
+A horizontal wheel on a single support feels gravity acting at a lever arm $d$.
+The resulting torque $\tau = m g d$ yields a precession rate
+$$\Omega = \frac{m g d}{I \omega}.$$
+Using the example mass $m \approx 0.19\,\text{kg}$ and the stand's `post_height = 40`\,mm in
+[`cad/stand.scad`](../cad/stand.scad) gives $d = 0.04\,\text{m}$, so gravity supplies
+$$\tau \approx 7.5\times10^{-2}\,\text{N·m}.$$
+At 3000\,rpm this leads to $\Omega \approx 0.96\,\text{rad/s}$ ($\approx 55^\circ/\text{s}$), so
+the wheel slowly noses downward unless the support resists.
+
 ```mermaid
 graph TD
     T[Torque τ] --> P[Precession Ω = τ / L]
