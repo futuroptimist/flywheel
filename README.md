@@ -17,6 +17,7 @@ Use this doc when adding automation to new repositories.
 1. **Use as a template** on GitHub.
 2. Clone your new repo and run `./scripts/setup.sh YOURNAME NEWREPO` to personalize placeholders.
 3. Commit and push to start the flywheel.
+4. Review the [Codex automation prompt](docs/prompts/codex/automation.md) for baseline tasks.
 
 ## Testing
 
