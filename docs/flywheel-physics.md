@@ -52,6 +52,12 @@ with angular velocity $\omega$ in radians per second.
 Expressed in revolutions per minute (rpm) $n$,
 $$E = \tfrac{1}{2} I \left(\tfrac{2\pi n}{60}\right)^2 = \tfrac{\pi^2 I n^2}{1800}$$
 
+Solving for speed gives
+$$n = \sqrt{\frac{1800 E}{\pi^2 I}}$$
+which helps size a wheel for a target energy. With
+\(I \approx 2.5\times10^{-4}\,\text{kg·m}^2\),
+storing \(100\,\text{J}\) would require \(n \approx 8.5\times10^3\,\text{rpm}\).
+
 ### Example using CAD dimensions
 
 The stock CAD model in [`cad/flywheel.scad`](../cad/flywheel.scad) sets
@@ -142,9 +148,14 @@ graph TD
 
 The rim's tangential velocity is
 $$v = \omega r$$
-where $r$ is the wheel radius.  Using the CAD value $r=50\,\text{mm}$ and
-3000\,rpm ($\omega \approx 314\,\text{rad/s}$) gives $v \approx 16\,\text{m/s}$.  Plastic
-parts have a maximum safe speed set by hoop stress.  Approximating the wheel as
+where $r$ is the wheel radius. Expressed in revolutions per minute $n$ and
+diameter $D = 2r$,
+$$v = \frac{\pi D n}{60},$$
+linking tip speed directly to the `diameter` parameter in
+[`cad/flywheel.scad`](../cad/flywheel.scad). Using the CAD value
+$r=50\,\text{mm}$ and 3000\,rpm ($\omega \approx 314\,\text{rad/s}$)
+gives $v \approx 16\,\text{m/s}$. Plastic parts have a maximum safe speed set by
+hoop stress. Approximating the wheel as
 a thin rim, balancing the centrifugal force $\rho A r \omega^2$ on a small
 segment with the tensile stress $\sigma A$ it supports gives
 $$\sigma \approx \rho r^2 \omega^2$$
