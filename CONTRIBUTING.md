@@ -22,5 +22,6 @@ pre-commit run --all-files
 
 - Add tests for new functionality when possible.
 - Update documentation in `README.md` or `docs/` as needed.
+- Ensure `.obj` model files end with a newline so pre-commit passes.
 - By submitting a PR you agree to license your work under the MIT license.
 - Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md).

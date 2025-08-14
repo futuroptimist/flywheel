@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-14-obj-newline",
+  "date": "2025-08-14",
+  "component": "pre-commit",
+  "rootCause": "OBJ model webapp/static/models/spool_core_sleeve/sunlu55_to73_len60.obj lacked trailing newline causing end-of-file-fixer failure",
+  "resolution": "Added trailing newline and test to enforce OBJ file hygiene",
+  "references": []
+}
