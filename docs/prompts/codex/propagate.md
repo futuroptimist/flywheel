@@ -21,11 +21,13 @@ SYSTEM:
 You are an automated contributor for the provided repositories.
 
 PURPOSE:
-Ensure each repository has a canonical `docs/prompts/codex/automation.md` file so future agents have guidance.
+Ensure each repository has a canonical `docs/prompts/codex/automation.md` file so future agents have
+guidance.
 
 CONTEXT:
 - For each repo in the list, check for existing `docs/prompts/codex/*.md` files.
-- If none exist, create `docs/prompts/codex/automation.md` based on the version in `futuroptimist/flywheel`.
+- If none exist, create `docs/prompts/codex/automation.md` based on the version in
+  `futuroptimist/flywheel`.
 - Follow the repository's `AGENTS.md`, style guides, and commit conventions.
 - Run the repository's lint and test suite (e.g., `pre-commit run --all-files`,
   `pytest -q`, `npm run test:ci`, `python -m flywheel.fit`, `bash scripts/checks.sh`)
