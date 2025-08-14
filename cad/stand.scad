@@ -5,7 +5,8 @@ bearing_outer_d = 22; // mm (608 bearing)
 bearing_thickness = 7; // mm
 base_length = 100; // mm
 base_width = 40;  // mm
-base_thickness = 8; // mm
+// reduce base thickness to save material while maintaining strength
+base_thickness = 6; // mm
 post_thickness = bearing_thickness + 3; // mm
 post_height = 40; // mm (distance from base to bearing center)
 

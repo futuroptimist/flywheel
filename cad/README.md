@@ -13,7 +13,7 @@ sudo apt-get install openscad
 ## Available models
 
 - `stand.scad` – stand for a flywheel shaft using 608 bearings; post thickness
-  derives from the bearing width
+  derives from the bearing width and the base is 6 mm thick by default to save material
 - `shaft.scad` – straight shaft sized for 608 bearings (exposes `shaft()` module for easy
   customization; override `$fs` via the `resolution_fs` variable for finer meshes)
 - `adapter.scad` – clamp adapter that attaches the flywheel to the shaft with configurable
