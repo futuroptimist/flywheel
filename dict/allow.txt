@@ -29,6 +29,7 @@ dspace
 eslint
 eslintrc
 frictionless
+frontend
 futuroptimist
 Gabriel
 github
@@ -64,6 +65,7 @@ styleguides
 customizations
 gabriel
 heatmap
+hillclimb
 llms
 onboarding
 runbook
@@ -181,6 +183,7 @@ prebuilt
 walkthrough
 params
 analytics
+src
 sunlu
 sqrt
 len
