@@ -9,8 +9,8 @@
 
 **flywheel** is a GitHub template for rapid project bootstrapping. It bundles linting, testing, documentation checks, and LLM-powered agents to keep your repo healthy.
 
-The canonical Codex automation prompt lives in [automation.md](docs/prompts/codex/automation.md).
-Copy it into new repositories to standardize automation.
+The canonical Codex automation prompt lives in [`automation.md`](docs/prompts/codex/automation.md).
+Agents should review it before contributing automation to new repositories.
 
 ## Usage
 
