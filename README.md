@@ -17,6 +17,7 @@ Agents should review it before contributing automation to new repositories.
 1. **Use as a template** on GitHub.
 2. Clone your new repo and run `./scripts/setup.sh YOURNAME NEWREPO` to personalize placeholders.
 3. Commit and push to start the flywheel.
+4. Review the [Codex automation prompt](docs/prompts/codex/automation.md) for baseline tasks.
 
 ## Testing
 
@@ -156,9 +157,9 @@ Clone a set of repos and generate Markdown reports:
 python -m flywheel.agents.scanner
 ```
 
-Reports are written to `reports/`. Each report lists only top-level files and ignores
-directories. Existing paths under the scanner's work area are removed before each
-clone so reports reflect a fresh snapshot.
+Reports are written to `reports/`. Each report lists only top-level non-hidden files and
+ignores directories. Existing paths under the scanner's work area are removed before
+each clone so reports reflect a fresh snapshot.
 
 ### Viewing the 3D flywheel
 

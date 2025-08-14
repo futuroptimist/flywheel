@@ -9,7 +9,7 @@ Type: evergreen
 This document stores the baseline prompt used when instructing OpenAI Codex (or
 compatible agents) to contribute to the Flywheel repository. Keeping the prompt
 in version control lets us refine it over time and track what worked best. It
-serves as the canonical prompt that other repositories can copy to
+serves as the canonical prompt that other repositories should copy to
 `docs/prompts/codex/automation.md` for consistent automation. For propagation
 instructions, see [propagate.md](propagate.md).
 

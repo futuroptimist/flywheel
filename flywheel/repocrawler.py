@@ -111,45 +111,48 @@ class RepoCrawler:
                 return []
         return []
 
-    def _detect_dark_patterns(self, repo: str, branch: str) -> int:
-        """Count dark UX patterns in code and docs.
+    def _count_patterns(
+        self,
+        repo: str,
+        branch: str,
+        patterns: list[re.Pattern],
+        files: list[str] | None = None,
+    ) -> int:
+        """Return matches for ``patterns`` across repo files.
 
-        File extension checks are case-insensitive.
+        ``files`` can be provided to avoid refetching the listing. File
+        extension checks are case-insensitive.
         """
 
         count = 0
-        files = self._list_files(repo, branch)[:50]
-        for path in files:
+        if files is None:
+            files = self._list_files(repo, branch)
+        paths = files[:50]
+        for path in paths:
             if not path.lower().endswith(self.CODE_EXTENSIONS):
                 continue
             text = self._fetch_file(repo, path, branch)
             if not text:
                 continue
-            for pat in self.DARK_PATTERNS:
+            for pat in patterns:
                 if pat.search(text):
                     count += 1
                     break
         return count
 
-    def _detect_bright_patterns(self, repo: str, branch: str) -> int:
-        """Count positive UX patterns in code and docs.
+    def _detect_dark_patterns(
+        self, repo: str, branch: str, files: list[str] | None = None
+    ) -> int:
+        """Count dark UX patterns in code and docs."""
 
-        File extension checks are case-insensitive.
-        """
+        return self._count_patterns(repo, branch, self.DARK_PATTERNS, files)
 
-        count = 0
-        files = self._list_files(repo, branch)[:50]
-        for path in files:
-            if not path.lower().endswith(self.CODE_EXTENSIONS):
-                continue
-            text = self._fetch_file(repo, path, branch)
-            if not text:
-                continue
-            for pat in self.BRIGHT_PATTERNS:
-                if pat.search(text):
-                    count += 1
-                    break
-        return count
+    def _detect_bright_patterns(
+        self, repo: str, branch: str, files: list[str] | None = None
+    ) -> int:
+        """Count positive UX patterns in code and docs."""
+
+        return self._count_patterns(repo, branch, self.BRIGHT_PATTERNS, files)
 
     def _badge_patch_percent(self, repo: str, branch: str) -> Optional[float]:
         """Return patch coverage parsed from the public badge."""
@@ -647,8 +650,17 @@ class RepoCrawler:
             ".pre-commit-config.yaml",
             branch,
         )
-        info.dark_pattern_count = self._detect_dark_patterns(repo, branch)
-        info.bright_pattern_count = self._detect_bright_patterns(repo, branch)
+        files = self._list_files(repo, branch)
+        info.dark_pattern_count = self._detect_dark_patterns(
+            repo,
+            branch,
+            files,
+        )
+        info.bright_pattern_count = self._detect_bright_patterns(
+            repo,
+            branch,
+            files,
+        )
 
     def crawl(self) -> List[RepoInfo]:
         infos = [self._basic_repo(r) for r in self.repos]

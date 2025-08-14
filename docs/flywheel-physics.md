@@ -52,6 +52,12 @@ with angular velocity $\omega$ in radians per second.
 Expressed in revolutions per minute (rpm) $n$,
 $$E = \tfrac{1}{2} I \left(\tfrac{2\pi n}{60}\right)^2 = \tfrac{\pi^2 I n^2}{1800}$$
 
+Solving for speed gives
+$$n = \sqrt{\frac{1800 E}{\pi^2 I}}$$
+which helps size a wheel for a target energy. With
+\(I \approx 2.5\times10^{-4}\,\text{kg·m}^2\),
+storing \(100\,\text{J}\) would require \(n \approx 8.5\times10^3\,\text{rpm}\).
+
 ### Example using CAD dimensions
 
 The stock CAD model in [`cad/flywheel.scad`](../cad/flywheel.scad) sets
@@ -124,6 +130,15 @@ $$\Omega \approx \frac{0.1}{7.8\times10^{-2}} \approx 1.3\,\text{rad/s}$$
 about $75^\circ/\text{s}$, which can twist the stand or mounts such as the one in
 [`cad/stand.scad`](../cad/stand.scad).
 
+A horizontal wheel on a single support feels gravity acting at a lever arm $d$.
+The resulting torque $\tau = m g d$ yields a precession rate
+$$\Omega = \frac{m g d}{I \omega}.$$
+Using the example mass $m \approx 0.19\,\text{kg}$ and the stand's `post_height = 40`\,mm in
+[`cad/stand.scad`](../cad/stand.scad) gives $d = 0.04\,\text{m}$, so gravity supplies
+$$\tau \approx 7.5\times10^{-2}\,\text{N·m}.$$
+At 3000\,rpm this leads to $\Omega \approx 0.96\,\text{rad/s}$ ($\approx 55^\circ/\text{s}$), so
+the wheel slowly noses downward unless the support resists.
+
 ```mermaid
 graph TD
     T[Torque τ] --> P[Precession Ω = τ / L]
@@ -133,9 +148,14 @@ graph TD
 
 The rim's tangential velocity is
 $$v = \omega r$$
-where $r$ is the wheel radius.  Using the CAD value $r=50\,\text{mm}$ and
-3000\,rpm ($\omega \approx 314\,\text{rad/s}$) gives $v \approx 16\,\text{m/s}$.  Plastic
-parts have a maximum safe speed set by hoop stress.  Approximating the wheel as
+where $r$ is the wheel radius. Expressed in revolutions per minute $n$ and
+diameter $D = 2r$,
+$$v = \frac{\pi D n}{60},$$
+linking tip speed directly to the `diameter` parameter in
+[`cad/flywheel.scad`](../cad/flywheel.scad). Using the CAD value
+$r=50\,\text{mm}$ and 3000\,rpm ($\omega \approx 314\,\text{rad/s}$)
+gives $v \approx 16\,\text{m/s}$. Plastic parts have a maximum safe speed set by
+hoop stress. Approximating the wheel as
 a thin rim, balancing the centrifugal force $\rho A r \omega^2$ on a small
 segment with the tensile stress $\sigma A$ it supports gives
 $$\sigma \approx \rho r^2 \omega^2$$
@@ -259,6 +279,11 @@ diameter, 7\,mm thick) around the 8\,mm shaft from
 $T_f \approx 10^{-3}\,\text{N·m}$, so the example wheel ($I \approx
 2.5\times10^{-4}\,\text{kg·m}^2$) coasts from 3000\,rpm ($\omega_0 \approx
 314\,\text{rad/s}$) for roughly $t \approx 80\,\text{s}$.
+
+The total angle swept during this coast is
+$$\theta = \tfrac{1}{2} \omega_0 t = \tfrac{I \omega_0^2}{2 T_f}$$
+For the same parameters this works out to $\theta \approx 1.2\times10^4$ rad,
+about $2\times10^3$ revolutions, so ensure the stand clears neighboring parts.
 
 Speed falls linearly as $\omega(t) = \omega_0 - (T_f/I) t$.  Friction converts
 mechanical energy to heat at rate $P = T_f \omega$, about
