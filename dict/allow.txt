@@ -197,8 +197,10 @@ precess
 circ
 Lockfile
 Untriaged
+Upgrader
 TODOs
 whitespace
 EOF
 stdout
 summarise
+upgrader

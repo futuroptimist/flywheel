@@ -56,6 +56,12 @@ def slugify(text: str) -> str:
     return text
 
 
+def is_one_click(snippet: str) -> bool:
+    """Heuristically determine if a prompt is 1-click ready."""
+    patterns = [r"\{[^}]+\}", r"<[^>]+>", r"TODO", r"REPLACE", r"YOUR \w+"]
+    return not any(re.search(p, snippet, re.IGNORECASE) for p in patterns)
+
+
 def find_type(lines: List[str], start: int) -> str:
     for idx in range(start, min(start + 5, len(lines))):
         match = re.search(r"Type:\s*([\w-]+)", lines[idx], re.IGNORECASE)
@@ -71,27 +77,33 @@ def is_prompt_heading(title: str) -> bool:
 def extract_prompts(text: str, base_url: str) -> List[List[str]]:
     lines = text.splitlines()
     prompts: List[List[str]] = []
+    headings: List[tuple[int, str]] = []
     for i, line in enumerate(lines):
         if line.startswith("# ") and not line.startswith("##"):
-            title = line[2:].strip()
-            ptype = find_type(lines, i + 1) or "unknown"
-            if ptype == "one":
-                ptype = "one-off"
-            anchor = slugify(title)
-            prompts.append([f"[{title}]({base_url}#{anchor})", ptype])
+            headings.append((i, line[2:].strip()))
         elif line.startswith("## ") or line.startswith("### "):
             title = line.lstrip("#").strip()
             if is_prompt_heading(title):
-                ptype = find_type(lines, i + 1) or "unknown"
-                if ptype == "one":
-                    ptype = "one-off"
-                anchor = slugify(title)
-                prompts.append([f"[{title}]({base_url}#{anchor})", ptype])
-    if not prompts:
-        title = extract_title(text)
-        if not title:
-            title = base_url.split("/")[-1]
-        prompts.append([f"[{title}]({base_url})", "unknown"])
+                headings.append((i, title))
+    if not headings:
+        title = extract_title(text) or base_url.split("/")[-1]
+        snippet = text
+        one_click = is_one_click(snippet)
+        prompts.append([f"[{title}]({base_url})", "unknown", one_click])
+        return prompts
+
+    for idx, (line_no, title) in enumerate(headings):
+        if idx + 1 < len(headings):
+            next_line = headings[idx + 1][0]
+        else:
+            next_line = len(lines)
+        ptype = find_type(lines, line_no + 1) or "unknown"
+        if ptype == "one":
+            ptype = "one-off"
+        snippet = "\n".join(lines[line_no + 1 : next_line])  # noqa: E203
+        anchor = slugify(title)
+        one_click = is_one_click(snippet)
+        prompts.append([f"[{title}]({base_url}#{anchor})", ptype, one_click])
     return prompts
 
 
@@ -120,7 +132,9 @@ def main() -> None:
         base_url = f"https://github.com/{local_repo}/blob/main/{rel}"  # noqa: E501
         path_link = f"[{rel}]({base_url})"
         prompts = extract_prompts(text, base_url)
-        for prompt_link, ptype in prompts:
+        for prompt_link, ptype, one_click in prompts:
+            if not one_click:
+                continue
             row = [path_link, prompt_link, ptype, "yes"]
             if path.name.startswith("prompts-"):
                 row = [f"**{cell}**" for cell in row]
@@ -162,7 +176,9 @@ def main() -> None:
                 )  # noqa: E501
                 path_link = f"[{path}]({base_url})"
                 prompts = extract_prompts(text, base_url)
-                for prompt_link, ptype in prompts:
+                for prompt_link, ptype, one_click in prompts:
+                    if not one_click:
+                        continue
                     row = [path_link, prompt_link, ptype, "yes"]
                     if Path(path).name.startswith("prompts-"):
                         row = [f"**{cell}**" for cell in row]
@@ -181,22 +197,57 @@ def main() -> None:
                             ]
                         new_rows.append(new_row)
 
+    type_order = {"evergreen": 0, "unknown": 1, "one-off": 2}
+    for repo_prompts in grouped.values():
+        repo_prompts.sort(key=lambda row: type_order.get(row[2], 1))
+
+    counts = {"evergreen": 0, "one-off": 0, "unknown": 0}
+    for repo_prompts in grouped.values():
+        for _, _, ptype, _ in repo_prompts:
+            counts[ptype] = counts.get(ptype, 0) + 1
+    total_prompts = sum(counts.values())
+    repo_count = len(grouped)
+
     lines = [
         "# Prompt Docs Summary",
         "",
-        "This index is auto-generated with "
-        "[scripts/update_prompt_docs_summary.py]"
-        "(../../scripts/update_prompt_docs_summary.py) "
+        "This index is auto-generated with ",
+        "[scripts/update_prompt_docs_summary.py]",
+        "(../../scripts/update_prompt_docs_summary.py) ",
         "using RepoCrawler to discover prompt documents across repositories.",
         "",
-        "All prompts are verified with OpenAI Codex. "
-        "Other coding agents like Claude Code, Gemini CLI, and Cursor "
-        "should work too.",
+        (
+            "All prompts are verified with OpenAI Codex. Other coding agents "
+            "like Claude Code, Gemini CLI, and Cursor should work too."
+        ),
+        "",
+        (
+            f"**{total_prompts} one-click prompts verified across "
+            f"{repo_count} repos ({counts['evergreen']} evergreen, "
+            f"{counts['one-off']} one-off, {counts['unknown']} unknown).**"
+        ),
+        "",
+        (
+            "One-off prompts are temporary—copy them into issues or PRs, "
+            "implement, and then remove them from source docs."
+        ),
+        "",
+        (
+            "All listed prompts are mechanically verified as 1-click ready: "
+            "copy & paste without editing."
+        ),
         "",
         "## Legend",
         "",
         tabulate(
             [
+                [
+                    "evergreen",
+                    (
+                        "prompts that can be reused to hillclimb toward "
+                        "goals like feature completeness or test coverage"
+                    ),
+                ],
                 [
                     "one-off",
                     (
@@ -205,27 +256,19 @@ def main() -> None:
                         "(glorified TODO; remove after cleanup)"
                     ),
                 ],
-                [
-                    "evergreen",
-                    (
-                        "prompts that can be reused to hillclimb toward "
-                        "goals like feature completeness or test coverage"
-                    ),
-                ],
                 # fmt: off
                 [
                     "unknown",
-                    "catch-all; refine into another category or "
-                    "create a new one",
+                    (
+                        "catch-all; refine into another category or "
+                        "create a new one"
+                    ),
                 ],
                 # fmt: on
             ],
             headers=["Type", "Description"],
             tablefmt="github",
         ),
-        "",
-        "All listed prompts are 1-click ready: copy & paste without editing. "
-        "See the One-click? column.",
         "",
     ]
 
