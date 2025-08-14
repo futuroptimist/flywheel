@@ -23,7 +23,7 @@ jobs:
       - uses: astral-sh/setup-uv@v1
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.12'
       - name: Install deps
         run: uv pip install --system -r requirements.txt
       - name: Update README
