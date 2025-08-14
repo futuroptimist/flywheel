@@ -147,6 +147,16 @@ same radius, $\omega_{max} \approx 4.4\times10^3\,\text{rad/s}$ or about
 42\,000\,rpm.  Designers typically apply a safety factor of at least two and
 operate well below this bound.
 
+Substituting this limit into the thin-rim energy expression
+$$E = \tfrac{1}{2} m r^2 \omega^2$$
+shows that material strength caps the stored energy at
+$$E_{max} = \tfrac{\sigma_y}{2\rho} m$$
+independent of radius. For the CAD wheel in [`cad/flywheel.scad`](../cad/flywheel.scad)
+with $m \approx 0.19\,\text{kg}$, PLA allows roughly $E_{max} \approx 4.5\,\text{kJ}$
+(about 4.5 kilojoules)—far above the $12\,\text{J}$ stored at 3000\,rpm.  Real prints
+fail sooner from layer adhesion and voids, so treat this limit as a best-case upper
+bound.
+
 ```mermaid
 graph TD
     R[Radius r = 50 mm] --> V[v = ω r]
