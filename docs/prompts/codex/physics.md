@@ -28,14 +28,21 @@ CONTEXT:
 - If browser dependencies are missing, run `npx playwright install chromium`
   or prefix tests with `SKIP_E2E=1`.
 - Cross-reference CAD dimensions where helpful.
+- If browser dependencies are missing, run `npx playwright install chromium` or
+  set `SKIP_E2E=1`.
 
 REQUEST:
-1. Inspect [flywheel-physics.md](../../flywheel-physics.md) for gaps or TODO notes.
+1. Inspect [docs/flywheel-physics.md](../../flywheel-physics.md) for gaps or TODO notes.
 2. Add clear explanations or equations where needed.
-3. Run the checks listed above before committing.
+3. Run these commands before committing:
+   - `pre-commit run --all-files`
+   - `pytest -q`
+   - `npm run test:ci`
+   - `python -m flywheel.fit`
+   - `bash scripts/checks.sh`
 
 OUTPUT:
-A pull request enhancing the physics docs with any new derivations or diagrams.
+A pull request with new physics derivations or diagrams and all checks passing.
 ```
 
 This keeps the physics guides fresh and consistent across updates.
