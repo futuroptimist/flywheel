@@ -13,15 +13,19 @@ _DEF_RE = re.compile(
 )
 
 
-def parse_scad_vars(path: Path) -> Dict[str, float]:
+def parse_scad_vars(path: str | Path) -> Dict[str, float]:
     """Return variable assignments parsed from a SCAD file.
+
+    Args:
+        path: String or :class:`~pathlib.Path` pointing to the SCAD file.
 
     Block comments ``/* ... */`` and inline ``//`` comments after the
     semicolon are ignored. The parser supports negative values, decimals
     without a leading zero, trailing decimal points, scientific notation,
     and multiple assignments on the same line.
     """
-    text = Path(path).read_text()
+    path = Path(path)
+    text = path.read_text()
     text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
     vars: Dict[str, float] = {}
     for raw_line in text.splitlines():

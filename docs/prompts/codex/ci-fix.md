@@ -1,6 +1,6 @@
 ---
 title: 'Codex CI-Failure Fix Prompt'
-slug:  'codex-ci-fix'
+slug: 'codex-ci-fix'
 ---
 
 # OpenAI Codex CI-Failure Fix Prompt
@@ -84,7 +84,7 @@ Create the file above at docs/prompts/codex/ci-fix.md.
 
 Apply the table patch (or edit manually; don’t forget the pipe alignment).
 
-Run pnpm docs:build (or your docs generator) to ensure no broken links.
+Run `npm --prefix docs-site run build` (or your docs generator) to ensure no broken links.
 
 Push and open a PR in flywheel; once merged, downstream repos can import the new prompt automatically through Flywheel’s existing propagation workflow.
 

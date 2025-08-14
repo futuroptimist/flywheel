@@ -84,3 +84,19 @@ def test_continue_on_empty(monkeypatch):
     monkeypatch.setattr(crawler, "_fetch_file", lambda r, p, b: None)
     assert crawler._detect_dark_patterns("foo/bar", "main") == 0
     assert crawler._detect_bright_patterns("foo/bar", "main") == 0
+
+
+def test_pattern_detection_reuses_file_list(monkeypatch):
+    crawler = rc.RepoCrawler([])
+    calls = {"count": 0}
+
+    def list_files(repo, branch):
+        calls["count"] += 1
+        return ["index.js", "README.md"]
+
+    monkeypatch.setattr(crawler, "_list_files", list_files)
+    monkeypatch.setattr(crawler, "_fetch_file", lambda r, p, b: "unsubscribe")
+    files = crawler._list_files("foo/bar", "main")
+    crawler._detect_dark_patterns("foo/bar", "main", files)
+    crawler._detect_bright_patterns("foo/bar", "main", files)
+    assert calls["count"] == 1
