@@ -260,6 +260,11 @@ $T_f \approx 10^{-3}\,\text{N·m}$, so the example wheel ($I \approx
 2.5\times10^{-4}\,\text{kg·m}^2$) coasts from 3000\,rpm ($\omega_0 \approx
 314\,\text{rad/s}$) for roughly $t \approx 80\,\text{s}$.
 
+The total angle swept during this coast is
+$$\theta = \tfrac{1}{2} \omega_0 t = \tfrac{I \omega_0^2}{2 T_f}$$
+For the same parameters this works out to $\theta \approx 1.2\times10^4$ rad,
+about $2\times10^3$ revolutions, so ensure the stand clears neighboring parts.
+
 Speed falls linearly as $\omega(t) = \omega_0 - (T_f/I) t$.  Friction converts
 mechanical energy to heat at rate $P = T_f \omega$, about
 $0.3\,\text{W}$ for the same bearing and speed.
