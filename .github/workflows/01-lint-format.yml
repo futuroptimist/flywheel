@@ -17,7 +17,7 @@ jobs:
         if: matrix.language == 'python'
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.12'
       - name: Install Py Lint Tools
         if: matrix.language == 'python'
         run: uv pip install --system flake8 black isort

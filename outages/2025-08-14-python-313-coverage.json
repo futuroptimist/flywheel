@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-14-python-313-coverage",
+  "date": "2025-08-14",
+  "component": "ci/tests",
+  "rootCause": "GitHub runner upgraded to Python 3.13, causing uv to fail installing coverage",
+  "resolution": "Pin GitHub Actions workflows to Python 3.12",
+  "references": ["https://github.com/futuroptimist/flywheel/actions/runs/16930813655"]
+}
