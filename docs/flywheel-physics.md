@@ -115,10 +115,12 @@ Torque is the time derivative of angular momentum,
 
 $$\tau = \frac{\mathrm{d}L}{\mathrm{d}t}$$
 
-so a force applied perpendicular to the spin axis changes the direction of $L$ rather than its magnitude.
+In vector form this becomes $\boldsymbol{\tau} = \boldsymbol{\Omega} \times \mathbf{L}$, so a
+force applied perpendicular to the spin axis changes the direction of $L$ rather than
+its magnitude.
 
-An off-axis torque $\tau$ causes the spin axis to <!-- codespell:ignore precess -->precess at
-$$\Omega = \frac{\tau}{L}$$
+An off-axis torque $\tau$ therefore causes the spin axis to <!-- codespell:ignore precess -->precess at
+$$\Omega = \frac{\tau}{L} = \frac{\tau}{I\omega}$$
 Perpendicular disturbances of $0.1\,\text{N·m}$ therefore produce
 $$\Omega \approx \frac{0.1}{7.8\times10^{-2}} \approx 1.3\,\text{rad/s}$$
 about $75^\circ/\text{s}$, which can twist the stand or mounts such as the one in
@@ -299,6 +301,14 @@ $$\omega_2 = \frac{r_1}{r_2} \omega_1$$
 
 where $r_1$ and $r_2$ are the radii of the driving and driven pulleys.
 Gears follow the same relation using tooth counts instead of radii.
+
+The inertia of a driven wheel reflected to the driver scales with the square of
+the speed ratio.  For a belt connection, the driver sees an effective inertia
+$$I_{\text{eff,2}} = I_2 \left(\frac{r_2}{r_1}\right)^2$$
+so the combined inertia at the input shaft becomes $I_1 + I_{\text{eff,2}} + \cdots$.
+Using the default wheel in [`cad/flywheel.scad`](../cad/flywheel.scad)
+($r_1 = 50\,\text{mm}$) to drive an identical wheel with a $25\,\text{mm}$ pulley
+reflects only one quarter of the second wheel's inertia back to the motor.
 
 The total stored energy is simply the sum of each wheel's kinetic
 energy:
