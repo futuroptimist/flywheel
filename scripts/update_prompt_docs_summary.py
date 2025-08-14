@@ -45,7 +45,7 @@ def _parse_existing(path: Path) -> Set[str]:
             continue
         parts = [p.strip() for p in line.split("|")[1:-1]]
         if len(parts) >= 2:
-            existing.add(parts[1])
+            existing.add(parts[1].replace("**", ""))
     return existing
 
 
@@ -58,7 +58,7 @@ def slugify(text: str) -> str:
 
 def find_type(lines: List[str], start: int) -> str:
     for idx in range(start, min(start + 5, len(lines))):
-        match = re.search(r"Type:\s*(\w+)", lines[idx], re.IGNORECASE)
+        match = re.search(r"Type:\s*([\w-]+)", lines[idx], re.IGNORECASE)
         if match:
             return match.group(1).lower()
     return ""
@@ -75,12 +75,16 @@ def extract_prompts(text: str, base_url: str) -> List[List[str]]:
         if line.startswith("# ") and not line.startswith("##"):
             title = line[2:].strip()
             ptype = find_type(lines, i + 1) or "unknown"
+            if ptype == "one":
+                ptype = "one-off"
             anchor = slugify(title)
             prompts.append([f"[{title}]({base_url}#{anchor})", ptype])
         elif line.startswith("## ") or line.startswith("### "):
             title = line.lstrip("#").strip()
             if is_prompt_heading(title):
                 ptype = find_type(lines, i + 1) or "unknown"
+                if ptype == "one":
+                    ptype = "one-off"
                 anchor = slugify(title)
                 prompts.append([f"[{title}]({base_url}#{anchor})", ptype])
     if not prompts:
@@ -117,9 +121,25 @@ def main() -> None:
         path_link = f"[{rel}]({base_url})"
         prompts = extract_prompts(text, base_url)
         for prompt_link, ptype in prompts:
-            grouped[repo_link].append([path_link, prompt_link, ptype])
+            row = [path_link, prompt_link, ptype, "yes"]
+            if path.name.startswith("prompts-"):
+                row = [f"**{cell}**" for cell in row]
+            grouped[repo_link].append(row)
             if prompt_link not in existing_docs:
-                new_rows.append([repo_link, path_link, prompt_link, ptype])
+                new_row = [
+                    repo_link,
+                    path_link,
+                    prompt_link,
+                    ptype,
+                    "yes",
+                ]
+                # fmt: off
+                if path.name.startswith("prompts-"):
+                    new_row = [new_row[0]] + list(
+                        f"**{cell}**" for cell in new_row[1:]
+                    )
+                # fmt: on
+                new_rows.append(new_row)
 
     # Add prompt docs from remote repositories (skip local repo)
     for spec in repos[1:]:
@@ -143,16 +163,23 @@ def main() -> None:
                 path_link = f"[{path}]({base_url})"
                 prompts = extract_prompts(text, base_url)
                 for prompt_link, ptype in prompts:
-                    grouped[repo_link].append([path_link, prompt_link, ptype])
+                    row = [path_link, prompt_link, ptype, "yes"]
+                    if Path(path).name.startswith("prompts-"):
+                        row = [f"**{cell}**" for cell in row]
+                    grouped[repo_link].append(row)
                     if prompt_link not in existing_docs:
-                        new_rows.append(
-                            [
-                                repo_link,
-                                path_link,
-                                prompt_link,
-                                ptype,
+                        new_row = [
+                            repo_link,
+                            path_link,
+                            prompt_link,
+                            ptype,
+                            "yes",
+                        ]
+                        if Path(path).name.startswith("prompts-"):
+                            new_row = [new_row[0]] + [
+                                f"**{cell}**" for cell in new_row[1:]
                             ]
-                        )
+                        new_rows.append(new_row)
 
     lines = [
         "# Prompt Docs Summary",
@@ -162,6 +189,44 @@ def main() -> None:
         "(../../scripts/update_prompt_docs_summary.py) "
         "using RepoCrawler to discover prompt documents across repositories.",
         "",
+        "All prompts are verified with OpenAI Codex. "
+        "Other coding agents like Claude Code, Gemini CLI, and Cursor "
+        "should work too.",
+        "",
+        "## Legend",
+        "",
+        tabulate(
+            [
+                [
+                    "one-off",
+                    (
+                        "prompts to implement features or make "
+                        "recommended changes "
+                        "(glorified TODO; remove after cleanup)"
+                    ),
+                ],
+                [
+                    "evergreen",
+                    (
+                        "prompts that can be reused to hillclimb toward "
+                        "goals like feature completeness or test coverage"
+                    ),
+                ],
+                # fmt: off
+                [
+                    "unknown",
+                    "catch-all; refine into another category or "
+                    "create a new one",
+                ],
+                # fmt: on
+            ],
+            headers=["Type", "Description"],
+            tablefmt="github",
+        ),
+        "",
+        "All listed prompts are 1-click ready: copy & paste without editing. "
+        "See the One-click? column.",
+        "",
     ]
 
     for repo_link, prompts in grouped.items():
@@ -170,7 +235,7 @@ def main() -> None:
         lines.append(
             tabulate(
                 prompts,
-                headers=["Path", "Prompt", "Type"],
+                headers=["Path", "Prompt", "Type", "One-click?"],
                 tablefmt="github",
             )
         )  # noqa: E501
@@ -183,7 +248,7 @@ def main() -> None:
                 "",
                 tabulate(
                     new_rows,
-                    headers=["Repo", "Path", "Prompt", "Type"],
+                    headers=["Repo", "Path", "Prompt", "Type", "One-click?"],
                     tablefmt="github",
                 ),
                 "",
