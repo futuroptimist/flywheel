@@ -2,6 +2,12 @@
 
 This index is auto-generated with [scripts/update_prompt_docs_summary.py](../../scripts/update_prompt_docs_summary.py) using RepoCrawler to discover prompt documents across repositories.
 
+Every row must pass the following inclusion checks:
+
+- **1-click verified:** prompts run when pasted with no edits; this is tested automatically.
+- **Evergreen prioritized:** reusable prompts take precedence. Copy one-offs, implement them, then clean them up.
+- **Salience first:** surface the highest-value prompts above the fold.
+
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
 ## Legend
@@ -12,7 +18,6 @@ All prompts are verified with OpenAI Codex. Other coding agents like Claude Code
 | evergreen | prompts that can be reused to hillclimb toward goals like feature completeness or test coverage  |
 | unknown   | catch-all; refine into another category or create a new one                                      |
 
-All listed prompts are 1-click ready: copy & paste without editing. See the One-click? column.
 
 ## **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**
 
