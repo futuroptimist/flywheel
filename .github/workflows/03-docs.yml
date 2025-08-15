@@ -30,4 +30,4 @@ jobs:
           python-version: '3.12'
       - run: |
           uv pip install --system linkchecker
-          linkchecker README.md docs/ || true
+          linkchecker README.md docs/ --check-extern --ignore-url '^http://(localhost|127\.0\.0\.1)' || true

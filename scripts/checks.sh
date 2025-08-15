@@ -51,4 +51,4 @@ run_security_checks
 if command -v pyspelling >/dev/null 2>&1 && [ -f .spellcheck.yaml ]; then
   pyspelling -c .spellcheck.yaml || true
 fi
-linkchecker README.md docs/ || true
+linkchecker README.md docs/ --check-extern --ignore-url '^http://(localhost|127\.0\.0\.1)' || true

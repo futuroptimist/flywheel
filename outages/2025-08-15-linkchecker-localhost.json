@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-15-linkchecker-localhost",
+  "date": "2025-08-15",
+  "component": "docs linkcheck",
+  "rootCause": "linkchecker attempted to fetch localhost URLs, returning connection errors",
+  "resolution": "ignore localhost addresses in linkchecker invocations",
+  "references": [".github/workflows/03-docs.yml", "scripts/checks.sh"]
+}
