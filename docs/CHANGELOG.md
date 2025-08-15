@@ -1,5 +1,8 @@
 # Changelog
 
+## [2025-08-15] - Safely handle symlinked destinations
+- avoid deleting linked directories when cloning repos
+
 ## [2025-08-14] - Pin Python version in CI
 - lock workflows to Python 3.12 to avoid uv install failures
 

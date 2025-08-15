@@ -31,6 +31,27 @@ def test_clone_repo_overwrites_file(monkeypatch, tmp_path):
     assert not dest.exists()
 
 
+def test_clone_repo_preserves_symlink_target(monkeypatch, tmp_path):
+    target = tmp_path / "real"
+    target.mkdir()
+    marker = target / "marker.txt"
+    marker.write_text("x")
+    symlink = tmp_path / "dest"
+    symlink.symlink_to(target, target_is_directory=True)
+
+    def fake_run(cmd, check):
+        Path(cmd[-1]).mkdir()
+        return subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    scanner.clone_repo("foo/bar", symlink)
+    assert target.exists()
+    assert marker.exists()
+    new_dest = tmp_path / "dest"
+    assert new_dest.is_dir()
+    assert not new_dest.is_symlink()
+
+
 def test_analyze_repo(tmp_path):
     (tmp_path / "a.txt").write_text("hi")
     (tmp_path / "b.md").write_text("yo")
