@@ -6,8 +6,8 @@ slug: 'codex-physics'
 # OpenAI Codex Physics Explainer Prompt
 Type: evergreen
 
-Use this prompt to automatically expand Flywheel's physics documentation. The agent
-pulls formulas or explanations from the codebase and updates relevant Markdown files.
+Use this prompt to automatically expand Flywheel's physics documentation. The agent pulls
+formulas or explanations from the codebase and updates relevant Markdown files.
 
 ```text
 SYSTEM:
@@ -28,18 +28,13 @@ CONTEXT:
 - If browser dependencies are missing, run `npx playwright install chromium`
   or prefix tests with `SKIP_E2E=1`.
 - Cross-reference CAD dimensions where helpful.
-- If browser dependencies are missing, run `npx playwright install chromium` or
-  set `SKIP_E2E=1`.
 
 REQUEST:
-1. Inspect [docs/flywheel-physics.md](../../flywheel-physics.md) for gaps or TODO notes.
+1. Inspect physics-related docs for gaps or TODO notes, such as
+   [docs/flywheel-construction.md](../../flywheel-construction.md).
 2. Add clear explanations or equations where needed.
-3. Run these commands before committing:
-   - `pre-commit run --all-files`
-   - `pytest -q`
-   - `npm run test:ci`
-   - `python -m flywheel.fit`
-   - `bash scripts/checks.sh`
+3. Run the checks listed above.
+4. Commit the changes with a concise message and open a pull request.
 
 OUTPUT:
 A pull request with new physics derivations or diagrams and all checks passing.
