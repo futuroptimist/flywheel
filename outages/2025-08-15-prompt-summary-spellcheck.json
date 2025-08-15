@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-15-prompt-summary-spellcheck",
+  "date": "2025-08-15",
+  "component": "docs/spellcheck",
+  "rootCause": "Auto-generated prompt docs summary lacked spellchecker disable marker, causing spellcheck job to fail",
+  "resolution": "Added disable comment and test to enforce it",
+  "references": ["https://github.com/futuroptimist/flywheel/actions/runs/16997350396"]
+}
