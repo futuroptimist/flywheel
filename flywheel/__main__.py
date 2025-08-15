@@ -111,7 +111,8 @@ def prompt(args: argparse.Namespace) -> None:
         snippet = "\n".join(readme.read_text().splitlines()[:20])
     else:
         snippet = "No README found."  # pragma: no cover
-    print(PROMPT_TMPL.format(snippet=snippet))
+    # Avoid ``str.format`` so braces in README snippets don't break formatting
+    print(PROMPT_TMPL.replace("{snippet}", snippet))
 
 
 def crawl(args: argparse.Namespace) -> None:

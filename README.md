@@ -136,6 +136,8 @@ Invoke the prompt agent to get repo-aware suggestions:
 flywheel prompt
 ```
 
+README content containing `{` or `}` characters is handled safely.
+
 ### Generating repo feature summary
 
 Create a Markdown table showing which flywheel files each repo uses:
