@@ -58,6 +58,18 @@ def test_prompt_no_readme(tmp_path):
     assert "No README found." in result.stdout
 
 
+def test_prompt_handles_braces(tmp_path):
+    readme = tmp_path / "README.md"
+    readme.write_text("Hello {braced} world")
+    result = subprocess.run(
+        [sys.executable, "-m", "flywheel", "prompt", str(tmp_path)],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert "{braced}" in result.stdout
+
+
 def test_cli_help():
     result = subprocess.run(
         [sys.executable, "-m", "flywheel", "--help"],
