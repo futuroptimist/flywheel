@@ -54,6 +54,15 @@ def test_analyze_repo_skips_hidden_files(tmp_path):
     assert "- .secret" not in report
 
 
+def test_analyze_repo_skips_symlinks(tmp_path):
+    target = tmp_path / "real.txt"
+    target.write_text("hi")
+    (tmp_path / "link.txt").symlink_to(target)
+    report = scanner.analyze_repo(tmp_path)
+    assert "- real.txt" in report
+    assert "- link.txt" not in report
+
+
 def test_main(monkeypatch, tmp_path):
     monkeypatch.chdir(tmp_path)
 
