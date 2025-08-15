@@ -1,6 +1,6 @@
 # Changelog
 
-## [2025-08-15] - Safely handle symlinked destinations
+## [2025-08-15] - Safely handle symbolic link destinations
 - avoid deleting linked directories when cloning repos
 
 ## [2025-08-14] - Pin Python version in CI
