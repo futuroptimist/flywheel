@@ -1,5 +1,8 @@
 # Changelog
 
+## [2025-08-15] - Skip Codecov upload without token
+- guard coverage uploads so forks without secrets keep CI green
+
 ## [2025-08-15] - Safely handle symbolic link destinations
 - avoid deleting linked directories when cloning repos
 
