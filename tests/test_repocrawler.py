@@ -160,6 +160,22 @@ def test_parse_coverage_codecov():
     assert result == "95%"
 
 
+def test_parse_coverage_shields(monkeypatch):
+    crawler = rc.RepoCrawler([])
+    # fmt: off
+    readme = (
+        "![Coverage]("
+        "https://img.shields.io/codecov/c/github/foo/bar/main.svg"
+        ")"
+    )
+    # fmt: on
+    monkeypatch.setattr(
+        crawler, "_project_coverage_from_codecov", lambda repo, branch: "88%"
+    )
+    result = crawler._parse_coverage(readme, "foo/bar", "main")
+    assert result == "88%"
+
+
 def test_uses_codecov_from_readme():
     sess = DummySession({})
     crawler = rc.RepoCrawler([], session=sess)
