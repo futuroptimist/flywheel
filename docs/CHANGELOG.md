@@ -1,7 +1,9 @@
 # Changelog
 
 ## [2025-08-15] - Ignore localhost links in docs checks
-- skip localhost URLs during link checking to avoid CI failures
+- skip localhost URLs during link checking to avoid CI failure
+## [2025-08-15] - Skip Codecov upload without token
+- guard coverage uploads so forks without secrets keep CI green
 
 ## [2025-08-15] - Safely handle symbolic link destinations
 - avoid deleting linked directories when cloning repos

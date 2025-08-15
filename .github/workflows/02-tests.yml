@@ -3,6 +3,8 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     strategy:
       matrix:
         language: [python, javascript]
@@ -41,19 +43,25 @@ jobs:
 
       # --- Upload coverage only if the matching report exists ---
       - name: Upload Python coverage
-        if: matrix.language == 'python' && hashFiles('coverage.xml') != ''
+        if: >-
+          matrix.language == 'python' &&
+          hashFiles('coverage.xml') != '' &&
+          env.CODECOV_TOKEN != ''
         uses: codecov/codecov-action@v4
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ env.CODECOV_TOKEN }}
           files: ./coverage.xml
           flags: python
-          fail_ci_if_error: true
+          fail_ci_if_error: false
 
       - name: Upload JS coverage
-        if: matrix.language == 'javascript' && hashFiles('coverage/lcov.info') != ''
+        if: >-
+          matrix.language == 'javascript' &&
+          hashFiles('coverage/lcov.info') != '' &&
+          env.CODECOV_TOKEN != ''
         uses: codecov/codecov-action@v4
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ env.CODECOV_TOKEN }}
           files: ./coverage/lcov.info
           flags: javascript
-          fail_ci_if_error: true
+          fail_ci_if_error: false
