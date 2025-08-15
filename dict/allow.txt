@@ -193,7 +193,6 @@ utils
 qa
 precession
 mathrm
-precess
 circ
 Lockfile
 Untriaged
