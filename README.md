@@ -120,6 +120,16 @@ Install the CLI and inject dev tooling. Without `--yes`, the command prompts for
 pipx run flywheel init . --language python --save-dev --yes
 ```
 
+### Updating dev tooling
+
+Refresh CI workflows and config files in an existing repo:
+
+```bash
+flywheel update path/to/repo
+```
+
+Skip copying dev tooling with `--no-save-dev`.
+
 ### Generating Codex prompts
 
 Invoke the prompt agent to get repo-aware suggestions:

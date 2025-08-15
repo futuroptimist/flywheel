@@ -87,6 +87,12 @@ def init_repo(args: argparse.Namespace) -> None:
         inject_dev(target)
 
 
+def update_repo(args: argparse.Namespace) -> None:
+    target = Path(args.path).resolve()
+    if args.save_dev:
+        inject_dev(target)
+
+
 PROMPT_TMPL = """# Purpose
 Assist developers working on this repository.
 
@@ -145,8 +151,19 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_update = sub.add_parser("update", help="update dev tooling")
     p_update.add_argument("path", help="target repository path")
-    p_update.add_argument("--save-dev", action="store_true", default=True)
-    p_update.set_defaults(func=lambda a: inject_dev(Path(a.path)))
+    p_update.add_argument(
+        "--save-dev",
+        action="store_true",
+        default=True,
+        help="inject dev tooling",
+    )
+    p_update.add_argument(
+        "--no-save-dev",
+        action="store_false",
+        dest="save_dev",
+        help="skip dev tooling",
+    )
+    p_update.set_defaults(func=update_repo)
 
     p_audit = sub.add_parser("audit", help="check for missing tooling")
     p_audit.add_argument("path", help="repository path")
