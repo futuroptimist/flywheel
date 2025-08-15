@@ -536,7 +536,7 @@ class RepoCrawler:
             return None
 
         if not re.search(
-            r"codecov.io/.+?/badge.svg|img.shields.io/codecov",
+            r"codecov\.io/.+?/badge\.svg|img\.shields\.io/codecov",
             readme,
         ):
             return None
