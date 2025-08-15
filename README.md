@@ -28,8 +28,6 @@ Run the full test suite before committing:
 ```bash
 pre-commit run --all-files
 pytest -q
-npm run lint
-npm test -- --coverage
 npm run test:ci
 python -m flywheel.fit
 bash scripts/checks.sh
