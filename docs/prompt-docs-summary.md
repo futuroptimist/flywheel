@@ -5,6 +5,9 @@ This index is auto-generated with
 (../../scripts/update_prompt_docs_summary.py)
 using RepoCrawler to discover prompt documents across repositories.
 
+Refer to [prompts-major-filter.md](prompts-major-filter.md) for guidance on trimming
+this list to only major one-click prompts or pending feature requests.
+
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
 **60 one-click prompts verified across 10 repos (2 evergreen, 2 one-off, 8 unknown).**
