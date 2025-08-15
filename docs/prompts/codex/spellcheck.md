@@ -16,7 +16,7 @@ PURPOSE:
 Keep Markdown documentation free of spelling errors.
 
 CONTEXT:
-- Run `pre-commit run codespell --files "$(git ls-files '*.md')"` to spell-check
+- Run `pre-commit run codespell --files $(git ls-files '*.md')` to spell-check
   Markdown.
 - Add unknown but legitimate words to
   [`dict/allow.txt`](../../../dict/allow.txt).
@@ -24,10 +24,10 @@ CONTEXT:
   Ensure these commands succeed:
   - `pre-commit run --all-files`
   - `pytest -q`
-  - `npm run lint`
   - `npm run test:ci`
   - `python -m flywheel.fit`
   - `bash scripts/checks.sh`
+- Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 - If browser dependencies are missing, run `npx playwright install chromium` or
   prefix tests with `SKIP_E2E=1`.
 
@@ -39,7 +39,7 @@ REQUEST:
 5. Commit the changes with a concise message and open a pull request.
 
 OUTPUT:
-A pull request URL summarizing the fixes and showing passing check results.
+A pull request summarizing the fixes and showing passing check results.
 ```
 
 Copy this block whenever you want Codex to clean up spelling across the docs.
