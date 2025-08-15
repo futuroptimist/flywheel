@@ -31,14 +31,14 @@ def clone_repo(repo: str, dest: Path) -> None:
 def analyze_repo(path: Path) -> str:
     """Return a simple report listing top-level files.
 
-    Only regular, non-hidden files in ``path`` are included; directories are
-    ignored.
+    Only regular, non-hidden files in ``path`` are included. Directories and
+    symlinks are ignored.
     """
 
     names = [
         p.name
         for p in path.iterdir()
-        if p.is_file() and not p.name.startswith(".")  # noqa: E501
+        if p.is_file() and not p.is_symlink() and not p.name.startswith(".")
     ]
     files = sorted(names)
     report_lines = [
