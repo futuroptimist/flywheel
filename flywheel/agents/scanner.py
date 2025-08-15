@@ -14,9 +14,14 @@ REPOS = [
 
 
 def clone_repo(repo: str, dest: Path) -> None:
-    """Clone ``repo`` into ``dest``, overwriting existing paths."""
+    """Clone ``repo`` into ``dest``, overwriting existing paths.
 
-    if dest.exists():
+    Symlinks are removed without touching their targets.
+    """
+
+    if dest.is_symlink():
+        dest.unlink()
+    elif dest.exists():
         if dest.is_dir():
             shutil.rmtree(dest)
         else:
