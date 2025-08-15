@@ -74,7 +74,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 0 | 0 | 2025-08-11 |
 
 Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip.
-Coverage percentages are parsed from their badges where available. Codecov shows ✅ when a Codecov config or badge is present. Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses.
+Coverage percentages are parsed from Codecov badges, including shields.io variants, where available. Codecov shows ✅ when a Codecov config or badge is present. Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses.
 The Outages column notes whether the repository keeps a structured incident log under `/outages`.
 The commit column shows the short SHA of the latest default branch commit at crawl time. The Trunk column indicates whether CI is green for that commit. Dark Patterns and Bright Patterns list counts of suspicious or positive code snippets detected.
 Last-Updated (UTC) records the date of the commit used for each row.

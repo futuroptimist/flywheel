@@ -535,7 +535,10 @@ class RepoCrawler:
         if not readme:
             return None
 
-        if not re.search(r"codecov.io/.+?/badge.svg", readme):
+        if not re.search(
+            r"codecov\.io/.+?/badge\.svg|img\.shields\.io/codecov",
+            readme,
+        ):
             return None
 
         pct = self._project_coverage_from_codecov(repo, branch)
