@@ -20,12 +20,14 @@ def parse_scad_vars(path: str | Path) -> Dict[str, float]:
         path: String or :class:`~pathlib.Path` pointing to the SCAD file.
 
     Block comments ``/* ... */`` and inline ``//`` comments after the
-    semicolon are ignored. The parser supports negative values, decimals
-    without a leading zero, trailing decimal points, scientific notation,
-    and multiple assignments on the same line.
+    semicolon are ignored. The parser strips an initial UTF‑8 BOM and
+    supports negative values, decimals without a leading zero, trailing
+    decimal points, scientific notation, and multiple assignments on the
+    same line.
     """
     path = Path(path)
     text = path.read_text()
+    text = text.lstrip("\ufeff")  # Handle UTF-8 BOM
     text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
     vars: Dict[str, float] = {}
     for raw_line in text.splitlines():
