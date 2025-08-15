@@ -1,0 +1,8 @@
+{
+  "id": "codecov-token-missing",
+  "date": "2025-08-15",
+  "component": "github-actions",
+  "rootCause": "Codecov uploads required a secret token unavailable to forked PRs, causing the workflow to fail.",
+  "resolution": "Upload steps now check for CODECOV_TOKEN and do not fail the build when absent.",
+  "references": []
+}
