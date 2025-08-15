@@ -1,5 +1,8 @@
 # Changelog
 
+## [2025-08-15] - Ignore localhost links in docs checks
+- skip localhost URLs during link checking to avoid CI failures
+
 ## [2025-08-15] - Safely handle symbolic link destinations
 - avoid deleting linked directories when cloning repos
 
