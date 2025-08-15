@@ -37,7 +37,7 @@ def analyze_repo(path: Path) -> str:
     """Return a simple report listing top-level files.
 
     Only regular, non-hidden files in ``path`` are included. Directories and
-    symlinks are ignored.
+    symlinks are ignored. Filenames are sorted case-insensitively.
     """
 
     names = [
@@ -45,7 +45,7 @@ def analyze_repo(path: Path) -> str:
         for p in path.iterdir()
         if p.is_file() and not p.is_symlink() and not p.name.startswith(".")
     ]
-    files = sorted(names)
+    files = sorted(names, key=str.lower)
     report_lines = [
         f"# Report for {path.name}",
         "",
