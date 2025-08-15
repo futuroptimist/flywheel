@@ -5,12 +5,6 @@ This index is auto-generated with
 (../../scripts/update_prompt_docs_summary.py)
 using RepoCrawler to discover prompt documents across repositories.
 
-Every row must pass the following inclusion checks:
-
-- **1-click verified:** prompts run when pasted with no edits; this is tested automatically.
-- **Evergreen prioritized:** reusable prompts take precedence. Copy one-offs, implement them, then clean them up.
-- **Salience first:** surface the highest-value prompts above the fold.
-
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
 **60 one-click prompts verified across 10 repos (2 evergreen, 2 one-off, 8 unknown).**
@@ -141,4 +135,4 @@ All listed prompts are mechanically verified as 1-click ready: copy & paste with
 
 None detected.
 
-_Updated automatically: 2025-08-14_
+_Updated automatically: 2025-08-15_
