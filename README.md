@@ -204,8 +204,8 @@ All parts fit together.
 ```
 
 Lines may include inline ``//`` comments, negative values, decimals without a
-leading zero, trailing decimal points, and scientific notation; the checker
-ignores the comments when parsing.
+leading zero, trailing decimal points, scientific notation, and underscore digit
+separators; the checker ignores the comments when parsing.
 
 Below is a simplified view of how the pieces stack:
 

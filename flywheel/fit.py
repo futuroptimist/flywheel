@@ -8,7 +8,8 @@ import trimesh
 
 _DEF_RE = re.compile(
     r"^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*"
-    r"([-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)\s*"
+    r"([-+]?(?:\d(?:_?\d)*(?:\.(?:\d(?:_?\d)*)?)?|\.\d(?:_?\d)*)"
+    r"(?:[eE][-+]?\d(?:_?\d)*)?)\s*"
     r";(?:\s*//.*)?$"
 )
 
@@ -22,8 +23,8 @@ def parse_scad_vars(path: str | Path) -> Dict[str, float]:
     Block comments ``/* ... */`` and inline ``//`` comments after the
     semicolon are ignored. The parser strips an initial UTF‑8 BOM and
     supports negative values, decimals without a leading zero, trailing
-    decimal points, scientific notation, and multiple assignments on the
-    same line.
+    decimal points, scientific notation, underscore digit separators, and
+    multiple assignments on the same line.
     """
     path = Path(path)
     text = path.read_text()
@@ -38,7 +39,8 @@ def parse_scad_vars(path: str | Path) -> Dict[str, float]:
                 continue
             m = _DEF_RE.match(part + ";")
             if m:
-                vars[m.group(1)] = float(m.group(2))
+                num = m.group(2).replace("_", "")
+                vars[m.group(1)] = float(num)
     return vars
 
 
