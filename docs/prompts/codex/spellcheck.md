@@ -16,17 +16,20 @@ PURPOSE:
 Keep Markdown documentation free of spelling errors.
 
 CONTEXT:
-- Run `pre-commit run codespell --files $(git ls-files "*.md")` to spell-check
+- Run `pre-commit run codespell --files $(git ls-files '*.md')` to spell-check
   Markdown documentation.
 - Add unknown but legitimate words to
   [`dict/allow.txt`](../../../dict/allow.txt).
 - Follow [`AGENTS.md`](../../../AGENTS.md) and [`README.md`](../../../README.md).
   Ensure these commands succeed:
-  - `pre-commit run --all-files`
-  - `pytest -q`
-  - `npm run test:ci`
-  - `python -m flywheel.fit`
-  - `bash scripts/checks.sh`
+
+  ```bash
+  pre-commit run --all-files
+  pytest -q
+  npm run test:ci
+  python -m flywheel.fit
+  bash scripts/checks.sh
+  ```
 - Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 - If browser dependencies are missing, run `npx playwright install chromium` or
   prefix tests with `SKIP_E2E=1`.
