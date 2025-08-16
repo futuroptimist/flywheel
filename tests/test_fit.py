@@ -2,6 +2,8 @@ import runpy
 import types
 from pathlib import Path
 
+import pytest
+
 import flywheel.fit as ff
 
 REPO = Path(__file__).resolve().parents[1]
@@ -56,6 +58,13 @@ def test_parse_scad_vars_numeric_underscores(tmp_path):
     scad.write_text("radius = 1_000.5;")
     vars = ff.parse_scad_vars(scad)
     assert vars == {"radius": 1000.5}
+
+
+def test_parse_scad_vars_rejects_non_finite(tmp_path):
+    scad = tmp_path / "part.scad"
+    scad.write_text("radius = 1e309;")
+    with pytest.raises(ValueError):
+        ff.parse_scad_vars(scad)
 
 
 def test_parse_scad_vars_multiple_per_line(tmp_path):

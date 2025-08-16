@@ -1,0 +1,8 @@
+{
+  "id": "scad-nonfinite",
+  "date": "2025-08-16",
+  "component": "parser",
+  "rootCause": "parse_scad_vars accepted non-finite numbers producing infinity",
+  "resolution": "validate numeric values and reject non-finite inputs",
+  "references": []
+}
