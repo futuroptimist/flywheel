@@ -15,6 +15,20 @@ run_security_checks() {
   fi
 }
 
+# documentation link check helper
+run_linkcheck() {
+  if command -v linkchecker >/dev/null 2>&1; then
+    linkchecker README.md docs/ || true
+  else
+    echo "linkchecker not installed; skipping link check"
+  fi
+}
+
+# exit early when sourced for unit tests
+if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
+  return
+fi
+
 if [ "${RUN_SECURITY_ONLY}" = "1" ]; then
   run_security_checks
   exit 0
@@ -51,4 +65,4 @@ run_security_checks
 if command -v pyspelling >/dev/null 2>&1 && [ -f .spellcheck.yaml ]; then
   pyspelling -c .spellcheck.yaml || true
 fi
-linkchecker README.md docs/ || true
+run_linkcheck

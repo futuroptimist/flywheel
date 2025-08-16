@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-16-linkchecker-missing",
+  "date": "2025-08-16",
+  "component": "scripts/checks.sh",
+  "rootCause": "checks script invoked linkchecker without verifying installation, leading to command-not-found errors",
+  "resolution": "added conditional check to skip linkchecker when not available",
+  "references": ["https://github.com/futuroptimist/flywheel/actions/runs/0000000000"]
+}
