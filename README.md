@@ -36,6 +36,8 @@ bash scripts/checks.sh
 If browser dependencies are missing, install them via `npx playwright install chromium`
 or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 
+`linkchecker` is optional; `scripts/checks.sh` skips link checks when it isn't installed.
+
 ## Contents
 
 - CI workflows for linting, tests, and docs
