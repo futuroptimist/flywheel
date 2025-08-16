@@ -37,7 +37,9 @@ def analyze_repo(path: Path) -> str:
     """Return a simple report listing top-level files.
 
     Only regular, non-hidden files in ``path`` are included. Directories and
-    symlinks are ignored. Filenames are sorted case-insensitively.
+    symlinks are ignored. Filenames are sorted case-insensitively. The returned
+    Markdown string ends with a trailing newline so that writing it directly to
+    disk produces a POSIX-compliant file.
     """
 
     names = [
@@ -55,7 +57,7 @@ def analyze_repo(path: Path) -> str:
     report_lines.extend(f"- {name}" for name in files)
     report_lines.append("")
     report_lines.append("*(OpenAI analysis would go here)*")
-    return "\n".join(report_lines)
+    return "\n".join(report_lines) + "\n"
 
 
 def main() -> None:
