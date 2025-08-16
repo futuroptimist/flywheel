@@ -6,7 +6,8 @@ slug: 'codex-cleanup'
 # Obsolete Prompt Cleanup
 Type: evergreen
 
-Use this prompt to remove one-off prompts that have already been implemented and to prune TODO entries targeting other repositories.
+Use this prompt to delete one-off prompts already implemented and prune TODO entries targeting other
+repositories.
 
 ```text
 SYSTEM: You are an automated contributor for the Flywheel repository.
@@ -18,9 +19,9 @@ CONTEXT:
 - Scan `docs/` for prompts marked `Type: one-off` whose features exist in the codebase.
 - Delete those prompt sections or files.
 - Remove matching rows from `docs/prompt-docs-todos.md`.
-- Regenerate `docs/prompts/summary.md` with
+- Regenerate `docs/prompt-docs-summary.md` with
   `python scripts/update_prompt_docs_summary.py --repos-from dict/prompt-doc-repos.txt \
-  --out docs/prompts/summary.md`.
+  --out docs/prompt-docs-summary.md`.
 - Follow `AGENTS.md` for testing requirements.
 
 REQUEST:

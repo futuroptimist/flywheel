@@ -92,6 +92,18 @@ def test_verify_fit(tmp_path, monkeypatch):
     assert ff.verify_fit(CAD_DIR, STL_DIR)
 
 
+def test_verify_fit_custom_tol(monkeypatch):
+    original = ff._dims
+
+    def bumped(path):
+        x, y, z = original(path)
+        return x + 0.01, y, z
+
+    monkeypatch.setattr(ff, "_dims", bumped)
+    with pytest.raises(AssertionError):
+        ff.verify_fit(CAD_DIR, STL_DIR, tol=0.001)
+
+
 def test_ensure_obj_models_mock(monkeypatch, tmp_path):
     import shutil
     import subprocess

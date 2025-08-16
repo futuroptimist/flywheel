@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-16-update-summary-precommit",
+  "date": "2025-08-16",
+  "component": "ci/update-summary",
+  "rootCause": "pre-commit in Update Repo Feature Summary workflow ran full project checks via run-checks hook, failing in minimal environment",
+  "resolution": "Skip run-checks hook using SKIP=run-checks so only formatting hooks run",
+  "references": ["https://github.com/futuroptimist/flywheel/actions/runs/17001987429"]
+}

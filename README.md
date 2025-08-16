@@ -48,7 +48,7 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - Fast Python installs powered by [uv](https://github.com/astral-sh/uv)
 - Example code and templates
 - Python CLI with subcommands `init`, `update`, `audit`, `prompt`, and `crawl` that prompts interactively unless `--yes` is used
-- RepoCrawler detects installers like uv, pip/pip3, and poetry in workflows
+- RepoCrawler detects installers like uv, pipx, pip/pip3, and poetry in workflows
 - [AGENTS.md](AGENTS.md) detailing included LLM assistants
 - [llms.txt](llms.txt) with quick context for AI helpers
 - [CLAUDE.md](CLAUDE.md) summarizing Anthropic guidance
@@ -203,6 +203,9 @@ A successful run prints:
 All parts fit together.
 ```
 
+Call ``verify_fit`` directly with a custom ``tol`` value to tighten or relax
+the default ``0.1`` mm tolerance.
+
 Lines may include inline ``//`` comments, negative values, decimals without a
 leading zero, trailing decimal points, scientific notation, and underscore digit
 separators; the checker ignores the comments when parsing.
@@ -239,7 +242,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [Gabriel](https://github.com/futuroptimist/gabriel) – "guardian angel" LLM focused on security. Its `docs/FLYWHEEL_RISK_MODEL.md` discusses how flywheel-style automation changes your threat model. See `docs/gabriel-integration.md` for ways these repositories will share tooling and evolve together.
 - ✅ [Futuroptimist](https://github.com/futuroptimist/futuroptimist) – YouTube scripts and automation experiments. See `docs/futuroptimist-integration.md` for lessons this repo borrows and improvement ideas.
 - ✅ [token.place](https://github.com/futuroptimist/token.place) – stateless faucet for LLM inference. See `docs/tokenplace-features.md` and related docs.
-- ✅ [DSPACE](https://github.com/democratizedspace/dspace) – offline-first idle simulation with maker quests. See `docs/dspace-integration.md` for quest ideas.
+- ❌ [DSPACE](https://github.com/democratizedspace/dspace) – offline-first idle simulation with maker quests. See `docs/dspace-integration.md` for quest ideas.
 - ✅ [f2clipboard](https://github.com/futuroptimist/f2clipboard) – bulk-copy utility exploring macro workflows. See `docs/f2clipboard-integration.md`.
 - ✅ [Sigma](https://github.com/futuroptimist/sigma) – ESP32 "AI pin" hardware. See `docs/sigma-integration.md`.
 - ✅ [sugarkube](https://github.com/futuroptimist/sugarkube) – accessible k3s platform for Raspberry Pi devices with off-grid solar. See `docs/sugarkube-integration.md`.
