@@ -55,6 +55,7 @@ class RepoCrawler:
 
     _UV = re.compile(r"setup-uv|uv venv", re.I)
     _PIP = re.compile(r"\bpip(?:3)?\s+install", re.I)
+    _PIPX = re.compile(r"\bpipx\s+install", re.I)
     _POETRY = re.compile(r"poetry\s+install", re.I)
     DARK_PATTERNS = [
         re.compile(r"onbeforeunload", re.I),
@@ -456,9 +457,15 @@ class RepoCrawler:
         return False
 
     def _detect_installer(self, text: str) -> str:
-        """Return installer hint based on workflow snippets."""
+        """Return installer hint based on workflow snippets.
+
+        Detects ``uv``, ``pipx``, ``pip`` and ``poetry`` keywords and returns
+        ``partial`` when no installer is found.
+        """
         if self._UV.search(text):
             return "uv"
+        if self._PIPX.search(text):
+            return "pipx"
         if self._PIP.search(text):
             return "pip"
         if self._POETRY.search(text):

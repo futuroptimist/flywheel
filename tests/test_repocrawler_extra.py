@@ -172,6 +172,7 @@ def test_installer_additional():
     c = RepoCrawler([])
     assert c._detect_installer("setup-uv") == "uv"
     assert c._detect_installer("poetry install") == "poetry"
+    assert c._detect_installer("pipx install flywheel") == "pipx"
     assert c._detect_installer("echo nothing") == "partial"
 
 
