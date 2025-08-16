@@ -15,5 +15,5 @@ CI runs failed on the spelling step, blocking merges.
 
 ## Actions to take
 - Exclude the generated prompt docs summary from spellcheck.
-- Whitelist common physics notation like `precess` and `circ`.
+- Whitelist common physics notation like <!-- codespell:ignore precess -->`precess` and `circ`.
 - Regenerate `docs/prompts/summary.md` with a valid Markdown table so spellcheck can cover it.
