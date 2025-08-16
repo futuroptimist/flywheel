@@ -24,7 +24,6 @@ CONTEXT:
   Ensure these commands succeed:
   - `pre-commit run --all-files`
   - `pytest -q`
-  - `npm run lint`
   - `npm run test:ci`
   - `python -m flywheel.fit`
   - `bash scripts/checks.sh`
