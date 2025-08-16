@@ -204,3 +204,8 @@ EOF
 stdout
 summarise
 upgrader
+NPC
+NPCs
+npcs
+parsers
+unhandled
