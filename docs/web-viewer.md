@@ -19,10 +19,12 @@ assimp export stl/stand.stl webapp/static/models/stand.obj
 
 ## Running Locally
 
+Ensure Node.js 20 or newer is installed. Then run:
+
 ```bash
 uv pip install -r requirements.txt
-npm install
-npx playwright install
+npm ci
+npx playwright install chromium
 python webapp/app.py
 ```
 
