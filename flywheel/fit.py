@@ -55,8 +55,16 @@ def _dims(stl_path: Path) -> Tuple[float, float, float]:
 def verify_fit(
     scad_dir: Path = Path("cad"),
     stl_dir: Path = Path("stl"),
+    tol: float = 0.1,
 ) -> bool:
-    """Check that CAD parameters align across parts and match exported STLs."""
+    """Check that CAD parameters align across parts and match exported STLs.
+
+    Args:
+        scad_dir: Directory containing the source ``.scad`` files.
+        stl_dir: Directory containing the exported ``.stl`` meshes.
+        tol: Maximum allowed deviation when comparing dimensions in
+            millimeters. Defaults to ``0.1``.
+    """
     adapter = parse_scad_vars(scad_dir / "adapter.scad")
     shaft = parse_scad_vars(scad_dir / "shaft.scad")
     wheel = parse_scad_vars(scad_dir / "flywheel.scad")
@@ -66,8 +74,6 @@ def verify_fit(
     assert shaft["shaft_diameter"] == adapter["shaft_diameter"]
     assert wheel["shaft_diameter"] >= shaft["shaft_diameter"]
     assert stand["bearing_outer_d"] > shaft["shaft_diameter"]
-
-    tol = 0.1
 
     shaft_dims = _dims(stl_dir / "shaft.stl")
     assert abs(shaft_dims[2] - shaft["shaft_length"]) < tol

@@ -203,6 +203,9 @@ A successful run prints:
 All parts fit together.
 ```
 
+Call ``verify_fit`` directly with a custom ``tol`` value to tighten or relax
+the default ``0.1`` mm tolerance.
+
 Lines may include inline ``//`` comments, negative values, decimals without a
 leading zero, trailing decimal points, scientific notation, and underscore digit
 separators; the checker ignores the comments when parsing.
