@@ -28,6 +28,8 @@ jobs:
         run: |
           python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --out docs/prompt-docs-summary.md --token $GITHUB_TOKEN
       - name: Run pre-commit
+        env:
+          SKIP: run-checks
         run: |
           pre-commit run --files docs/prompt-docs-summary.md || true
           git add docs/prompt-docs-summary.md

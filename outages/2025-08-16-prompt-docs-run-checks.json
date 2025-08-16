@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-16-prompt-docs-run-checks",
+  "date": "2025-08-16",
+  "component": "docs/prompt-summary",
+  "rootCause": "Pre-commit ran project checks without Node in docs summary workflow",
+  "resolution": "Set SKIP=run-checks to bypass project checks in scheduled workflow",
+  "references": ["https://github.com/futuroptimist/flywheel/actions/runs/17001987429"]
+}
