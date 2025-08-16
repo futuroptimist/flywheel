@@ -29,7 +29,7 @@ black --check . --exclude ".venv/|node_modules/"
 if [ -f package.json ]; then
   npm ci
   if [ -z "$SKIP_E2E" ]; then
-    npx playwright install --with-deps
+    npx playwright install chromium
     npm run lint
     npm run format:check
     npm run test:ci

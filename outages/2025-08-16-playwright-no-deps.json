@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-16-playwright-no-deps",
+  "date": "2025-08-16",
+  "component": "tests/playwright",
+  "rootCause": "Playwright install step attempted to fetch system dependencies via --with-deps, causing apt failures in CI",
+  "resolution": "Install Chromium only without system dependencies and update tests",
+  "references": ["https://github.com/futuroptimist/flywheel/actions/runs/17004384104"]
+}
