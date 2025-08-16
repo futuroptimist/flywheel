@@ -24,7 +24,8 @@ def parse_scad_vars(path: str | Path) -> Dict[str, float]:
     semicolon are ignored. The parser strips an initial UTF‑8 BOM and
     supports negative values, decimals without a leading zero, trailing
     decimal points, scientific notation, underscore digit separators, and
-    multiple assignments on the same line.
+    multiple assignments on the same line. Raises :class:`ValueError` when a
+    variable assignment lacks a numeric value.
     """
     path = Path(path)
     text = path.read_text()
@@ -41,6 +42,11 @@ def parse_scad_vars(path: str | Path) -> Dict[str, float]:
             if m:
                 num = m.group(2).replace("_", "")
                 vars[m.group(1)] = float(num)
+            elif re.match(
+                r"[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*" r"[a-zA-Z_][a-zA-Z0-9_]*\s*$",
+                part,
+            ):
+                raise ValueError(f"invalid assignment: {part}")
     return vars
 
 
