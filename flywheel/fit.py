@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import re
 from pathlib import Path
 from typing import Dict, Tuple
@@ -41,12 +42,12 @@ def parse_scad_vars(path: str | Path) -> Dict[str, float]:
             m = _DEF_RE.match(part + ";")
             if m:
                 num = m.group(2).replace("_", "")
-                vars[m.group(1)] = float(num)
-            elif re.match(
-                r"[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*" r"[a-zA-Z_][a-zA-Z0-9_]*\s*$",
-                part,
-            ):
-                raise ValueError(f"invalid assignment: {part}")
+                value = float(num)
+                if not math.isfinite(value):
+                    raise ValueError(
+                        f"Non-finite value for {m.group(1)}: {num}",
+                    )
+                vars[m.group(1)] = value
     return vars
 
 
