@@ -1,9 +1,24 @@
+<!-- spellchecker: disable -->
 # Prompt Docs Summary
 
 This index is auto-generated with
 [scripts/update_prompt_docs_summary.py]
 (../../scripts/update_prompt_docs_summary.py)
 using RepoCrawler to discover prompt documents across repositories.
+
+RepoCrawler walks each repo, parses prompt front matter, and records the `type`
+(evergreen, one-off, unknown) along with whether each entry is 1-click. Update
+the inventory after editing prompt docs:
+
+```bash
+python scripts/update_prompt_docs_summary.py
+```
+
+### Triage unknown prompts
+
+Unknown entries usually mean missing `type` metadata. Convert them to
+`evergreen` or `one-off`, or prune them entirely to keep the list lean and
+high-signal.
 
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
