@@ -56,8 +56,9 @@ def test_default_branch_errors():
 
 def test_init_uses_requests_cache(tmp_path, monkeypatch):
     class FakeSession:
-        def __init__(self, path):
+        def __init__(self, path, expire_after):
             self.path = path
+            self.expire_after = expire_after
             self.headers = {}
 
     fake_rc = SimpleNamespace(CachedSession=FakeSession)
@@ -66,6 +67,7 @@ def test_init_uses_requests_cache(tmp_path, monkeypatch):
     crawler = RepoCrawler([])
     assert isinstance(crawler.session, FakeSession)
     assert crawler.session.path == Path(".cache") / "github-cache"
+    assert crawler.session.expire_after == 3600
 
 
 def test_latest_commit_error():

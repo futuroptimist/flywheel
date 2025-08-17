@@ -57,7 +57,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | ❌ | 2025-08-11 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | ❌ | 2025-08-11 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | ❌ | 2025-08-11 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 5 | ✅ | ❌ | ❌ | ✅ | ❌ | 2025-08-11 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | ❌ | 2025-08-11 |
 
 ## Dark & Bright Pattern Scan
 | Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |
