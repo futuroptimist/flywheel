@@ -1,3 +1,4 @@
+<!-- spellchecker: disable -->
 # Prompt Docs Summary
 
 This index is auto-generated with

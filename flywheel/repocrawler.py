@@ -204,7 +204,7 @@ class RepoCrawler:
             cache_dir = Path(".cache")
             cache_dir.mkdir(exist_ok=True)
             self.session = requests_cache.CachedSession(
-                cache_dir / "github-cache"
+                cache_dir / "github-cache", expire_after=3600
             )  # noqa: E501
         else:  # pragma: no cover - requests_cache not installed
             self.session = requests.Session()
