@@ -208,13 +208,30 @@ def main() -> None:
     total_prompts = sum(counts.values())
     repo_count = len(grouped)
 
+    triage_counts: list[list[str | int]] = []
+    for repo_link, repo_prompts in grouped.items():
+        unknown = 0
+        one_off = 0
+        for _, _, ptype, _ in repo_prompts:
+            p = ptype.replace("*", "")
+            if p == "unknown":
+                unknown += 1
+            elif p == "one-off":
+                one_off += 1
+        if unknown or one_off:
+            triage_counts.append([repo_link, unknown, one_off])
+
     lines = [
+        "<!-- spellchecker: disable -->",
         "# Prompt Docs Summary",
         "",
         "This index is auto-generated with ",
         "[scripts/update_prompt_docs_summary.py]",
         "(../../scripts/update_prompt_docs_summary.py) ",
         "using RepoCrawler to discover prompt documents across repositories.",
+        "",
+        "RepoCrawler powers other reports like repo-feature summaries; "
+        "use it as a model for deep dives.",
         "",
         (
             "All prompts are verified with OpenAI Codex. Other coding agents "
@@ -237,40 +254,70 @@ def main() -> None:
             "copy & paste without editing."
         ),
         "",
-        "## Legend",
-        "",
-        tabulate(
-            [
-                [
-                    "evergreen",
-                    (
-                        "prompts that can be reused to hillclimb toward "
-                        "goals like feature completeness or test coverage"
-                    ),
-                ],
-                [
-                    "one-off",
-                    (
-                        "prompts to implement features or make "
-                        "recommended changes "
-                        "(glorified TODO; remove after cleanup)"
-                    ),
-                ],
-                # fmt: off
-                [
-                    "unknown",
-                    (
-                        "catch-all; refine into another category or "
-                        "create a new one"
-                    ),
-                ],
-                # fmt: on
-            ],
-            headers=["Type", "Description"],
-            tablefmt="github",
-        ),
-        "",
     ]
+
+    if triage_counts:
+        lines.extend(
+            [
+                "## Triage Summary",
+                "",
+                "Repos with prompts still marked as unknown or one-off.",
+                "",
+                tabulate(
+                    triage_counts,
+                    headers=["Repo", "Unknown", "One-off"],
+                    tablefmt="github",
+                ),
+                "",
+                (
+                    "Run this script to regenerate the table after "
+                    "triaging prompts:"  # noqa: E501
+                ),
+                "",
+                "```bash",
+                "python scripts/update_prompt_docs_summary.py "
+                "--repos-from docs/repo_list.txt "
+                "--out docs/prompt-docs-summary.md",
+                "```",
+                "",
+            ]
+        )
+
+    lines.extend(
+        [
+            "## Legend",
+            "",
+            tabulate(
+                [
+                    [
+                        "evergreen",
+                        (
+                            "prompts that can be reused to hillclimb toward "
+                            "goals like feature completeness or test coverage"
+                        ),
+                    ],
+                    [
+                        "one-off",
+                        (
+                            "prompts to implement features or make "
+                            "recommended changes "
+                            "(glorified TODO; remove after cleanup)"
+                        ),
+                    ],
+                    [
+                        "unknown",
+                        (
+                            "catch-all; refine into another category or "
+                            "create a new one"
+                        ),
+                    ],
+                ],
+                headers=["Type", "Description"],
+                tablefmt="github",
+            ),
+            "",
+        ]
+    )
 
     for repo_link, prompts in grouped.items():
         lines.append(f"## {repo_link}")
