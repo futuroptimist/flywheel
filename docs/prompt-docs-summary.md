@@ -181,3 +181,19 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)   | **[docs/prompts-codex-pi-image.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-pi-image.md)**                                                | **[Codex Pi Image Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-pi-image.md#codex-pi-image-prompt)**                                                                      | **unknown** | **yes**      |
 
 _Updated automatically: 2025-08-18_
+
+## Codex Prompt for Unknowns and One-offs
+
+```
+You are a Codex agent triaging unknown and one-off prompts in this summary.
+For each entry:
+1. Inspect the linked repo and file to learn the context.
+2. Decide how to resolve it: reclassify, implement, or drop.
+3. If work belongs elsewhere, create a new .md in that repo with details and link back.
+4. Record follow-ups in docs/prompt-docs-todos.md and update this summary when done.
+
+After resolving items, run:
+python scripts/update_prompt_docs_summary.py \
+  --repos-from docs/repo_list.txt \
+  --out docs/prompt-docs-summary.md
+```
