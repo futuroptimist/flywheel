@@ -6,30 +6,30 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `2bf2608` | ✅ | 2025-08-18 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `832d129` | ✅ | 2025-08-18 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `7f1cc3c` | ✅ | 2025-08-16 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `a26c207` | ✅ | 2025-08-16 |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `699d02a` | ✅ | 2025-08-18 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `4de57cd` | ✅ | 2025-08-16 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `a6e01b3` | ✅ | 2025-08-18 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `c580cd7` | ✅ | 2025-08-18 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `d019235` | ✅ | 2025-08-16 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `a7fd055` | ✅ | 2025-08-16 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `e73708a` | ✅ | 2025-08-16 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `19b9053` | ✅ | 2025-08-17 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `81d9d16` | ✅ | 2025-08-18 |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |
 | ---- | -------- | ----- | ------- | --------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✔️ | — | ✅ | 🚀 uv | 2025-08-18 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ❌ | — | ✅ | 🚀 uv | 2025-08-18 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | ❌ | — | ✅ | 🚀 uv | 2025-08-16 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ❌ | — | ✅ | 🚀 uv | 2025-08-16 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✔️ | — | ✅ | 🚀 uv | 2025-08-18 |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | 99% | — | ✅ | pip | 2025-08-16 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✔️ | — | ✅ | 🔶 partial | 2025-08-18 |
-| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ✔️ | — | ✅ | 🚀 uv | 2025-08-16 |
-| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✔️ | — | ✅ | 🚀 uv | 2025-08-16 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ❌ | — | ✅ | 🚀 uv | 2025-08-18 |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ❌ | — | ✅ | pip | 2025-08-16 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ❌ | — | ✅ | 🔶 partial | 2025-08-18 |
+| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | — | ✅ | 🚀 uv | 2025-08-16 |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ❌ | — | ✅ | 🚀 uv | 2025-08-16 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ❌ | — | ✅ | pip | 2025-08-16 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 57% | — | ✅ | 🚀 uv | 2025-08-17 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ❌ | — | ✅ | 🚀 uv | 2025-08-18 |
 
 ## Policies & Automation
 | Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Last-Updated (UTC) |
@@ -43,7 +43,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-16 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-16 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2025-08-16 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2025-08-17 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2025-08-18 |
 
 ## Dark & Bright Pattern Scan
 | Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |
@@ -57,7 +57,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | 0 | 0 | 2025-08-16 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | 0 | 0 | 2025-08-16 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | 0 | 0 | 2025-08-16 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 0 | 0 | 2025-08-17 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 0 | 0 | 2025-08-18 |
 
 Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip.
 Coverage percentages are parsed from their badges where available. Codecov shows ✅ when a Codecov config or badge is present. Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses.
