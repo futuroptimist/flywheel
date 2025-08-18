@@ -32,3 +32,32 @@ REQUEST:
 OUTPUT:
 A pull request that deletes outdated prompts and cleans up corresponding TODO items.
 ```
+
+## Upgrade Prompt
+Type: evergreen
+
+Use this prompt to refine the cleanup instructions.
+
+```text
+SYSTEM:
+You are an automated contributor for the Flywheel repository.
+
+PURPOSE:
+Keep this cleanup prompt effective for removing obsolete items.
+
+CONTEXT:
+- Follow `AGENTS.md` and `README.md`.
+- Ensure `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`,
+  `python -m flywheel.fit`, and `bash scripts/checks.sh` pass.
+- Regenerate `docs/prompt-docs-summary.md` with
+  `python scripts/update_prompt_docs_summary.py --repos-from \
+  dict/prompt-doc-repos.txt --out docs/prompt-docs-summary.md`.
+
+REQUEST:
+1. Review this file for outdated steps or unclear language.
+2. Update content and regenerate the summary.
+3. Run the checks above.
+
+OUTPUT:
+A pull request that improves this cleanup prompt with all checks green.
+```
