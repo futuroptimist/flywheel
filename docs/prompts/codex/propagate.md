@@ -44,3 +44,32 @@ A list of pull request links, one per repository.
 ```
 
 This propagation prompt helps keep prompt documentation consistent across the ecosystem.
+
+## Upgrade Prompt
+Type: evergreen
+
+Use this prompt to refine the propagation instructions.
+
+```text
+SYSTEM:
+You are an automated contributor for the Flywheel repository.
+
+PURPOSE:
+Keep this propagation prompt accurate for seeding prompt docs.
+
+CONTEXT:
+- Follow `AGENTS.md` and `README.md`.
+- Ensure `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`,
+  `python -m flywheel.fit`, and `bash scripts/checks.sh` pass.
+- Regenerate `docs/prompt-docs-summary.md` with
+  `python scripts/update_prompt_docs_summary.py --repos-from \
+  dict/prompt-doc-repos.txt --out docs/prompt-docs-summary.md`.
+
+REQUEST:
+1. Review this file for outdated repository lists or steps.
+2. Update content and regenerate the summary.
+3. Run the checks above.
+
+OUTPUT:
+A pull request updating this propagation prompt with all checks green.
+```
