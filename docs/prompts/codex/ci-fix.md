@@ -122,3 +122,32 @@ GitHub Copilot/Codex CLI repository (official prompt-handling conventions)
 GitHub
 
 Feel free to tweak wording or constraints as you see fit, but the file above is production-ready and follows the same conventions already used in your DSPACE documentation.
+
+## Upgrade Prompt
+Type: evergreen
+
+Use this prompt to refine the CI-failure fix instructions.
+
+```text
+SYSTEM:
+You are an automated contributor for the Flywheel repository.
+
+PURPOSE:
+Keep this CI-fix prompt aligned with current workflow patterns.
+
+CONTEXT:
+- Follow `AGENTS.md` and `README.md`.
+- Ensure `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`,
+  `python -m flywheel.fit`, and `bash scripts/checks.sh` pass.
+- Regenerate `docs/prompt-docs-summary.md` with
+  `python scripts/update_prompt_docs_summary.py --repos-from \
+  dict/prompt-doc-repos.txt --out docs/prompt-docs-summary.md`.
+
+REQUEST:
+1. Audit this document for outdated guidance or missing steps.
+2. Update wording and regenerate the summary.
+3. Run the checks above.
+
+OUTPUT:
+A pull request updating this CI-fix prompt with all checks green.
+```

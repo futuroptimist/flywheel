@@ -102,7 +102,10 @@ USER:
 1. Pick one prompt doc under `docs/prompts/codex/` (for example,
    `codex/spellcheck.md`).
 2. Fix outdated instructions, links or formatting.
-3. Run the checks above.
+3. Regenerate `docs/prompt-docs-summary.md` with
+   `python scripts/update_prompt_docs_summary.py --repos-from \
+   dict/prompt-doc-repos.txt --out docs/prompt-docs-summary.md`.
+4. Run the checks above.
 
 OUTPUT:
 A pull request with the improved prompt doc and passing checks.

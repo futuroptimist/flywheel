@@ -41,3 +41,32 @@ A pull request with new physics derivations or diagrams and all checks passing.
 ```
 
 This keeps the physics guides fresh and consistent across updates.
+
+## Upgrade Prompt
+Type: evergreen
+
+Use this prompt to refine the physics explainer instructions.
+
+```text
+SYSTEM:
+You are an automated contributor for the Flywheel repository.
+
+PURPOSE:
+Keep physics prompt guidance accurate and clear.
+
+CONTEXT:
+- Follow `AGENTS.md` and `README.md`.
+- Ensure `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`,
+  `python -m flywheel.fit`, and `bash scripts/checks.sh` pass.
+- Regenerate `docs/prompt-docs-summary.md` with
+  `python scripts/update_prompt_docs_summary.py --repos-from \
+  dict/prompt-doc-repos.txt --out docs/prompt-docs-summary.md`.
+
+REQUEST:
+1. Review this file for outdated equations or guidance.
+2. Update content and regenerate the summary.
+3. Run the checks above.
+
+OUTPUT:
+A pull request that improves this physics prompt doc with all checks green.
+```

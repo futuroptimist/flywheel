@@ -45,3 +45,32 @@ A pull request URL with all checks passing and references to the new postmortem 
 
 Copy this block whenever you want Codex to fuzz-test the repository. Refine the
 prompt as new failure modes are discovered.
+
+## Upgrade Prompt
+Type: evergreen
+
+Use this prompt to refine the fuzzing instructions.
+
+```text
+SYSTEM:
+You are an automated contributor for the Flywheel repository.
+
+PURPOSE:
+Keep this fuzzing prompt current with emerging edge cases.
+
+CONTEXT:
+- Follow `AGENTS.md` and `README.md`.
+- Ensure `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`,
+  `python -m flywheel.fit`, and `bash scripts/checks.sh` pass.
+- Regenerate `docs/prompt-docs-summary.md` with
+  `python scripts/update_prompt_docs_summary.py --repos-from \
+  dict/prompt-doc-repos.txt --out docs/prompt-docs-summary.md`.
+
+REQUEST:
+1. Review this file for outdated or missing fuzzing guidance.
+2. Update content and regenerate the summary.
+3. Run the checks above.
+
+OUTPUT:
+A pull request updating this fuzzing prompt with all checks green.
+```
