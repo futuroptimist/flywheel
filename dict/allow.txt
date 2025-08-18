@@ -199,6 +199,7 @@ Lockfile
 Untriaged
 Upgrader
 TODOs
+todos
 whitespace
 EOF
 stdout
