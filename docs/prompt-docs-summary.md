@@ -1,9 +1,12 @@
+<!-- spellchecker: disable -->
 # Prompt Docs Summary
 
 This index is auto-generated with
 [scripts/update_prompt_docs_summary.py]
 (../../scripts/update_prompt_docs_summary.py)
 using RepoCrawler to discover prompt documents across repositories.
+
+RepoCrawler powers other reports like repo-feature summaries; use it as a model for deep dives.
 
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
@@ -12,6 +15,29 @@ All prompts are verified with OpenAI Codex. Other coding agents like Claude Code
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
 All listed prompts are mechanically verified as 1-click ready: copy & paste without editing.
+
+## Triage Summary
+
+Repos with prompts still marked as unknown or one-off.
+
+| Repo                                                                          |   Unknown |   One-off |
+|-------------------------------------------------------------------------------|-----------|-----------|
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       |         1 |         2 |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel)                   |        11 |         0 |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel)             |         8 |         0 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) |         2 |         0 |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place)     |         7 |         0 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace)       |        29 |         0 |
+| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard)     |         3 |         0 |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma)                 |         3 |         0 |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove)                   |         5 |         0 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)         |         4 |         0 |
+
+Run this script to regenerate the table after triaging prompts:
+
+```bash
+python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --out docs/prompt-docs-summary.md
+```
 
 ## Legend
 
@@ -23,14 +49,11 @@ All listed prompts are mechanically verified as 1-click ready: copy & paste with
 
 ## **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**
 
-| Path                                                                                                                     | Prompt                                                                                                                                                                              | Type      | One-click?   |
-|--------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|--------------|
-| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md) | [Upgrade Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md#upgrade-prompt)                                                               | evergreen | yes          |
-| [docs/prompts/codex/fuzzing.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/fuzzing.md)       | [OpenAI Codex Fuzzing Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/fuzzing.md#openai-codex-fuzzing-prompt)                                        | evergreen | yes          |
-| [docs/prompts/codex/spellcheck.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/spellcheck.md) | [Codex Spellcheck Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/spellcheck.md#codex-spellcheck-prompt)                                             | evergreen | yes          |
-| [docs/prompts/codex/ci-fix.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/ci-fix.md)         | [2 – Add a column to `docs/repo-feature-summary.md`](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/ci-fix.md#2-add-a-column-to-docsrepo-feature-summarymd) | unknown   | yes          |
-| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md) | [Implementation prompts](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md#implementation-prompts)                                               | one-off   | yes          |
-| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md) | [1 Add ⭐ Stars & 🐞 Open-Issues columns](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md#1-add-stars-open-issues-columns)                       | one-off   | yes          |
+| Path                                                                                                                     | Prompt                                                                                                                                                                              | Type    | One-click?   |
+|--------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|--------------|
+| [docs/prompts/codex/ci-fix.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/ci-fix.md)         | [2 – Add a column to `docs/repo-feature-summary.md`](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/ci-fix.md#2-add-a-column-to-docsrepo-feature-summarymd) | unknown | yes          |
+| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md) | [Implementation prompts](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md#implementation-prompts)                                               | one-off | yes          |
+| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md) | [1 Add ⭐ Stars & 🐞 Open-Issues columns](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md#1-add-stars-open-issues-columns)                       | one-off | yes          |
 
 ## [futuroptimist/axel](https://github.com/futuroptimist/axel)
 
