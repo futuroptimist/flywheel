@@ -181,3 +181,15 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)   | **[docs/prompts-codex-pi-image.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-pi-image.md)**                                                | **[Codex Pi Image Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-pi-image.md#codex-pi-image-prompt)**                                                                      | **unknown** | **yes**      |
 
 _Updated automatically: 2025-08-18_
+
+## Codex Prompt: Resolve Unknowns and One-offs
+
+```text
+You are Codex iterating on docs/prompt-docs-summary.md. Drill into entries labeled
+"unknown" or "one-off" across repos. For each entry:
+1. Ask targeted questions or note missing details needed to implement it.
+2. If the task belongs in another repo, create a Markdown prompt there (e.g.,
+   docs/prompts/<task>.md) summarizing work and link back here.
+3. Update this summary with new status once resolved or deferred.
+Respond with the next action plan.
+```
