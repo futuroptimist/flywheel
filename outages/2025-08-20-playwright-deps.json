@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-20-playwright-deps",
+  "date": "2025-08-20",
+  "component": "tests/playwright",
+  "rootCause": "Playwright tests ran without required system dependencies, causing browser launch failures",
+  "resolution": "Install Playwright system dependencies before running end-to-end tests",
+  "references": ["https://github.com/futuroptimist/flywheel/actions/runs/17072058088"]
+}

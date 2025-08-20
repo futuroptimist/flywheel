@@ -8,9 +8,9 @@ test('package.json defines test:ci script', () => {
   expect(pkg.scripts['test:ci']).toBeDefined();
 });
 
-test('playwright:install only installs chromium', () => {
+test('playwright:install installs browser and deps', () => {
   const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url)));
   expect(pkg.scripts['playwright:install']).toBe(
-    'playwright install chromium',
+    'playwright install-deps chromium && playwright install chromium',
   );
 });
