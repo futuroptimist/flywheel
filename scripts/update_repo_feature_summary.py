@@ -29,7 +29,17 @@ def main() -> None:
     crawler = RepoCrawler(repos, token=args.token)
     infos = crawler.crawl()
 
-    basics = [["Repo", "Branch", "Commit", "Last-Updated (UTC)"]]
+    basics = [
+        [
+            "Repo",
+            "Branch",
+            "Commit",
+            "Trunk",
+            "Stars",
+            "Open Issues",
+            "Last-Updated (UTC)",
+        ]
+    ]
     coverage = [
         [
             "Repo",
@@ -60,7 +70,22 @@ def main() -> None:
             link = f"**{link}**"
         commit = f"`{info.latest_commit}`" if info.latest_commit else "n/a"
         updated = info.commit_date or "n/a"
-        basics.append([link, info.branch, commit, updated])
+        trunk = "n/a"
+        if info.trunk_green is True:
+            trunk = "✅"
+        elif info.trunk_green is False:
+            trunk = "❌"
+        basics.append(
+            [
+                link,
+                info.branch,
+                commit,
+                trunk,
+                str(info.stars),
+                str(info.open_issues),
+                updated,
+            ]
+        )
 
         cov = "❌"
         if info.coverage:

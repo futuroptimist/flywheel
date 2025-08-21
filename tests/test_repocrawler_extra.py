@@ -54,6 +54,26 @@ def test_default_branch_errors():
     assert crawler._default_branch("demo/repo") == "main"
 
 
+def test_repo_stats_request_exception():
+    class ErrSession:
+        def __init__(self):
+            self.headers = {}
+
+        def get(self, *_, **__):
+            raise requests.RequestException("boom")
+
+    crawler = RepoCrawler([], session=ErrSession())
+    assert crawler._repo_stats("demo/repo") == (0, 0)
+
+
+def test_repo_stats_bad_json():
+    sess = make_session(
+        {"/repos/demo/repo": DummyResp(200, json_data=ValueError("bad"))}
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._repo_stats("demo/repo") == (0, 0)
+
+
 def test_init_uses_requests_cache(tmp_path, monkeypatch):
     class FakeSession:
         def __init__(self, path, expire_after):
@@ -245,6 +265,8 @@ def test_generate_summary_no_patch(monkeypatch):
         latest_commit="123cafe",
         workflow_count=1,
         trunk_green=None,
+        stars=0,
+        open_issues=0,
         commit_date="2024-01-01",
     )
     crawler = RepoCrawler([])
