@@ -1,7 +1,7 @@
+futuroptimist/flywheel
 futuroptimist/futuroptimist
 futuroptimist/token.place
 democratizedspace/dspace@v3
-futuroptimist/flywheel
 futuroptimist/gabriel
 futuroptimist/f2clipboard
 futuroptimist/axel

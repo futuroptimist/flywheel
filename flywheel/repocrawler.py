@@ -13,6 +13,10 @@ from urllib.parse import urlparse
 import requests
 from requests import RequestException
 
+from .logging import get_logger
+
+logger = get_logger(__name__)
+
 try:  # pragma: no cover - optional dependency
     import requests_cache
 except Exception:  # pragma: no cover - fallback when cache not installed
@@ -100,7 +104,8 @@ class RepoCrawler:
                 headers={"Accept": "application/vnd.github+json"},
                 timeout=10,
             )
-        except RequestException:
+        except RequestException as exc:
+            logger.warning("request to %s failed: %s", url, exc)
             return []
         if resp.status_code == 200:
             try:
@@ -110,8 +115,10 @@ class RepoCrawler:
                     for item in data.get("tree", [])
                     if item.get("type") == "blob"
                 ]
-            except Exception:
+            except Exception as exc:
+                logger.debug("failed to parse response from %s: %s", url, exc)
                 return []
+        logger.debug("unexpected status %s for %s", resp.status_code, url)
         return []
 
     def _count_patterns(
