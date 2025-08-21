@@ -6,17 +6,17 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist)** | main | `4249460` | ✅ | 0 | 0 | 2025-08-21 |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `07be87a` | ✅ | 6 | 8 | 2025-08-21 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `0c06203` | ✅ | 3 | 78 | 2025-08-21 |
-| [futuroptimist/flywheel](https://github.com/futuroptimist/flywheel) | main | `100187a` | ✅ | 0 | 2 | 2025-08-21 |
+| **[futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist)** | main | `556af5f` | ✅ | 0 | 0 | 2025-08-21 |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `888c2bc` | ✅ | 6 | 3 | 2025-08-21 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `0c06203` | ✅ | 3 | 37 | 2025-08-21 |
+| [futuroptimist/flywheel](https://github.com/futuroptimist/flywheel) | main | `15fbccd` | ✅ | 0 | 0 | 2025-08-21 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `7c2f06e` | ✅ | 0 | 0 | 2025-08-20 |
-| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `649bc64` | ✅ | 1 | 1 | 2025-08-20 |
+| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `649bc64` | ✅ | 1 | 0 | 2025-08-20 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `d8c91d7` | ✅ | 0 | 1 | 2025-08-20 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `d01da15` | ✅ | 0 | 0 | 2025-08-20 |
-| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `e48eac8` | ✅ | 0 | 1 | 2025-08-20 |
+| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `e48eac8` | ✅ | 0 | 0 | 2025-08-20 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `640679b` | ✅ | 0 | 0 | 2025-08-20 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `a18631f` | ✅ | 0 | 1 | 2025-08-20 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `a18631f` | ✅ | 0 | 0 | 2025-08-20 |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |
@@ -32,22 +32,6 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | ❌ | — | ✅ | 🚀 uv | 2025-08-20 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ❌ | — | ✅ | pip | 2025-08-20 |
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ❌ | — | ✅ | 🚀 uv | 2025-08-20 |
-
-
-## Security & Dependency Health
-| Repo | Dependabot | Secret-Scanning | CodeQL | Snyk (badge) |
-| ---- | ---------- | --------------- | ------ | ------------ |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ❌ | ❌ | ❌ | ❌ |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ | ❌ | ✅ | ❌ |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✅ | ❌ | ❌ | ❌ |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ | ❌ | ✅ | ❌ |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ | ❌ | ❌ | ❌ |
-| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | ❌ | ❌ | ❌ |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ | ❌ | ❌ | ❌ |
-| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ❌ | ❌ | ❌ | ❌ |
-| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | ❌ | ❌ | ❌ | ❌ |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ❌ | ❌ | ❌ |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ❌ | ❌ | ❌ | ❌ |
 
 ## Policies & Automation
 | Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Last-Updated (UTC) |
