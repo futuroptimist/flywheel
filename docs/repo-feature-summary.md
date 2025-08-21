@@ -6,10 +6,10 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----------------- |
-| **[futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist)** | main | `0aebacb` | ✅ | 2025-08-21 |
+| **[futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist)** | main | `4313311` | ✅ | 2025-08-21 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `6e4e288` | ✅ | 2025-08-20 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `0e24fe7` | ✅ | 2025-08-20 |
-| [futuroptimist/flywheel](https://github.com/futuroptimist/flywheel) | main | `522a02b` | ✅ | 2025-08-21 |
+| [futuroptimist/flywheel](https://github.com/futuroptimist/flywheel) | main | `0c3e12c` | ✅ | 2025-08-21 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `7c2f06e` | ✅ | 2025-08-20 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `649bc64` | ✅ | 2025-08-20 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `d8c91d7` | ✅ | 2025-08-20 |
