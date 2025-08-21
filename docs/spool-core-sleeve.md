@@ -11,10 +11,10 @@ sanity‑check builds.
 use "../utils/spool_core_sleeve.scad";
 
 // direct parameters
-spool_core_sleeve(inner_id=55, target_od=73, length=60, clearance=0.20);
+spool_core_sleeve(inner_id=55, target_od=62, length=60, clearance=0.20);
 
 // or via named preset
-spool_core_sleeve_preset("sunlu55_to73_len60");
+spool_core_sleeve_preset("sunlu55_to62_len60");
 ```
 
 ### Parameters
@@ -22,7 +22,7 @@ spool_core_sleeve_preset("sunlu55_to73_len60");
 | Name        | Type | Default | Notes                               |
 |-------------|------|---------|-------------------------------------|
 | `inner_id`  | mm   | 55      | Measured bore (ID) of the spool     |
-| `target_od` | mm   | 73      | Desired sleeve outer diameter (OD)  |
+| `target_od` | mm   | 62      | Desired sleeve outer diameter (OD)  |
 | `length`    | mm   | 60      | Axial length (match spool width)    |
 | `clearance` | mm   | 0.20    | Added to diameter of bore (total)   |
 | `$fn_outer` | —    | 200     | Facets for outer cylinder           |
@@ -36,16 +36,16 @@ clearance (e.g., 0.15–0.30).
 Example (Linux/macOS):
 
 ```bash
-openscad -o stl/spool_core_sleeve/sunlu55_to73_len60.stl \
-  -D INNER_ID=55 -D TARGET_OD=73 -D LENGTH=60 -D CLEARANCE=0.20 \
+openscad -o stl/spool_core_sleeve/sunlu55_to62_len60.stl \
+  -D INNER_ID=55 -D TARGET_OD=62 -D LENGTH=60 -D CLEARANCE=0.20 \
   cad/examples/spool_core_sleeve_example.scad
 ```
 
 Or with the preset shortcut:
 
 ```bash
-openscad -o stl/spool_core_sleeve/sunlu55_to73_len60.stl \
-  -D PRESET="sunlu55_to73_len60" \
+openscad -o stl/spool_core_sleeve/sunlu55_to62_len60.stl \
+  -D PRESET="sunlu55_to62_len60" \
   cad/examples/spool_core_sleeve_example.scad
 ```
 

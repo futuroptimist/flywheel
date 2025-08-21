@@ -72,6 +72,7 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - Web viewer instructions in `docs/web-viewer.md`
 - CI troubleshooting tips in `docs/ci-guide.md`
 - Nightly STL exports are committed back to `stl/` after each run
+- Sunlu spool core sleeve adapter [STL](stl/spool_core_sleeve/sunlu55_to62_len60.stl)
 - Flywheel construction guide in `docs/flywheel-construction.md` with CAD files in `cad/`
   including `stand.scad`, `shaft.scad`, and `adapter.scad`. Assembly details live in `docs/flywheel-stand.md`, clamp instructions in `docs/flywheel-adapter.md`, and physics in `docs/flywheel-physics.md`
 
@@ -256,7 +257,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [f2clipboard](https://github.com/futuroptimist/f2clipboard) –  \
   bulk-copy utility exploring macro workflows.  \
   See `docs/f2clipboard-integration.md`.
-- ❌ [Axel](https://github.com/futuroptimist/axel) –  \
+- ✅ [Axel](https://github.com/futuroptimist/axel) –  \
   personal LLM accelerator for repository quests.  \
   See `docs/axel-integration.md` for pairings.
 - ✅ [Sigma](https://github.com/futuroptimist/sigma) –  \
@@ -264,7 +265,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   See `docs/sigma-integration.md`.
 - ✅ [gitshelves](https://github.com/futuroptimist/gitshelves) –  \
   3D-printable block models from GitHub commits.
-- ❌ [wove](https://github.com/futuroptimist/wove) –  \
+- ✅ [wove](https://github.com/futuroptimist/wove) –  \
   toolkit for knitting and robotic looms.
 - ✅ [sugarkube](https://github.com/futuroptimist/sugarkube) –  \
   k3s platform for off-grid Raspberry Pi clusters.  \
