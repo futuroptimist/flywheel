@@ -8,6 +8,8 @@ using RepoCrawler to discover prompt documents across repositories.
 
 RepoCrawler powers other reports like repo-feature summaries; use it as a model for deep dives.
 
+Think of each listed repository as a small flywheel belted to this codebase. The list in dict/prompt-doc-repos.txt mirrors docs/repo_list.txt; if a repo drops from the output, fix that integration rather than deleting it.
+
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
 **111 one-click prompts verified across 11 repos (20 evergreen, 4 one-off, 12 unknown).**
