@@ -2,9 +2,6 @@
 
 This table tracks which flywheel features each related repository has adopted.
 
-> Flywheel is dual-licensed as **MIT OR Apache-2.0**. Related repositories are
-> encouraged to adopt the same dual license scheme.
-
 <!-- spellchecker: disable -->
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
@@ -12,7 +9,7 @@ This table tracks which flywheel features each related repository has adopted.
 | **[futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist)** | main | `124657b` | ✅ | 0 | 0 | 2025-08-21 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `99697d1` | ✅ | 6 | 3 | 2025-08-21 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `f4a29c4` | ✅ | 3 | 37 | 2025-08-21 |
-| [futuroptimist/flywheel](https://github.com/futuroptimist/flywheel) | main | `62fe018` | ✅ | 0 | 4 | 2025-08-21 |
+| [futuroptimist/flywheel](https://github.com/futuroptimist/flywheel) | main | `16efc8f` | ✅ | 0 | 3 | 2025-08-21 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `a0a9b1c` | ✅ | 0 | 0 | 2025-08-21 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `85d425d` | ✅ | 1 | 0 | 2025-08-21 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `7eb3ccc` | ✅ | 0 | 0 | 2025-08-21 |
