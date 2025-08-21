@@ -155,6 +155,32 @@ def main() -> None:
                 # fmt: on
                 new_rows.append(new_row)
 
+    # Include top-level docs named like 'prompt-*.md'
+    for path in sorted(docs_root.glob("prompt*.md")):
+        if path.name in {"prompt-docs-summary.md", "prompt-docs-todos.md"}:
+            continue
+        text = path.read_text()
+        repo_link = f"**[{local_repo}](https://github.com/{local_repo})**"
+        rel = Path("docs") / path.name
+        base_url = f"https://github.com/{local_repo}/blob/main/{rel}"  # noqa: E501
+        path_link = f"[{rel}]({base_url})"
+        prompts = extract_prompts(text, base_url)
+        for prompt_link, ptype, one_click in prompts:
+            if not one_click:
+                continue
+            row = [path_link, prompt_link, ptype, "yes"]
+            grouped[repo_link].append(row)
+            if prompt_link not in existing_docs:
+                new_rows.append(
+                    [
+                        repo_link,
+                        path_link,
+                        prompt_link,
+                        ptype,
+                        "yes",
+                    ]
+                )
+
     # Add prompt docs from remote repositories (skip local repo)
     for spec in repos[1:]:
         if "@" in spec:
