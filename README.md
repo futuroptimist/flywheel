@@ -72,7 +72,7 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - Web viewer instructions in `docs/web-viewer.md`
 - CI troubleshooting tips in `docs/ci-guide.md`
 - Nightly STL exports are committed back to `stl/` after each run
-- Sunlu spool core sleeve adapter [STL](stl/spool_core_sleeve/sunlu55_to62_len60.stl)
+- Sunlu spool core sleeve adapter [STL](stl/spool_core_sleeve/sunlu55_to63_len60.stl)
 - Flywheel construction guide in `docs/flywheel-construction.md` with CAD files in `cad/`
   including `stand.scad`, `shaft.scad`, and `adapter.scad`. Assembly details live in `docs/flywheel-stand.md`, clamp instructions in `docs/flywheel-adapter.md`, and physics in `docs/flywheel-physics.md`
 
