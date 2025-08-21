@@ -3,8 +3,8 @@ set -euo pipefail
 
 # Render a spool sleeve STL from parameters or a named PRESET.
 # Usage examples:
-#   scripts/openscad_render_spool_core_sleeve.sh 55 73 60 0.20
-#   PRESET=sunlu55_to73_len60 scripts/openscad_render_spool_core_sleeve.sh
+#   scripts/openscad_render_spool_core_sleeve.sh 55 62 60 0.20
+#   PRESET=sunlu55_to62_len60 scripts/openscad_render_spool_core_sleeve.sh
 # Outputs to stl/spool_core_sleeve/<name>.stl and logs echo to a .log file.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
