@@ -31,11 +31,11 @@ jobs:
       - name: Matrix render (common variants)
         run: |
           set -euo pipefail
-          PRESET="sunlu55_to73_len60" bash scripts/openscad_render_spool_core_sleeve.sh
+          PRESET="sunlu55_to62_len60" bash scripts/openscad_render_spool_core_sleeve.sh
           # Add more presets here as you collect measurements:
           # PRESET="brandX54_to73_len60" bash scripts/openscad_render_spool_core_sleeve.sh
-          # bash scripts/openscad_render_spool_core_sleeve.sh 55 73 60 0.15
-          # bash scripts/openscad_render_spool_core_sleeve.sh 55 73 60 0.25
+          # bash scripts/openscad_render_spool_core_sleeve.sh 62 73 60 0.15
+          # bash scripts/openscad_render_spool_core_sleeve.sh 62 73 60 0.25
 
       - name: Upload STLs
         uses: actions/upload-artifact@v4
