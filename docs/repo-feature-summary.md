@@ -4,19 +4,19 @@ This table tracks which flywheel features each related repository has adopted.
 
 <!-- spellchecker: disable -->
 ## Basics
-| Repo | Branch | Commit | Trunk | Last-Updated (UTC) |
-| ---- | ------ | ------ | ----- | ----------------- |
-| **[futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist)** | main | `0ccd29c` | ✅ | 2025-08-20 |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `4de57cd` | ✅ | 2025-08-16 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `5b653eb` | ✅ | 2025-08-19 |
-| [futuroptimist/flywheel](https://github.com/futuroptimist/flywheel) | main | `02c8978` | ✅ | 2025-08-20 |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `7574aa4` | ✅ | 2025-08-19 |
-| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `d019235` | ✅ | 2025-08-16 |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `7f1cc3c` | ❌ | 2025-08-16 |
-| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `a7fd055` | ✅ | 2025-08-16 |
-| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `8d9fccb` | ✅ | 2025-08-07 |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `e73708a` | ❌ | 2025-08-16 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `6446416` | ✅ | 2025-08-19 |
+| Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
+| ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
+| **[futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist)** | main | `0ccd29c` | ✅ | 0 | 0 | 2025-08-20 |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `4de57cd` | ✅ | 0 | 0 | 2025-08-16 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `5b653eb` | ✅ | 0 | 0 | 2025-08-19 |
+| [futuroptimist/flywheel](https://github.com/futuroptimist/flywheel) | main | `02c8978` | ✅ | 0 | 0 | 2025-08-20 |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `7574aa4` | ✅ | 0 | 0 | 2025-08-19 |
+| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `d019235` | ✅ | 0 | 0 | 2025-08-16 |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `7f1cc3c` | ❌ | 0 | 0 | 2025-08-16 |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `a7fd055` | ✅ | 0 | 0 | 2025-08-16 |
+| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `8d9fccb` | ✅ | 0 | 0 | 2025-08-07 |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `e73708a` | ❌ | 0 | 0 | 2025-08-16 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `6446416` | ✅ | 0 | 0 | 2025-08-19 |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |

@@ -40,6 +40,8 @@ class RepoInfo:
     latest_commit: Optional[str]
     workflow_count: int
     trunk_green: Optional[bool]
+    stars: int = 0
+    open_issues: int = 0
     commit_date: Optional[str] = None
     dark_pattern_count: int = 0
     bright_pattern_count: int = 0
@@ -245,6 +247,28 @@ class RepoCrawler:
             except Exception:
                 return "main"
         return "main"
+
+    def _repo_stats(self, repo: str) -> tuple[int, int]:
+        """Return ``(stars, open_issues)`` for ``repo``."""
+
+        url = f"https://api.github.com/repos/{repo}"
+        try:
+            resp = self.session.get(
+                url,
+                headers={"Accept": "application/vnd.github+json"},
+                timeout=10,
+            )
+        except RequestException:
+            return 0, 0
+        if resp.status_code == 200:
+            try:
+                data = resp.json()
+                stars = int(data.get("stargazers_count", 0) or 0)
+                issues = int(data.get("open_issues_count", 0) or 0)
+                return stars, issues
+            except Exception:
+                return 0, 0
+        return 0, 0
 
     def _latest_commit(
         self, repo: str, branch: str
@@ -590,6 +614,7 @@ class RepoCrawler:
             trunk_green = self._branch_green(repo, branch, latest_commit)
         else:
             trunk_green = None
+        stars, open_issues = self._repo_stats(repo)
         return RepoInfo(
             name=repo,
             branch=branch,
@@ -606,6 +631,8 @@ class RepoCrawler:
             latest_commit=latest_commit,
             workflow_count=0,
             trunk_green=trunk_green,
+            stars=stars,
+            open_issues=open_issues,
             commit_date=commit_date,
         )
 
@@ -701,9 +728,13 @@ class RepoCrawler:
         ]
 
         basics_header = (
-            "| Repo | Branch | Commit | Trunk | Last-Updated (UTC) |"  # noqa: E501
+            "| Repo | Branch | Commit | Trunk | Stars | "
+            "Open Issues | Last-Updated (UTC) |"
         )
-        basics_sep = "| ---- | ------ | ------ | ----- | ----------------- |"
+        basics_sep = (
+            "| ---- | ------ | ------ | ----- | ----- | "
+            "----------- | ----------------- |"
+        )
         lines.extend(["## Basics", basics_header, basics_sep])
         basics_rows = []
 
@@ -752,7 +783,10 @@ class RepoCrawler:
                 trunk = "❌"
             updated = info.commit_date or "n/a"
             basics_rows.append(
-                f"| {repo_link} | {info.branch} | {commit} | {trunk} | {updated} |"  # noqa: E501
+                (
+                    f"| {repo_link} | {info.branch} | {commit} | {trunk} | "
+                    f"{info.stars} | {info.open_issues} | {updated} |"
+                )
             )
             codecov = "✅" if info.uses_codecov else "❌"
             coverage_rows.append(

@@ -245,6 +245,8 @@ def test_generate_summary_no_patch(monkeypatch):
         latest_commit="123cafe",
         workflow_count=1,
         trunk_green=None,
+        stars=0,
+        open_issues=0,
         commit_date="2024-01-01",
     )
     crawler = RepoCrawler([])

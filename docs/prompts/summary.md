@@ -30,7 +30,6 @@ All listed prompts are mechanically verified as 1-click ready: copy & paste with
 | [docs/prompts/codex/spellcheck.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/spellcheck.md) | [Codex Spellcheck Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/spellcheck.md#codex-spellcheck-prompt)                                             | evergreen | yes          |
 | [docs/prompts/codex/ci-fix.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/ci-fix.md)         | [2 – Add a column to `docs/repo-feature-summary.md`](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/ci-fix.md#2-add-a-column-to-docsrepo-feature-summarymd) | unknown   | yes          |
 | [docs/prompts/codex/automation.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md) | [Implementation prompts](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md#implementation-prompts)                                               | one-off   | yes          |
-| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md) | [1 Add ⭐ Stars & 🐞 Open-Issues columns](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md#1-add-stars-open-issues-columns)                       | one-off   | yes          |
 
 ## [futuroptimist/axel](https://github.com/futuroptimist/axel)
 

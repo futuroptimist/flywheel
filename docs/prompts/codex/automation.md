@@ -50,32 +50,6 @@ Copy this entire block into Codex when you want the agent to automatically impro
 Copy **one** of the prompts below into Codex when you want the agent to improve `docs/repo-feature-summary.md`.
 Each prompt is file-scoped, single-purpose and immediately actionable.
 
-### 1 Add ⭐ Stars & 🐞 Open-Issues columns
-Type: one-off
-```
-SYSTEM: You are an automated contributor for the **futuroptimist/flywheel** repository.
-
-GOAL
-Extend the **Basics** table in `docs/repo-feature-summary.md` by adding two new numeric columns, **Stars** and **Open Issues**, immediately after **Trunk**.
-
-FILES OF INTEREST
-- docs/repo-feature-summary.md
-- scripts/gen-repo-feature-summary.ts   ← create if absent
-
-REQUIREMENTS
-1. Retrieve live values via the GitHub REST API (no GraphQL) using octokit.*
-2. Persist results in `scripts/gen-repo-feature-summary.ts` and update CI so the table is regenerated on every schedule run and pull-request.
-3. Keep column alignment correct (use `|` escapes where needed).
-4. Unit-test the generator with mocked API responses (`vitest`).
-5. CI must stay green and coverage ≥ 90 % lines & branches.
-
-ACCEPTANCE CHECK
-`npm run test && node scripts/gen-repo-feature-summary.ts --dry-run` finishes without diff except for the expected table change.
-
-OUTPUT
-Return **only** the patch (diff) required.
-```
-
 ### How to choose a prompt
 
 | When you want to…                        | Use prompt |
