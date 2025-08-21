@@ -17,6 +17,7 @@ PyPI
 README
 RSA
 YOURNAME
+apache
 auth
 axel
 axel's
@@ -68,6 +69,7 @@ heatmap
 hillclimb
 llms
 onboarding
+opensource
 runbook
 Runbook
 subcommand
@@ -175,6 +177,7 @@ ghcr
 mypy
 syft
 winget
+www
 zsh
 LFS
 BOM

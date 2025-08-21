@@ -2,6 +2,9 @@
 
 This table tracks which flywheel features each related repository has adopted.
 
+> Flywheel is dual-licensed as **MIT OR Apache-2.0**. Related repositories are
+> encouraged to adopt the same dual license scheme.
+
 <!-- spellchecker: disable -->
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
