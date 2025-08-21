@@ -4,11 +4,11 @@
 //  Library module for parametric spool-core sleeves.
 //  Example usage:
 //      use <../utils/spool_core_sleeve.scad>;
-//      spool_core_sleeve(inner_id=55, target_od=62, length=60, clearance=0.20);
+//      spool_core_sleeve(inner_id=55, target_od=63, length=60, clearance=0.20);
 //
 //  Parameters:
 //    inner_id   — measured bore ID (mm), e.g. 55 (≈AMS axle)
-//    target_od  — outer diameter of sleeve (mm), e.g. 62 (Sunlu spool)
+//    target_od  — outer diameter of sleeve (mm), e.g. 63 (Sunlu spool)
 //    length     — axial length (mm), e.g. 60
 //    clearance  — extra diameter added to bore (total), default 0.20
 //    $fn_outer  — circle resolution for outer cylinder
@@ -22,7 +22,7 @@
 
 module spool_core_sleeve(
     inner_id   = 55,
-    target_od  = 62,
+    target_od  = 63,
     length     = 60,
     clearance  = 0.20,
     $fn_outer  = 200,
@@ -51,10 +51,10 @@ module spool_core_sleeve(
 
 // Optional named presets (extend as you collect measurements)
 function _spool_core_sleeve_preset(preset) =
-    (preset == "sunlu55_to62_len60") ? [55, 62, 60, 0.20] : undef;
+    (preset == "sunlu55_to63_len60") ? [55, 63, 60, 0.20] : undef;
 
 module spool_core_sleeve_preset(
-    preset = "sunlu55_to62_len60", $fn_outer = 200, $fn_inner = 150
+    preset = "sunlu55_to63_len60", $fn_outer = 200, $fn_inner = 150
 ) {
     p = _spool_core_sleeve_preset(preset);
     assert(p != undef, str("unknown preset: ", preset));
