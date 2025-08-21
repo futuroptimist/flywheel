@@ -20,6 +20,7 @@ def test_summary_generation(monkeypatch):
     monkeypatch.setattr(crawler, "_branch_green", lambda *a, **kw: True)
     monkeypatch.setattr(crawler, "_detect_installer", lambda *a, **kw: "uv")
     monkeypatch.setattr(crawler, "_has_file", lambda *a, **kw: True)
+    monkeypatch.setattr(crawler, "_repo_stats", lambda *a, **kw: (0, 0))
 
     summary = crawler.generate_summary()
     assert (
@@ -34,6 +35,10 @@ def test_summary_generation(monkeypatch):
     assert (
         "| Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |"  # noqa: E501
         in summary
+    )
+    assert (
+        "| Repo | Branch | Commit | Trunk | Stars | "
+        "Open Issues | Last-Updated (UTC) |" in summary
     )
 
 

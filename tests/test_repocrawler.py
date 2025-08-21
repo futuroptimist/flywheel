@@ -48,7 +48,11 @@ class DummySession:
                     if p.startswith(prefix)  # noqa: E501
                 ]  # noqa: E501
                 return Resp(json.dumps([{"name": n} for n in names]), 200)
-            return Resp('{"default_branch": "main"}', 200)
+            return Resp(
+                '{"default_branch": "main", "stargazers_count": 123, '
+                '"open_issues_count": 4}',
+                200,
+            )
 
         path = url.split("raw.githubusercontent.com/")[-1]
         if path in self.files:
@@ -81,6 +85,17 @@ def test_generate_summary(monkeypatch):
     monkeypatch.setattr(crawler, "_parse_coverage", lambda *a, **kw: "100%")
     out = crawler.generate_summary()
     lines = out.splitlines()
+    basics_idx = lines.index("## Basics")
+    header = lines[basics_idx + 1]
+    first_row_basics = lines[basics_idx + 3]
+    assert (
+        "| Repo | Branch | Commit | Trunk | Stars | "
+        "Open Issues | Last-Updated (UTC) |" in header
+    )
+    assert (
+        "| **[foo/bar](https://github.com/foo/bar)** | main | `deadbee` | "
+        "✅ | 123 | 4 | 2024-01-01 |" in first_row_basics
+    )
     idx = lines.index("## Coverage & Installer")
     first_row = lines[idx + 3]
     assert "| ✔️ |" in first_row
@@ -120,6 +135,7 @@ def test_generate_summary_partial_coverage(monkeypatch):
     monkeypatch.setattr(crawler, "_branch_green", lambda *a, **kw: True)
     monkeypatch.setattr(crawler, "_detect_installer", lambda *a, **kw: "uv")
     monkeypatch.setattr(crawler, "_has_file", lambda *a, **kw: True)
+    monkeypatch.setattr(crawler, "_repo_stats", lambda *a, **kw: (0, 0))
     summary = crawler.generate_summary()
     lines = summary.splitlines()
     idx = lines.index("## Coverage & Installer")
@@ -247,6 +263,8 @@ def test_generate_summary_installer_variants(monkeypatch):
         latest_commit="cafec0d",
         workflow_count=1,
         trunk_green=True,
+        stars=0,
+        open_issues=0,
         commit_date="2024-01-01",
     )
     info_partial = info_uv.__class__(
@@ -276,6 +294,8 @@ def test_generate_summary_other_installer(monkeypatch):
         latest_commit="1234567",
         workflow_count=1,
         trunk_green=True,
+        stars=0,
+        open_issues=0,
         commit_date="2024-01-01",
     )
     crawler = rc.RepoCrawler([])
@@ -301,14 +321,17 @@ def test_summary_column_order(monkeypatch):
         latest_commit="abcdef0",
         workflow_count=1,
         trunk_green=True,
+        stars=0,
+        open_issues=0,
         commit_date="2024-01-01",
     )
     crawler = rc.RepoCrawler([])
     monkeypatch.setattr(crawler, "crawl", lambda: [info])
     summary = crawler.generate_summary()
     assert (
-        "| Repo | Branch | Commit | Trunk | Last-Updated (UTC) |" in summary
-    )  # noqa: E501
+        "| Repo | Branch | Commit | Trunk | Stars | "
+        "Open Issues | Last-Updated (UTC) |" in summary
+    )
     assert (
         "| Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |"  # noqa: E501
         in summary
@@ -323,8 +346,9 @@ def test_summary_column_order(monkeypatch):
     )
     lines = summary.splitlines()
     idx = lines.index(
-        "| Repo | Branch | Commit | Trunk | Last-Updated (UTC) |"
-    )  # noqa: E501
+        "| Repo | Branch | Commit | Trunk | Stars | "
+        "Open Issues | Last-Updated (UTC) |"
+    )
     row = lines[idx + 2]
     assert "`abcdef0`" in row
 
@@ -411,6 +435,8 @@ def test_generate_summary_with_patch(monkeypatch):
         latest_commit="abcdef1",
         workflow_count=1,
         trunk_green=False,
+        stars=0,
+        open_issues=0,
         commit_date="2024-01-01",
     )
     crawler = rc.RepoCrawler([])
