@@ -3,7 +3,8 @@ set -euo pipefail
 
 # Render a spool sleeve STL from parameters or a named PRESET.
 # Usage examples:
-#   scripts/openscad_render_spool_core_sleeve.sh 55 63 60 0.20
+#   scripts/openscad_render_spool_core_sleeve.sh 55 63 64 60 0.20
+#   scripts/openscad_render_spool_core_sleeve.sh 55 63 60 0.20  # end defaults to 63
 #   PRESET=sunlu55_to63_len60 scripts/openscad_render_spool_core_sleeve.sh
 # Outputs to stl/spool_core_sleeve/<name>.stl and logs echo to a .log file.
 
@@ -20,17 +21,25 @@ if [[ "${PRESET:-}" != "" ]]; then
     DEFINE=(-D "PRESET=\"${PRESET}\"")
 else
     if [[ $# -lt 4 ]]; then
-        echo "Usage: $0 INNER_ID TARGET_OD LENGTH CLEARANCE"
+        echo "Usage: $0 INNER_ID TARGET_OD [TARGET_OD_END] LENGTH CLEARANCE"
         echo " or: PRESET=name $0"
         exit 2
     fi
     INNER_ID="$1"
     TARGET_OD="$2"
-    LENGTH="$3"
-    CLEARANCE="$4"
-    NAME="id${INNER_ID}_od${TARGET_OD}_len${LENGTH}_clr${CLEARANCE}"
+    if [[ $# -ge 5 ]]; then
+        TARGET_OD_END="$3"
+        LENGTH="$4"
+        CLEARANCE="$5"
+    else
+        TARGET_OD_END="$2"
+        LENGTH="$3"
+        CLEARANCE="$4"
+    fi
+    NAME="id${INNER_ID}_od${TARGET_OD}to${TARGET_OD_END}_len${LENGTH}_clr${CLEARANCE}"
     DEFINE=(-D "INNER_ID=${INNER_ID}" -D "TARGET_OD=${TARGET_OD}" \
-        -D "LENGTH=${LENGTH}" -D "CLEARANCE=${CLEARANCE}")
+        -D "TARGET_OD_END=${TARGET_OD_END}" -D "LENGTH=${LENGTH}" \
+        -D "CLEARANCE=${CLEARANCE}")
 fi
 
 OUT_STL="${OUT_DIR}/${NAME}.stl"

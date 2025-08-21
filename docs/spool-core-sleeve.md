@@ -1,8 +1,9 @@
 # Core‑Sleeve Spool Adapter (OpenSCAD utility module)
 
 A tiny, reusable OpenSCAD module for adapting filament spools: it slides into the
-spool’s bore (`inner_id`) and expands the wall to a desired outer diameter (`target_od`),
-over the full spool width (`length`). It echoes computed wall thickness so CI can
+spool’s bore (`inner_id`) and expands the wall to desired outer diameters
+(`target_od` → `target_od_end`) over the full spool width (`length`). It echoes
+computed wall thickness so CI can
 sanity‑check builds.
 
 ## Quick start
@@ -11,7 +12,8 @@ sanity‑check builds.
 use "../utils/spool_core_sleeve.scad";
 
 // direct parameters
-spool_core_sleeve(inner_id=55, target_od=63, length=60, clearance=0.20);
+spool_core_sleeve(inner_id=55, target_od=63, target_od_end=64,
+                  length=60, clearance=0.20);
 
 // or via named preset
 spool_core_sleeve_preset("sunlu55_to63_len60");
@@ -21,10 +23,11 @@ spool_core_sleeve_preset("sunlu55_to63_len60");
 
 | Name        | Type | Default | Notes                               |
 |-------------|------|---------|-------------------------------------|
-| `inner_id`  | mm   | 55      | Measured bore (ID) of the spool     |
-| `target_od` | mm   | 63      | Desired sleeve outer diameter (OD)  |
-| `length`    | mm   | 60      | Axial length (match spool width)    |
-| `clearance` | mm   | 0.20    | Added to diameter of bore (total)   |
+| `inner_id`      | mm   | 55      | Measured bore (ID) of the spool     |
+| `target_od`     | mm   | 63      | Sleeve OD at z=0                    |
+| `target_od_end` | mm   | 63      | Sleeve OD at z=length               |
+| `length`        | mm   | 60      | Axial length (match spool width)    |
+| `clearance`     | mm   | 0.20    | Added to diameter of bore (total)   |
 | `$fn_outer` | —    | 200     | Facets for outer cylinder           |
 | `$fn_inner` | —    | 150     | Facets for inner bore               |
 
@@ -37,7 +40,8 @@ Example (Linux/macOS):
 
 ```bash
 openscad -o stl/spool_core_sleeve/sunlu55_to63_len60.stl \
-  -D INNER_ID=55 -D TARGET_OD=63 -D LENGTH=60 -D CLEARANCE=0.20 \
+  -D INNER_ID=55 -D TARGET_OD=63 -D TARGET_OD_END=64 \
+  -D LENGTH=60 -D CLEARANCE=0.20 \
   cad/examples/spool_core_sleeve_example.scad
 ```
 

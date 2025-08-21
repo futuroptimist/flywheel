@@ -14,8 +14,8 @@ STL="${REPO_ROOT}/stl/spool_core_sleeve/${PRESET}.stl"
 
 [[ -s "${STL}" ]] || { echo "FAIL: STL missing"; exit 1; }
 
-# Expect wall thickness = (63-55)/2 = 4 mm (allow simple string match)
-grep -E 'Radial wall thickness: +4(.0+)? +mm' "${LOG}" >/dev/null \
+# Expect wall thickness start/end = 4 mm -> 4.5 mm
+grep -E 'Radial wall thickness: +4(\.0+)? +mm -> +4\.5(\.0+)? +mm' "${LOG}" >/dev/null \
     || { echo "FAIL: unexpected wall thickness (see ${LOG})"; exit 1; }
 
 echo "All checks passed."
