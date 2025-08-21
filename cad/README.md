@@ -22,10 +22,11 @@ sudo apt-get install openscad
   (override `$fs` via the `resolution_fs` variable for finer meshes)
 - `utils/spool_core_sleeve.scad` – parametric spool core sleeve library
   (see `examples/spool_core_sleeve_example.scad`; a pre-generated
-  `sunlu55_to63_len60` sleeve lives in `stl/spool_core_sleeve/`)
+  `sunlu55_to63_len60` 63→64 mm tapered sleeve lives in
+  `stl/spool_core_sleeve/`)
 - `examples/spool_core_sleeve_example.scad` – demo spool core sleeve; the
   corresponding OBJ lives in `webapp/static/models/examples/` and the
-  pre-generated sleeve's OBJ is at
+  pre-generated 63→64 mm sleeve's OBJ is at
   `webapp/static/models/spool_core_sleeve/sunlu55_to63_len60.obj`
 
 ## Regenerating meshes
