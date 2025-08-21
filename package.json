@@ -1,6 +1,7 @@
 {
   "name": "flywheel",
   "type": "module",
+  "license": "MIT OR Apache-2.0",
   "scripts": {
     "lint": "echo skip",
     "format": "echo skip",
