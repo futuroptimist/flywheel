@@ -256,7 +256,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [f2clipboard](https://github.com/futuroptimist/f2clipboard) –  \
   bulk-copy utility exploring macro workflows.  \
   See `docs/f2clipboard-integration.md`.
-- ❌ [Axel](https://github.com/futuroptimist/axel) –  \
+- ✅ [Axel](https://github.com/futuroptimist/axel) –  \
   personal LLM accelerator for repository quests.  \
   See `docs/axel-integration.md` for pairings.
 - ✅ [Sigma](https://github.com/futuroptimist/sigma) –  \
@@ -264,7 +264,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   See `docs/sigma-integration.md`.
 - ✅ [gitshelves](https://github.com/futuroptimist/gitshelves) –  \
   3D-printable block models from GitHub commits.
-- ❌ [wove](https://github.com/futuroptimist/wove) –  \
+- ✅ [wove](https://github.com/futuroptimist/wove) –  \
   toolkit for knitting and robotic looms.
 - ✅ [sugarkube](https://github.com/futuroptimist/sugarkube) –  \
   k3s platform for off-grid Raspberry Pi clusters.  \

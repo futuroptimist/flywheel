@@ -234,6 +234,13 @@ def main() -> None:
         "use it as a model for deep dives.",
         "",
         (
+            "Think of each listed repository as a small flywheel belted "
+            "to this codebase. The list in dict/prompt-doc-repos.txt "
+            "mirrors docs/repo_list.txt; if a repo drops from the output, "
+            "fix that integration rather than deleting it."
+        ),
+        "",
+        (
             "All prompts are verified with OpenAI Codex. Other coding agents "
             "like Claude Code, Gemini CLI, and Cursor should work too."
         ),
