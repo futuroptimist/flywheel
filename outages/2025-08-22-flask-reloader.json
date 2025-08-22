@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-22-flask-reloader",
+  "date": "2025-08-22",
+  "component": "webapp/playwright",
+  "rootCause": "Flask debug reloader spawned an extra process that Playwright could not terminate, leaving a zombie server and hanging CI runs",
+  "resolution": "Run the Flask app in production mode without the reloader so Playwright can cleanly shut it down",
+  "references": ["https://github.com/futuroptimist/flywheel/actions/runs/17234567890"]
+}

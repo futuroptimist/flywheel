@@ -177,8 +177,8 @@ def test_models_route(tmp_path):
 def test_main_entry(monkeypatch):
     called = {}
 
-    def fake_run(self, debug, port):
-        called["port"] = port
+    def fake_run(self, **kwargs):
+        called["port"] = kwargs.get("port")
 
     monkeypatch.setattr("flask.app.Flask.run", fake_run)
     runpy.run_module("webapp.app", run_name="__main__")

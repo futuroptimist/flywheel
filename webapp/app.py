@@ -82,8 +82,21 @@ def models(filename):
     return send_from_directory(MODEL_DIR, filename)
 
 
-if __name__ == "__main__":
+def main() -> None:
+    """Run the development server.
+
+    The Playwright test harness launches this module as a subprocess. Running
+    Flask with ``debug`` or the auto-reloader enabled spawns an additional
+    child process which Playwright fails to terminate, leaving stray servers in
+    CI.  Using production mode avoids the reloader and ensures the server exits
+    cleanly once tests finish.
+    """
+
     # Hard-coded port chosen arbitrarily within the dynamic/private range.
     port = 42165
     print(f"Starting Flask development server on port {port}…")
-    app.run(debug=True, port=port)
+    app.run(port=port, debug=False, use_reloader=False)
+
+
+if __name__ == "__main__":
+    main()
