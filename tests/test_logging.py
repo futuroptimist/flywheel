@@ -1,6 +1,6 @@
 import logging
 
-from flywheel.logging import get_logger
+from flywheel.logging import _resolve_level, get_logger
 
 
 def test_default_log_level_info(monkeypatch):
@@ -22,3 +22,7 @@ def test_explicit_level_overrides_env(monkeypatch):
     monkeypatch.setenv("FLYWHEEL_LOG_LEVEL", "debug")
     logger = get_logger("override")
     assert logger.level == logging.DEBUG
+
+
+def test_resolve_level_defaults_to_info():
+    assert _resolve_level(None) == logging.INFO
