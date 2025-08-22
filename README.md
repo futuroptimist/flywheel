@@ -274,7 +274,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [f2clipboard](https://github.com/futuroptimist/f2clipboard) –  \
   bulk-copy utility exploring macro workflows.  \
   See `docs/f2clipboard-integration.md`.
-- ✅ [Axel](https://github.com/futuroptimist/axel) –  \
+- ❌ [Axel](https://github.com/futuroptimist/axel) –  \
   personal LLM accelerator for repository quests.  \
   See `docs/axel-integration.md` for pairings.
 - ✅ [Sigma](https://github.com/futuroptimist/sigma) –  \
