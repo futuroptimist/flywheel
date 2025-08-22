@@ -28,9 +28,14 @@ CONTEXT:
   * Do **not** break existing functionality.
   * Follow the repository’s style guidelines and commit-lint rules.
   * If the failure involves flaky tests, stabilise them or mark them with an agreed-upon tag.
-  * Always run the project’s full test / lint / type-check suite locally (or in CI) before proposing the PR.
+  * Always run the project’s full test / lint / type-check suite locally
+    (for Flywheel: `pre-commit run --all-files`, `pytest -q`, `npm run lint`,
+    `npm run test:ci`, `python -m flywheel.fit`, and `bash scripts/checks.sh`)
+    before proposing the PR.
   * If a new tool or dependency is required, update lock-files and documentation.
   * Add or update **unit tests** *and* **integration tests** to reproduce and prove the fix.
+  * Scan staged changes for secrets before committing
+    (e.g., `git diff --cached | ./scripts/scan-secrets.py`).
   * Provide a concise changelog entry.
 
 REQUEST:
