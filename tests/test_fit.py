@@ -133,6 +133,41 @@ def test_ensure_obj_models_mock(monkeypatch, tmp_path):
     assert set(scad_names) <= set(obj_names)
 
 
+def test_ensure_obj_models_appends_newline(monkeypatch, tmp_path):
+    import shutil
+    import subprocess
+    import sys
+    import types
+
+    import webapp.app as webapp_module
+
+    models = tmp_path / "models"
+    models.mkdir()
+    webapp_module.MODEL_DIR = models
+    webapp_module.SCAD_DIR = CAD_DIR
+
+    class DummyMesh:
+        def export(self, path, file_type="obj"):
+            Path(path).write_bytes(b"no-newline")
+
+    def fake_load(path, file_type=None):
+        return DummyMesh()
+
+    def fake_run(cmd, check):
+        Path(cmd[2]).write_text("stl")
+
+    monkeypatch.setitem(
+        sys.modules, "trimesh", types.SimpleNamespace(load_mesh=fake_load)
+    )
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(shutil, "which", lambda x: "/usr/bin/openscad")
+
+    webapp_module.ensure_obj_models()
+
+    for obj in models.glob("*.obj"):
+        assert obj.read_bytes().endswith(b"\n")
+
+
 def test_ensure_obj_models_no_openscad(monkeypatch, tmp_path):
     import shutil
 
