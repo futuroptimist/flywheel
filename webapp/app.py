@@ -14,7 +14,9 @@ def ensure_obj_models():
 
     Uses the OpenSCAD CLI if available. Only re-exports when the source file is
     newer than the existing .obj or the .obj is missing. Silently ignores
-    failures so the web app still runs even if OpenSCAD isn’t installed.
+    failures so the web app still runs even if OpenSCAD isn’t installed. The
+    generated OBJ is normalized to end with a newline so git hygiene checks
+    pass.
     """
     if not MODEL_DIR.exists():
         MODEL_DIR.mkdir(parents=True, exist_ok=True)
@@ -65,6 +67,10 @@ def ensure_obj_models():
                     print(msg)
                     mesh = trimesh.load_mesh(stl_path, file_type="stl")
                     mesh.export(obj_path, file_type="obj")
+                    # Ensure exported OBJ ends with a newline for git hygiene
+                    data = obj_path.read_bytes()
+                    if data and not data.endswith(b"\n"):
+                        obj_path.write_bytes(data + b"\n")
         except Exception as exc:
             print(f"[ERROR] Failed to export {scad_path.name}: {exc}")
 

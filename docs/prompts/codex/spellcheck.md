@@ -16,8 +16,8 @@ PURPOSE:
 Keep Markdown documentation free of spelling errors.
 
 CONTEXT:
-- Run `pre-commit run codespell --files $(git ls-files '*.md')` to spell-check
-  Markdown documentation.
+- Run `pre-commit run codespell --files "$(git ls-files '*.md')"` to
+  spell-check Markdown documentation.
 - Add unknown but legitimate words to
   [`dict/allow.txt`](../../../dict/allow.txt).
 - Follow [`AGENTS.md`](../../../AGENTS.md) and [`README.md`](../../../README.md).
@@ -26,6 +26,7 @@ CONTEXT:
   ```bash
   pre-commit run --all-files
   pytest -q
+  npm run lint
   npm run test:ci
   python -m flywheel.fit
   bash scripts/checks.sh
@@ -60,9 +61,9 @@ PURPOSE:
 Keep this spellcheck prompt accurate as tooling evolves.
 
 CONTEXT:
-- Follow `AGENTS.md` and `README.md`.
-- Ensure `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`,
-  `python -m flywheel.fit`, and `bash scripts/checks.sh` pass.
+- Follow [`AGENTS.md`](../../../AGENTS.md) and [`README.md`](../../../README.md).
+- Ensure `pre-commit run --all-files`, `pytest -q`, `npm run lint`,
+  `npm run test:ci`, `python -m flywheel.fit`, and `bash scripts/checks.sh` pass.
 - Regenerate `docs/prompt-docs-summary.md` with
   `python scripts/update_prompt_docs_summary.py --repos-from \
   dict/prompt-doc-repos.txt --out docs/prompt-docs-summary.md`.

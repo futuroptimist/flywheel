@@ -23,8 +23,11 @@ def status_to_emoji(conclusion: str | None) -> str:
     """Return an emoji representing the workflow conclusion.
 
     GitHub may mark runs as ``neutral`` or ``skipped`` when no jobs execute.
-    Treat those as successful for status reporting purposes.
+    Treat those as successful for status reporting purposes. The ``conclusion``
+    string is handled case-insensitively.
     """
+    if conclusion is not None:
+        conclusion = conclusion.lower()
     if conclusion in {"success", "neutral", "skipped"}:
         return "✅"
     if conclusion is None:
