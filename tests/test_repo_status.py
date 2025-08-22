@@ -11,6 +11,8 @@ def test_status_to_emoji():
     assert rs.status_to_emoji("skipped") == "✅"
     assert rs.status_to_emoji("failure") == "❌"
     assert rs.status_to_emoji(None) == "❓"
+    assert rs.status_to_emoji("Success") == "✅"
+    assert rs.status_to_emoji("FAILURE") == "❌"
 
 
 def test_fetch_repo_status_success(monkeypatch):

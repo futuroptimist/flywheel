@@ -42,6 +42,7 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - DEPENDABOT for automated dependency updates
 - CodeQL workflow for security scanning
 - Style guides for Python and JavaScript
+- README status script handles mixed-case GitHub workflow conclusions
 - Detailed best practice explanations in `docs/best_practices_catalog.md`
 - Dark pattern guidance in `docs/dark-patterns.md`
 - Bright pattern catalog in `docs/bright-patterns.md`
