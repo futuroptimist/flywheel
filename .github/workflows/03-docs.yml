@@ -9,17 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      # Ensure dictionaries are present
-      - name: Install aspell dictionaries
-        run: sudo apt-get update && sudo apt-get install -y aspell aspell-en
-
-      - name: Spell check markdown & docs
-        uses: rojopolis/spellcheck-github-actions@0.35.0
+      - uses: crate-ci/typos@v1
         with:
-          config_path: .spellcheck.yaml
-        # If you prefer non-blocking:
-        # continue-on-error: true
+          config: .typos.toml
   linkcheck:
     runs-on: ubuntu-latest
     steps:
