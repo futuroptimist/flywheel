@@ -1,0 +1,10 @@
+{
+  "id": "2025-08-20-prompt-docs-todos-blank",
+  "date": "2025-08-20",
+  "component": "docs/prompt-docs-todos",
+  "rootCause": "Commit 35c0d684 cleared the file content without a placeholder",
+  "resolution": "Restored header with guidance and added test to ensure file isn't empty",
+  "references": [
+    "https://github.com/futuroptimist/flywheel/commit/35c0d6843b5d6dddfffc6a7c59e648c30eabec44"
+  ]
+}
