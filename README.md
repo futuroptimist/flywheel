@@ -172,6 +172,7 @@ python -m flywheel.agents.scanner
 Reports are written to `reports/`. Each report lists only top-level non-hidden files and
 ignores directories. File names are sorted case-insensitively. Existing paths under the
 scanner's work area are removed before each clone so reports reflect a fresh snapshot.
+Missing parent directories are created automatically when cloning.
 
 ### Viewing the 3D flywheel
 
