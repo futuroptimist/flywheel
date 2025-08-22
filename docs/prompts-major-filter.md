@@ -1,34 +1,69 @@
-# Prompt Docs Cleanup Plan
+---
+title: 'Prompt Docs Major Filter'
+slug: 'prompts-major-filter'
+---
 
-This document provides step-by-step instructions for a future LLM to refine
-[prompt-docs-summary.md](prompt-docs-summary.md) so it only lists major prompts
-that are either ready for one-click use or describe pending unimplemented feature
-requests.
+# Prompt Docs Major Filter
+Type: one-off
 
-## Goals
-- Keep the summary focused on high-value prompts.
-- Remove entries that lack LLM-ready code blocks or that do not correspond to
-  actionable feature requests.
-- Maintain links to evergreen one-click prompts.
+This prompt guides an assistant to prune `prompt-docs-summary.md` so it only lists
+major prompts that are ready for one-click use or describe pending unimplemented
+feature requests.
 
-## Review Procedure
-1. Open `prompt-docs-summary.md` and inspect each linked section.
-2. Follow the link and verify that:
-   - The section contains a code block intended as an LLM prompt.
-   - The prompt is either evergreen one-click or an unimplemented feature request.
-3. If either condition fails, remove the row from the summary.
-4. When in doubt, err on the side of trimming the entry and note it for review.
+```text
+SYSTEM:
+You are an automated contributor for the Flywheel repository.
 
-## Regeneration
-After editing, run:
+PURPOSE:
+Trim `docs/prompt-docs-summary.md` to include only high-value prompts.
+
+CONTEXT:
+- Keep entries with LLM-ready code blocks.
+- Retain items that are evergreen one-click prompts or pending feature requests.
+- Remove rows that do not meet these criteria.
+
+REQUEST:
+1. Review every row in `docs/prompt-docs-summary.md`.
+2. Delete rows lacking a prompt code block or actionable feature request.
+3. Run `python scripts/update_prompt_docs_summary.py` to regenerate the table.
+4. Run `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`,
+   `python -m flywheel.fit`, and `bash scripts/checks.sh`.
+
+OUTPUT:
+A pull request with the cleaned summary and all checks green.
+```
+
+## Specification
+
+An entry in `prompt-docs-summary.md` is *major* when it:
+
+- Contains a code block intended for direct use as an LLM prompt.
+- Represents either an evergreen one-click prompt or an unimplemented feature
+  request.
+
+Entries failing any condition must be removed from the summary.
+
+## Example Usage
+
+If a summary row points to a doc without a prompt block, delete that row, then
+regenerate the table:
 
 ```bash
 python scripts/update_prompt_docs_summary.py
 ```
 
-This regenerates the table to include only approved prompts. Repeat the review
-process if new entries appear.
+The resulting file keeps only the remaining major prompts.
 
-## Incremental Improvements
-Apply these steps in small commits, gradually converging on a concise summary.
-Future agents should continue pruning as new prompt docs are added.
+## API Reference
+
+### `scripts/update_prompt_docs_summary.py`
+
+Scans repositories for prompt docs and rebuilds `prompt-docs-summary.md`.
+
+| Option            | Description                                             |
+|-------------------|---------------------------------------------------------|
+| `--repos-from`    | Optional path to a list of extra repositories to scan.  |
+| `--out`           | Output file path (default: `docs/prompt-docs-summary.md`). |
+
+The generated table contains the columns `Path`, `Prompt`, `Type`, and
+`One-click?` for each discovered prompt document.
