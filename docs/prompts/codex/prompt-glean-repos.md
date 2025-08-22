@@ -1,30 +1,38 @@
-# Prompt Glean Repos
+---
+title: 'Codex Repo Glean Prompt'
+slug: 'codex-glean-repos'
+---
 
-Nested checklists capturing improvements from downstream projects.
+# Codex Repo Glean Prompt
+Type: evergreen
 
-- [ ] [Futuroptimist](https://github.com/futuroptimist/futuroptimist)
-  - [ ] Evaluate adopting `uv` for Python dependency management.
-  - [ ] Keep test coverage at 100% as a release gate.
-- [ ] [token.place](https://github.com/futuroptimist/token.place)
-  - [ ] Add CodeQL and secret scanning workflows.
-  - [ ] Enable Dependabot for dependency updates.
-- [ ] [DSPACE](https://github.com/democratizedspace/dspace)
-  - [ ] Prototype `pnpm` support for faster Node installs.
-  - [ ] Borrow accessibility prompts for front-end docs.
-- [ ] [flywheel](https://github.com/futuroptimist/flywheel)
-  - [ ] Centralize CI templates for reuse across repos.
-- [ ] [Gabriel](https://github.com/futuroptimist/gabriel)
-  - [ ] Incorporate risk modeling guidance into security docs.
-  - [ ] Investigate local inference for security scans.
-- [ ] [f2clipboard](https://github.com/futuroptimist/f2clipboard)
-  - [ ] Explore CLI helpers to gather CI logs automatically.
-- [ ] [Axel](https://github.com/futuroptimist/axel)
-  - [ ] Integrate quest tracking to surface cross-repo tasks.
-- [ ] [Sigma](https://github.com/futuroptimist/sigma)
-  - [ ] Mirror SCAD→STL workflows and `llms.txt` endpoint configs.
-- [ ] [gitshelves](https://github.com/futuroptimist/gitshelves)
-  - [ ] Offer optional tooling to render commit activity as 3D blocks.
-- [ ] [wove](https://github.com/futuroptimist/wove)
-  - [ ] Consider `pyspelling` in pre-commit for docs.
-- [ ] [sugarkube](https://github.com/futuroptimist/sugarkube)
-  - [ ] Evaluate KiCad export and hardware docs workflows.
+Use this prompt to inventory related repositories. Paste it into the OpenAI Codex CLI to
+crawl each project, record its structure, tech stack and conventions, and refresh
+`docs/repo-feature-summary.md`.
+
+```
+SYSTEM:
+You are an automated repo auditor using Flywheel's RepoCrawler.
+
+PURPOSE:
+Discover how each related repository is organized and which conventions it follows.
+
+CONTEXT:
+- The repositories to scan are listed in docs/repo-feature-summary.md.
+- Follow AGENTS.md and any repo-specific guides.
+- Prefer existing tools like `python -m flywheel.agents.scanner` and `rg`.
+
+REQUEST:
+1. For each repository in docs/repo-feature-summary.md:
+   a. Clone the repository.
+   b. List its major directories and primary languages.
+   c. Identify build systems, package managers, linters and test frameworks.
+   d. Note presence of AGENTS.md, pre-commit config and other community files.
+2. Update docs/repo-feature-summary.md with the gathered details.
+3. Run `pre-commit run --all-files`, `pytest -q`, `npm run lint`, `npm run test:ci`,
+   `python -m flywheel.fit` and `bash scripts/checks.sh`.
+4. Commit with a brief message.
+
+OUTPUT:
+A pull request containing the updated docs/repo-feature-summary.md and passing checks.
+```
