@@ -80,13 +80,31 @@ Log each incident in `/outages` so future fixes can reference past outages.
 Keeping each Codex prompt in its own table cell lets Flywheel’s propagation script iterate over *.md prompt files programmatically (e.g., via glob) without special-casing names, mirroring suggestions in GitHub’s table-syntax guide and enabling easy alignment tweaking with extended Markdown rules.
 
 ## 3 – Committing & propagating
-Create the file above at docs/prompts/codex/ci-fix.md.
+Update `docs/prompts/codex/ci-fix.md` and related tables.
 
 Apply the table patch (or edit manually; don’t forget the pipe alignment).
 
+Regenerate the summary and run all checks:
+
+```
+python scripts/update_prompt_docs_summary.py \
+  --repos-from dict/prompt-doc-repos.txt \
+  --out docs/prompt-docs-summary.md
+pre-commit run --all-files
+pytest -q
+npm run lint
+npm run test:ci
+python -m flywheel.fit
+bash scripts/checks.sh
+git diff --cached | ./scripts/scan-secrets.py
+```
+
+Verify `dict/prompt-doc-repos.txt` matches `docs/repo_list.txt`.
+
 Run `npm --prefix docs-site run build` (or your docs generator) to ensure no broken links.
 
-Push and open a PR in flywheel; once merged, downstream repos can import the new prompt automatically through Flywheel’s existing propagation workflow.
+Push and open a PR in flywheel; once merged, downstream repos can import the new
+prompt through Flywheel’s existing propagation workflow.
 
 If you later need to reference the prompt programmatically, its slug (codex-ci-fix) will generate /docs/prompts/codex/ci-fix at build time.
 
