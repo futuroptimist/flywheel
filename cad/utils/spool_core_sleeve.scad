@@ -59,7 +59,9 @@ module spool_core_sleeve(
 
 // Optional named presets (extend as you collect measurements)
 function _spool_core_sleeve_preset(preset) =
-    (preset == "sunlu55_to63_len60") ? [55, 63, 64, 60, 0.20] : undef;
+    (preset == "sunlu55_to63_len60") ? [55, 63, 64, 60, 0.20] :
+    (preset == "sunlu55_to63cyl_len60") ? [55, 63, 63, 60, 0.20] :
+    undef;
 
 module spool_core_sleeve_preset(
     preset = "sunlu55_to63_len60", $fn_outer = 200, $fn_inner = 150
