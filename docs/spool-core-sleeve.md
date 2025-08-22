@@ -17,6 +17,9 @@ spool_core_sleeve(inner_id=55, target_od=63, target_od_end=64,
 
 // or via named preset
 spool_core_sleeve_preset("sunlu55_to63_len60");
+
+// straight 63 mm cylinder (works as a wedge removal tool)
+spool_core_sleeve_preset("sunlu55_to63cyl_len60");
 ```
 
 ### Parameters
@@ -52,6 +55,14 @@ openscad -o stl/spool_core_sleeve/sunlu55_to63_len60.stl \
   -D PRESET="sunlu55_to63_len60" \
   cad/examples/spool_core_sleeve_example.scad
 ```
+
+## Ready-to-print files
+
+Two preset SCAD files live in `cad/spool_core_sleeve/` with matching STLs in
+`stl/spool_core_sleeve/`. The tapered adapter (`sunlu55_to63_len60`) expands from
+63 mm to 64 mm, while the straight cylinder (`sunlu55_to63cyl_len60`) serves as a
+wedge-removal tool so the adapter can be reused across many spools.
+
 
 ## Printing notes
 
