@@ -28,7 +28,9 @@ CONTEXT:
   * Do **not** break existing functionality.
   * Follow the repository’s style guidelines and commit-lint rules.
   * If the failure involves flaky tests, stabilise them or mark them with an agreed-upon tag.
-  * Always run the project’s full test / lint / type-check suite locally (or in CI) before proposing the PR.
+  * Run the repository’s full lint/test/type-check suite (for Flywheel: `pre-commit run --all-files`,
+    `pytest -q`, `npm run lint`, `npm run test:ci`, `python -m flywheel.fit`, `bash scripts/checks.sh`).
+  * Scan staged changes for secrets (`git diff --cached | ./scripts/scan-secrets.py`).
   * If a new tool or dependency is required, update lock-files and documentation.
   * Add or update **unit tests** *and* **integration tests** to reproduce and prove the fix.
   * Provide a concise changelog entry.
@@ -36,11 +38,12 @@ CONTEXT:
 REQUEST:
 1. Read the failure logs and locate the first real error.
 2. Explain (in the pull-request body) *why* the failure occurred.
-3. Commit the necessary code, configuration, or documentation changes.
-4. Record the incident in `outages/YYYY-MM-DD-<slug>.json` using `outages/schema.json`.
-5. Push to a branch named `codex/ci-fix/<short-description>`.
-6. Open a pull request that – once merged – makes the default branch CI-green.
-7. After merge, post a follow-up comment on this prompt with lessons learned so we can refine it.
+3. Run the repository’s checks and scan for secrets, ensuring the diff is clean.
+4. Commit the necessary code, configuration, or documentation changes.
+5. Record the incident in `outages/YYYY-MM-DD-<slug>.json` using `outages/schema.json`.
+6. Push to a branch named `codex/ci-fix-<short-description>`.
+7. Open a pull request that – once merged – makes the default branch CI-green.
+8. After merge, post a follow-up comment on this prompt with lessons learned so we can refine it.
 
 OUTPUT:
 A GitHub pull request URL. The PR must include:
