@@ -62,6 +62,20 @@ def is_one_click(snippet: str) -> bool:
     return not any(re.search(p, snippet, re.IGNORECASE) for p in patterns)
 
 
+def is_prompt_doc_path(path: str) -> bool:
+    """Return True if *path* looks like a prompt markdown file.
+
+    The check is case-insensitive and skips the generated summary document.
+    """
+
+    lower = path.lower()
+    return (
+        "prompt" in lower
+        and lower.endswith(".md")
+        and not lower.endswith("prompt-docs-summary.md")
+    )
+
+
 def find_type(lines: List[str], start: int) -> str:
     for idx in range(start, min(start + 5, len(lines))):
         match = re.search(r"Type:\s*([\w-]+)", lines[idx], re.IGNORECASE)
@@ -164,11 +178,7 @@ def main() -> None:
             branch = crawler._default_branch(name)
         files = crawler._list_files(name, branch)
         for path in files:
-            if (
-                "prompt" in path
-                and path.endswith(".md")
-                and not path.endswith("prompt-docs-summary.md")
-            ):
+            if is_prompt_doc_path(path):
                 text = crawler._fetch_file(name, path, branch) or ""
                 repo_link = f"[{name}](https://github.com/{name})"
                 base_url = (
