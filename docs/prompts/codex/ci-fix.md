@@ -41,11 +41,12 @@ CONTEXT:
 REQUEST:
 1. Read the failure logs and locate the first real error.
 2. Explain (in the pull-request body) *why* the failure occurred.
-3. Commit the necessary code, configuration, or documentation changes.
-4. Record the incident in `outages/YYYY-MM-DD-<slug>.json` using `outages/schema.json`.
-5. Push to a branch named `codex/ci-fix/<short-description>`.
-6. Open a pull request that – once merged – makes the default branch CI-green.
-7. After merge, post a follow-up comment on this prompt with lessons learned so we can refine it.
+3. Run the repository’s checks and scan for secrets, ensuring the diff is clean.
+4. Commit the necessary code, configuration, or documentation changes.
+5. Record the incident in `outages/YYYY-MM-DD-<slug>.json` using `outages/schema.json`.
+6. Push to a branch named `codex/ci-fix-<short-description>`.
+7. Open a pull request that – once merged – makes the default branch CI-green.
+8. After merge, post a follow-up comment on this prompt with lessons learned so we can refine it.
 
 OUTPUT:
 A GitHub pull request URL. The PR must include:
