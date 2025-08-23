@@ -97,8 +97,16 @@ def extract_prompts(text: str, base_url: str) -> List[List[str]]:
             next_line = headings[idx + 1][0]
         else:
             next_line = len(lines)
-        ptype = find_type(lines, line_no + 1) or "unknown"
-        if ptype == "one":
+        ptype = find_type(lines, line_no + 1)
+        if not ptype:
+            title_lower = title.lower()
+            if re.match(r"\d", title_lower):
+                ptype = "one-off"
+            elif "prompt" in title_lower:
+                ptype = "evergreen"
+            else:
+                ptype = "unknown"
+        elif ptype == "one":
             ptype = "one-off"
         snippet = "\n".join(lines[line_no + 1 : next_line])  # noqa: E203
         anchor = slugify(title)
