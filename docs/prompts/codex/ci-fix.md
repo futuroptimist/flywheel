@@ -71,24 +71,8 @@ Log each incident in `/outages` so future fixes can reference past outages.
 
 ---
 
-## 2 – Add a column to `docs/repo-feature-summary.md`
-
-### a) Patch
-
-```diff
--| Docs | Changelog | Codex Prompts |
-+| Docs | Changelog | Codex Prompts | **CI-Fix Prompt** |
-@@
--| ✅  | ✅ | prompts/codex/automation.md |
-+| ✅  | ✅ | prompts/codex/automation.md | prompts/codex/ci-fix.md |
-```
-### b) Why a separate column?
-Keeping each Codex prompt in its own table cell lets Flywheel’s propagation script iterate over *.md prompt files programmatically (e.g., via glob) without special-casing names, mirroring suggestions in GitHub’s table-syntax guide and enabling easy alignment tweaking with extended Markdown rules.
-
-## 3 – Committing & propagating
-Update `docs/prompts/codex/ci-fix.md` and related tables.
-
-Apply the table patch (or edit manually; don’t forget the pipe alignment).
+## 2 – Commit and propagate
+Update `docs/prompts/codex/ci-fix.md`.
 
 Regenerate the summary and run all checks:
 
