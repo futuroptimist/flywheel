@@ -49,6 +49,12 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | one-off   | prompts to implement features or make recommended changes (glorified TODO; remove after cleanup) |
 | unknown   | catch-all; refine into another category or create a new one                                      |
 
+=======
+## **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**
+
+| Path                                                                                                                     | Prompt                                                                                                                                | Type    | One-click?   |
+|--------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|---------|--------------|
+| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md) | [Implementation prompts](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md#implementation-prompts) | unknown | yes          |
 ## [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist)
 
 | Path                                                                                                                              | Prompt                                                                                                                                           | Type        | One-click?   |

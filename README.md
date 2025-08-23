@@ -33,7 +33,7 @@ python -m flywheel.fit
 bash scripts/checks.sh
 ```
 
-If browser dependencies are missing, install them via `npx playwright install chromium`
+If browser dependencies are missing, run `npm run playwright:install`
 or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 
 ## Contents
@@ -151,6 +151,7 @@ flywheel crawl --repos-file docs/repo_list.txt --output docs/repo-feature-summar
 
 Append `@branch` to any repo to crawl a non-default branch, e.g. `owner/name@dev`. Lines in `docs/repo_list.txt` are combined with any repos passed on the command line.
 Pass `--token YOURTOKEN` or set `GITHUB_TOKEN` to avoid API rate limits.
+Missing parent directories for the output path are created automatically.
 The `Update Repo Feature Summary` workflow runs nightly and after each merge, committing `docs/repo-feature-summary.md` to `main` so the table stays fresh.
 The summary records the short SHA of the latest commit, the name of each repository's default branch, and whether the latest commit passed CI on that branch.
 
@@ -274,7 +275,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   "guardian angel" LLM focused on security.  \
   Its `docs/FLYWHEEL_RISK_MODEL.md` discusses how automation changes your threat model.  \
   See `docs/gabriel-integration.md` for ways these repositories will share tooling.
-- ✅ [f2clipboard](https://github.com/futuroptimist/f2clipboard) –  \
+- ❌ [f2clipboard](https://github.com/futuroptimist/f2clipboard) –  \
   bulk-copy utility exploring macro workflows.  \
   See `docs/f2clipboard-integration.md`.
 - ✅ [Axel](https://github.com/futuroptimist/axel) –  \

@@ -25,7 +25,7 @@ CONTEXT:
   - `npm run test:ci`
   - `python -m flywheel.fit`
   - `bash scripts/checks.sh`
-- If browser dependencies are missing, run `npx playwright install chromium`
+- If browser dependencies are missing, run `npm run playwright:install`
   or prefix tests with `SKIP_E2E=1`.
 - Cross-reference CAD dimensions where helpful.
 
