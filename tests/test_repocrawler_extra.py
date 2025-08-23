@@ -542,7 +542,7 @@ def test_branch_green_status_bad_json():
         }
     )
     crawler = RepoCrawler([], session=sess)
-    assert crawler._branch_green("demo/repo", "main", "bad") is None
+    assert crawler._branch_green("demo/repo", "main", "bad") is False
 
 
 def test_branch_green_status_non_200():
@@ -553,7 +553,7 @@ def test_branch_green_status_non_200():
         }
     )
     crawler = RepoCrawler([], session=sess)
-    assert crawler._branch_green("demo/repo", "main", "miss") is None
+    assert crawler._branch_green("demo/repo", "main", "miss") is False
 
 
 def test_branch_green_request_exception():
@@ -565,7 +565,7 @@ def test_branch_green_request_exception():
             raise requests.RequestException("boom")
 
     crawler = RepoCrawler([], session=ErrSession())
-    assert crawler._branch_green("demo/repo", "main", "dead") is None
+    assert crawler._branch_green("demo/repo", "main", "dead") is False
 
 
 def test_branch_green_no_sha():
