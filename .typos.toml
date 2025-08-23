@@ -147,6 +147,8 @@ Snyk              = "Snyk"
 mjs               = "mjs"
 yyyy              = "yyyy"
 LTS               = "LTS"
+circ              = "circ"
+precess           = "precess"
 
 [files]
 # Existing exclusions plus new ones for generated assets
