@@ -219,3 +219,6 @@ untriaged
 elex
 cyl
 linters
+
+Vitest
+vitest

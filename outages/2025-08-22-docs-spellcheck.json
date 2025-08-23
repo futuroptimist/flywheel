@@ -1,0 +1,11 @@
+{
+  "id": "2025-08-22-docs-spellcheck",
+  "date": "2025-08-22",
+  "component": "docs/spellcheck",
+  "rootCause": "Docs workflow used aspell-based spellcheck action which failed to run reliably",
+  "resolution": "Switch docs workflow to crate-ci/typos action",
+  "references": [
+    "https://github.com/futuroptimist/flywheel/actions/runs/17147342134",
+    "docs/pms/2025-08-22-docs-spellcheck.md"
+  ]
+}

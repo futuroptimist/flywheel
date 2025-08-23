@@ -31,6 +31,17 @@ def test_clone_repo_overwrites_file(monkeypatch, tmp_path):
     assert not dest.exists()
 
 
+def test_clone_repo_creates_parent(monkeypatch, tmp_path):
+    dest = tmp_path / "nested" / "dest"
+
+    def fake_run(cmd, check):
+        assert Path(cmd[-1]).parent.exists()
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    scanner.clone_repo("foo/bar", dest)
+    assert dest.parent.exists()
+
+
 def test_clone_repo_preserves_symlink_target(monkeypatch, tmp_path):
     target = tmp_path / "real"
     target.mkdir()
