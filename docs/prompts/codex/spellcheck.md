@@ -32,7 +32,7 @@ CONTEXT:
   bash scripts/checks.sh
   ```
 - Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-- If browser dependencies are missing, run `npx playwright install chromium` or
+- If browser dependencies are missing, run `npm run playwright:install` or
   prefix tests with `SKIP_E2E=1`.
 
 REQUEST:
@@ -65,7 +65,7 @@ CONTEXT:
 - Ensure `pre-commit run --all-files`, `pytest -q`, `npm run lint`, `npm run test:ci`,
   `python -m flywheel.fit`, and `bash scripts/checks.sh` pass.
 - Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
-- If browser dependencies are missing, run `npx playwright install chromium` or
+- If browser dependencies are missing, run `npm run playwright:install` or
   prefix tests with `SKIP_E2E=1`.
 - Regenerate `docs/prompt-docs-summary.md` with
   `python scripts/update_prompt_docs_summary.py --repos-from dict/prompt-doc-repos.txt \
