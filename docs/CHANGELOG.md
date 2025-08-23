@@ -1,5 +1,8 @@
 # Changelog
 
+## [2025-08-23] - Fix newline in prompt docs summary
+- add missing newline to docs/prompt-docs-summary.md to satisfy pre-commit
+
 ## [2025-08-22] - Use typos for docs spellcheck
 - replace flaky aspell-based spellchecker with crate-ci/typos
 
