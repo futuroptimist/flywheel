@@ -16,8 +16,8 @@ PURPOSE:
 Keep Markdown documentation free of spelling errors.
 
 CONTEXT:
-- Run `pre-commit run codespell --files "$(git ls-files '*.md')"` to
-  spell-check Markdown documentation.
+ - Run `pre-commit run codespell --files $(git ls-files '*.md')` to
+   spell check Markdown documentation.
 - Add unknown but legitimate words to
   [`dict/allow.txt`](../../../dict/allow.txt).
 - Follow [`AGENTS.md`](../../../AGENTS.md) and [`README.md`](../../../README.md).
@@ -67,9 +67,12 @@ CONTEXT:
 - Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 - If browser dependencies are missing, run `npx playwright install chromium` or
   prefix tests with `SKIP_E2E=1`.
-- Regenerate `docs/prompt-docs-summary.md` with
-  `python scripts/update_prompt_docs_summary.py --repos-from dict/prompt-doc-repos.txt \
-  --out docs/prompt-docs-summary.md`.
+ - Regenerate `docs/prompt-docs-summary.md` with:
+
+   ```bash
+   python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt \
+     --out docs/prompt-docs-summary.md
+   ```
 
 REQUEST:
 1. Review this file for outdated commands or paths.
