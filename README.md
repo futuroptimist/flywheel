@@ -266,7 +266,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [token.place](https://github.com/futuroptimist/token.place) –  \
   stateless faucet for LLM inference.  \
   See `docs/tokenplace-features.md` and related docs.
-- ❌ [DSPACE](https://github.com/democratizedspace/dspace) –  \
+- ✅ [DSPACE](https://github.com/democratizedspace/dspace) –  \
   offline-first idle simulation with maker quests.  \
   See `docs/dspace-integration.md` for quest ideas.
 - ✅ [flywheel](https://github.com/futuroptimist/flywheel) –  \
@@ -275,7 +275,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   "guardian angel" LLM focused on security.  \
   Its `docs/FLYWHEEL_RISK_MODEL.md` discusses how automation changes your threat model.  \
   See `docs/gabriel-integration.md` for ways these repositories will share tooling.
-- ✅ [f2clipboard](https://github.com/futuroptimist/f2clipboard) –  \
+- ❌ [f2clipboard](https://github.com/futuroptimist/f2clipboard) –  \
   bulk-copy utility exploring macro workflows.  \
   See `docs/f2clipboard-integration.md`.
 - ✅ [Axel](https://github.com/futuroptimist/axel) –  \
