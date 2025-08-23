@@ -46,6 +46,21 @@ def test_main_crawl(monkeypatch, tmp_path):
     assert out.read_text() == "report"
 
 
+def test_main_crawl_creates_parent_dirs(monkeypatch, tmp_path):
+    out = tmp_path / "nested" / "sum.md"
+
+    class DummyCrawler:
+        def __init__(self, repos, token=None):
+            self.repos = repos
+
+        def generate_summary(self):
+            return "report"
+
+    monkeypatch.setattr(fm, "RepoCrawler", DummyCrawler)
+    fm.main(["crawl", "foo/bar", "--output", str(out)])
+    assert out.read_text() == "report"
+
+
 def test_main_crawl_no_repos(tmp_path):
     repo_file = tmp_path / "repos.txt"
     repo_file.write_text("")
