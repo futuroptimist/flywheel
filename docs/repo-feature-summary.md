@@ -6,13 +6,13 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `85f7130` | ✅ | 0 | 10 | 2025-08-23 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `538d85b` | ✅ | 0 | 11 | 2025-08-23 |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `2304448` | ✅ | 0 | 2 | 2025-08-23 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `faef083` | ✅ | 3 | 51 | 2025-08-23 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `590d025` | ✅ | 6 | 5 | 2025-08-22 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `171c813` | ✅ | 0 | 3 | 2025-08-22 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `b06aad3` | ✅ | 1 | 0 | 2025-08-22 |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `07c4a25` | ✅ | 0 | 1 | 2025-08-22 |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `a45787f` | ✅ | 0 | 0 | 2025-08-23 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `9f30a0e` | ✅ | 0 | 1 | 2025-08-23 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `b43e60f` | ✅ | 0 | 3 | 2025-08-22 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `68a522f` | ✅ | 0 | 5 | 2025-08-23 |
@@ -27,7 +27,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ❌ | — | ✅ | pip | 2025-08-22 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ❌ | — | ✅ | 🚀 uv | 2025-08-22 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | — | ✅ | 🚀 uv | 2025-08-22 |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | ❌ | — | ✅ | 🚀 uv | 2025-08-22 |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | ❌ | — | ✅ | 🚀 uv | 2025-08-23 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ❌ | — | ✅ | 🚀 uv | 2025-08-23 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | ❌ | — | ✅ | 🚀 uv | 2025-08-22 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ❌ | — | ✅ | pip | 2025-08-23 |
@@ -42,7 +42,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2025-08-22 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | 2025-08-22 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-22 |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | 2025-08-22 |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | 2025-08-23 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-23 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | ✅ | ✅ | 4 | ✅ | ❌ | ❌ | ❌ | 2025-08-22 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2025-08-23 |
@@ -57,7 +57,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | 0 | 1 | 2025-08-22 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | 0 | 7 | 2025-08-22 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | 0 | 0 | 2025-08-22 |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | 0 | 1 | 2025-08-22 |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | 0 | 1 | 2025-08-23 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | 0 | 0 | 2025-08-23 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | 0 | 0 | 2025-08-22 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | 0 | 0 | 2025-08-23 |
