@@ -266,7 +266,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [token.place](https://github.com/futuroptimist/token.place) –  \
   stateless faucet for LLM inference.  \
   See `docs/tokenplace-features.md` and related docs.
-- ❌ [DSPACE](https://github.com/democratizedspace/dspace) –  \
+- ✅ [DSPACE](https://github.com/democratizedspace/dspace) –  \
   offline-first idle simulation with maker quests.  \
   See `docs/dspace-integration.md` for quest ideas.
 - ✅ [flywheel](https://github.com/futuroptimist/flywheel) –  \
