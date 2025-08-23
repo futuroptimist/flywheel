@@ -24,7 +24,7 @@ Repos with prompts still marked as unknown or one-off.
 
 | Repo                                                                          |   Unknown |   One-off |
 |-------------------------------------------------------------------------------|-----------|-----------|
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       |         2 |         0 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       |         1 |         0 |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) |         4 |         0 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace)       |        36 |         0 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place)     |        10 |         0 |
@@ -52,10 +52,9 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 
 ## **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**
 
-| Path                                                                                                                     | Prompt                                                                                                                                                                              | Type    | One-click?   |
-|--------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|--------------|
-| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md) | [Implementation prompts](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md#implementation-prompts)                                               | unknown | yes          |
-| [docs/prompts/codex/ci-fix.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/ci-fix.md)         | [2 – Add a column to `docs/repo-feature-summary.md`](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/ci-fix.md#2-add-a-column-to-docsrepo-feature-summarymd) | unknown | yes          |
+| Path                                                                                                                     | Prompt                                                                                                                                | Type    | One-click?   |
+|--------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|---------|--------------|
+| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md) | [Implementation prompts](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md#implementation-prompts) | unknown | yes          |
 
 ## [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist)
 

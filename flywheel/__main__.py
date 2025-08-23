@@ -126,7 +126,9 @@ def crawl(args: argparse.Namespace) -> None:
         raise SystemExit("No repositories provided")
     crawler = RepoCrawler(repos, token=args.token)
     md = crawler.generate_summary()
-    Path(args.output).write_text(md)
+    out = Path(args.output)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(md)
 
 
 def build_parser() -> argparse.ArgumentParser:
