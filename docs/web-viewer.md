@@ -24,7 +24,7 @@ Ensure Node.js 20 or newer is installed. Then run:
 ```bash
 uv pip install -r requirements.txt
 npm ci
-npx playwright install chromium
+npm run playwright:install
 python webapp/app.py
 ```
 

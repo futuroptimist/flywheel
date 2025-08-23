@@ -51,6 +51,11 @@ def parse_scad_vars(path: str | Path) -> Dict[str, float]:
             elif re.match(r"[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*$", part):
                 name = part.split("=", 1)[0].strip()
                 raise ValueError(f"missing value for {name}")
+            elif re.match(
+                r"[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*[-+]?(?:\d|\.)",
+                part,
+            ):
+                raise ValueError(f"invalid assignment: {part}")
     return vars
 
 

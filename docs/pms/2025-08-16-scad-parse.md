@@ -10,7 +10,8 @@ Invalid CAD parameters could propagate without notice.
 `parse_scad_vars` failed to validate assignments, skipping non-numeric values.
 
 ## Resolution
-Raise `ValueError` when an assignment lacks a numeric value.
+Raise `ValueError` when an assignment lacks a numeric value or contains
+non-numeric characters after the number.
 
 ## Prevention
 Add fuzz tests to ensure malformed content triggers errors.
