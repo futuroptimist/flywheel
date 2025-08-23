@@ -39,7 +39,7 @@ Repos with prompts still marked as unknown or one-off.
 Run this script to regenerate the table after triaging prompts:
 
 ```bash
-python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --out docs/prompt-docs-summary.md
+python scripts/update_prompt_docs_summary.py --repos-from dict/prompt-doc-repos.txt --out docs/prompt-docs-summary.md
 ```
 
 ## Legend
@@ -82,7 +82,6 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | **[frontend/src/pages/docs/md/prompts-codex.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex.md)**                       | **[2. Prompt ingredients](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex.md#2-prompt-ingredients)**                                                                | **unknown** | **yes**      |
 | **[frontend/src/pages/docs/md/prompts-codex.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex.md)**                       | **[Upgrade Prompt](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex.md#upgrade-prompt)**                                                                             | **unknown** | **yes**      |
 | **[frontend/src/pages/docs/md/prompts-codex.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex.md)**                       | **[Prompt Upgrader](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex.md#prompt-upgrader)**                                                                           | **unknown** | **yes**      |
-| **[frontend/src/pages/docs/md/prompts-codex.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex.md)**                       | **[Outage prompts](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex.md#outage-prompts)**                                                                             | **unknown** | **yes**      |
 | **[frontend/src/pages/docs/md/prompts-docs.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-docs.md)**                         | **[Documentation prompts for the _dspace_ repo](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-docs.md#documentation-prompts-for-the-dspace-repo)**                      | **unknown** | **yes**      |
 | **[frontend/src/pages/docs/md/prompts-docs.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-docs.md)**                         | **[Proofreading prompt](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-docs.md#proofreading-prompt)**                                                                    | **unknown** | **yes**      |
 | **[frontend/src/pages/docs/md/prompts-docs.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-docs.md)**                         | **[Cross-link check prompt](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-docs.md#cross-link-check-prompt)**                                                            | **unknown** | **yes**      |
