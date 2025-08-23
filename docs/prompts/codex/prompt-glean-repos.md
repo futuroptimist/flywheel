@@ -44,31 +44,3 @@ OUTPUT:
 A pull request that updates `docs/repo-feature-summary.md` with accurate repository summaries and
 all checks passing.
 ```
-
-## Upgrade Prompt
-Type: evergreen
-
-Use this prompt to refine the repo glean instructions.
-
-```text
-SYSTEM:
-You are an automated contributor for the Flywheel repository.
-
-PURPOSE:
-Keep the repo glean prompt accurate and actionable.
-
-CONTEXT:
-- Follow `AGENTS.md` and `README.md`.
-- Ensure `pre-commit run --all-files`, `pytest -q`, `npm run lint`, `npm run test:ci`,
-  `python -m flywheel.fit`, and `bash scripts/checks.sh` pass.
-- Regenerate `docs/prompt-docs-summary.md` with
-  `python scripts/update_prompt_docs_summary.py --repos-from dict/prompt-doc-repos.txt --out docs/prompt-docs-summary.md`.
-
-REQUEST:
-1. Review `docs/prompts/codex/prompt-glean-repos.md` for outdated guidance.
-2. Update the prompt and regenerate the summary.
-3. Run the checks above.
-
-OUTPUT:
-A pull request with the refined prompt and passing checks.
-```
