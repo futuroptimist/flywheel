@@ -42,6 +42,7 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - DEPENDABOT for automated dependency updates
 - CodeQL workflow for security scanning
 - Style guides for Python and JavaScript
+- README status script handles mixed-case GitHub workflow conclusions
 - Detailed best practice explanations in `docs/best_practices_catalog.md`
 - Dark pattern guidance in `docs/dark-patterns.md`
 - Bright pattern catalog in `docs/bright-patterns.md`
@@ -172,6 +173,7 @@ python -m flywheel.agents.scanner
 Reports are written to `reports/`. Each report lists only top-level non-hidden files and
 ignores directories. File names are sorted case-insensitively. Existing paths under the
 scanner's work area are removed before each clone so reports reflect a fresh snapshot.
+Missing parent directories are created automatically when cloning.
 
 ### Viewing the 3D flywheel
 
@@ -275,7 +277,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [f2clipboard](https://github.com/futuroptimist/f2clipboard) –  \
   bulk-copy utility exploring macro workflows.  \
   See `docs/f2clipboard-integration.md`.
-- ❌ [Axel](https://github.com/futuroptimist/axel) –  \
+- ✅ [Axel](https://github.com/futuroptimist/axel) –  \
   personal LLM accelerator for repository quests.  \
   See `docs/axel-integration.md` for pairings.
 - ✅ [Sigma](https://github.com/futuroptimist/sigma) –  \
