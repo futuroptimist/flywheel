@@ -359,16 +359,16 @@ class RepoCrawler:
                 timeout=10,
             )
         except RequestException:
-            return None
+            return False
 
         # ----- New, more robust evaluation ---------------------------------
         if resp.status_code != 200:
-            return None
+            return False
 
         try:
             body = resp.json()
         except Exception:
-            return None
+            return False
 
         # 1. Fast-path: combined status already success
         if body.get("state") == "success":

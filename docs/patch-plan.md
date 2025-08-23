@@ -10,6 +10,7 @@ This patch extends the flywheel template with a Python CLI and agent hook.
 - added minimal `.eslintrc.json` and `.prettierrc` used as templates.
 - interactive prompts ask for language and dev tooling unless `--yes` is used.
 - repo crawler uses the `requests` library to fetch files.
+- repo crawler treats CI status API errors as failing to reduce unknowns.
 - root `requirements.txt` lists `requests` so CI installs dependencies.
 
 ## Tests
