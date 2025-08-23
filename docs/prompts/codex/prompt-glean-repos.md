@@ -1,30 +1,46 @@
-# Prompt Glean Repos
+---
+title: 'Codex Repo Glean Prompt'
+slug: 'codex-glean-repos'
+---
 
-Nested checklists capturing improvements from downstream projects.
+# OpenAI Codex Repo Glean Prompt
+Type: evergreen
 
-- [ ] [Futuroptimist](https://github.com/futuroptimist/futuroptimist)
-  - [ ] Evaluate adopting `uv` for Python dependency management.
-  - [ ] Keep test coverage at 100% as a release gate.
-- [ ] [token.place](https://github.com/futuroptimist/token.place)
-  - [ ] Add CodeQL and secret scanning workflows.
-  - [ ] Enable Dependabot for dependency updates.
-- [ ] [DSPACE](https://github.com/democratizedspace/dspace)
-  - [ ] Prototype `pnpm` support for faster Node installs.
-  - [ ] Borrow accessibility prompts for front-end docs.
-- [ ] [flywheel](https://github.com/futuroptimist/flywheel)
-  - [ ] Centralize CI templates for reuse across repos.
-- [ ] [Gabriel](https://github.com/futuroptimist/gabriel)
-  - [ ] Incorporate risk modeling guidance into security docs.
-  - [ ] Investigate local inference for security scans.
-- [ ] [f2clipboard](https://github.com/futuroptimist/f2clipboard)
-  - [ ] Explore CLI helpers to gather CI logs automatically.
-- [ ] [Axel](https://github.com/futuroptimist/axel)
-  - [ ] Integrate quest tracking to surface cross-repo tasks.
-- [ ] [Sigma](https://github.com/futuroptimist/sigma)
-  - [ ] Mirror SCAD→STL workflows and `llms.txt` endpoint configs.
-- [ ] [gitshelves](https://github.com/futuroptimist/gitshelves)
-  - [ ] Offer optional tooling to render commit activity as 3D blocks.
-- [ ] [wove](https://github.com/futuroptimist/wove)
-  - [ ] Consider `pyspelling` in pre-commit for docs.
-- [ ] [sugarkube](https://github.com/futuroptimist/sugarkube)
-  - [ ] Evaluate KiCad export and hardware docs workflows.
+Use this prompt to have Codex crawl related repositories and record their structure, tech stack,
+and conventions. Summaries feed into `docs/repo-feature-summary.md`.
+
+```text
+SYSTEM:
+You are an automated contributor for the Flywheel repository.
+
+PURPOSE:
+Catalog the structure, tech stack, and conventions of related repositories.
+
+CONTEXT:
+- Use `docs/repo-feature-summary.md` to discover repositories to scan.
+- For each repository:
+  - clone it in a temporary directory;
+  - map the project layout;
+  - identify primary languages, frameworks, and build tools;
+  - note any conventions (AGENTS.md, tests, linters, CI workflows).
+- After scanning all repositories, update `docs/repo-feature-summary.md` with new observations.
+- Follow `AGENTS.md` and `README.md`.
+- Ensure the following succeed:
+  - `pre-commit run --all-files`
+  - `pytest -q`
+  - `npm run lint`
+  - `npm run test:ci`
+  - `python -m flywheel.fit`
+  - `bash scripts/checks.sh`
+
+REQUEST:
+1. Clone and inspect each repository in `docs/repo-feature-summary.md` sequentially.
+2. Summarize structure, tech stack, and conventions for each.
+3. Update `docs/repo-feature-summary.md` with the new findings.
+4. Run the checks above.
+5. Commit and open a pull request.
+
+OUTPUT:
+A pull request that updates `docs/repo-feature-summary.md` with accurate repository summaries and
+all checks passing.
+```
