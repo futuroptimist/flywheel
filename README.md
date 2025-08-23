@@ -151,6 +151,7 @@ flywheel crawl --repos-file docs/repo_list.txt --output docs/repo-feature-summar
 
 Append `@branch` to any repo to crawl a non-default branch, e.g. `owner/name@dev`. Lines in `docs/repo_list.txt` are combined with any repos passed on the command line.
 Pass `--token YOURTOKEN` or set `GITHUB_TOKEN` to avoid API rate limits.
+Missing parent directories for the output path are created automatically.
 The `Update Repo Feature Summary` workflow runs nightly and after each merge, committing `docs/repo-feature-summary.md` to `main` so the table stays fresh.
 The summary records the short SHA of the latest commit, the name of each repository's default branch, and whether the latest commit passed CI on that branch.
 
