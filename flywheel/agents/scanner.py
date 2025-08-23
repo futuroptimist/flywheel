@@ -17,8 +17,10 @@ def clone_repo(repo: str, dest: Path) -> None:
     """Clone ``repo`` into ``dest``, overwriting existing paths.
 
     Symlinks are removed without touching their targets.
+    Missing parent directories are created automatically.
     """
 
+    dest.parent.mkdir(parents=True, exist_ok=True)
     if dest.is_symlink():
         dest.unlink()
     elif dest.exists():

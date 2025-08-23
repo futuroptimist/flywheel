@@ -16,8 +16,8 @@ PURPOSE:
 Keep Markdown documentation free of spelling errors.
 
 CONTEXT:
-- Run `pre-commit run codespell --files $(git ls-files '*.md')` to spell-check
-  Markdown documentation.
+- Run `pre-commit run codespell --files "$(git ls-files '*.md')"` to
+  spell-check Markdown documentation.
 - Add unknown but legitimate words to
   [`dict/allow.txt`](../../../dict/allow.txt).
 - Follow [`AGENTS.md`](../../../AGENTS.md) and [`README.md`](../../../README.md).
@@ -26,6 +26,7 @@ CONTEXT:
   ```bash
   pre-commit run --all-files
   pytest -q
+  npm run lint
   npm run test:ci
   python -m flywheel.fit
   bash scripts/checks.sh
@@ -61,7 +62,7 @@ Keep this spellcheck prompt accurate as tooling evolves.
 
 CONTEXT:
 - Follow [`AGENTS.md`](../../../AGENTS.md) and [`README.md`](../../../README.md).
-- Ensure `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`,
+- Ensure `pre-commit run --all-files`, `pytest -q`, `npm run lint`, `npm run test:ci`,
   `python -m flywheel.fit`, and `bash scripts/checks.sh` pass.
 - Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
 - If browser dependencies are missing, run `npx playwright install chromium` or

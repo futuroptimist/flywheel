@@ -1,5 +1,8 @@
 # Changelog
 
+## [2025-08-22] - Use typos for docs spellcheck
+- replace flaky aspell-based spellchecker with crate-ci/typos
+
 ## [2025-08-16] - Skip run-checks in prompt docs workflow
 - avoid failing scheduled doc summary by bypassing project checks
 
