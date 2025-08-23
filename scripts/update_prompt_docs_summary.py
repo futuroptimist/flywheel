@@ -71,7 +71,13 @@ def find_type(lines: List[str], start: int) -> str:
 
 
 def is_prompt_heading(title: str) -> bool:
-    return "prompt" in title.lower() or title[:1].isdigit()
+    """Return True when a heading likely represents a prompt section."""
+    t = title.lower().strip()
+    if t.startswith(("how to", "notes", "why", "further")):
+        return False
+    if t.endswith("prompts"):
+        return False
+    return "prompt" in t
 
 
 def extract_prompts(text: str, base_url: str) -> List[List[str]]:
