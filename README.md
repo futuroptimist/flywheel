@@ -284,7 +284,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [Sigma](https://github.com/futuroptimist/sigma) –  \
   ESP32 "AI pin" hardware.  \
   See `docs/sigma-integration.md`.
-- ❌ [gitshelves](https://github.com/futuroptimist/gitshelves) –  \
+- ✅ [gitshelves](https://github.com/futuroptimist/gitshelves) –  \
   3D-printable block models from GitHub commits.
 - ✅ [wove](https://github.com/futuroptimist/wove) –  \
   toolkit for knitting and robotic looms.
