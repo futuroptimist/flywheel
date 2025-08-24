@@ -8,7 +8,7 @@ import sys
 from collections import defaultdict
 from datetime import date
 from pathlib import Path
-from typing import DefaultDict, List, Set
+from typing import DefaultDict, Iterable, List, Set
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
@@ -115,6 +115,15 @@ def extract_prompts(text: str, base_url: str) -> List[List[str]]:
     return prompts
 
 
+def iter_local_prompt_docs(docs_root: Path) -> Iterable[Path]:
+    """Yield markdown prompt docs bundled with the local repository."""
+    codex_dir = docs_root / "prompts" / "codex"
+    for path in sorted(codex_dir.glob("*.md")):
+        yield path
+    for path in sorted(docs_root.glob("prompts-*.md")):
+        yield path
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repos-from", type=Path, required=True)
@@ -132,11 +141,10 @@ def main() -> None:
     # Include prompt docs from the local repository (first entry)
     local_repo = repos[0].split("@")[0]
     docs_root = Path(__file__).resolve().parents[1] / "docs"
-    prompts_dir = docs_root / "prompts" / "codex"
-    for path in sorted(prompts_dir.glob("*.md")):
+    for path in iter_local_prompt_docs(docs_root):
         text = path.read_text()
         repo_link = f"**[{local_repo}](https://github.com/{local_repo})**"
-        rel = Path("docs/prompts/codex") / path.name
+        rel = Path("docs") / path.relative_to(docs_root)
         base_url = f"https://github.com/{local_repo}/blob/main/{rel}"  # noqa: E501
         path_link = f"[{rel}]({base_url})"
         prompts = extract_prompts(text, base_url)

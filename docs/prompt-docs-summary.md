@@ -12,7 +12,7 @@ Think of each listed repository as a small flywheel belted to this codebase. The
 
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
-**125 one-click prompts verified across 11 repos (24 evergreen, 1 one-off, 3 unknown).**
+**127 one-click prompts verified across 11 repos (24 evergreen, 1 one-off, 3 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
@@ -24,6 +24,7 @@ Repos with prompts still marked as unknown or one-off.
 
 | Repo                                                                          |   Unknown |   One-off |
 |-------------------------------------------------------------------------------|-----------|-----------|
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       |         0 |         1 |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) |         0 |         1 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace)       |         0 |        10 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place)     |         0 |         2 |
@@ -46,6 +47,12 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | evergreen | prompts that can be reused to hillclimb toward goals like feature completeness or test coverage  |
 | one-off   | prompts to implement features or make recommended changes (glorified TODO; remove after cleanup) |
 | unknown   | catch-all; refine into another category or create a new one                                      |
+
+## **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**
+
+| Path                                                                                                                 | Prompt                                                                                                                                    | Type        | One-click?   |
+|----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|-------------|--------------|
+| **[docs/prompts-major-filter.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-major-filter.md)** | **[Prompt Docs Major Filter](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-major-filter.md#prompt-docs-major-filter)** | **one-off** | **yes**      |
 
 ## [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist)
 
@@ -129,6 +136,8 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [docs/prompts/codex/propagate.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/propagate.md)                                                   | [Upgrade Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/propagate.md#upgrade-prompt)                                                                                             | evergreen     | yes          |
 | **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [docs/prompts/codex/spellcheck.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/spellcheck.md)                                                 | [Codex Spellcheck Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/spellcheck.md#codex-spellcheck-prompt)                                                                          | evergreen     | yes          |
 | **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | [docs/prompts/codex/spellcheck.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/spellcheck.md)                                                 | [Upgrade Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/spellcheck.md#upgrade-prompt)                                                                                            | evergreen     | yes          |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | **[docs/prompts-major-filter.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-major-filter.md)**                                                     | **[Prompt Docs Major Filter](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-major-filter.md#prompt-docs-major-filter)**                                                                        | **one-off**   | **yes**      |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**       | **[docs/prompts-major-filter.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-major-filter.md)**                                                     | **[`scripts/update_prompt_docs_summary.py`](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts-major-filter.md#scriptsupdatepromptdocssummarypy)**                                                 | **evergreen** | **yes**      |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | **[docs/prompts-codex-spellcheck.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-spellcheck.md)**                                        | **[Codex Spellcheck Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-spellcheck.md#codex-spellcheck-prompt)**                                                                 | **evergreen** | **yes**      |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | **[docs/prompts-codex-video-script-ideas.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-video-script-ideas.md)**                        | **[Video Script Ideas Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-video-script-ideas.md#video-script-ideas-prompt)**                                                     | **evergreen** | **yes**      |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | **[docs/prompts-codex.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex.md)**                                                              | **[Codex Automation Prompt](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex.md#codex-automation-prompt)**                                                                            | **evergreen** | **yes**      |
