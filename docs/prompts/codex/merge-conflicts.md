@@ -1,0 +1,1 @@
+Please help resolve the merge conflicts in the below codeblock by returning a codeblock with the exact same content (no syntax or lint fixes) but with the merge contents resolved. In future messages, I'll ask for additional merge conflicts to be resolved. Please follow the same formula for those, too!
