@@ -25,7 +25,10 @@ repos:
           - requests
           - Flask
           - responses
+          - tabulate
           - trimesh
+          - tabulate
           - bandit
           - safety
+          - tabulate
         pass_filenames: false

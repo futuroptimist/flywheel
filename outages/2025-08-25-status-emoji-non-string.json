@@ -1,0 +1,8 @@
+{
+  "id": "status-emoji-non-string",
+  "date": "2025-08-25",
+  "component": "repo_status.status_to_emoji",
+  "rootCause": "function called .lower() on non-string conclusion, crashing on numeric API responses",
+  "resolution": "cast conclusion to string before lowercasing to handle non-string inputs",
+  "references": ["tests/test_repo_status.py::test_status_to_emoji_non_string"]
+}

@@ -11,6 +11,7 @@
 
 The canonical Codex automation prompt lives in [`automation.md`](docs/prompts/codex/automation.md).
 Agents should review it before contributing automation to new repositories.
+Other repos should copy this file to `docs/prompts/codex/automation.md`.
 
 ## Usage
 
@@ -294,3 +295,5 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   See `docs/sugarkube-integration.md`.
 
 A summary of flywheel features adopted across repos lives in [docs/repo-feature-summary.md](docs/repo-feature-summary.md).
+
+For automation guidelines see the [Codex prompt](docs/prompts/codex/automation.md).
