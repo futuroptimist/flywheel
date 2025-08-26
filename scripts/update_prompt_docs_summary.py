@@ -117,11 +117,15 @@ def extract_prompts(text: str, base_url: str) -> List[List[str]]:
 
 def iter_local_prompt_docs(docs_root: Path) -> Iterable[Path]:
     """Yield markdown prompt docs bundled with the local repository."""
-    codex_dir = docs_root / "prompts" / "codex"
-    for path in sorted(codex_dir.glob("*.md")):
-        yield path
-    for path in sorted(docs_root.glob("prompts-*.md")):
-        yield path
+    for path in sorted(docs_root.rglob("*.md")):
+        rel = path.relative_to(docs_root)
+        pl = str(rel).lower()
+        if (
+            "prompt" in pl
+            and not pl.endswith("prompt-docs-summary.md")
+            and not pl.endswith("prompt-docs-todos.md")
+        ):
+            yield path
 
 
 def main() -> None:
@@ -180,16 +184,18 @@ def main() -> None:
             branch = crawler._default_branch(name)
         files = crawler._list_files(name, branch)
         for path in files:
+            pl = path.lower()
             if (
-                "prompt" in path
-                and path.endswith(".md")
-                and not path.endswith("prompt-docs-summary.md")
+                "prompt" in pl
+                and pl.endswith(".md")
+                and not pl.endswith("prompt-docs-summary.md")
+                and not pl.endswith("prompt-docs-todos.md")
             ):
                 text = crawler._fetch_file(name, path, branch) or ""
                 repo_link = f"[{name}](https://github.com/{name})"
                 base_url = (
-                    f"https://github.com/{name}/blob/{branch}/" f"{path}"
-                )  # noqa: E501
+                    f"https://github.com/{name}/blob/{branch}/{path}"  # noqa: E501
+                )
                 path_link = f"[{path}]({base_url})"
                 prompts = extract_prompts(text, base_url)
                 for prompt_link, ptype, one_click in prompts:
