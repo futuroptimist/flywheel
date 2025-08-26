@@ -6,6 +6,7 @@ set -euo pipefail
 #   scripts/openscad_render_spool_core_sleeve.sh 55 63 64 60 0.20
 #   scripts/openscad_render_spool_core_sleeve.sh 55 63 60 0.20  # end defaults to 63
 #   PRESET=sunlu55_to63_len60 scripts/openscad_render_spool_core_sleeve.sh
+#   PRESET=sunlu55_to73_len60 scripts/openscad_render_spool_core_sleeve.sh
 # Outputs to stl/spool_core_sleeve/<name>.stl and logs echo to a .log file.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
