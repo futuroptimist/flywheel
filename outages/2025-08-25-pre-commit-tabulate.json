@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-25-pre-commit-tabulate",
+  "date": "2025-08-25",
+  "component": "pre-commit",
+  "rootCause": "run-checks hook lacked tabulate so tests failed during collection",
+  "resolution": "added tabulate to additional_dependencies in pre-commit config",
+  "references": []
+}
