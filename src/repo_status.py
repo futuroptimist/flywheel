@@ -27,7 +27,7 @@ def status_to_emoji(conclusion: str | None) -> str:
     string is handled case-insensitively.
     """
     if conclusion is not None:
-        conclusion = conclusion.lower()
+        conclusion = str(conclusion).lower()
     if conclusion in {"success", "neutral", "skipped"}:
         return "✅"
     if conclusion is None:

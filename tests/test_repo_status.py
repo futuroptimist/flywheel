@@ -15,6 +15,10 @@ def test_status_to_emoji():
     assert rs.status_to_emoji("FAILURE") == "❌"
 
 
+def test_status_to_emoji_non_string():
+    assert rs.status_to_emoji(42) == "❌"
+
+
 def test_fetch_repo_status_success(monkeypatch):
     class Resp:
         def __init__(self, conclusion):
