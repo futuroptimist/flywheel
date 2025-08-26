@@ -6,7 +6,7 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `630631b` | ✅ | 0 | 10 | 2025-08-26 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `00704df` | ✅ | 0 | 10 | 2025-08-26 |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `e7c9fdb` | ✅ | 0 | 13 | 2025-08-26 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `89d3c57` | ✅ | 3 | 78 | 2025-08-25 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `27db056` | ✅ | 6 | 8 | 2025-08-24 |
@@ -16,7 +16,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `1f6bdaf` | ✅ | 0 | 0 | 2025-08-23 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `f55dc51` | ✅ | 0 | 10 | 2025-08-24 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `a493bf6` | ✅ | 0 | 1 | 2025-08-24 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `eb1e91e` | ✅ | 0 | 0 | 2025-08-26 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `1b895b7` | ✅ | 0 | 0 | 2025-08-26 |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |
