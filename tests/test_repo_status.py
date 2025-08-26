@@ -58,6 +58,11 @@ def test_fetch_repo_status_inconsistent(monkeypatch):
         rs.fetch_repo_status("owner/repo", attempts=2)
 
 
+def test_fetch_repo_status_attempts_zero():
+    with pytest.raises(ValueError):
+        rs.fetch_repo_status("owner/repo", attempts=0)
+
+
 def test_update_readme(tmp_path, monkeypatch):
     readme = tmp_path / "README.md"
     readme.write_text("## Related Projects\n- https://github.com/a/b\n")
