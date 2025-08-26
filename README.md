@@ -11,6 +11,7 @@
 
 The canonical Codex automation prompt lives in [`automation.md`](docs/prompts/codex/automation.md).
 Agents should review it before contributing automation to new repositories.
+Other repos should copy this file to `docs/prompts/codex/automation.md`.
 
 ## Usage
 
