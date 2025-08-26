@@ -22,9 +22,11 @@ sudo apt-get install openscad
   (override `$fs` via the `resolution_fs` variable for finer meshes)
 - `utils/spool_core_sleeve.scad` – parametric spool core sleeve library.
   Ready-to-print presets live in `spool_core_sleeve/` with matching STLs in
-  `../stl/spool_core_sleeve/`, including a `sunlu55_to63_len60` 63→64 mm
-  tapered adapter and a `sunlu55_to63cyl_len60` straight 63 mm cylinder for
-  wedge removal.
+  `../stl/spool_core_sleeve/`, including:
+  - `sunlu55_to63_len60` 63→64 mm tapered adapter
+  - `sunlu55_to63cyl_len60` straight 63 mm removal cylinder
+  - `sunlu55_to73_len60` 73→74 mm tapered adapter
+  - `sunlu55_to73cyl_len60` straight 73 mm removal cylinder
 - `examples/spool_core_sleeve_example.scad` – demo spool core sleeve; the
   corresponding OBJ lives in `webapp/static/models/examples/` and the
   pre-generated 63→64 mm sleeve's OBJ is at

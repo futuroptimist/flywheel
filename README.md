@@ -74,8 +74,12 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - Web viewer instructions in `docs/web-viewer.md`
 - CI troubleshooting tips in `docs/ci-guide.md`
 - Nightly STL exports are committed back to `stl/` after each run
-- Sunlu spool core sleeve adapter (63→64 mm) [STL](./stl/spool_core_sleeve/sunlu55_to63_len60.stl)
-  and matching wedge-removal cylinder [STL](./stl/spool_core_sleeve/sunlu55_to63cyl_len60.stl)
+- Sunlu spool core sleeve adapters for Bambu Lab AMS:
+  [63→64 mm](./stl/spool_core_sleeve/sunlu55_to63_len60.stl) and
+  [73→74 mm](./stl/spool_core_sleeve/sunlu55_to73_len60.stl) sleeves with
+  matching wedge-removal cylinders
+  ([63 mm](./stl/spool_core_sleeve/sunlu55_to63cyl_len60.stl) and
+  [73 mm](./stl/spool_core_sleeve/sunlu55_to73cyl_len60.stl))
 - Flywheel construction guide in `docs/flywheel-construction.md` with CAD files in `cad/`
   including `stand.scad`, `shaft.scad`, and `adapter.scad`. Assembly details live in `docs/flywheel-stand.md`, clamp instructions in `docs/flywheel-adapter.md`, and physics in `docs/flywheel-physics.md`
 
