@@ -7,8 +7,8 @@ slug: 'codex-cad'
 Type: evergreen
 
 Use this prompt whenever CAD models or STL exports need updating. It mirrors the
-style of DSPACE's `docs/prompts/codex/automation.md` so the automation workflows
-stay consistent.
+style of this repository's `docs/prompts/codex/automation.md` so the automation
+workflows stay consistent.
 
 ```
 SYSTEM:
@@ -23,7 +23,8 @@ CONTEXT:
 - Verify parts fit by running `python -m flywheel.fit`.
 
 REQUEST:
-1. Look for TODO comments in `cad/*.scad` or open issues tagged `cad`.
+1. Look for TODO comments in `cad/*.scad` or open
+   [issues tagged `cad`](https://github.com/flywheel-factory/flywheel/issues?q=is%3Aopen+label%3Acad).
 2. Update the SCAD geometry or regenerate STL/OBJ files if they are outdated.
 3. Run `python -m flywheel.fit` to confirm dimensions match.
 4. Commit updated models and documentation.
