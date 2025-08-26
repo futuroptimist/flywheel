@@ -25,6 +25,7 @@ repos:
           - requests
           - Flask
           - responses
+          - tabulate
           - trimesh
           - tabulate
           - bandit
