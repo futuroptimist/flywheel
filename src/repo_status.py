@@ -46,8 +46,11 @@ def fetch_repo_status(
     The GitHub API occasionally returns inconsistent data if a workflow is
     updating while we query it. To catch this non-determinism we fetch the
     status multiple times and ensure all results match. If they differ we raise
-    ``RuntimeError`` so the calling workflow fails loudly.
+    ``RuntimeError`` so the calling workflow fails loudly. ``attempts`` must be
+    at least ``1`` to ensure we have a conclusion to report.
     """
+    if attempts < 1:
+        raise ValueError("attempts must be >= 1")
     headers = {"Accept": "application/vnd.github+json"}
     if token:
         headers["Authorization"] = f"Bearer {token}"

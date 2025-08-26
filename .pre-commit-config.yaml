@@ -26,6 +26,7 @@ repos:
           - Flask
           - responses
           - trimesh
+          - tabulate
           - bandit
           - safety
         pass_filenames: false
