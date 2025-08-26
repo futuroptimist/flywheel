@@ -12,8 +12,6 @@ from typing import DefaultDict, Iterable, List, Set
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from tabulate import tabulate  # noqa: E402
-
 from flywheel.repocrawler import RepoCrawler  # noqa: E402
 
 
@@ -89,7 +87,8 @@ def extract_prompts(text: str, base_url: str) -> List[List[str]]:
         title = extract_title(text) or base_url.split("/")[-1]
         snippet = text
         one_click = is_one_click(snippet)
-        prompts.append([f"[{title}]({base_url})", "unknown", one_click])
+        title_link = f"[{title}]({base_url})"
+        prompts.append([title_link, "unknown", one_click, snippet])
         return prompts
 
     for idx, (line_no, title) in enumerate(headings):
@@ -111,7 +110,8 @@ def extract_prompts(text: str, base_url: str) -> List[List[str]]:
         snippet = "\n".join(lines[line_no + 1 : next_line])  # noqa: E203
         anchor = slugify(title)
         one_click = is_one_click(snippet)
-        prompts.append([f"[{title}]({base_url}#{anchor})", ptype, one_click])
+        title_link = f"[{title}]({base_url}#{anchor})"
+        prompts.append([title_link, ptype, one_click, snippet])
     return prompts
 
 
@@ -125,6 +125,8 @@ def iter_local_prompt_docs(docs_root: Path) -> Iterable[Path]:
 
 
 def main() -> None:
+    from tabulate import tabulate
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--repos-from", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
@@ -134,7 +136,6 @@ def main() -> None:
     repos = load_repos(args.repos_from)
     crawler = RepoCrawler(repos, token=args.token)
 
-    existing_docs = _parse_existing(args.out)
     grouped: DefaultDict[str, List[List[str]]] = defaultdict(list)
     new_rows: list[list[str]] = []
 
@@ -148,28 +149,17 @@ def main() -> None:
         base_url = f"https://github.com/{local_repo}/blob/main/{rel}"  # noqa: E501
         path_link = f"[{rel}]({base_url})"
         prompts = extract_prompts(text, base_url)
-        for prompt_link, ptype, one_click in prompts:
+        for prompt_link, ptype, one_click, snippet in prompts:
+            if ptype not in {"evergreen", "one-off"}:
+                continue
+            if ptype != "one-off" and "```" not in snippet:
+                continue
             if not one_click:
                 continue
             row = [path_link, prompt_link, ptype, "yes"]
             if path.name.startswith("prompts-"):
                 row = [f"**{cell}**" for cell in row]
             grouped[repo_link].append(row)
-            if prompt_link not in existing_docs:
-                new_row = [
-                    repo_link,
-                    path_link,
-                    prompt_link,
-                    ptype,
-                    "yes",
-                ]
-                # fmt: off
-                if path.name.startswith("prompts-"):
-                    new_row = [new_row[0]] + list(
-                        f"**{cell}**" for cell in new_row[1:]
-                    )
-                # fmt: on
-                new_rows.append(new_row)
 
     # Add prompt docs from remote repositories (skip local repo)
     for spec in repos[1:]:
@@ -192,26 +182,17 @@ def main() -> None:
                 )  # noqa: E501
                 path_link = f"[{path}]({base_url})"
                 prompts = extract_prompts(text, base_url)
-                for prompt_link, ptype, one_click in prompts:
+                for prompt_link, ptype, one_click, snippet in prompts:
+                    if ptype not in {"evergreen", "one-off"}:
+                        continue
+                    if ptype != "one-off" and "```" not in snippet:
+                        continue
                     if not one_click:
                         continue
                     row = [path_link, prompt_link, ptype, "yes"]
                     if Path(path).name.startswith("prompts-"):
                         row = [f"**{cell}**" for cell in row]
                     grouped[repo_link].append(row)
-                    if prompt_link not in existing_docs:
-                        new_row = [
-                            repo_link,
-                            path_link,
-                            prompt_link,
-                            ptype,
-                            "yes",
-                        ]
-                        if Path(path).name.startswith("prompts-"):
-                            new_row = [new_row[0]] + [
-                                f"**{cell}**" for cell in new_row[1:]
-                            ]
-                        new_rows.append(new_row)
 
     type_order = {"evergreen": 0, "unknown": 1, "one-off": 2}
     for repo_prompts in grouped.values():
@@ -342,7 +323,7 @@ def main() -> None:
         ]
     )
 
-    actionable_types = {"unknown", "one-off"}
+    actionable_types = {"evergreen", "one-off"}
     for repo_link, prompts in grouped.items():
         actionable = []
         for p in prompts:
