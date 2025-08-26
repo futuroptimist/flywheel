@@ -2,5 +2,85 @@
 
 Track outstanding prompt documentation work across repositories. Add rows below as TODOs emerge.
 
-| Repo | Suggested Prompt | Type | Notes |
-|------|-----------------|------|-------|
+| Repo | Missing Doc |
+|------|-------------|
+| democratizedspace/dspace | [docs/prompts-outages.md](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts-outages.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-accessibility.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-accessibility.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-audit.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-audit.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-backend.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-backend.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-backups.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-backups.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-codex-ci-fix.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex-ci-fix.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-codex-meta.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex-meta.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-codex-upgrader.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-codex-upgrader.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-docs.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-docs.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-frontend.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-frontend.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-monitoring.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-monitoring.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-outages.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-outages.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-playwright-tests.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-playwright-tests.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-refactors.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-refactors.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-secrets.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-secrets.md) |
+| democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-vitest.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-vitest.md) |
+| futuroptimist/axel | [docs/prompts-codex-ci-fix.md](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex-ci-fix.md) |
+| futuroptimist/axel | [docs/prompts-codex-spellcheck.md](https://github.com/futuroptimist/axel/blob/main/docs/prompts-codex-spellcheck.md) |
+| futuroptimist/f2clipboard | [docs/prompts-codex-ci-fix.md](https://github.com/futuroptimist/f2clipboard/blob/main/docs/prompts-codex-ci-fix.md) |
+| futuroptimist/f2clipboard | [docs/prompts-codex-docs.md](https://github.com/futuroptimist/f2clipboard/blob/main/docs/prompts-codex-docs.md) |
+| futuroptimist/flywheel | [docs/pms/2025-08-09-spellcheck-prompt-summary.md](https://github.com/futuroptimist/flywheel/blob/main/docs/pms/2025-08-09-spellcheck-prompt-summary.md) |
+| futuroptimist/flywheel | [docs/pms/2025-08-10-untriaged-in-prompt-summary.md](https://github.com/futuroptimist/flywheel/blob/main/docs/pms/2025-08-10-untriaged-in-prompt-summary.md) |
+| futuroptimist/flywheel | [docs/pms/2025-08-15-prompt-summary-spellcheck.md](https://github.com/futuroptimist/flywheel/blob/main/docs/pms/2025-08-15-prompt-summary-spellcheck.md) |
+| futuroptimist/flywheel | [docs/pms/2025-08-16-prompt-docs-run-checks.md](https://github.com/futuroptimist/flywheel/blob/main/docs/pms/2025-08-16-prompt-docs-run-checks.md) |
+| futuroptimist/flywheel | [docs/pms/2025-08-23-prompt-docs-newline.md](https://github.com/futuroptimist/flywheel/blob/main/docs/pms/2025-08-23-prompt-docs-newline.md) |
+| futuroptimist/flywheel | [docs/prompt-docs-todos.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompt-docs-todos.md) |
+| futuroptimist/flywheel | [docs/prompts/codex/automation.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md) |
+| futuroptimist/flywheel | [docs/prompts/codex/cad.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/cad.md) |
+| futuroptimist/flywheel | [docs/prompts/codex/ci-fix.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/ci-fix.md) |
+| futuroptimist/flywheel | [docs/prompts/codex/cleanup.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/cleanup.md) |
+| futuroptimist/flywheel | [docs/prompts/codex/fuzzing.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/fuzzing.md) |
+| futuroptimist/flywheel | [docs/prompts/codex/merge-conflicts.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/merge-conflicts.md) |
+| futuroptimist/flywheel | [docs/prompts/codex/physics.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/physics.md) |
+| futuroptimist/flywheel | [docs/prompts/codex/prompt-glean-repos.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/prompt-glean-repos.md) |
+| futuroptimist/flywheel | [docs/prompts/codex/propagate.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/propagate.md) |
+| futuroptimist/flywheel | [docs/prompts/codex/spellcheck.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/spellcheck.md) |
+| futuroptimist/flywheel | [docs/prompts/summary.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/summary.md) |
+| futuroptimist/futuroptimist | [docs/prompts-codex-spellcheck.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-spellcheck.md) |
+| futuroptimist/futuroptimist | [docs/prompts-codex-video-script-ideas.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-video-script-ideas.md) |
+| futuroptimist/futuroptimist | [docs/prompts-codex-video-script.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-video-script.md) |
+| futuroptimist/futuroptimist | [docs/prompts-codex.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex.md) |
+| futuroptimist/futuroptimist | [docs/prompts/codex/automation.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts/codex/automation.md) |
+| futuroptimist/futuroptimist | [docs/prompts/codex/cad.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts/codex/cad.md) |
+| futuroptimist/futuroptimist | [docs/prompts/codex/cleanup.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts/codex/cleanup.md) |
+| futuroptimist/futuroptimist | [docs/prompts/codex/fuzzing.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts/codex/fuzzing.md) |
+| futuroptimist/futuroptimist | [docs/prompts/codex/physics.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts/codex/physics.md) |
+| futuroptimist/futuroptimist | [docs/prompts/codex/propagate.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts/codex/propagate.md) |
+| futuroptimist/futuroptimist | [docs/prompts/codex/spellcheck.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts/codex/spellcheck.md) |
+| futuroptimist/gabriel | [prompts-repos.md](https://github.com/futuroptimist/gabriel/blob/main/prompts-repos.md) |
+| futuroptimist/gabriel | [prompts/README.md](https://github.com/futuroptimist/gabriel/blob/main/prompts/README.md) |
+| futuroptimist/gitshelves | [docs/prompts-codex-ci-fix.md](https://github.com/futuroptimist/gitshelves/blob/main/docs/prompts-codex-ci-fix.md) |
+| futuroptimist/gitshelves | [docs/prompts-codex-docs.md](https://github.com/futuroptimist/gitshelves/blob/main/docs/prompts-codex-docs.md) |
+| futuroptimist/gitshelves | [docs/prompts-codex-refactor.md](https://github.com/futuroptimist/gitshelves/blob/main/docs/prompts-codex-refactor.md) |
+| futuroptimist/gitshelves | [docs/prompts-codex-spellcheck.md](https://github.com/futuroptimist/gitshelves/blob/main/docs/prompts-codex-spellcheck.md) |
+| futuroptimist/gitshelves | [docs/prompts-codex-tests.md](https://github.com/futuroptimist/gitshelves/blob/main/docs/prompts-codex-tests.md) |
+| futuroptimist/gitshelves | [docs/repo_feature_summary_prompt.md](https://github.com/futuroptimist/gitshelves/blob/main/docs/repo_feature_summary_prompt.md) |
+| futuroptimist/sigma | [docs/prompts-codex-cad.md](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-cad.md) |
+| futuroptimist/sigma | [docs/prompts-codex-ci-fix.md](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-ci-fix.md) |
+| futuroptimist/sigma | [docs/prompts-codex-docs.md](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-docs.md) |
+| futuroptimist/sigma | [docs/prompts-codex-spellcheck.md](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-spellcheck.md) |
+| futuroptimist/sigma | [docs/prompts-codex-tests.md](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-tests.md) |
+| futuroptimist/sigma | [docs/prompts-codex.md](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex.md) |
+| futuroptimist/sugarkube | [docs/prompts-codex-cad.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-cad.md) |
+| futuroptimist/sugarkube | [docs/prompts-codex-ci-fix.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-ci-fix.md) |
+| futuroptimist/sugarkube | [docs/prompts-codex-docker-repo.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-docker-repo.md) |
+| futuroptimist/sugarkube | [docs/prompts-codex-docs.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-docs.md) |
+| futuroptimist/sugarkube | [docs/prompts-codex-elex.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-elex.md) |
+| futuroptimist/sugarkube | [docs/prompts-codex-pi-image.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-pi-image.md) |
+| futuroptimist/sugarkube | [docs/prompts-codex-spellcheck.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-spellcheck.md) |
+| futuroptimist/sugarkube | [docs/prompts-codex-tests.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-tests.md) |
+| futuroptimist/sugarkube | [docs/prompts-codex.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex.md) |
+| futuroptimist/token.place | [docs/prompts-codex-chore.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-chore.md) |
+| futuroptimist/token.place | [docs/prompts-codex-ci-fix.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-ci-fix.md) |
+| futuroptimist/token.place | [docs/prompts-codex-docs.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-docs.md) |
+| futuroptimist/token.place | [docs/prompts-codex-feature.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-feature.md) |
+| futuroptimist/token.place | [docs/prompts-codex-refactor.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-refactor.md) |
+| futuroptimist/token.place | [docs/prompts-codex-security.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-security.md) |
+| futuroptimist/wove | [docs/prompts-codex-cad.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-codex-cad.md) |
+| futuroptimist/wove | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md) |
+| futuroptimist/wove | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md) |
