@@ -24,6 +24,12 @@ Fuzz the codebase to discover and patch vulnerabilities or edge cases before the
 CONTEXT:
 - Generate random, malformed, and boundary-case inputs for exposed interfaces,
   CLI commands, HTTP handlers, and data parsers.
+- Vary environment variables, configuration files, and file paths, including
+  path-traversal or symlink attacks.
+- Run fuzzers in parallel to surface race conditions, deadlocks, and other
+  concurrency bugs.
+- Probe unusual encodings, extremely large or deeply nested payloads, and
+  resource-exhaustion scenarios (memory, disk, file descriptors).
 - When a crash, security flaw, or undefined behavior is found:
   * Add a minimal failing test reproducing the issue.
   * Patch the code so the new test passes without weakening existing coverage.
