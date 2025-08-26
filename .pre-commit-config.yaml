@@ -28,4 +28,5 @@ repos:
           - trimesh
           - bandit
           - safety
+          - tabulate
         pass_filenames: false
