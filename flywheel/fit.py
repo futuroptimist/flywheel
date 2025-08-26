@@ -25,8 +25,8 @@ def parse_scad_vars(path: str | Path) -> Dict[str, float]:
     supports negative values, decimals without a leading zero, trailing
     decimal points, scientific notation, underscore digit separators, and
     multiple assignments on the same line. Raises :class:`ValueError` when a
-    variable assignment lacks a numeric value or has an empty right-hand
-    side.
+    variable assignment lacks a numeric value, has an empty right-hand side,
+    or omits a terminating semicolon.
     """
     path = Path(path)
     text = path.read_text()
@@ -35,6 +35,13 @@ def parse_scad_vars(path: str | Path) -> Dict[str, float]:
     vars: Dict[str, float] = {}
     for raw_line in text.splitlines():
         line = raw_line.split("//", 1)[0]
+        stripped = line.strip()
+        if (
+            stripped
+            and re.match(r"[a-zA-Z_][a-zA-Z0-9_]*\s*=", stripped)
+            and not stripped.endswith(";")
+        ):
+            raise ValueError(f"missing semicolon: {stripped}")
         for part in line.split(";"):
             part = part.strip()
             if not part:

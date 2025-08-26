@@ -213,7 +213,8 @@ the default ``0.1`` mm tolerance.
 
 Lines may include inline ``//`` comments, negative values, decimals without a
 leading zero, trailing decimal points, scientific notation, and underscore digit
-separators; the checker ignores the comments when parsing.
+separators; the checker ignores the comments when parsing. Assignments must end
+with a semicolon or a ``ValueError`` is raised.
 
 Below is a simplified view of how the pieces stack:
 
