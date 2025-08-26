@@ -11,9 +11,6 @@ from pathlib import Path
 from typing import DefaultDict, Iterable, List, Set
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-
-from tabulate import tabulate  # noqa: E402
-
 from flywheel.repocrawler import RepoCrawler  # noqa: E402
 
 
@@ -129,6 +126,8 @@ def iter_local_prompt_docs(docs_root: Path) -> Iterable[Path]:
 
 
 def main() -> None:
+    from tabulate import tabulate
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--repos-from", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
