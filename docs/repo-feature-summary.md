@@ -67,3 +67,71 @@ Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv m
 Coverage percentages are parsed from their badges where available. Codecov shows ✅ when a Codecov config or badge is present. Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses.
 The commit column shows the short SHA of the latest default branch commit at crawl time. The Trunk column indicates whether CI is green for that commit. Dark Patterns and Bright Patterns list counts of suspicious or positive code snippets detected.
 Last-Updated (UTC) records the date of the commit used for each row.
+
+## Repository Details
+
+### futuroptimist/flywheel
+- layout: `flywheel/` package, `webapp/` Next.js app, `docs/`, `tests/`, `scripts/`
+- tech stack: Python 3.12, TypeScript/React with Next.js
+- build tools: pre-commit, pytest, npm
+- conventions: AGENTS.md, extensive GitHub Actions workflows
+
+### futuroptimist/futuroptimist
+- layout: `src/`, `docs/`, `tests/`, `scripts/`
+- tech stack: Python
+- build tools: pre-commit, pytest, Makefile
+- conventions: AGENTS.md, `runbook.yml`, GitHub Actions
+
+### democratizedspace/dspace
+- layout: `frontend/` Astro site, `backend/` TypeScript services, `docs/`, `tests/`
+- tech stack: TypeScript with Astro
+- build tools: pnpm, vitest/jest, Makefile
+- conventions: AGENTS.md, pnpm workspace, GitHub Actions workflows
+
+### futuroptimist/token.place
+- layout: `api/`, `server/`, `desktop/`, `docs/`, `tests/`
+- tech stack: Python and Node.js
+- build tools: Makefile, pytest, npm
+- conventions: AGENTS.md, docker setup, GitHub Actions
+
+### futuroptimist/gabriel
+- layout: `gabriel/` Python package, `viewer/`, `docs/`, `tests/`
+- tech stack: Python with a small JS viewer
+- build tools: pyproject, pre-commit, Makefile
+- conventions: AGENTS.md, security policy, GitHub Actions
+
+### futuroptimist/f2clipboard
+- layout: `f2clipboard/` package, `docs/`, `scripts/`, `tests/`
+- tech stack: Python
+- build tools: pyproject, pre-commit
+- conventions: AGENTS.md, GitHub Actions
+
+### futuroptimist/axel
+- layout: `axel/` package, `hardware/`, `docs/`, `examples/`, `tests/`
+- tech stack: Python
+- build tools: pyproject, pre-commit, Makefile
+- conventions: AGENTS.md, docker-compose mock, GitHub Actions
+
+### futuroptimist/sigma
+- layout: `sigma/` package, `hardware/`, `docs/`, `scripts/`, `tests/`
+- tech stack: Python with ESP32 firmware
+- build tools: Makefile, pre-commit
+- conventions: AGENTS.md, hardware docs, GitHub Actions
+
+### futuroptimist/gitshelves
+- layout: `gitshelves/` module, `openscad/`, `stl/`, `docs/`, `tests/`
+- tech stack: Python and OpenSCAD
+- build tools: pyproject, pytest
+- conventions: AGENTS.md, GitHub Actions; lacks pre-commit
+
+### futuroptimist/wove
+- layout: `wove/` package, `cad/`, `stl/`, `docs/`, `scripts/`, `tests/`
+- tech stack: Python and OpenSCAD
+- build tools: pre-commit, pytest
+- conventions: AGENTS.md, GitHub Actions
+
+### futuroptimist/sugarkube
+- layout: `cad/`, `docs/`, `elex/`, `scripts/`, `stl/`, `tests/`
+- tech stack: Python and hardware guides
+- build tools: pre-commit, custom scripts
+- conventions: AGENTS.md, Codecov config, GitHub Actions
