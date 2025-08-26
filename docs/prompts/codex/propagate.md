@@ -7,12 +7,13 @@ slug: 'codex-propagate'
 Type: evergreen
 
 Use this prompt to ask Codex to seed missing `prompts-*.md` files across repositories listed in
-[`docs/repo-feature-summary.md`](../../repo-feature-summary.md).
+[`dict/prompt-doc-repos.txt`](../../../dict/prompt-doc-repos.txt), which mirrors
+[`docs/repo_list.txt`](../../repo_list.txt).
 
 **Human set-up steps:**
 
-1. Review [`docs/prompts/summary.md`](../summary.md) and compile a list of repos that lack a
-   `docs/prompts/codex/automation.md` baseline.
+1. Review [`docs/prompt-docs-summary.md`](../../prompt-docs-summary.md) and compile a list of repos
+   that lack a `docs/prompts/codex/automation.md` baseline.
 2. Paste that list (one repo per line) at the top of your ChatGPT message.
 3. Add two blank lines, then copy the block below and send it.
 

@@ -27,6 +27,7 @@ repos:
           - responses
           - tabulate
           - trimesh
+          - tabulate
           - bandit
           - safety
         pass_filenames: false
