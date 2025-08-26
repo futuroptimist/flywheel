@@ -1,0 +1,8 @@
+{
+  "id": "precommit-tabulate",
+  "date": "2025-08-25",
+  "component": "pre-commit",
+  "rootCause": "update_prompt_docs_summary imported tabulate at module load, so environments without the package failed",
+  "resolution": "move tabulate import inside main so pre-commit tests no longer require the dependency",
+  "references": ["https://github.com/flywheel/flywheel/actions/runs/0000000000"]
+}

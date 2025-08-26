@@ -3,6 +3,9 @@
 ## [2025-08-27] - Scan root docs for prompt files
 - include `docs/prompts-*.md` in prompt docs crawler
 
+## [2025-08-25] - Defer tabulate import in prompt doc script
+- allow tests to run without installing tabulate
+
 ## [2025-08-23] - Fix newline in prompt docs summary
 - add missing newline to docs/prompt-docs-summary.md to satisfy pre-commit
 
