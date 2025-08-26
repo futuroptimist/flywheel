@@ -12,10 +12,15 @@ from scripts.update_prompt_docs_summary import extract_prompts  # noqa: E402
 
 def test_heading_type_inference():
     text = """## 1 - Fix issue
-Details
+```
+code
+```
 
 ## Codex Spellcheck Prompt
-Content"""
+```
+code
+```
+"""
     base_url = "https://example.com/doc.md"
     prompts = extract_prompts(text, base_url)
     assert prompts[0][1] == "one-off"

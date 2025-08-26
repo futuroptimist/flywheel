@@ -8,11 +8,9 @@ import sys
 from collections import defaultdict
 from datetime import date
 from pathlib import Path
-from typing import DefaultDict, Iterable, List, Set
+from typing import DefaultDict, Iterable, List
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-
-from tabulate import tabulate  # noqa: E402
 
 from flywheel.repocrawler import RepoCrawler  # noqa: E402
 
@@ -34,19 +32,6 @@ def extract_title(text: str) -> str:
         if line.startswith("#"):
             return line.lstrip("#").strip()
     return ""
-
-
-def _parse_existing(path: Path) -> Set[str]:
-    if not path.exists():
-        return set()
-    existing: Set[str] = set()
-    for line in path.read_text().splitlines():
-        if not line.startswith("|"):
-            continue
-        parts = [p.strip() for p in line.split("|")[1:-1]]
-        if len(parts) >= 2:
-            existing.add(parts[1].replace("**", ""))
-    return existing
 
 
 def slugify(text: str) -> str:
@@ -88,6 +73,8 @@ def extract_prompts(text: str, base_url: str) -> List[List[str]]:
     if not headings:
         title = extract_title(text) or base_url.split("/")[-1]
         snippet = text
+        if "```" not in snippet:
+            return []
         one_click = is_one_click(snippet)
         prompts.append([f"[{title}]({base_url})", "unknown", one_click])
         return prompts
@@ -109,6 +96,8 @@ def extract_prompts(text: str, base_url: str) -> List[List[str]]:
         elif ptype == "one":
             ptype = "one-off"
         snippet = "\n".join(lines[line_no + 1 : next_line])  # noqa: E203
+        if "```" not in snippet:
+            continue
         anchor = slugify(title)
         one_click = is_one_click(snippet)
         prompts.append([f"[{title}]({base_url}#{anchor})", ptype, one_click])
@@ -125,6 +114,8 @@ def iter_local_prompt_docs(docs_root: Path) -> Iterable[Path]:
 
 
 def main() -> None:
+    from tabulate import tabulate
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--repos-from", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
@@ -134,9 +125,7 @@ def main() -> None:
     repos = load_repos(args.repos_from)
     crawler = RepoCrawler(repos, token=args.token)
 
-    existing_docs = _parse_existing(args.out)
     grouped: DefaultDict[str, List[List[str]]] = defaultdict(list)
-    new_rows: list[list[str]] = []
 
     # Include prompt docs from the local repository (first entry)
     local_repo = repos[0].split("@")[0]
@@ -149,27 +138,12 @@ def main() -> None:
         path_link = f"[{rel}]({base_url})"
         prompts = extract_prompts(text, base_url)
         for prompt_link, ptype, one_click in prompts:
-            if not one_click:
+            if ptype not in {"evergreen", "one-off"} or not one_click:
                 continue
             row = [path_link, prompt_link, ptype, "yes"]
             if path.name.startswith("prompts-"):
                 row = [f"**{cell}**" for cell in row]
             grouped[repo_link].append(row)
-            if prompt_link not in existing_docs:
-                new_row = [
-                    repo_link,
-                    path_link,
-                    prompt_link,
-                    ptype,
-                    "yes",
-                ]
-                # fmt: off
-                if path.name.startswith("prompts-"):
-                    new_row = [new_row[0]] + list(
-                        f"**{cell}**" for cell in new_row[1:]
-                    )
-                # fmt: on
-                new_rows.append(new_row)
 
     # Add prompt docs from remote repositories (skip local repo)
     for spec in repos[1:]:
@@ -193,31 +167,18 @@ def main() -> None:
                 path_link = f"[{path}]({base_url})"
                 prompts = extract_prompts(text, base_url)
                 for prompt_link, ptype, one_click in prompts:
-                    if not one_click:
+                    if ptype not in {"evergreen", "one-off"} or not one_click:
                         continue
                     row = [path_link, prompt_link, ptype, "yes"]
                     if Path(path).name.startswith("prompts-"):
                         row = [f"**{cell}**" for cell in row]
                     grouped[repo_link].append(row)
-                    if prompt_link not in existing_docs:
-                        new_row = [
-                            repo_link,
-                            path_link,
-                            prompt_link,
-                            ptype,
-                            "yes",
-                        ]
-                        if Path(path).name.startswith("prompts-"):
-                            new_row = [new_row[0]] + [
-                                f"**{cell}**" for cell in new_row[1:]
-                            ]
-                        new_rows.append(new_row)
 
-    type_order = {"evergreen": 0, "unknown": 1, "one-off": 2}
+    type_order = {"evergreen": 0, "one-off": 1}
     for repo_prompts in grouped.values():
         repo_prompts.sort(key=lambda row: type_order.get(row[2], 1))
 
-    counts = {"evergreen": 0, "one-off": 0, "unknown": 0}
+    counts = {"evergreen": 0, "one-off": 0}
     for repo_prompts in grouped.values():
         for _, _, ptype, _ in repo_prompts:
             counts[ptype] = counts.get(ptype, 0) + 1
@@ -226,16 +187,15 @@ def main() -> None:
 
     triage_counts: list[list[str | int]] = []
     for repo_link, repo_prompts in grouped.items():
-        unknown = 0
-        one_off = 0
-        for _, _, ptype, _ in repo_prompts:
-            p = ptype.replace("*", "")
-            if p == "unknown":
-                unknown += 1
-            elif p == "one-off":
-                one_off += 1
-        if unknown or one_off:
-            triage_counts.append([repo_link, unknown, one_off])
+        one_off = sum(
+            (
+                1
+                for _, _, ptype, _ in repo_prompts
+                if ptype.replace("*", "") == "one-off"
+            )
+        )
+        if one_off:
+            triage_counts.append([repo_link, one_off])
 
     lines = [
         "<!-- spellchecker: disable -->",
@@ -264,7 +224,7 @@ def main() -> None:
         (
             f"**{total_prompts} one-click prompts verified across "
             f"{repo_count} repos ({counts['evergreen']} evergreen, "
-            f"{counts['one-off']} one-off, {counts['unknown']} unknown).**"
+            f"{counts['one-off']} one-off).**"
         ),
         "",
         (
@@ -284,11 +244,11 @@ def main() -> None:
             [
                 "## Triage Summary",
                 "",
-                "Repos with prompts still marked as unknown or one-off.",
+                "Repos with prompts still marked as one-off.",
                 "",
                 tabulate(
                     triage_counts,
-                    headers=["Repo", "Unknown", "One-off"],
+                    headers=["Repo", "One-off"],
                     tablefmt="github",
                 ),
                 "",
@@ -327,13 +287,6 @@ def main() -> None:
                             "(glorified TODO; remove after cleanup)"
                         ),
                     ],
-                    [
-                        "unknown",
-                        (
-                            "catch-all; refine into another category or "
-                            "create a new one"
-                        ),
-                    ],
                 ],
                 headers=["Type", "Description"],
                 tablefmt="github",
@@ -342,7 +295,7 @@ def main() -> None:
         ]
     )
 
-    actionable_types = {"unknown", "one-off"}
+    actionable_types = {"evergreen", "one-off"}
     for repo_link, prompts in grouped.items():
         actionable = []
         for p in prompts:
@@ -361,21 +314,7 @@ def main() -> None:
         )  # noqa: E501
         lines.append("")
 
-    if new_rows:
-        lines.extend(
-            [
-                "## Untriaged Prompt Docs",
-                "",
-                tabulate(
-                    new_rows,
-                    headers=["Repo", "Path", "Prompt", "Type", "One-click?"],
-                    tablefmt="github",
-                ),
-                "",
-            ]
-        )
-    else:
-        lines.extend(["## Untriaged Prompt Docs", "", "None detected.", ""])
+    lines.extend(["## Untriaged Prompt Docs", "", "None detected.", ""])
 
     todo_file = docs_root / "prompt-docs-todos.md"
     if todo_file.exists() and todo_file.read_text().strip():
