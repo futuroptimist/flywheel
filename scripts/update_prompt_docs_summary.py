@@ -8,7 +8,7 @@ import sys
 from collections import defaultdict
 from datetime import date
 from pathlib import Path
-from typing import DefaultDict, Iterable, List, Set
+from typing import DefaultDict, Iterable, List
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from flywheel.repocrawler import RepoCrawler  # noqa: E402
@@ -31,19 +31,6 @@ def extract_title(text: str) -> str:
         if line.startswith("#"):
             return line.lstrip("#").strip()
     return ""
-
-
-def _parse_existing(path: Path) -> Set[str]:
-    if not path.exists():
-        return set()
-    existing: Set[str] = set()
-    for line in path.read_text().splitlines():
-        if not line.startswith("|"):
-            continue
-        parts = [p.strip() for p in line.split("|")[1:-1]]
-        if len(parts) >= 2:
-            existing.add(parts[1].replace("**", ""))
-    return existing
 
 
 def slugify(text: str) -> str:
@@ -137,9 +124,7 @@ def main() -> None:
     repos = load_repos(args.repos_from)
     crawler = RepoCrawler(repos, token=args.token)
 
-    existing_docs = _parse_existing(args.out)
     grouped: DefaultDict[str, List[List[str]]] = defaultdict(list)
-    new_rows: list[list[str]] = []
 
     # Include prompt docs from the local repository (first entry)
     local_repo = repos[0].split("@")[0]
@@ -158,21 +143,6 @@ def main() -> None:
             if path.name.startswith("prompts-"):
                 row = [f"**{cell}**" for cell in row]
             grouped[repo_link].append(row)
-            if prompt_link not in existing_docs:
-                new_row = [
-                    repo_link,
-                    path_link,
-                    prompt_link,
-                    ptype,
-                    "yes",
-                ]
-                # fmt: off
-                if path.name.startswith("prompts-"):
-                    new_row = [new_row[0]] + list(
-                        f"**{cell}**" for cell in new_row[1:]
-                    )
-                # fmt: on
-                new_rows.append(new_row)
 
     # Add prompt docs from remote repositories (skip local repo)
     for spec in repos[1:]:
@@ -204,19 +174,6 @@ def main() -> None:
                     if Path(path).name.startswith("prompts-"):
                         row = [f"**{cell}**" for cell in row]
                     grouped[repo_link].append(row)
-                    if prompt_link not in existing_docs:
-                        new_row = [
-                            repo_link,
-                            path_link,
-                            prompt_link,
-                            ptype,
-                            "yes",
-                        ]
-                        if Path(path).name.startswith("prompts-"):
-                            new_row = [new_row[0]] + [
-                                f"**{cell}**" for cell in new_row[1:]
-                            ]
-                        new_rows.append(new_row)
 
     type_order = {"evergreen": 0, "unknown": 1, "one-off": 2}
     for repo_prompts in grouped.values():
@@ -228,19 +185,6 @@ def main() -> None:
             counts[ptype] = counts.get(ptype, 0) + 1
     total_prompts = sum(counts.values())
     repo_count = len(grouped)
-
-    triage_counts: list[list[str | int]] = []
-    for repo_link, repo_prompts in grouped.items():
-        unknown = 0
-        one_off = 0
-        for _, _, ptype, _ in repo_prompts:
-            p = ptype.replace("*", "")
-            if p == "unknown":
-                unknown += 1
-            elif p == "one-off":
-                one_off += 1
-        if unknown or one_off:
-            triage_counts.append([repo_link, unknown, one_off])
 
     lines = [
         "<!-- spellchecker: disable -->",
@@ -282,34 +226,13 @@ def main() -> None:
             "copy & paste without editing."
         ),
         "",
+        "Run this script to regenerate the table:",
+        "",
+        "```bash",
+        "python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --out docs/prompt-docs-summary.md",  # noqa: E501
+        "```",
+        "",
     ]
-
-    if triage_counts:
-        lines.extend(
-            [
-                "## Triage Summary",
-                "",
-                "Repos with prompts still marked as unknown or one-off.",
-                "",
-                tabulate(
-                    triage_counts,
-                    headers=["Repo", "Unknown", "One-off"],
-                    tablefmt="github",
-                ),
-                "",
-                (
-                    "Run this script to regenerate the table after "
-                    "triaging prompts:"  # noqa: E501
-                ),
-                "",
-                "```bash",
-                "python scripts/update_prompt_docs_summary.py "
-                "--repos-from docs/repo_list.txt "
-                "--out docs/prompt-docs-summary.md",
-                "```",
-                "",
-            ]
-        )
 
     lines.extend(
         [
@@ -347,40 +270,17 @@ def main() -> None:
         ]
     )
 
-    actionable_types = {"unknown", "one-off"}
-    for repo_link, prompts in grouped.items():
-        actionable = []
-        for p in prompts:
-            if p[2].replace("*", "") in actionable_types:
-                actionable.append(p)
-        if not actionable:
-            continue
+    for repo_link, repo_prompts in grouped.items():
         lines.append(f"## {repo_link}")
         lines.append("")
         lines.append(
             tabulate(
-                actionable,
+                repo_prompts,
                 headers=["Path", "Prompt", "Type", "One-click?"],
                 tablefmt="github",
             )
-        )  # noqa: E501
-        lines.append("")
-
-    if new_rows:
-        lines.extend(
-            [
-                "## Untriaged Prompt Docs",
-                "",
-                tabulate(
-                    new_rows,
-                    headers=["Repo", "Path", "Prompt", "Type", "One-click?"],
-                    tablefmt="github",
-                ),
-                "",
-            ]
         )
-    else:
-        lines.extend(["## Untriaged Prompt Docs", "", "None detected.", ""])
+        lines.append("")
 
     todo_file = docs_root / "prompt-docs-todos.md"
     if todo_file.exists() and todo_file.read_text().strip():
