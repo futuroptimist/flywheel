@@ -318,6 +318,22 @@ def test_recent_commits_request_exception():
     assert crawler._recent_commits("demo/repo", "main") == []
 
 
+def test_recent_commits_uses_timeout():
+    captured = {}
+
+    class Sess:
+        def __init__(self):
+            self.headers = {}
+
+        def get(self, url, **kwargs):
+            captured.update(kwargs)
+            return DummyResp(200, json_data=[{"sha": "aa"}])
+
+    crawler = RepoCrawler([], session=Sess())
+    assert crawler._recent_commits("demo/repo", "main") == ["aa"]
+    assert captured.get("timeout") == 10
+
+
 @pytest.mark.parametrize("conclusion", ["success", "neutral", "skipped"])
 def test_branch_green_actions_pass(conclusion):
     sess = make_session(

@@ -15,6 +15,10 @@ def test_status_to_emoji():
     assert rs.status_to_emoji("FAILURE") == "❌"
 
 
+def test_status_to_emoji_non_string():
+    assert rs.status_to_emoji(42) == "❌"
+
+
 def test_fetch_repo_status_success(monkeypatch):
     class Resp:
         def __init__(self, conclusion):
@@ -52,6 +56,11 @@ def test_fetch_repo_status_inconsistent(monkeypatch):
     monkeypatch.setattr(rs.requests, "get", fake_get)
     with pytest.raises(RuntimeError):
         rs.fetch_repo_status("owner/repo", attempts=2)
+
+
+def test_fetch_repo_status_attempts_zero():
+    with pytest.raises(ValueError):
+        rs.fetch_repo_status("owner/repo", attempts=0)
 
 
 def test_update_readme(tmp_path, monkeypatch):

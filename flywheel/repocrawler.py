@@ -434,6 +434,7 @@ class RepoCrawler:
             resp = self.session.get(
                 url,
                 headers={"Accept": "application/vnd.github+json"},
+                timeout=10,
             )
         except RequestException:
             return []

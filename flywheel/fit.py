@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import re
 from pathlib import Path
 from typing import Dict, Tuple
@@ -21,12 +22,12 @@ def parse_scad_vars(path: str | Path) -> Dict[str, float]:
         path: String or :class:`~pathlib.Path` pointing to the SCAD file.
 
     Block comments ``/* ... */`` and inline ``//`` comments after the
-    semicolon are ignored. The parser strips an initial UTF‑8 BOM and
+    semicolon are ignored. The parser strips an initial UTF-8 BOM and
     supports negative values, decimals without a leading zero, trailing
     decimal points, scientific notation, underscore digit separators, and
     multiple assignments on the same line. Raises :class:`ValueError` when a
-    variable assignment lacks a numeric value or has an empty right-hand
-    side.
+    variable assignment lacks a numeric value, has an empty right-hand side,
+    or omits a terminating semicolon, or exceeds floating-point range.
     """
     path = Path(path)
     text = path.read_text()
@@ -35,6 +36,13 @@ def parse_scad_vars(path: str | Path) -> Dict[str, float]:
     vars: Dict[str, float] = {}
     for raw_line in text.splitlines():
         line = raw_line.split("//", 1)[0]
+        stripped = line.strip()
+        if (
+            stripped
+            and re.match(r"[a-zA-Z_][a-zA-Z0-9_]*\s*=", stripped)
+            and not stripped.endswith(";")
+        ):
+            raise ValueError(f"missing semicolon: {stripped}")
         for part in line.split(";"):
             part = part.strip()
             if not part:
@@ -42,7 +50,10 @@ def parse_scad_vars(path: str | Path) -> Dict[str, float]:
             m = _DEF_RE.match(part + ";")
             if m:
                 num = m.group(2).replace("_", "")
-                vars[m.group(1)] = float(num)
+                value = float(num)
+                if not math.isfinite(value):
+                    raise ValueError(f"invalid number for {m.group(1)}: {num}")
+                vars[m.group(1)] = value
             elif re.match(
                 r"[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*" r"[a-zA-Z_][a-zA-Z0-9_]*\s*$",
                 part,

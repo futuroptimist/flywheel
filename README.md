@@ -11,6 +11,7 @@
 
 The canonical Codex automation prompt lives in [`automation.md`](docs/prompts/codex/automation.md).
 Agents should review it before contributing automation to new repositories.
+Other repos should copy this file to `docs/prompts/codex/automation.md`.
 
 ## Usage
 
@@ -42,7 +43,7 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - DEPENDABOT for automated dependency updates
 - CodeQL workflow for security scanning
 - Style guides for Python and JavaScript
-- README status script handles mixed-case GitHub workflow conclusions
+- README status script handles mixed-case GitHub workflow conclusions and validates attempt counts
 - Detailed best practice explanations in `docs/best_practices_catalog.md`
 - Dark pattern guidance in `docs/dark-patterns.md`
 - Bright pattern catalog in `docs/bright-patterns.md`
@@ -73,8 +74,12 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - Web viewer instructions in `docs/web-viewer.md`
 - CI troubleshooting tips in `docs/ci-guide.md`
 - Nightly STL exports are committed back to `stl/` after each run
-- Sunlu spool core sleeve adapter (63→64 mm) [STL](./stl/spool_core_sleeve/sunlu55_to63_len60.stl)
-  and matching wedge-removal cylinder [STL](./stl/spool_core_sleeve/sunlu55_to63cyl_len60.stl)
+- Sunlu spool core sleeve adapters for Bambu Lab AMS:
+  [63→64 mm](./stl/spool_core_sleeve/sunlu55_to63_len60.stl) and
+  [73→74 mm](./stl/spool_core_sleeve/sunlu55_to73_len60.stl) sleeves with
+  matching wedge-removal cylinders
+  ([63 mm](./stl/spool_core_sleeve/sunlu55_to63cyl_len60.stl) and
+  [73 mm](./stl/spool_core_sleeve/sunlu55_to73cyl_len60.stl))
 - Flywheel construction guide in `docs/flywheel-construction.md` with CAD files in `cad/`
   including `stand.scad`, `shaft.scad`, and `adapter.scad`. Assembly details live in `docs/flywheel-stand.md`, clamp instructions in `docs/flywheel-adapter.md`, and physics in `docs/flywheel-physics.md`
 
@@ -213,7 +218,8 @@ the default ``0.1`` mm tolerance.
 
 Lines may include inline ``//`` comments, negative values, decimals without a
 leading zero, trailing decimal points, scientific notation, and underscore digit
-separators; the checker ignores the comments when parsing.
+separators; the checker ignores the comments when parsing. Assignments must end
+with a semicolon or a ``ValueError`` is raised.
 
 Below is a simplified view of how the pieces stack:
 
@@ -293,3 +299,5 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   See `docs/sugarkube-integration.md`.
 
 A summary of flywheel features adopted across repos lives in [docs/repo-feature-summary.md](docs/repo-feature-summary.md).
+
+For automation guidelines see the [Codex prompt](docs/prompts/codex/automation.md).
