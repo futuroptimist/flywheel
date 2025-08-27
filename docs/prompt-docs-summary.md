@@ -12,7 +12,7 @@ Think of each listed repository as a small flywheel belted to this codebase. The
 
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
-**139 one-click prompts verified across 11 repos (29 evergreen, 2 one-off, 7 unknown).**
+**141 one-click prompts verified across 11 repos (29 evergreen, 2 one-off, 7 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
@@ -47,6 +47,8 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | evergreen | prompts that can be reused to hillclimb toward goals like feature completeness or test coverage  |
 | one-off   | prompts to implement features or make recommended changes (glorified TODO; remove after cleanup) |
 | unknown   | catch-all; refine into another category or create a new one                                      |
+
+Prompts can also set `conversational: true` in their front matter to indicate a plain-text preamble meant for direct chat use without agentic sections.
 
 ## **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**
 
