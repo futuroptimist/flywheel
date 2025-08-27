@@ -1,6 +1,7 @@
 ---
 title: 'Codex Merge Conflicts Prompt'
 slug: 'codex-merge-conflicts'
+conversational: true
 ---
 
 # Codex Merge Conflicts Prompt
@@ -9,34 +10,13 @@ Type: evergreen
 Use this prompt to resolve Git merge conflicts without altering unrelated code.
 
 ```text
-SYSTEM:
-You are an automated contributor for the Flywheel repository.
+Resolve the merge conflict in the code snippet below. Remove the conflict markers while
+preserving existing formatting, imports, and surrounding code. Do not modify lines that are
+not part of the conflict.
 
-PURPOSE:
-Resolve merge conflicts in supplied code blocks.
-
-CONTEXT:
-- Only remove conflict markers; keep original formatting.
-- Follow `AGENTS.md` and `README.md`.
-- Ensure these commands succeed:
-  ```bash
-  pre-commit run --all-files
-  pytest -q
-  npm run lint
-  npm run test:ci
-  python -m flywheel.fit
-  bash scripts/checks.sh
-  ```
-- Scan staged changes for secrets with
-  `git diff --cached | ./scripts/scan-secrets.py`.
-
-REQUEST:
-1. Output the merged code in a single fenced block.
-2. Preserve code style and imports.
-3. Stop after presenting the resolved block.
-
-OUTPUT:
-A code block containing the resolved file contents.
+Return the merged file contents in a single fenced code block, followed by any notes that
+help explain the resolution. If more snippets are provided later in this chat, handle them
+using the same approach.
 ```
 
 ## Upgrade Prompt
@@ -45,28 +25,12 @@ Type: evergreen
 Use this prompt to refine the merge conflict instructions.
 
 ```text
-SYSTEM:
-You are an automated contributor for the Flywheel repository.
+Review this code snippet for clarity and accuracy. After editing, regenerate
+`docs/prompt-docs-summary.md` with `python scripts/update_prompt_docs_summary.py --repos-from
+docs/repo_list.txt --out docs/prompt-docs-summary.md`. Run `pre-commit run --all-files`,
+`pytest -q`, `npm run lint`, `npm run test:ci`, `python -m flywheel.fit`, and `bash
+scripts/checks.sh`, then scan staged changes for secrets using `git diff --cached |
+./scripts/scan-secrets.py`.
 
-PURPOSE:
-Keep this merge conflict prompt accurate and concise.
-
-CONTEXT:
-- Follow `AGENTS.md` and `README.md`.
-- Ensure `pre-commit run --all-files`, `pytest -q`,
-  `npm run lint`, `npm run test:ci`,
-  `python -m flywheel.fit`, and `bash scripts/checks.sh` pass.
-- Regenerate `docs/prompt-docs-summary.md` with
-  `python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt \
-    --out docs/prompt-docs-summary.md`.
-- Scan staged changes for secrets using
-  `git diff --cached | ./scripts/scan-secrets.py`.
-
-REQUEST:
-1. Review this file for clarity and accuracy.
-2. Update the summary and run all checks.
-3. Commit the changes and open a PR.
-
-OUTPUT:
-A pull request updating this merge conflict prompt with all checks green.
+Share the updated code snippet and test results.
 ```
