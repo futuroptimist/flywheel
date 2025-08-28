@@ -32,6 +32,17 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | one-off   | prompts to implement features or make recommended changes (glorified TODO; remove after cleanup) |
 | unknown   | catch-all; refine into another category or create a new one                                      |
 
+### Prompt styles
+
+Most prompts listed here are **agentic**: they direct the model to perform tasks step by step,
+such as [docs/prompts/codex/automation.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/automation.md).
+The only **conversational** example currently tracked is
+[docs/prompts/codex/merge-conflicts.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/merge-conflicts.md),
+which frames the request as a dialogue.
+
+Future prompt docs should clearly state whether they are agentic or conversational to reduce
+ambiguity.
+
 ## **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**
 
 | Path                                                                                                                                                         | Prompt                                                                                                                                                                               | Type          | One-click?   |
