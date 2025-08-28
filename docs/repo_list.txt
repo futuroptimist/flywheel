@@ -9,3 +9,4 @@ futuroptimist/sigma
 futuroptimist/gitshelves
 futuroptimist/wove
 futuroptimist/sugarkube
+futuroptimist/pr-reaper
