@@ -6,9 +6,9 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `0767285` | ✅ | 0 | 2 | 2025-08-29 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `d775fdf` | ✅ | 0 | 3 | 2025-08-29 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `7a7ad15` | ❌ | 3 | 46 | 2025-08-29 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `929f8b8` | ✅ | 0 | 2 | 2025-08-29 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `ed9ac6b` | ✅ | 0 | 2 | 2025-08-29 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `bea138e` | ✅ | 3 | 47 | 2025-08-29 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `27db056` | ✅ | 6 | 7 | 2025-08-24 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `d55746b` | ✅ | 0 | 0 | 2025-08-28 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `abb6b05` | ✅ | 1 | 0 | 2025-08-27 |
@@ -16,7 +16,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `1f6bdaf` | ✅ | 0 | 0 | 2025-08-23 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `f55dc51` | ✅ | 0 | 0 | 2025-08-24 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `a493bf6` | ✅ | 0 | 0 | 2025-08-24 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `b42840f` | ✅ | 0 | 0 | 2025-08-29 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `ed1c186` | ✅ | 0 | 7 | 2025-08-29 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `aa8ff39` | ✅ | 0 | 0 | 2025-08-28 |
 
 ## Coverage & Installer
