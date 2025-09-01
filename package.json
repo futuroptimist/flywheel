@@ -17,7 +17,7 @@
   "devDependencies": {
     "@playwright/test": "^1.43.1",
     "cross-env": "^10.0.0",
-    "jest": "^30.0.5"
+    "jest": "^30.1.2"
   },
   "dependencies": {
     "three": "^0.178.0"
