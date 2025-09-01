@@ -6,3 +6,7 @@ const workflow = readFileSync(new URL('../.github/workflows/04-update-summary.ym
 test('summary workflow skips run-checks hook', () => {
   expect(workflow).toMatch(/SKIP: run-checks/);
 });
+
+test('summary workflow rebases before pushing', () => {
+  expect(workflow).toMatch(/git pull --rebase origin main/);
+});
