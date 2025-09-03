@@ -12,7 +12,7 @@ Think of each listed repository as a small flywheel belted to this codebase. The
 
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
-**168 one-click prompts verified across 11 repos (31 evergreen, 2 one-off, 7 unknown).**
+**167 one-click prompts verified across 11 repos (30 evergreen, 2 one-off, 7 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
@@ -46,7 +46,6 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | [docs/prompts/codex/fuzzing.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/fuzzing.md)                                           | [OpenAI Codex Fuzzing Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/fuzzing.md#openai-codex-fuzzing-prompt)                                         | evergreen     | yes          |
 | [docs/prompts/codex/fuzzing.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/fuzzing.md)                                           | [Upgrade Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/fuzzing.md#upgrade-prompt)                                                                   | evergreen     | yes          |
 | [docs/prompts/codex/merge-conflicts.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/merge-conflicts.md)                           | [Codex Merge Conflicts Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/merge-conflicts.md#codex-merge-conflicts-prompt)                               | evergreen     | yes          |
-| [docs/prompts/codex/merge-conflicts.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/merge-conflicts.md)                           | [Upgrade Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/merge-conflicts.md#upgrade-prompt)                                                           | evergreen     | yes          |
 | [docs/prompts/codex/physics.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/physics.md)                                           | [Upgrade Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/physics.md#upgrade-prompt)                                                                   | evergreen     | yes          |
 | [docs/prompts/codex/prompt-glean-repos.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/prompt-glean-repos.md)                     | [OpenAI Codex Repo Glean Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/prompt-glean-repos.md#openai-codex-repo-glean-prompt)                        | evergreen     | yes          |
 | [docs/prompts/codex/propagate.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/propagate.md)                                       | [Upgrade Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/propagate.md#upgrade-prompt)                                                                 | evergreen     | yes          |
@@ -343,4 +342,4 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/wove | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md) | unknown | |
 | futuroptimist/wove | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md) | unknown | |
 
-_Updated automatically: 2025-09-02_
+_Updated automatically: 2025-09-03_
