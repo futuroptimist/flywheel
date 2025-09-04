@@ -298,6 +298,9 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   k3s platform for off-grid Raspberry Pi clusters.  \
   See `docs/sugarkube-integration.md`.
 
+- ✅ [jobbot3000](https://github.com/futuroptimist/jobbot3000) –  \
+  self-hosted, open-source job search copilot.
+
 A summary of flywheel features adopted across repos lives in [docs/repo-feature-summary.md](docs/repo-feature-summary.md).
 
 For automation guidelines see the [Codex prompt](docs/prompts/codex/automation.md).
