@@ -10,11 +10,15 @@ Each section covers three points:
 
 ## Pre-commit Hooks
 
-**Why:** Running `pre-commit` before every push keeps formatting and tests consistent. It helps avoid CI failures and encourages small, clean commits.
+**Why:** Running `pre-commit` before every push keeps formatting and tests consistent.
+It helps avoid CI failures and encourages small, clean commits.
 
-**How it works:** The `.pre-commit-config.yaml` file lists hooks for `flake8`, `isort`, `black`, `pytest`, and link checking. When you run `pre-commit run --all-files` the hooks format code, lint for errors, and run tests locally.
+**How it works:** The `.pre-commit-config.yaml` file lists hooks for `flake8`, `isort`,
+`black`, `pytest`, and link checking. When you run `pre-commit run --all-files`, the
+hooks format code, lint for errors, and run tests locally.
 
-**Maintenance:** Add new lint or test tools to `.pre-commit-config.yaml` and update `scripts/checks.sh`. LLM agents should check hook output and suggest fixes.
+**Maintenance:** Add new lint or test tools to `.pre-commit-config.yaml` and update
+`scripts/checks.sh`. LLM agents should check hook output and suggest fixes.
 
 ## Style Guides
 
