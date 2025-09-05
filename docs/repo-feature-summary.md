@@ -6,8 +6,8 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `bc0c727` | ✅ | 0 | 4 | 2025-09-05 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `9c05521` | ✅ | 0 | 14 | 2025-09-05 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `1a0eaab` | ✅ | 0 | 4 | 2025-09-05 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `bc5a4e3` | ✅ | 0 | 13 | 2025-09-05 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `f5fcd82` | ✅ | 3 | 38 | 2025-09-02 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `27db056` | ✅ | 6 | 9 | 2025-08-24 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `d55746b` | ✅ | 0 | 0 | 2025-08-28 |
@@ -16,7 +16,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `1f6bdaf` | ✅ | 0 | 0 | 2025-08-23 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `f55dc51` | ✅ | 0 | 0 | 2025-08-24 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `a493bf6` | ✅ | 0 | 0 | 2025-08-24 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `403cb24` | ✅ | 0 | 23 | 2025-09-04 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `b20279b` | ✅ | 0 | 23 | 2025-09-05 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `aa8ff39` | ✅ | 0 | 0 | 2025-08-28 |
 
 ## Coverage & Installer
@@ -32,7 +32,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ❌ | — | ✅ | 🚀 uv | 2025-08-23 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | ❌ | — | ✅ | 🚀 uv | 2025-08-24 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ❌ | — | ✅ | pip | 2025-08-24 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ❌ | — | ✅ | 🚀 uv | 2025-09-04 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ❌ | — | ✅ | 🚀 uv | 2025-09-05 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | ❌ | — | ❌ | 🔶 partial | 2025-08-28 |
 
 ## Policies & Automation
@@ -48,7 +48,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-08-23 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | ✅ | ✅ | 4 | ✅ | ❌ | ❌ | ❌ | 2025-08-24 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2025-08-24 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2025-09-04 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2025-09-05 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | ✅ | ✅ | 2 | ✅ | ✅ | ✅ | ❌ | 2025-08-28 |
 
 ## Dark & Bright Pattern Scan
@@ -64,7 +64,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | 0 | 0 | 2025-08-23 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | 0 | 0 | 2025-08-24 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | 0 | 0 | 2025-08-24 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 0 | 0 | 2025-09-04 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 0 | 0 | 2025-09-05 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | 0 | 1 | 2025-08-28 |
 
 Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip.
