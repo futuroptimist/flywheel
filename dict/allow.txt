@@ -222,3 +222,9 @@ linters
 
 Vitest
 vitest
+
+aspell
+lowercasing
+finiteness
+AMS
+Bambu
