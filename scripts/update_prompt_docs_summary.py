@@ -42,7 +42,7 @@ def slugify(text: str) -> str:
 
 def is_one_click(snippet: str) -> bool:
     """Heuristically determine if a prompt is 1-click ready."""
-    patterns = [r"\{[^}]+\}", r"<[^>]+>", r"TODO", r"REPLACE", r"YOUR \w+"]
+    patterns = [r"{[A-Z][^}]+}", r"TODO", r"REPLACE", r"YOUR \w+"]
     return not any(re.search(p, snippet, re.IGNORECASE) for p in patterns)
 
 
