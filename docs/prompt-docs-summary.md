@@ -195,10 +195,6 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | **[docs/prompts/prompts-hillclimb.md](https://github.com/futuroptimist/axel/blob/main/docs/prompts/prompts-hillclimb.md)** | **[add-pipx-install.yml](https://github.com/futuroptimist/axel/blob/main/docs/prompts/prompts-hillclimb.md#add-pipx-installyml)**       | **unknown**   | **yes**      |
 | **[docs/prompts/prompts-hillclimb.md](https://github.com/futuroptimist/axel/blob/main/docs/prompts/prompts-hillclimb.md)** | **[docker-compose-mock.yml](https://github.com/futuroptimist/axel/blob/main/docs/prompts/prompts-hillclimb.md#docker-compose-mockyml)** | **unknown**   | **yes**      |
 
-## [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000)
-
-No prompt docs discovered.
-
 ## [futuroptimist/sigma](https://github.com/futuroptimist/sigma)
 
 | Path                                                                                                                      | Prompt                                                                                                                                    | Type          | One-click?   |
@@ -346,4 +342,4 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/wove | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md) | unknown | |
 | futuroptimist/wove | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md) | unknown | |
 
-_Updated automatically: 2025-09-04_
+_Updated automatically: 2025-09-05_
