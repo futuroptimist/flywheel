@@ -228,3 +228,4 @@ lowercasing
 finiteness
 AMS
 Bambu
+Lightening
