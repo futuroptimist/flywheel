@@ -12,7 +12,7 @@ Think of each listed repository as a small flywheel belted to this codebase. The
 
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
-**197 one-click prompts verified across 13 repos (36 evergreen, 2 one-off, 7 unknown).**
+**203 one-click prompts verified across 13 repos (42 evergreen, 2 one-off, 7 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
@@ -293,6 +293,12 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | Path                                                                                                                       | Prompt                                                                                                                                    | Type      | One-click?   |
 |----------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|-----------|--------------|
 | [docs/prompts/codex/automation.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/automation.md) | [Codex Automation Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/automation.md#codex-automation-prompt) | evergreen | yes          |
+| [docs/prompts/codex/chore.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/chore.md)           | [Codex Chore Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/chore.md#codex-chore-prompt)                | evergreen | yes          |
+| [docs/prompts/codex/docs.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/docs.md)             | [Codex Docs Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/docs.md#codex-docs-prompt)                   | evergreen | yes          |
+| [docs/prompts/codex/feature.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/feature.md)       | [Codex Feature Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/feature.md#codex-feature-prompt)          | evergreen | yes          |
+| [docs/prompts/codex/fix.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/fix.md)               | [Codex Fix Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/fix.md#codex-fix-prompt)                      | evergreen | yes          |
+| [docs/prompts/codex/refactor.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/refactor.md)     | [Codex Refactor Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/refactor.md#codex-refactor-prompt)       | evergreen | yes          |
+| [docs/prompts/codex/spellcheck.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/spellcheck.md) | [Codex Spellcheck Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/spellcheck.md#codex-spellcheck-prompt) | evergreen | yes          |
 
 ## TODO Prompts for Other Repos
 
@@ -382,4 +388,4 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/wove | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md) | unknown | |
 | futuroptimist/wove | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md) | unknown | |
 
-_Updated automatically: 2025-09-05_
+_Updated automatically: 2025-09-06_
