@@ -114,6 +114,58 @@ module sleeve(od, id, h) {
     }
 }
 
+// ---------------------------------------------------------------------------
+// Legacy wrapper modules (for examples & external callers)
+// ---------------------------------------------------------------------------
+
+module spool_core_sleeve(
+    inner_id      = 55.5,
+    target_od     = 63.0,
+    target_od_end = undef,
+    length        = 58.0,
+    clearance     = 0.20,
+    $fn_outer     = 160,
+    $fn_inner     = 160
+) {
+    // New geometry does not support taper; use the larger diameter.
+    target_od_end = is_undef(target_od_end) ? target_od : target_od_end;
+    if (target_od != target_od_end)
+        echo("NOTE: target_od_end ignored; using max diameter for constant OD sleeve.");
+
+    od = max(target_od, target_od_end);
+    $fn = min($fn_outer, $fn_inner);
+
+    // "clearance" in the legacy API is diametral; apply directly.
+    sleeve(od, inner_id + clearance, length);
+}
+
+function _spool_core_sleeve_preset(preset) =
+    (preset == "sunlu55_to63_len60")    ? [55,   63, 63, 60, 0.20] :
+    (preset == "sunlu55_to63cyl_len60") ? [55,   63, 63, 60, 0.20] :
+    (preset == "sunlu55_to73_len60")    ? [55,   73, 73, 60, 0.20] :
+    (preset == "sunlu55_to73cyl_len60") ? [55,   73, 73, 60, 0.20] :
+    (preset == "bambu55p5_to63_len58")  ? [55.5, 63, 63, 58, 0.40] :
+    (preset == "bambu55p5_to73_len59")  ? [55.5, 73, 73, 59, 0.40] :
+    undef;
+
+module spool_core_sleeve_preset(
+    preset    = "sunlu55_to63_len60",
+    $fn_outer = 160,
+    $fn_inner = 160
+) {
+    p = _spool_core_sleeve_preset(preset);
+    assert(p != undef, str("unknown preset: ", preset));
+    spool_core_sleeve(
+        inner_id      = p[0],
+        target_od     = p[1],
+        target_od_end = p[2],
+        length        = p[3],
+        clearance     = p[4],
+        $fn_outer     = $fn_outer,
+        $fn_inner     = $fn_inner
+    );
+}
+
 // -------------------- Render --------------------
 final_h = (mode == "ring") ? RING_H : LEN;
 sleeve(OD_EFF, ID_EFF, final_h);
