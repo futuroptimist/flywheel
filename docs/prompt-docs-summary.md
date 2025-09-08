@@ -12,7 +12,7 @@ Think of each listed repository as a small flywheel belted to this codebase. The
 
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
-**203 one-click prompts verified across 13 repos (42 evergreen, 2 one-off, 7 unknown).**
+**206 one-click prompts verified across 13 repos (45 evergreen, 2 one-off, 7 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
@@ -275,7 +275,7 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | **[docs/prompts-codex-pi-image.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-pi-image.md)**               | **[Upgrade Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-pi-image.md#upgrade-prompt)**                                                 | **evergreen** | **yes**      |
 | **[docs/prompts-codex-pi-token-dspace.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-pi-token-dspace.md)** | **[Codex Pi token.place & dspace Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-pi-token-dspace.md#codex-pi-tokenplace-dspace-prompt)** | **evergreen** | **yes**      |
 | **[docs/prompts-codex-pi-token-dspace.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-pi-token-dspace.md)** | **[Upgrade Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-pi-token-dspace.md#upgrade-prompt)**                                          | **evergreen** | **yes**      |
-| **[docs/prompts-codex-spellcheck.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-spellcheck.md)**           | **[Codex Spellcheck Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-spellcheck.md#codex-spellcheck-prompt)**                             | **evergreen** | **yes**      |
+| **[docs/prompts-codex-spellcheck.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-spellcheck.md)**           | **[Sugarkube Codex Spellcheck Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-spellcheck.md#sugarkube-codex-spellcheck-prompt)**         | **evergreen** | **yes**      |
 | **[docs/prompts-codex-spellcheck.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-spellcheck.md)**           | **[Upgrade Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-spellcheck.md#upgrade-prompt)**                                               | **evergreen** | **yes**      |
 | **[docs/prompts-codex-tests.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-tests.md)**                     | **[Codex Tests Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-tests.md#codex-tests-prompt)**                                            | **evergreen** | **yes**      |
 | **[docs/prompts-codex-tests.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-tests.md)**                     | **[Upgrade Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-tests.md#upgrade-prompt)**                                                    | **evergreen** | **yes**      |
@@ -290,15 +290,18 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 
 ## [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000)
 
-| Path                                                                                                                       | Prompt                                                                                                                                    | Type      | One-click?   |
-|----------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|-----------|--------------|
-| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/automation.md) | [Codex Automation Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/automation.md#codex-automation-prompt) | evergreen | yes          |
-| [docs/prompts/codex/chore.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/chore.md)           | [Codex Chore Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/chore.md#codex-chore-prompt)                | evergreen | yes          |
-| [docs/prompts/codex/docs.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/docs.md)             | [Codex Docs Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/docs.md#codex-docs-prompt)                   | evergreen | yes          |
-| [docs/prompts/codex/feature.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/feature.md)       | [Codex Feature Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/feature.md#codex-feature-prompt)          | evergreen | yes          |
-| [docs/prompts/codex/fix.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/fix.md)               | [Codex Fix Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/fix.md#codex-fix-prompt)                      | evergreen | yes          |
-| [docs/prompts/codex/refactor.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/refactor.md)     | [Codex Refactor Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/refactor.md#codex-refactor-prompt)       | evergreen | yes          |
-| [docs/prompts/codex/spellcheck.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/spellcheck.md) | [Codex Spellcheck Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/spellcheck.md#codex-spellcheck-prompt) | evergreen | yes          |
+| Path                                                                                                                         | Prompt                                                                                                                                       | Type      | One-click?   |
+|------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|-----------|--------------|
+| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/automation.md)   | [Codex Automation Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/automation.md#codex-automation-prompt)    | evergreen | yes          |
+| [docs/prompts/codex/chore.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/chore.md)             | [Codex Chore Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/chore.md#codex-chore-prompt)                   | evergreen | yes          |
+| [docs/prompts/codex/docs.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/docs.md)               | [Codex Docs Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/docs.md#codex-docs-prompt)                      | evergreen | yes          |
+| [docs/prompts/codex/feature.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/feature.md)         | [Codex Feature Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/feature.md#codex-feature-prompt)             | evergreen | yes          |
+| [docs/prompts/codex/fix.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/fix.md)                 | [Codex Fix Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/fix.md#codex-fix-prompt)                         | evergreen | yes          |
+| [docs/prompts/codex/performance.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/performance.md) | [Codex Performance Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/performance.md#codex-performance-prompt) | evergreen | yes          |
+| [docs/prompts/codex/refactor.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/refactor.md)       | [Codex Refactor Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/refactor.md#codex-refactor-prompt)          | evergreen | yes          |
+| [docs/prompts/codex/security.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/security.md)       | [Codex Security Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/security.md#codex-security-prompt)          | evergreen | yes          |
+| [docs/prompts/codex/spellcheck.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/spellcheck.md)   | [Codex Spellcheck Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/spellcheck.md#codex-spellcheck-prompt)    | evergreen | yes          |
+| [docs/prompts/codex/upgrade.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/upgrade.md)         | [Codex Upgrade Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/upgrade.md#codex-upgrade-prompt)             | evergreen | yes          |
 
 ## TODO Prompts for Other Repos
 
@@ -388,4 +391,4 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/wove | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md) | unknown | |
 | futuroptimist/wove | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md) | unknown | |
 
-_Updated automatically: 2025-09-07_
+_Updated automatically: 2025-09-08_
