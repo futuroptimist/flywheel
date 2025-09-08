@@ -292,7 +292,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   See `docs/sigma-integration.md`.
 - ✅ [gitshelves](https://github.com/futuroptimist/gitshelves) –  \
   3D-printable block models from GitHub commits.
-- ✅ [wove](https://github.com/futuroptimist/wove) –  \
+- ❌ [wove](https://github.com/futuroptimist/wove) –  \
   toolkit for knitting and robotic looms.
 - ✅ [sugarkube](https://github.com/futuroptimist/sugarkube) –  \
   k3s platform for off-grid Raspberry Pi clusters.  \
