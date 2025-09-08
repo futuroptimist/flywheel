@@ -16,9 +16,35 @@ Resolve the merge conflict in the code snippet below.
 - Preserve existing formatting, imports, and surrounding code.
 - Do not modify lines outside the conflict.
 - When resolving, prefer the version consistent with naming conventions and other docs in this repo.
-- If both versions are valid and a manual choice is required, include both in the merged code as commented alternatives marked with `// MANUAL DECISION REQUIRED`.
-- After the code, summarize the differences between the two sides and explain why you resolved them this way.
+- If both versions are valid and a manual choice is required, include both in the merged code.
+  Mark each alternative with `// MANUAL DECISION REQUIRED`.
+- After the code, add **Resolution Notes** summarizing the differences and explaining your choice.
 
+```
+
+## Example
+
+Example conflict:
+
+```text
+<<<<<<< main
+Job requirements may start with `-`, `+`, `*`, `•`, `–`, or `—`; markers are removed.
+=======
+Job requirements may appear under headers like `Requirements` or `Responsibilities`.
+Bullet markers such as `-`, `*`, `•`, `–`, or `—` are stripped when parsing job text.
+>>>>>>> feature
+```
+
+Example resolution:
+
+```text
+Job requirements may appear under headers like `Requirements` or `Responsibilities`.
+They may start with `-`, `+`, `*`, `•`, `–`, or `—`; these markers are stripped when parsing job
+text.
+
+// Resolution Notes
+// - Preserved header coverage from the feature branch.
+// - Kept `+` marker support from main.
 ```
 
 ## Upgrade Prompt
@@ -43,5 +69,6 @@ If everything passes, output:
 `“All lightweight checks passed. Ready for CI.”`
 Otherwise, list the failing steps with concise explanations.
 
-_*Note: Full test suites (`pytest`, `npm test`, `python -m flywheel.fit`) should be run separately in CI, not here.*_
+_*Note: Full test suites (`pytest`, `npm run test:ci`, `python -m flywheel.fit`) should be run
+separately in CI, not here.*_
 ```
