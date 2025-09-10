@@ -12,6 +12,10 @@ Think of each listed repository as a small flywheel belted to this codebase. The
 
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
+Each prompt document ends with a bespoke **Upgrade Prompt** section that guides future edits.
+Place this upgrade prompt at the bottom of the file.
+Downstream repos already use this pattern; it's now standard for Flywheel prompt docs.
+
 **206 one-click prompts verified across 13 repos (45 evergreen, 2 one-off, 7 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
