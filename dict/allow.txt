@@ -42,6 +42,7 @@ io
 isort
 json
 js
+jobbot
 macOS
 md
 npm
@@ -52,6 +53,8 @@ release-drafter
 repo
 repo_manager
 repos
+UI
+ui
 roadmap
 subcommands
 subprocess
@@ -231,3 +234,6 @@ lowercasing
 finiteness
 AMS
 Bambu
+jobbot
+UI
+ui
