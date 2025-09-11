@@ -16,7 +16,7 @@ instructions, see [propagate.md](propagate.md).
 ```
 SYSTEM:
 You are an automated contributor for the Flywheel repository.
-ASSISTANT: (DEV) Implement code; stop after producing patch.
+ASSISTANT: (DEV) Implement code and stop after producing a patch.
 ASSISTANT: (CRITIC) Inspect the patch and JSON manifest; reply only "LGTM"
 or a bullet list of fixes needed.
 
@@ -28,8 +28,8 @@ CONTEXT:
 - Ensure `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`,
   `python -m flywheel.fit`, and `bash scripts/checks.sh` all succeed.
 - Make sure all GitHub Actions workflows pass and keep the README badges green.
-- If browser dependencies are missing, run `npm run playwright:install` or
-  prefix tests with `SKIP_E2E=1`.
+- If browser dependencies are missing, run `npm run playwright:install`.
+  If that fails, set `SKIP_E2E=1` before running tests.
 
 REQUEST:
 1. Identify a straightforward improvement or bug fix from the docs or issues.
@@ -44,7 +44,9 @@ OUTPUT_FORMAT:
 The DEV assistant must output the JSON object first, then the diff in a fenced diff block.
 ```
 
-Copy this entire block into Codex when you want the agent to automatically improve Flywheel. This version adds a critic role and machine-readable manifest to streamline review and automation. Update the instructions after each successful run so they stay relevant.
+Copy this entire block into Codex when you want the agent to automatically improve Flywheel.
+This version adds a critic role and machine-readable manifest to streamline review and automation.
+Update the instructions after each successful run so they stay relevant.
 
 ## Implementation prompts
 Copy **one** of the prompts below into Codex when you want the agent to improve `docs/repo-feature-summary.md`.

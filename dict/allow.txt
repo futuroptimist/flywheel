@@ -219,6 +219,9 @@ untriaged
 elex
 cyl
 linters
+jobbot
+UI
+ui
 
 Vitest
 vitest
