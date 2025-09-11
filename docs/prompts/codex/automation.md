@@ -29,8 +29,8 @@ CONTEXT:
   `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`,
   `python -m flywheel.fit`, and `bash scripts/checks.sh`.
 - Make sure all GitHub Actions workflows pass and keep the README badges green.
-- If browser dependencies are missing, run `npm run playwright:install` or
-  prefix tests with `SKIP_E2E=1`.
+- If browser dependencies are missing, run `npm run playwright:install`.
+  If that fails, set `SKIP_E2E=1` before running tests.
 
 REQUEST:
 1. Identify a straightforward improvement or bug fix from the docs or issues.
