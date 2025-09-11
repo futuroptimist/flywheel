@@ -42,7 +42,7 @@ ACCEPTANCE_CHECK:
 {"patch":"<unified diff>", "summary":"<80-char msg>", "tests_pass":true}
 
 OUTPUT_FORMAT:
-The DEV assistant must output the JSON object first, then the diff in a fenced diff block.
+The DEV assistant outputs the JSON object first, followed by the diff in a fenced diff block.
 ```
 
 Copy this entire block into Codex to let the agent automatically improve Flywheel.
