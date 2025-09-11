@@ -12,15 +12,7 @@ Think of each listed repository as a small flywheel belted to this codebase. The
 
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
-Each prompt document must end with a bespoke **Upgrade Prompt** section:
-
-- Title the section `## Upgrade Prompt`.
-- Tailor the instructions to that specific document.
-- Place it at the very bottom of the file.
-
-Downstream repos already use this pattern; it's now standard for Flywheel prompt docs.
-
-**217 one-click prompts verified across 13 repos (56 evergreen, 2 one-off, 7 unknown).**
+**218 one-click prompts verified across 13 repos (57 evergreen, 2 one-off, 7 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
@@ -321,6 +313,7 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | [docs/prompts/codex/test.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/test.md)               | [Codex Test Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/test.md#codex-test-prompt)                      | evergreen | yes          |
 | [docs/prompts/codex/test.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/test.md)               | [Upgrade Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/test.md#upgrade-prompt)                            | evergreen | yes          |
 | [docs/prompts/codex/upgrade.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/upgrade.md)         | [Codex Upgrade Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/upgrade.md#codex-upgrade-prompt)             | evergreen | yes          |
+| [docs/prompts/codex/upgrade.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/upgrade.md)         | [Upgrader Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/upgrade.md#upgrader-prompt)                       | evergreen | yes          |
 
 ## TODO Prompts for Other Repos
 
@@ -410,4 +403,4 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/wove | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md) | unknown | |
 | futuroptimist/wove | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md) | unknown | |
 
-_Updated automatically: 2025-09-10_
+_Updated automatically: 2025-09-11_
