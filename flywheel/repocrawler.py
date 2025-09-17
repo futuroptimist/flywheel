@@ -105,11 +105,12 @@ class RepoCrawler:
         if resp.status_code == 200:
             try:
                 data = resp.json()
-                return [
+                paths = [
                     item.get("path", "")
                     for item in data.get("tree", [])
                     if item.get("type") == "blob"
                 ]
+                return sorted(paths)
             except Exception:
                 return []
         return []
