@@ -40,10 +40,21 @@ def slugify(text: str) -> str:
     return text
 
 
+PLACEHOLDER_PATTERNS = [
+    re.compile(r"{[A-Z][^}]+}"),
+    re.compile(r"\bTODO\b", re.IGNORECASE),
+    re.compile(r"\bREPLACE\b", re.IGNORECASE),
+    # Match placeholder-style "YOUR" tokens (e.g., "YOURNAME", "YOUR TOKEN").
+    # This intentionally remains case-sensitive so natural language like
+    # "your project" does not trip the heuristic.
+    re.compile(r"\bYOUR(?:\s+[A-Z][A-Z0-9_-]*|[A-Z0-9_-]+)\b"),
+]
+
+
 def is_one_click(snippet: str) -> bool:
     """Heuristically determine if a prompt is 1-click ready."""
-    patterns = [r"{[A-Z][^}]+}", r"TODO", r"REPLACE", r"YOUR \w+"]
-    return not any(re.search(p, snippet, re.IGNORECASE) for p in patterns)
+
+    return not any(pattern.search(snippet) for pattern in PLACEHOLDER_PATTERNS)
 
 
 def find_type(lines: List[str], start: int) -> str:
