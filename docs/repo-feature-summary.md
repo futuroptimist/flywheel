@@ -6,8 +6,8 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `6794a27` | ✅ | 0 | 4 | 2025-09-20 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `8efb54f` | ✅ | 0 | 0 | 2025-09-20 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `6472b65` | ✅ | 0 | 4 | 2025-09-20 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `e017e36` | ✅ | 0 | 0 | 2025-09-20 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `49a21fd` | ❌ | 3 | 37 | 2025-09-08 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `27db056` | ✅ | 6 | 9 | 2025-08-24 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `d55746b` | ✅ | 0 | 0 | 2025-08-28 |
@@ -16,9 +16,9 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `1f6bdaf` | ✅ | 0 | 0 | 2025-08-23 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `95b6053` | ✅ | 0 | 0 | 2025-09-14 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `a493bf6` | ✅ | 0 | 0 | 2025-08-24 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `9c8e3f4` | ✅ | 0 | 5 | 2025-09-20 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `a9ad928` | ✅ | 0 | 9 | 2025-09-20 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `f0df6e4` | ✅ | 0 | 0 | 2025-09-19 |
-| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `a3f14b5` | ✅ | 0 | 5 | 2025-09-20 |
+| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `91d1043` | ✅ | 0 | 9 | 2025-09-20 |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |
