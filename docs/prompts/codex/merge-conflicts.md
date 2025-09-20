@@ -16,7 +16,7 @@ Resolve the merge conflict in the code snippet below.
 - Preserve existing formatting, imports, and surrounding code.
 - Do not modify lines outside the conflict.
 - When resolving, prefer the version consistent with naming conventions and other docs in this repo.
-- If both versions are valid and a manual choice is required, include both in the merged code as commented alternatives marked with `// MANUAL DECISION REQUIRED`.
+- If both versions are valid, resolve the ambiguity yourself by selecting the option that best fits the surrounding context, incorporating details from prior conversation turns and the memory feature as needed; do not leave manual decision comments in the output.
 - After the code, summarize the differences between the two sides and explain why you resolved them this way.
 
 ```
