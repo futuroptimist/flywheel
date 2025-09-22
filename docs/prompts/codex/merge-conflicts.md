@@ -17,7 +17,9 @@ Resolve the merge conflict in the code snippet below.
 - Do not modify lines outside the conflict.
 - When resolving, prefer the version consistent with naming conventions and other docs in this repo.
 - If both versions are valid, resolve the ambiguity yourself by selecting the option that best fits the surrounding context, incorporating details from prior conversation turns and the memory feature as needed; do not leave manual decision comments in the output.
-- Output the fully resolved snippet exactly once inside a single fenced code block.
+- Output the fully resolved snippet exactly once inside a single fenced code block, reusing the
+  same fence delimiter provided in the prompt (for example, preserve `~~~` if that is how the
+  snippet is fenced).
 - Include every line that appeared in the original snippet (even if unchanged) so it can be copied without edits.
 - After the code, summarize the differences between the two sides and explain why you resolved them this way.
 
