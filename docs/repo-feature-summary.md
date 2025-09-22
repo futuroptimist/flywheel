@@ -6,8 +6,8 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `8fa3791` | ✅ | 0 | 4 | 2025-09-22 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `6c747f3` | ✅ | 0 | 0 | 2025-09-22 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `d4d77b3` | ✅ | 0 | 4 | 2025-09-22 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `321384e` | ✅ | 0 | 0 | 2025-09-22 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `49a21fd` | ❌ | 3 | 37 | 2025-09-08 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `27db056` | ✅ | 6 | 9 | 2025-08-24 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `d55746b` | ✅ | 0 | 0 | 2025-08-28 |
@@ -15,10 +15,10 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `fa4840f` | ✅ | 0 | 2 | 2025-08-24 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `1f6bdaf` | ✅ | 0 | 0 | 2025-08-23 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `95b6053` | ✅ | 0 | 0 | 2025-09-14 |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `a493bf6` | ✅ | 0 | 0 | 2025-08-24 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `76f48ed` | ✅ | 0 | 33 | 2025-09-22 |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `a493bf6` | ❌ | 0 | 0 | 2025-08-24 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `1724eb2` | ✅ | 0 | 48 | 2025-09-22 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `f0df6e4` | ✅ | 0 | 0 | 2025-09-19 |
-| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `956b645` | ✅ | 0 | 16 | 2025-09-22 |
+| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `2b9f8c4` | ✅ | 0 | 31 | 2025-09-22 |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |
