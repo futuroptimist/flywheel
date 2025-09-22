@@ -12,7 +12,7 @@ Think of each listed repository as a small flywheel belted to this codebase. The
 
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
-**231 one-click prompts verified across 13 repos (63 evergreen, 5 one-off, 7 unknown).**
+**232 one-click prompts verified across 13 repos (64 evergreen, 5 one-off, 7 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
@@ -280,6 +280,7 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | Path                                                                                                                                                | Prompt                                                                                                                                                                                                          | Type          | One-click?   |
 |-----------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|--------------|
 | [docs/prompt-pi-image-improvement-checklist.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompt-pi-image-improvement-checklist.md) | [Pi Image Improvement Checklist Implementation Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompt-pi-image-improvement-checklist.md#pi-image-improvement-checklist-implementation-prompt) | evergreen     | yes          |
+| [docs/prompt-pi-image-improvement-checklist.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompt-pi-image-improvement-checklist.md) | [Upgrade Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompt-pi-image-improvement-checklist.md#upgrade-prompt)                                                                             | evergreen     | yes          |
 | **[docs/prompts-codex-cad.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-cad.md)**                                     | **[Upgrade Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-cad.md#upgrade-prompt)**                                                                                             | **evergreen** | **yes**      |
 | **[docs/prompts-codex-ci-fix.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-ci-fix.md)**                               | **[Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-ci-fix.md#codex-ci-failure-fix-prompt)**                                                                | **evergreen** | **yes**      |
 | **[docs/prompts-codex-ci-fix.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-ci-fix.md)**                               | **[Upgrade Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-codex-ci-fix.md#upgrade-prompt)**                                                                                          | **evergreen** | **yes**      |
@@ -416,4 +417,4 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/wove | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md) | unknown | |
 | futuroptimist/wove | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md) | unknown | |
 
-_Updated automatically: 2025-09-21_
+_Updated automatically: 2025-09-22_
