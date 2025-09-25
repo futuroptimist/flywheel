@@ -1,6 +1,8 @@
 # Repo Feature Summary
 
 This table tracks which flywheel features each related repository has adopted.
+Regenerate it locally with `flywheel crawl --repos-file docs/repo_list.txt --output \
+docs/repo-feature-summary.md` if the automation run is blocked.
 
 <!-- spellchecker: disable -->
 ## Basics
