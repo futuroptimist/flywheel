@@ -12,7 +12,7 @@ Think of each listed repository as a small flywheel belted to this codebase. The
 
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
-**240 one-click prompts verified across 13 repos (69 evergreen, 5 one-off, 7 unknown).**
+**244 one-click prompts verified across 14 repos (73 evergreen, 5 one-off, 7 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
@@ -66,6 +66,8 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | [docs/pms/2025-08-23-prompt-docs-newline.md](https://github.com/futuroptimist/flywheel/blob/main/docs/pms/2025-08-23-prompt-docs-newline.md)                 | [2025-08-23: Prompt docs newline](https://github.com/futuroptimist/flywheel/blob/main/docs/pms/2025-08-23-prompt-docs-newline.md#2025-08-23-prompt-docs-newline)                     | one-off       | yes          |
 | [docs/prompts/codex/ci-fix.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/ci-fix.md)                                             | [2 – Commit and propagate](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/ci-fix.md#2-commit-and-propagate)                                                  | one-off       | yes          |
 | [docs/prompts/codex/ci-fix.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/ci-fix.md)                                             | [4 – Further reading & references](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/ci-fix.md#4-further-reading-references)                                    | one-off       | yes          |
+
+_Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/pms`, `docs/prompts-major-filter.md`, `docs/prompts-salient.md`, `docs/prompts`._
 
 ## [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist)
 
@@ -170,6 +172,8 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | **[frontend/src/pages/docs/md/prompts-vitest.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-vitest.md)**                               | **[Vitest test prompts for the _dspace_ repo](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-vitest.md#vitest-test-prompts-for-the-dspace-repo)**                        | **evergreen** | **yes**      |
 | **[frontend/src/pages/docs/md/prompts-vitest.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-vitest.md)**                               | **[Upgrader Prompt](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-vitest.md#upgrader-prompt)**                                                                          | **evergreen** | **yes**      |
 
+_Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/prompts-outages.md`, `frontend/src/pages/docs/md`._
+
 ## [futuroptimist/token.place](https://github.com/futuroptimist/token.place)
 
 | Path                                                                                                                        | Prompt                                                                                                                                                                    | Type          | One-click?   |
@@ -185,6 +189,8 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | **[docs/prompts-codex.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex.md)**                   | **[Implementation prompts](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex.md#implementation-prompts)**                                         | **evergreen** | **yes**      |
 | **[docs/prompts-codex.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex.md)**                   | **[1 Document environment variables in README](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex.md#1-document-environment-variables-in-readme)** | **one-off**   | **yes**      |
 | **[docs/prompts-codex.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex.md)**                   | **[2 Add API rate limit test](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex.md#2-add-api-rate-limit-test)**                                   | **one-off**   | **yes**      |
+
+_Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/prompts-codex-chore.md`, `docs/prompts-codex-ci-fix.md`, `docs/prompts-codex-docs.md`, `docs/prompts-codex-feature.md`, `docs/prompts-codex-refactor.md`, `docs/prompts-codex-security.md`, `docs/prompts-codex.md`._
 
 ## [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel)
 
@@ -203,6 +209,8 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | [prompts/scan-bright-dark-patterns.md](https://github.com/futuroptimist/gabriel/blob/main/prompts/scan-bright-dark-patterns.md) | [Scan for Bright and Dark Patterns](https://github.com/futuroptimist/gabriel/blob/main/prompts/scan-bright-dark-patterns.md#scan-for-bright-and-dark-patterns)        | unknown       | yes          |
 | [prompts/update-risk-model.md](https://github.com/futuroptimist/gabriel/blob/main/prompts/update-risk-model.md)                 | [Update Flywheel Risk Model](https://github.com/futuroptimist/gabriel/blob/main/prompts/update-risk-model.md#update-flywheel-risk-model)                              | unknown       | yes          |
 
+_Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/prompts-codex.md`, `prompts-repos.md`, `prompts`._
+
 ## [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard)
 
 | Path                                                                                                                    | Prompt                                                                                                                                                              | Type          | One-click?   |
@@ -214,6 +222,8 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | **[docs/prompts-codex.md](https://github.com/futuroptimist/f2clipboard/blob/main/docs/prompts-codex.md)**               | **[Roadmap implementation prompt](https://github.com/futuroptimist/f2clipboard/blob/main/docs/prompts-codex.md#roadmap-implementation-prompt)**                     | **evergreen** | **yes**      |
 | **[docs/prompts-codex.md](https://github.com/futuroptimist/f2clipboard/blob/main/docs/prompts-codex.md)**               | **[Task-specific prompts](https://github.com/futuroptimist/f2clipboard/blob/main/docs/prompts-codex.md#task-specific-prompts)**                                     | **evergreen** | **yes**      |
 | **[docs/prompts-codex.md](https://github.com/futuroptimist/f2clipboard/blob/main/docs/prompts-codex.md)**               | **[2 Emit Markdown to stdout and clipboard](https://github.com/futuroptimist/f2clipboard/blob/main/docs/prompts-codex.md#2-emit-markdown-to-stdout-and-clipboard)** | **one-off**   | **yes**      |
+
+_Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/prompts-codex-ci-fix.md`, `docs/prompts-codex-docs.md`, `docs/prompts-codex.md`._
 
 ## [futuroptimist/axel](https://github.com/futuroptimist/axel)
 
@@ -237,6 +247,8 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | **[docs/prompts/prompts-hillclimb.md](https://github.com/futuroptimist/axel/blob/main/docs/prompts/prompts-hillclimb.md)** | **[add-pipx-install.yml](https://github.com/futuroptimist/axel/blob/main/docs/prompts/prompts-hillclimb.md#add-pipx-installyml)**                               | **unknown**   | **yes**      |
 | **[docs/prompts/prompts-hillclimb.md](https://github.com/futuroptimist/axel/blob/main/docs/prompts/prompts-hillclimb.md)** | **[docker-compose-mock.yml](https://github.com/futuroptimist/axel/blob/main/docs/prompts/prompts-hillclimb.md#docker-compose-mockyml)**                         | **unknown**   | **yes**      |
 
+_Note: Prompt docs also found outside `docs/prompts/codex/`: `.axel/hillclimb/prompts`, `docs/prompts-codex-ci-fix.md`, `docs/prompts-codex-spellcheck.md`, `docs/prompts-codex.md`, `docs/prompts`._
+
 ## [futuroptimist/sigma](https://github.com/futuroptimist/sigma)
 
 | Path                                                                                                                      | Prompt                                                                                                                                       | Type          | One-click?   |
@@ -247,6 +259,8 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | **[docs/prompts-codex-spellcheck.md](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-spellcheck.md)** | **[Codex Spellcheck Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-spellcheck.md#codex-spellcheck-prompt)**     | **evergreen** | **yes**      |
 | **[docs/prompts-codex-tests.md](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-tests.md)**           | **[Codex Test Addition Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex-tests.md#codex-test-addition-prompt)**    | **evergreen** | **yes**      |
 | **[docs/prompts-codex.md](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex.md)**                       | **[Codex Automation Prompt](https://github.com/futuroptimist/sigma/blob/main/docs/prompts-codex.md#codex-automation-prompt)**                | **evergreen** | **yes**      |
+
+_Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/prompts-codex-cad.md`, `docs/prompts-codex-ci-fix.md`, `docs/prompts-codex-docs.md`, `docs/prompts-codex-spellcheck.md`, `docs/prompts-codex-tests.md`, `docs/prompts-codex.md`._
 
 ## [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves)
 
@@ -263,6 +277,8 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | **[docs/prompts-codex.md](https://github.com/futuroptimist/gitshelves/blob/main/docs/prompts-codex.md)**                         | **[1 Document the `--months-per-row` option](https://github.com/futuroptimist/gitshelves/blob/main/docs/prompts-codex.md#1-document-the---months-per-row-option)** | **one-off**   | **yes**      |
 | **[docs/prompts-codex.md](https://github.com/futuroptimist/gitshelves/blob/main/docs/prompts-codex.md)**                         | **[2 Add a spellcheck dictionary](https://github.com/futuroptimist/gitshelves/blob/main/docs/prompts-codex.md#2-add-a-spellcheck-dictionary)**                     | **one-off**   | **yes**      |
 
+_Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/prompts-codex-ci-fix.md`, `docs/prompts-codex-docs.md`, `docs/prompts-codex-refactor.md`, `docs/prompts-codex-spellcheck.md`, `docs/prompts-codex-tests.md`, `docs/prompts-codex.md`, `docs/repo_feature_summary_prompt.md`._
+
 ## [futuroptimist/wove](https://github.com/futuroptimist/wove)
 
 | Path                                                                                                       | Prompt                                                                                                                                              | Type          | One-click?   |
@@ -275,6 +291,8 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | **[docs/prompts-codex.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-codex.md)**         | **[3 Add a Crochet Glossary](https://github.com/futuroptimist/wove/blob/main/docs/prompts-codex.md#3-add-a-crochet-glossary)**                      | **one-off**   | **yes**      |
 | **[docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md)**           | **[Codex Docs Prompt](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md#codex-docs-prompt)**                                     | **evergreen** | **yes**      |
 | **[docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md)**         | **[Codex Test Prompt](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md#codex-test-prompt)**                                    | **evergreen** | **yes**      |
+
+_Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/prompts-codex-cad.md`, `docs/prompts-codex.md`, `docs/prompts-docs.md`, `docs/prompts-tests.md`._
 
 ## [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube)
 
@@ -307,6 +325,8 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | **[docs/prompts-simplification.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-simplification.md)**                                             | **[Before you run the prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-simplification.md#before-you-run-the-prompt)**                                                                           | **evergreen** | **yes**      |
 | **[docs/prompts-simplification.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-simplification.md)**                                             | **[Upgrade Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts-simplification.md#upgrade-prompt)**                                                                                                 | **evergreen** | **yes**      |
 
+_Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/archived`, `docs/prompts-codex-cad.md`, `docs/prompts-codex-ci-fix.md`, `docs/prompts-codex-docker-repo.md`, `docs/prompts-codex-docs.md`, `docs/prompts-codex-elex.md`, `docs/prompts-codex-pi-image.md`, `docs/prompts-codex-pi-token-dspace.md`, `docs/prompts-codex-spellcheck.md`, `docs/prompts-codex-tests.md`, `docs/prompts-codex.md`, `docs/prompts-simplification.md`._
+
 ## [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper)
 
 | Path                                                                                                                      | Prompt                                                                                                                                   | Type      | One-click?   |
@@ -336,6 +356,15 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | [docs/prompts/codex/spellcheck.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/spellcheck.md)         | [Codex Spellcheck Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/spellcheck.md#codex-spellcheck-prompt)             | evergreen | yes          |
 | [docs/prompts/codex/style.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/style.md)                   | [Codex Style Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/style.md#codex-style-prompt)                            | evergreen | yes          |
 | [docs/prompts/codex/test.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/test.md)                     | [Codex Test Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/test.md#codex-test-prompt)                               | evergreen | yes          |
+
+## [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io)
+
+| Path                                                                                                                           | Prompt                                                                                                                                        | Type      | One-click?   |
+|--------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|-----------|--------------|
+| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/codex/automation.md) | [Codex Automation Prompt](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/codex/automation.md#codex-automation-prompt) | evergreen | yes          |
+| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/codex/automation.md) | [Implementation prompts](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/codex/automation.md#implementation-prompts)   | evergreen | yes          |
+| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/codex/automation.md) | [How to choose a prompt](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/codex/automation.md#how-to-choose-a-prompt)   | evergreen | yes          |
+| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/codex/automation.md) | [Upgrade Prompt](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/codex/automation.md#upgrade-prompt)                   | evergreen | yes          |
 
 ## TODO Prompts for Other Repos
 

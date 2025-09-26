@@ -123,6 +123,25 @@ def iter_local_prompt_docs(docs_root: Path) -> Iterable[Path]:
             yield path
 
 
+def is_canonical_prompt_path(path: str) -> bool:
+    """Return True if the prompt doc lives under docs/prompts/codex/."""
+
+    normalized = path.replace("\\", "/")
+    return normalized.startswith("docs/prompts/codex/")
+
+
+def describe_noncanonical_location(path: str) -> str:
+    normalized = path.replace("\\", "/")
+    parent = Path(normalized).parent
+    normalized_path = Path(normalized)
+    if not parent or parent in {Path(""), Path(".")}:
+        return normalized_path.as_posix()
+    parent_str = parent.as_posix()
+    if parent_str == "docs":
+        return normalized_path.as_posix()
+    return parent_str
+
+
 def main() -> None:
     from tabulate import tabulate
 
@@ -136,6 +155,7 @@ def main() -> None:
     crawler = RepoCrawler(repos, token=args.token)
 
     grouped: DefaultDict[str, List[List[str]]] = defaultdict(list)
+    noncanonical_paths: DefaultDict[str, set[str]] = defaultdict(set)
 
     # Include prompt docs from the local repository (first entry)
     local_repo = repos[0].split("@")[0]
@@ -144,8 +164,9 @@ def main() -> None:
         text = path.read_text()
         repo_link = f"**[{local_repo}](https://github.com/{local_repo})**"
         rel = Path("docs") / path.relative_to(docs_root)
-        base_url = f"https://github.com/{local_repo}/blob/main/{rel}"  # noqa: E501
-        path_link = f"[{rel}]({base_url})"
+        rel_str = rel.as_posix()
+        base_url = f"https://github.com/{local_repo}/blob/main/{rel_str}"  # noqa: E501
+        path_link = f"[{rel_str}]({base_url})"
         prompts = extract_prompts(text, base_url)
         for prompt_link, ptype, one_click in prompts:
             if not one_click:
@@ -154,6 +175,8 @@ def main() -> None:
             if path.name.startswith("prompts-"):
                 row = [f"**{cell}**" for cell in row]
             grouped[repo_link].append(row)
+        if not is_canonical_prompt_path(rel_str):
+            noncanonical_paths[repo_link].add(describe_noncanonical_location(rel_str))
 
     # Add prompt docs from remote repositories (skip local repo)
     for spec in repos[1:]:
@@ -185,6 +208,10 @@ def main() -> None:
                     if Path(path).name.startswith("prompts-"):
                         row = [f"**{cell}**" for cell in row]
                     grouped[repo_link].append(row)
+                    if not is_canonical_prompt_path(path):
+                        noncanonical_paths[repo_link].add(
+                            describe_noncanonical_location(path)
+                        )
 
     type_order = {"evergreen": 0, "unknown": 1, "one-off": 2}
     for repo_prompts in grouped.values():
@@ -292,6 +319,18 @@ def main() -> None:
             )
         )
         lines.append("")
+        if noncanonical_paths.get(repo_link):
+            locations = ", ".join(
+                sorted(f"`{loc}`" for loc in noncanonical_paths[repo_link])
+            )
+            lines.append(
+                (
+                    "_Note: Prompt docs also found outside "
+                    "`docs/prompts/codex/`: "
+                    f"{locations}._"
+                )
+            )
+            lines.append("")
 
     todo_file = docs_root / "prompt-docs-todos.md"
     if todo_file.exists() and todo_file.read_text().strip():
