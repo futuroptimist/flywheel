@@ -1,0 +1,10 @@
+{
+  "id": "2025-09-26-javascript-tests-runtime",
+  "date": "2025-09-26",
+  "component": "github-actions",
+  "rootCause": "The JavaScript test job installed all of requirements.txt, forcing pip to compile assimp_py from source and adding several minutes to each run.",
+  "resolution": "Install only the lightweight webapp dependencies from webapp/requirements-playwright.txt in the JavaScript workflow and add a regression test.",
+  "references": [
+    "https://github.com/futuroptimist/flywheel/actions/runs/18029996098/job/51304258464"
+  ]
+}

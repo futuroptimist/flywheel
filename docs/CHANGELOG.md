@@ -1,5 +1,8 @@
 # Changelog
 
+## [2025-09-26] - Speed up JavaScript tests
+- install minimal webapp dependencies for Playwright to avoid rebuilding assimp_py in CI
+
 ## [2025-08-27] - Scan root docs for prompt files
 - include `docs/prompts-*.md` in prompt docs crawler
 
