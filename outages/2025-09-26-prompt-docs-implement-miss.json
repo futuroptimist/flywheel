@@ -1,0 +1,11 @@
+{
+  "id": "2025-09-26-prompt-docs-implement-miss",
+  "date": "2025-09-26",
+  "component": "docs/prompt-docs-summary",
+  "rootCause": "Filter only matched markdown paths containing 'prompt', so implement.md prompt docs were skipped",
+  "resolution": "Expanded the prompt doc detector to include implement.md files and regenerated the summary",
+  "references": [
+    "scripts/update_prompt_docs_summary.py",
+    "docs/prompt-docs-summary.md"
+  ]
+}
