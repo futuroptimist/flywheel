@@ -43,7 +43,11 @@ def slugify(text: str) -> str:
 
 PLACEHOLDER_PATTERNS = [
     re.compile(r"{[A-Z][^}]+}"),
-    re.compile(r"\bTODO\b", re.IGNORECASE),
+    # Treat TODO markers as placeholders only when they open a line or bullet.
+    re.compile(
+        r"^\s*(?:[-*]|//|#|<!--)?\s*TODO\b",
+        re.IGNORECASE | re.MULTILINE,
+    ),
     re.compile(r"\bREPLACE\b", re.IGNORECASE),
     # Match placeholder-style "YOUR" tokens (e.g., "YOURNAME", "YOUR TOKEN").
     # This intentionally remains case-sensitive so natural language like
@@ -179,6 +183,20 @@ def format_markdown(path: Path) -> None:
             f" {path}. Generated file may require manual formatting.",
             file=sys.stderr,
         )
+
+
+def normalize_heading_spacing(path: Path) -> None:
+    """Ensure the title immediately follows the spellchecker comment."""
+
+    lines = path.read_text().splitlines()
+    if (
+        len(lines) >= 3
+        and lines[0].startswith("<!-- spellchecker:")
+        and not lines[1].strip()
+        and lines[2].startswith("# ")
+    ):
+        normalized = "\n".join([lines[0], lines[2], *lines[3:]])
+        path.write_text(normalized + ("\n" if not normalized.endswith("\n") else ""))
 
 
 def main() -> None:
@@ -384,6 +402,7 @@ def main() -> None:
     lines.extend([f"_Updated automatically: {date.today()}_", ""])
     args.out.write_text("\n".join(line.rstrip() for line in lines))
     format_markdown(args.out)
+    normalize_heading_spacing(args.out)
 
 
 if __name__ == "__main__":
