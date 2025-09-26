@@ -196,7 +196,8 @@ def normalize_heading_spacing(path: Path) -> None:
         and lines[2].startswith("# ")
     ):
         normalized = "\n".join([lines[0], lines[2], *lines[3:]])
-        path.write_text(normalized + ("\n" if not normalized.endswith("\n") else ""))
+        newline = "" if normalized.endswith("\n") else "\n"
+        path.write_text(normalized + newline)
 
 
 def main() -> None:
@@ -375,9 +376,10 @@ def main() -> None:
         )
         lines.append("")
         if noncanonical_paths.get(repo_link):
-            locations = ", ".join(
-                sorted(f"`{loc}`" for loc in noncanonical_paths[repo_link])
+            formatted_locations = (
+                f"`{loc}`" for loc in noncanonical_paths[repo_link]
             )
+            locations = ", ".join(sorted(formatted_locations))
             lines.append(
                 (
                     "_❌ Note: Prompt docs also found outside "
