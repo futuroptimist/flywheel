@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sys
 from collections import defaultdict
@@ -159,12 +160,26 @@ def main() -> None:
     repos = load_repos(args.repos_from)
     crawler = RepoCrawler(repos, token=args.token)
 
+    repo_root = Path(__file__).resolve().parents[1]
+    script_path = Path(__file__).resolve()
+    script_display_path = script_path.relative_to(repo_root).as_posix()
+
+    out_path = args.out
+    if not out_path.is_absolute():
+        out_path = (Path.cwd() / out_path).resolve()
+    try:
+        script_relative_link = Path(
+            os.path.relpath(script_path, out_path.parent)
+        ).as_posix()
+    except ValueError:
+        script_relative_link = script_display_path
+
     grouped: DefaultDict[str, List[List[str]]] = defaultdict(list)
     noncanonical_paths: DefaultDict[str, set[str]] = defaultdict(set)
 
     # Include prompt docs from the local repository (first entry)
     local_repo = repos[0].split("@")[0]
-    docs_root = Path(__file__).resolve().parents[1] / "docs"
+    docs_root = repo_root / "docs"
     for path in iter_local_prompt_docs(docs_root):
         text = path.read_text()
         repo_link = f"**[{local_repo}](https://github.com/{local_repo})**"
@@ -232,10 +247,11 @@ def main() -> None:
         "<!-- spellchecker: disable -->",
         "# Prompt Docs Summary",
         "",
-        "This index is auto-generated with ",
-        "[scripts/update_prompt_docs_summary.py]",
-        "(../../scripts/update_prompt_docs_summary.py) ",
-        "using RepoCrawler to discover prompt documents across repositories.",
+        (
+            "This index is auto-generated with "
+            f"[{script_display_path}]({script_relative_link}) "
+            "using RepoCrawler to discover prompt documents across repositories."
+        ),
         "",
         "RepoCrawler powers other reports like repo-feature summaries; "
         "use it as a model for deep dives.",
