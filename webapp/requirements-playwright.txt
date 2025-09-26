@@ -1,0 +1,4 @@
+# Minimal Python dependencies required to run the webapp during Playwright tests.
+# Keep this list lean to avoid expensive installs in CI.
+Flask
+trimesh
