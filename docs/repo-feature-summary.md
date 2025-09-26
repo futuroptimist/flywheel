@@ -6,7 +6,7 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `257fa7a` | ✅ | 0 | 5 | 2025-09-26 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `1493397` | ✅ | 0 | 6 | 2025-09-26 |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `4a7c920` | ✅ | 0 | 0 | 2025-09-26 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `49a21fd` | ❌ | 3 | 37 | 2025-09-08 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `3b2204d` | ✅ | 6 | 3 | 2025-09-24 |
@@ -18,7 +18,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `a493bf6` | ❌ | 0 | 0 | 2025-08-24 |
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `ef0dc44` | ✅ | 0 | 3 | 2025-09-26 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `f9f08f2` | ✅ | 0 | 0 | 2025-09-24 |
-| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `f8dcfaf` | ✅ | 0 | 3 | 2025-09-26 |
+| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `09878d5` | ✅ | 0 | 2 | 2025-09-26 |
 | [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `a617f49` | ✅ | 0 | 5 | 2025-09-26 |
 
 ## Coverage & Installer
