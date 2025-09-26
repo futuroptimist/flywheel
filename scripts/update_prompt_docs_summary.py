@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import subprocess
 import sys
 from collections import defaultdict
 from datetime import date
@@ -110,16 +111,25 @@ def extract_prompts(text: str, base_url: str) -> List[List[str]]:
     return prompts
 
 
+PROMPT_KEYWORDS = ("prompt", "implement")
+
+
+def looks_like_prompt_doc(path: str) -> bool:
+    """Return True when the path suggests a prompt/implementation doc."""
+
+    pl = path.lower()
+    if pl.endswith("prompt-docs-summary.md") or pl.endswith(
+        "prompt-docs-todos.md"
+    ):
+        return False
+    return any(keyword in pl for keyword in PROMPT_KEYWORDS)
+
+
 def iter_local_prompt_docs(docs_root: Path) -> Iterable[Path]:
     """Yield markdown prompt docs bundled with the local repository."""
     for path in sorted(docs_root.rglob("*.md")):
         rel = path.relative_to(docs_root)
-        pl = str(rel).lower()
-        if (
-            "prompt" in pl
-            and not pl.endswith("prompt-docs-summary.md")
-            and not pl.endswith("prompt-docs-todos.md")
-        ):
+        if looks_like_prompt_doc(str(rel)):
             yield path
 
 
@@ -145,6 +155,30 @@ def describe_noncanonical_location(path: str) -> str:
     if parent in {Path(""), Path(".")}:
         return normalized
     return parent.as_posix()
+
+
+def format_markdown(path: Path) -> None:
+    """Format the generated Markdown file with Prettier."""
+
+    try:
+        subprocess.run(
+            [
+                "npx",
+                "--yes",
+                "prettier@latest",
+                "--log-level",
+                "warn",
+                "--write",
+                str(path),
+            ],
+            check=True,
+        )
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        print(
+            "warning: failed to run `npx prettier --write` on"
+            f" {path}. Generated file may require manual formatting.",
+            file=sys.stderr,
+        )
 
 
 def main() -> None:
@@ -194,12 +228,7 @@ def main() -> None:
         files = crawler._list_files(name, branch)
         for path in files:
             pl = path.lower()
-            if (
-                "prompt" in pl
-                and pl.endswith(".md")
-                and not pl.endswith("prompt-docs-summary.md")
-                and not pl.endswith("prompt-docs-todos.md")
-            ):
+            if pl.endswith(".md") and looks_like_prompt_doc(pl):
                 text = crawler._fetch_file(name, path, branch) or ""
                 repo_link = f"[{name}](https://github.com/{name})"
                 base_url = f"https://github.com/{name}/blob/{branch}/{path}"
@@ -354,6 +383,7 @@ def main() -> None:
 
     lines.extend([f"_Updated automatically: {date.today()}_", ""])
     args.out.write_text("\n".join(line.rstrip() for line in lines))
+    format_markdown(args.out)
 
 
 if __name__ == "__main__":
