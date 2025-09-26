@@ -1,0 +1,11 @@
+{
+  "id": "2025-09-26-prompt-docs-todo-filter",
+  "date": "2025-09-26",
+  "component": "docs/prompt-docs-summary",
+  "rootCause": "The one-click heuristic treated any occurrence of 'TODO' as a placeholder, so implement.md prompts that describe TODO workflows were excluded from the summary.",
+  "resolution": "Updated the heuristic to only flag TODO markers at the start of a line or bullet and regenerated the prompt summary to restore the missing entries.",
+  "references": [
+    "scripts/update_prompt_docs_summary.py",
+    "docs/prompt-docs-summary.md"
+  ]
+}
