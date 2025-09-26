@@ -11,3 +11,4 @@ futuroptimist/wove
 futuroptimist/sugarkube
 futuroptimist/pr-reaper
 futuroptimist/jobbot3000
+futuroptimist/danielsmith.io
