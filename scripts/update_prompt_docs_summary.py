@@ -333,7 +333,7 @@ def main() -> None:
             )
             lines.append(
                 (
-                    "_Note: Prompt docs also found outside "
+                    "_❌ Note: Prompt docs also found outside "
                     "`docs/prompts/codex/`: "
                     f"{locations}._"
                 )
