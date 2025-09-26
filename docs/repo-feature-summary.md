@@ -6,8 +6,8 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `1fa4698` | ✅ | 0 | 3 | 2025-09-26 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `f682950` | ✅ | 0 | 0 | 2025-09-26 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `257fa7a` | ✅ | 0 | 5 | 2025-09-26 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `4a7c920` | ✅ | 0 | 0 | 2025-09-26 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `49a21fd` | ❌ | 3 | 37 | 2025-09-08 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `3b2204d` | ✅ | 6 | 3 | 2025-09-24 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `8d239a6` | ✅ | 0 | 0 | 2025-09-26 |
@@ -16,10 +16,10 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `1f6bdaf` | ✅ | 0 | 0 | 2025-08-23 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `95b6053` | ✅ | 0 | 0 | 2025-09-14 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `a493bf6` | ❌ | 0 | 0 | 2025-08-24 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `b03d396` | ✅ | 0 | 0 | 2025-09-26 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `ef0dc44` | ✅ | 0 | 3 | 2025-09-26 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `f9f08f2` | ✅ | 0 | 0 | 2025-09-24 |
-| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `6cd0767` | ✅ | 0 | 0 | 2025-09-26 |
-| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `0f90c8f` | ✅ | 0 | 3 | 2025-09-26 |
+| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `f8dcfaf` | ✅ | 0 | 3 | 2025-09-26 |
+| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `a617f49` | ✅ | 0 | 5 | 2025-09-26 |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |
@@ -55,7 +55,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 7 | ✅ | ✅ | ✅ | ✅ | 2025-09-26 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | ✅ | ✅ | 2 | ✅ | ✅ | ✅ | ❌ | 2025-09-24 |
 | [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | ✅ | ✅ | 3 | ❌ | ❌ | ❌ | ❌ | 2025-09-26 |
-| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | ✅ | ✅ | 4 | ❌ | ❌ | ❌ | ✅ | 2025-09-26 |
+| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | ✅ | ✅ | 5 | ❌ | ❌ | ❌ | ✅ | 2025-09-26 |
 
 ## Dark & Bright Pattern Scan
 | Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |
@@ -73,7 +73,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 0 | 0 | 2025-09-26 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | 0 | 1 | 2025-09-24 |
 | [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | 0 | 4 | 2025-09-26 |
-| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | 0 | 0 | 2025-09-26 |
+| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | 0 | 1 | 2025-09-26 |
 
 Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip.
 Coverage percentages are parsed from their badges where available. Codecov shows ✅ when a Codecov config or badge is present. Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses.
