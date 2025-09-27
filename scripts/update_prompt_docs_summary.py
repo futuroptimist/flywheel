@@ -304,8 +304,8 @@ def main() -> None:
         "",
         (
             "This index is auto-generated with "
-            "[scripts/update_prompt_docs_summary.py]"
-            "(../../scripts/update_prompt_docs_summary.py) "
+            f"[{script_display}]"
+            f"({script_href}) "
             "using RepoCrawler to discover prompt documents "
             "across repositories."
         ),
