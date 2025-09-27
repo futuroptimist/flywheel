@@ -283,10 +283,12 @@ def main() -> None:
         "<!-- spellchecker: disable -->",
         "# Prompt Docs Summary",
         "",
-        "This index is auto-generated with ",
-        "[scripts/update_prompt_docs_summary.py]",
-        "(../../scripts/update_prompt_docs_summary.py) ",
-        "using RepoCrawler to discover prompt documents across repositories.",
+        (
+            "This index is auto-generated with "
+            "[scripts/update_prompt_docs_summary.py]"
+            "(../../scripts/update_prompt_docs_summary.py)"
+            " using RepoCrawler to discover prompt documents across repositories."
+        ),
         "",
         "RepoCrawler powers other reports like repo-feature summaries; "
         "use it as a model for deep dives.",
