@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-13-playwright-dropdown-wait",
+  "date": "2025-08-13",
+  "component": "ci/test-javascript",
+  "rootCause": "Playwright test queried the viewer dropdown before options loaded, triggering flaky failures",
+  "resolution": "Wait for dropdown options to appear before evaluation and monitor CI for further flakes",
+  "references": []
+}

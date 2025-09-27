@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-16-playwright-apt-failure",
+  "date": "2025-08-16",
+  "component": "ci/test-javascript",
+  "rootCause": "Playwright install used --with-deps, triggering apt to fetch every browser dependency and intermittently fail",
+  "resolution": "Install only the Chromium browser without system dependencies and add coverage to ensure the lighter install path",
+  "references": []
+}
