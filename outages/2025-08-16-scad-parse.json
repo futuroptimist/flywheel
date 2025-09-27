@@ -1,8 +1,8 @@
 {
-    "id": "2025-08-16-scad-parse",
-    "date": "2025-08-16",
-    "component": "parse_scad_vars",
-    "rootCause": "Malformed SCAD assignments were silently ignored allowing invalid parameters to pass",
-    "resolution": "Validate assignments and raise ValueError on malformed values",
-    "references": ["docs/pms/2025-08-16-scad-parse.md"],
+  "id": "2025-08-16-scad-parse",
+  "date": "2025-08-16",
+  "component": "parse_scad_vars",
+  "rootCause": "Malformed SCAD assignments were silently ignored allowing invalid parameters to pass",
+  "resolution": "Validate assignments and raise ValueError on malformed values",
+  "references": []
 }
