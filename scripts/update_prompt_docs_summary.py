@@ -297,18 +297,18 @@ def main() -> None:
     script_href = Path(
         os.path.relpath(scripts_path, args.out.parent)
     ).as_posix()
+    script_link = f"[{script_display}]({script_href})"
+    generated_line = (
+        "This index is auto-generated with {link} "
+        "using RepoCrawler to discover "
+        "prompt documents across repositories."
+    ).format(link=script_link)
 
     lines = [
         "<!-- spellchecker: disable -->",
         "# Prompt Docs Summary",
         "",
-        (
-            "This index is auto-generated with "
-            "[scripts/update_prompt_docs_summary.py]"
-            "(../../scripts/update_prompt_docs_summary.py) "
-            "using RepoCrawler to discover prompt documents "
-            "across repositories."
-        ),
+        generated_line,
         "",
         (
             "RepoCrawler powers other reports like repo-feature summaries; "
