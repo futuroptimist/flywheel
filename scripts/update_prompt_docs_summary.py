@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import subprocess
 import sys
@@ -118,12 +119,22 @@ def extract_prompts(text: str, base_url: str) -> List[List[str]]:
 PROMPT_KEYWORDS = ("prompt", "implement")
 PROMPT_DOC_SKIP_SUFFIXES = ("prompt-docs-summary.md", "prompt-docs-todos.md")
 
+# Exclude archival folders such as legacy postmortems that happen to include the word
+# "prompt" in their filenames (e.g., historical docs/pms/2025-08-09-spellcheck-prompt-summary.md).
+PROMPT_DOC_EXCLUDE_PATTERNS = (
+    re.compile(r"(?:^|/)pms/"),
+    re.compile(r"/postmortem"),
+    re.compile(r"/post-mortem"),
+)
+
 
 def looks_like_prompt_doc(path: str) -> bool:
     """Return True when the path suggests a prompt/implementation doc."""
 
     pl = path.lower()
     if any(pl.endswith(suffix) for suffix in PROMPT_DOC_SKIP_SUFFIXES):
+        return False
+    if any(pattern.search(pl) for pattern in PROMPT_DOC_EXCLUDE_PATTERNS):
         return False
     return any(keyword in pl for keyword in PROMPT_KEYWORDS)
 
@@ -279,13 +290,20 @@ def main() -> None:
     total_prompts = sum(counts.values())
     repo_count = len(grouped)
 
+    repo_root = Path(__file__).resolve().parents[1]
+    scripts_path = repo_root / "scripts" / "update_prompt_docs_summary.py"
+    script_display = scripts_path.relative_to(repo_root).as_posix()
+    script_href = Path(
+        os.path.relpath(scripts_path, args.out.parent)
+    ).as_posix()
+
     lines = [
         "<!-- spellchecker: disable -->",
         "# Prompt Docs Summary",
         "",
         "This index is auto-generated with ",
-        "[scripts/update_prompt_docs_summary.py]",
-        "(../../scripts/update_prompt_docs_summary.py) ",
+        f"[{script_display}]",
+        f"({script_href}) ",
         "using RepoCrawler to discover prompt documents across repositories.",
         "",
         "RepoCrawler powers other reports like repo-feature summaries; "

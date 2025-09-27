@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-10-pre-commit-formatting",
+  "date": "2025-08-10",
+  "component": "ci/pre-commit",
+  "rootCause": "Trailing whitespace in docs and missing newline in a static OBJ asset violated pre-commit formatting hooks",
+  "resolution": "Fix the formatting issues and audit docs and static assets to ensure end-of-file and whitespace checks pass",
+  "references": []
+}
