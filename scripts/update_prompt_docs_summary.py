@@ -116,15 +116,14 @@ def extract_prompts(text: str, base_url: str) -> List[List[str]]:
 
 
 PROMPT_KEYWORDS = ("prompt", "implement")
+PROMPT_DOC_SKIP_SUFFIXES = ("prompt-docs-summary.md", "prompt-docs-todos.md")
 
 
 def looks_like_prompt_doc(path: str) -> bool:
     """Return True when the path suggests a prompt/implementation doc."""
 
     pl = path.lower()
-    if pl.endswith("prompt-docs-summary.md") or pl.endswith(
-        "prompt-docs-todos.md"
-    ):
+    if any(pl.endswith(suffix) for suffix in PROMPT_DOC_SKIP_SUFFIXES):
         return False
     return any(keyword in pl for keyword in PROMPT_KEYWORDS)
 
@@ -159,6 +158,10 @@ def describe_noncanonical_location(path: str) -> str:
     if parent in {Path(""), Path(".")}:
         return normalized
     return parent.as_posix()
+
+
+def format_locations(locations: Iterable[str]) -> List[str]:
+    return [f"`{loc}`" for loc in locations]
 
 
 def format_markdown(path: Path) -> None:
@@ -196,7 +199,8 @@ def normalize_heading_spacing(path: Path) -> None:
         and lines[2].startswith("# ")
     ):
         normalized = "\n".join([lines[0], lines[2], *lines[3:]])
-        path.write_text(normalized + ("\n" if not normalized.endswith("\n") else ""))
+        newline = "" if normalized.endswith("\n") else "\n"
+        path.write_text(normalized + newline)
 
 
 def main() -> None:
@@ -375,9 +379,9 @@ def main() -> None:
         )
         lines.append("")
         if noncanonical_paths.get(repo_link):
-            locations = ", ".join(
-                sorted(f"`{loc}`" for loc in noncanonical_paths[repo_link])
-            )
+            noncanonical = noncanonical_paths[repo_link]
+            formatted_locations = format_locations(noncanonical)
+            locations = ", ".join(sorted(formatted_locations))
             lines.append(
                 (
                     "_❌ Note: Prompt docs also found outside "
