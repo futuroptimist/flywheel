@@ -302,24 +302,31 @@ def main() -> None:
         "<!-- spellchecker: disable -->",
         "# Prompt Docs Summary",
         "",
-        "This index is auto-generated with ",
-        f"[{script_display}]",
-        f"({script_href}) ",
-        "using RepoCrawler to discover prompt documents across repositories.",
+        (
+            "This index is auto-generated with "
+            "[scripts/update_prompt_docs_summary.py]"
+            "(../../scripts/update_prompt_docs_summary.py) "
+            "using RepoCrawler to discover prompt documents "
+            "across repositories."
+        ),
         "",
-        "RepoCrawler powers other reports like repo-feature summaries; "
-        "use it as a model for deep dives.",
+        (
+            "RepoCrawler powers other reports like repo-feature summaries; "
+            "use it as a model for deep dives."
+        ),
         "",
         (
             "Think of each listed repository as a small flywheel belted "
             "to this codebase. The list in dict/prompt-doc-repos.txt "
-            "mirrors docs/repo_list.txt; if a repo drops from the output, "
+            "mirrors docs/repo_list.txt; if a repo drops from the "
+            "output, "
             "fix that integration rather than deleting it."
         ),
         "",
         (
-            "All prompts are verified with OpenAI Codex. Other coding agents "
-            "like Claude Code, Gemini CLI, and Cursor should work too."
+            "All prompts are verified with OpenAI Codex. Other coding "
+            "agents like Claude Code, Gemini CLI, and Cursor should work "
+            "too."
         ),
         "",
         (
@@ -329,13 +336,13 @@ def main() -> None:
         ),
         "",
         (
-            "One-off prompts are temporary—copy them into issues or PRs, "
-            "implement, and then remove them from source docs."
+            "One-off prompts are temporary—copy them into issues or "
+            "PRs, implement, and then remove them from source docs."
         ),
         "",
         (
-            "All listed prompts are mechanically verified as 1-click ready: "
-            "copy & paste without editing."
+            "All listed prompts are mechanically verified as 1-click "
+            "ready: copy & paste without editing."
         ),
         "",
         "Run this script to regenerate the table:",
