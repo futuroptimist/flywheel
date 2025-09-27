@@ -294,9 +294,8 @@ def main() -> None:
     repo_root = Path(__file__).resolve().parents[1]
     scripts_path = repo_root / "scripts" / "update_prompt_docs_summary.py"
     script_display = scripts_path.relative_to(repo_root).as_posix()
-    script_href = Path(
-        os.path.relpath(scripts_path, args.out.parent)
-    ).as_posix()
+    script_relpath = os.path.relpath(scripts_path, args.out.parent)
+    script_href = Path(script_relpath).as_posix()
 
     lines = [
         "<!-- spellchecker: disable -->",
