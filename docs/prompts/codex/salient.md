@@ -12,7 +12,7 @@ Please review:
 - https://github.com/futuroptimist/flywheel/blob/main/docs/prompt-docs-summary.md
 - https://github.com/futuroptimist/flywheel/blob/main/docs/repo-feature-summary.md
 
-Ignore any files under `docs/pms/`; PM docs are archival and should not inform prompts.
+Ignore outage records under `outages/`; they track incidents and should not inform prompts.
 
 Return an ordered Markdown list (high to low) of 20–100 prompts. Format each
 item as `[title](URL)` with a brief description so links stay clickable and the

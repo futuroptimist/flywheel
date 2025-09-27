@@ -59,11 +59,6 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/token.place | [docs/prompts-codex-refactor.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-refactor.md) | evergreen | |
 | futuroptimist/token.place | [docs/prompts-codex-security.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts-codex-security.md) | evergreen | |
 | futuroptimist/wove | [docs/prompts-codex-cad.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-codex-cad.md) | evergreen | |
-| futuroptimist/flywheel | [docs/pms/2025-08-09-spellcheck-prompt-summary.md](https://github.com/futuroptimist/flywheel/blob/main/docs/pms/2025-08-09-spellcheck-prompt-summary.md) | one-off | |
-| futuroptimist/flywheel | [docs/pms/2025-08-10-untriaged-in-prompt-summary.md](https://github.com/futuroptimist/flywheel/blob/main/docs/pms/2025-08-10-untriaged-in-prompt-summary.md) | one-off | |
-| futuroptimist/flywheel | [docs/pms/2025-08-15-prompt-summary-spellcheck.md](https://github.com/futuroptimist/flywheel/blob/main/docs/pms/2025-08-15-prompt-summary-spellcheck.md) | one-off | |
-| futuroptimist/flywheel | [docs/pms/2025-08-16-prompt-docs-run-checks.md](https://github.com/futuroptimist/flywheel/blob/main/docs/pms/2025-08-16-prompt-docs-run-checks.md) | one-off | |
-| futuroptimist/flywheel | [docs/pms/2025-08-23-prompt-docs-newline.md](https://github.com/futuroptimist/flywheel/blob/main/docs/pms/2025-08-23-prompt-docs-newline.md) | one-off | |
 | democratizedspace/dspace | [docs/prompts-outages.md](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts-outages.md) | unknown | |
 | democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-accessibility.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-accessibility.md) | unknown | |
 | democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-audit.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-audit.md) | unknown | |
@@ -77,7 +72,7 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-refactors.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-refactors.md) | unknown | |
 | democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-secrets.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-secrets.md) | unknown | |
 | democratizedspace/dspace | [frontend/src/pages/docs/md/prompts-vitest.md](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/docs/md/prompts-vitest.md) | unknown | |
-| futuroptimist/flywheel | [docs/prompts/summary.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/summary.md) | unknown | |
+| futuroptimist/flywheel | [docs/prompts/codex/summary.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/summary.md) | unknown | |
 | futuroptimist/gabriel | [prompts-repos.md](https://github.com/futuroptimist/gabriel/blob/main/prompts-repos.md) | unknown | |
 | futuroptimist/gabriel | [prompts/README.md](https://github.com/futuroptimist/gabriel/blob/main/prompts/README.md) | unknown | |
 | futuroptimist/gitshelves | [docs/repo_feature_summary_prompt.md](https://github.com/futuroptimist/gitshelves/blob/main/docs/repo_feature_summary_prompt.md) | unknown | |

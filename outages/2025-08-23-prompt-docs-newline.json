@@ -2,10 +2,9 @@
   "id": "2025-08-23-prompt-docs-newline",
   "date": "2025-08-23",
   "component": "docs/prompt-docs-summary",
-  "rootCause": "Generated summary file lacked trailing newline, triggering pre-commit's end-of-file-fixer and failing Docs workflow",
-  "resolution": "Add missing newline to docs/prompt-docs-summary.md and rerun pre-commit",
+  "rootCause": "Generated summary file lacked a trailing newline, triggering pre-commit's end-of-file-fixer and failing the docs workflow",
+  "resolution": "Update the generator to ensure newline-terminated output and rerun the workflow",
   "references": [
-    "https://github.com/futuroptimist/flywheel/actions/runs/17169709861",
-    "docs/pms/2025-08-23-prompt-docs-newline.md"
+    "https://github.com/futuroptimist/flywheel/actions/runs/17169709861"
   ]
 }

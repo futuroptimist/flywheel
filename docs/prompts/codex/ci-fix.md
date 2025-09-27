@@ -54,14 +54,15 @@ A GitHub pull request URL. The PR must include:
 * Evidence that **all** checks are now passing (`✔️`).
 * Links to any new or updated tests.
 Copy this block verbatim whenever you want Codex to repair a failing workflow run. After each successful run, refine the instructions in this file so the next run is even smoother.
-After opening the pull request, create a new postmortem file under `docs/pms/` named `YYYY-MM-DD-short-title.md` capturing:
+After opening the pull request, add a JSON outage record under `outages/YYYY-MM-DD-short-title.json`
+that captures:
 - Date, author, and status
 - What went wrong
 - Root cause
 - Impact
 - Actions to take
-Keep action items inside the postmortem so each regression has its own standalone record.
-Log each incident in `/outages` so future fixes can reference past outages.
+Use `outages/schema.json` to validate the structure and keep follow-up items with the outage so each
+regression has its own standalone record future fixes can reference.
 ```
 
 ### Why this mirrors the existing pattern
