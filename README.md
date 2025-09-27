@@ -59,7 +59,7 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - [Codex automation prompt](docs/prompts/codex/automation.md)
 - CAD update prompt in `docs/prompts/codex/cad.md`
 - Physics explainer prompt in `docs/prompts/codex/physics.md`
-- Cross-repo prompt index in `docs/prompts/summary.md` listing `prompts-items.md`, `prompts-quests.md`, and `prompts-codex.md` across repos
+- Cross-repo prompt index in `docs/prompts/codex/summary.md` listing `prompts-items.md`, `prompts-quests.md`, and `prompts-codex.md` across repos
 - Axel integration guide in `docs/axel-integration.md`
 - DSPACE synergy doc in `docs/dspace-integration.md`
 - Cross-repo roadmap in `docs/REPOS_ROADMAP.md`

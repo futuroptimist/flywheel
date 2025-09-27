@@ -29,9 +29,7 @@ CONTEXT:
   * Patch the code so the new test passes without weakening existing coverage.
   * Note any security impact and mitigation steps.
 - Record each incident in `outages/YYYY-MM-DD-incident.json` using `outages/schema.json`.
-- Create a companion postmortem in `docs/pms/YYYY-MM-DD-short-title.md`
-  summarizing the root cause and fix.
-- Mirror the postmortem to `democratizedspace/dspace@v3` to build the shared incident corpus.
+- Mirror the outage entry to `democratizedspace/dspace@v3` to build the shared incident corpus.
 
 REQUEST:
 1. Run `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`, and `python -m flywheel.fit`.

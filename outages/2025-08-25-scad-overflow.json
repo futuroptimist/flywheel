@@ -1,8 +1,8 @@
 {
-    "id": "2025-08-25-scad-overflow",
-    "date": "2025-08-25",
-    "component": "parse_scad_vars",
-    "rootCause": "Parser accepted numbers exceeding float range producing infinities",
-    "resolution": "Check for non-finite numbers and raise ValueError",
-    "references": ["docs/pms/2025-08-25-scad-overflow.md"]
+  "id": "2025-08-25-scad-overflow",
+  "date": "2025-08-25",
+  "component": "parse_scad_vars",
+  "rootCause": "Parser accepted numbers exceeding float range producing infinities",
+  "resolution": "Check for non-finite numbers and raise ValueError",
+  "references": []
 }

@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-10-untriaged-in-prompt-summary",
+  "date": "2025-08-10",
+  "component": "docs/spellcheck",
+  "rootCause": "Prompt docs summary introduced an 'Untriaged' heading that typos did not whitelist, failing spellcheck",
+  "resolution": "Add the term to the spellcheck dictionary and regenerate the summary without custom headings that break linting",
+  "references": []
+}

@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-13-node-version-mismatch",
+  "date": "2025-08-13",
+  "component": "ci/test-javascript",
+  "rootCause": "GitHub Actions workflow still ran Node 18 even after the project adopted Node 20 features",
+  "resolution": "Upgrade workflows to Node 20, document the requirement, and add a check that enforces the expected runtime",
+  "references": []
+}

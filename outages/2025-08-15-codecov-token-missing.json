@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-15-codecov-token-missing",
+  "date": "2025-08-15",
+  "component": "ci/tests",
+  "rootCause": "Codecov upload step always required CODECOV_TOKEN, which is unavailable for pull requests from forks",
+  "resolution": "Guard the Codecov step so it only runs when the token is provided and allow uploads to fail without breaking CI",
+  "references": []
+}

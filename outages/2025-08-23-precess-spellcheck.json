@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-23-precess-spellcheck",
+  "date": "2025-08-23",
+  "component": "docs/spellcheck",
+  "rootCause": "Spellcheck allow list lacked physics terms such as precess and circ, causing typos action failures",
+  "resolution": "Add the missing physics vocabulary to .typos.toml extend-words so docs spellcheck passes",
+  "references": []
+}

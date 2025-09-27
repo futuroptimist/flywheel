@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-09-spellcheck-prompt-summary",
+  "date": "2025-08-09",
+  "component": "docs/spellcheck",
+  "rootCause": "Generated prompt docs summary produced malformed tables and physics terms missing from the dictionary",
+  "resolution": "Regenerate the summary with valid Markdown, exclude the file from spellcheck, and whitelist recurring physics terms",
+  "references": []
+}

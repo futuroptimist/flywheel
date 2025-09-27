@@ -1,0 +1,10 @@
+{
+  "id": "2025-08-14-python-313-install",
+  "date": "2025-08-14",
+  "component": "ci/tests",
+  "rootCause": "GitHub Actions runners auto-upgraded to Python 3.13, and uv could not install coverage tooling for the new version",
+  "resolution": "Pin CI workflows to Python 3.12 until coverage publishes Python 3.13 wheels and add guards for the interpreter version",
+  "references": [
+    "https://github.com/futuroptimist/flywheel/actions/runs/16930813655"
+  ]
+}

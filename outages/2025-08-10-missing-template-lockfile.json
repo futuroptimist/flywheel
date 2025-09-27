@@ -1,0 +1,8 @@
+{
+  "id": "2025-08-10-missing-template-lockfile",
+  "date": "2025-08-10",
+  "component": "templates/javascript",
+  "rootCause": "templates/javascript lacked a committed package-lock.json, so npm ci failed in template checks",
+  "resolution": "Commit the missing lockfile and add checks ensuring every template includes required dependency locks",
+  "references": []
+}
