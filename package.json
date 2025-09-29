@@ -15,7 +15,7 @@
     "docs:dev": "npm --prefix docs-site run dev"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.0",
+    "@playwright/test": "^1.55.1",
     "cross-env": "^10.0.0",
     "jest": "^30.1.3"
   },
