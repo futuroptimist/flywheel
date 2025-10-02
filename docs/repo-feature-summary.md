@@ -6,16 +6,16 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `f0d71e9` | ✅ | 0 | 4 | 2025-10-02 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `18056ab` | ✅ | 0 | 2 | 2025-10-02 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `490f531` | ✅ | 0 | 3 | 2025-10-02 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `0ee0fe9` | ✅ | 0 | 1 | 2025-10-02 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `a1c270a` | ✅ | 3 | 37 | 2025-10-02 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `9795acf` | ✅ | 6 | 11 | 2025-10-02 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `06f670c` | ✅ | 0 | 0 | 2025-10-02 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `f403482` | ✅ | 1 | 0 | 2025-10-02 |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `33b57ef` | ✅ | 0 | 0 | 2025-10-02 |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `33b57ef` | ✅ | 0 | 3 | 2025-10-02 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `38426af` | ✅ | 0 | 2 | 2025-10-02 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `9d0fd8e` | ✅ | 0 | 1 | 2025-10-02 |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `d2f5aca` | ✅ | 0 | 0 | 2025-10-02 |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `d2f5aca` | ✅ | 0 | 1 | 2025-10-02 |
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `341924e` | ✅ | 0 | 1 | 2025-10-02 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `a7876db` | ✅ | 0 | 0 | 2025-09-27 |
 | [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `53bc3a5` | ✅ | 0 | 4 | 2025-10-02 |
