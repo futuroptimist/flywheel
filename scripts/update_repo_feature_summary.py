@@ -63,6 +63,14 @@ def main() -> None:
             "Last-Updated (UTC)",
         ]
     ]
+    pattern = [
+        [
+            "Repo",
+            "Dark Patterns",
+            "Bright Patterns",
+            "Last-Updated (UTC)",
+        ]
+    ]
 
     for idx, info in enumerate(infos):
         link = f"[{info.name}](https://github.com/{info.name})"
@@ -119,6 +127,15 @@ def main() -> None:
             ]
         )
 
+        pattern.append(
+            [
+                link,
+                str(info.dark_pattern_count),
+                str(info.bright_pattern_count),
+                updated,
+            ]
+        )
+
     lines = [
         "## Basics",
         tabulate(basics[1:], headers=basics[0], tablefmt="github"),
@@ -137,19 +154,29 @@ def main() -> None:
             tabulate(policy[1:], headers=policy[0], tablefmt="github"),
         ]
     )
+    lines.extend(
+        [
+            "",
+            "## Dark & Bright Pattern Scan",
+            tabulate(pattern[1:], headers=pattern[0], tablefmt="github"),
+        ]
+    )
     lines.append("")
     lines.append(
         "Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. "  # noqa: E501
         "🔶 partial signals a mix of uv and pip.\n"  # noqa: E501
         "Coverage percentages are parsed from Codecov when available. Codecov shows ✅ when a Codecov config or badge is present. "  # noqa: E501
         "Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise. The commit column shows the short SHA of the latest default branch commit at crawl time.\n"  # noqa: E501
-        "Last-Updated (UTC) records the date of that commit."
+        "Last-Updated (UTC) records the date of that commit.\n"
+        "Dark Patterns counts potential UX anti-patterns while Bright Patterns counts pro-user cues detected in code and docs."  # noqa: E501
     )
     lines.append(
         f"_Updated automatically: {date.today()}_",
     )
 
     content = "\n".join(["# Repo Feature Summary", "", *lines])
+    if not content.endswith("\n"):
+        content += "\n"
     args.out.write_text(content)
 
 
