@@ -55,7 +55,7 @@ class RepoCrawler:
     # so repos with custom workflow names still count.
     CI_KEYWORDS = ("ci", "test", "lint", "build", "docs", "qa")
 
-    _UV = re.compile(r"setup-uv|uv venv", re.I)
+    _UV = re.compile(r"setup-uv|uv\s+venv|uv\s+pip\s+install", re.I)
     _PIP = re.compile(r"\bpip(?:3)?\s+install", re.I)
     _PIPX = re.compile(r"\bpipx\s+install", re.I)
     _POETRY = re.compile(r"poetry\s+install", re.I)
@@ -485,8 +485,9 @@ class RepoCrawler:
     def _detect_installer(self, text: str) -> str:
         """Return installer hint based on workflow snippets.
 
-        Detects ``uv``, ``pipx``, ``pip`` and ``poetry`` keywords and returns
-        ``partial`` when no installer is found.
+        Detects ``uv``, ``pipx``, ``pip`` and ``poetry`` keywords (including
+        workflows that invoke ``uv pip install``) and returns ``partial`` when
+        no installer is found.
         """
         if self._UV.search(text):
             return "uv"
