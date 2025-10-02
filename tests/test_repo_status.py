@@ -73,3 +73,50 @@ def test_update_readme(tmp_path, monkeypatch):
     data = readme.read_text().splitlines()
     assert data[1].startswith("- ✅ ")
     assert re.search(r"https://github.com/a/b", data[1])
+
+
+def test_cli_updates_readme(monkeypatch, tmp_path):
+    readme = tmp_path / "README.md"
+    readme.write_text(
+        "\n".join(
+            [
+                "# Title",
+                "",
+                "## Related Projects",
+                "- https://github.com/example/repo",
+                "",
+            ]
+        )
+    )
+
+    captured = {}
+
+    def fake_fetch(repo, token=None, branch=None, attempts=2):
+        captured["params"] = {
+            "repo": repo,
+            "token": token,
+            "branch": branch,
+            "attempts": attempts,
+        }
+        return "✅"
+
+    monkeypatch.setattr(rs, "fetch_repo_status", fake_fetch)
+
+    rs.main(["--readme", str(readme), "--attempts", "3"])
+
+    assert captured["params"] == {
+        "repo": "example/repo",
+        "token": None,
+        "branch": None,
+        "attempts": 3,
+    }
+    lines = readme.read_text().splitlines()
+    assert lines[3] == "- ✅ https://github.com/example/repo"
+
+
+def test_cli_attempt_validation(tmp_path):
+    readme = tmp_path / "README.md"
+    readme.write_text("## Related Projects\n")
+
+    with pytest.raises(SystemExit):
+        rs.main(["--readme", str(readme), "--attempts", "0"])

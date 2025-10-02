@@ -8,9 +8,11 @@ completed successfully, failed, or hasn't completed.
 
 from __future__ import annotations
 
+import argparse
 import os
 import re
 from pathlib import Path
+from typing import Sequence
 
 import requests
 
@@ -76,7 +78,11 @@ def fetch_repo_status(
     return status_to_emoji(conclusions[0])
 
 
-def update_readme(readme_path: Path, token: str | None = None) -> None:
+def update_readme(
+    readme_path: Path,
+    token: str | None = None,
+    attempts: int = 2,
+) -> None:
     """Update README with status emojis for related project repos."""
     lines = readme_path.read_text().splitlines()
     in_section = False
@@ -91,12 +97,43 @@ def update_readme(readme_path: Path, token: str | None = None) -> None:
             if match:
                 repo = f"{match.group(1)}/{match.group(2)}"
                 branch = match.group(3)
-                emoji = fetch_repo_status(repo, token, branch)
+                emoji = fetch_repo_status(repo, token, branch, attempts)
                 lines[i] = re.sub(r"^(\-\s*)(?:[✅❌❓]\s*)*", r"\1", line)
                 lines[i] = f"- {emoji} {lines[i][2:].lstrip()}"
     readme_path.write_text("\n".join(lines) + "\n")
 
 
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Update README Related Projects status badges."
+    )
+    parser.add_argument(
+        "--readme",
+        type=Path,
+        default=Path("README.md"),
+        help="Path to README file to update.",
+    )
+    parser.add_argument(
+        "--token",
+        help="GitHub token. Defaults to GITHUB_TOKEN environment variable.",
+    )
+    parser.add_argument(
+        "--attempts",
+        type=int,
+        default=2,
+        help="Number of API reads used to confirm workflow conclusions.",
+    )
+    return parser
+
+
+def main(argv: Sequence[str] | None = None) -> None:
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    if args.attempts < 1:
+        parser.error("--attempts must be >= 1")
+    token = args.token or os.environ.get("GITHUB_TOKEN")
+    update_readme(args.readme, token=token, attempts=args.attempts)
+
+
 if __name__ == "__main__":  # pragma: no cover
-    token = os.environ.get("GITHUB_TOKEN")
-    update_readme(Path(__file__).resolve().parent.parent / "README.md", token)
+    main()
