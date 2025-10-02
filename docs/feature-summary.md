@@ -182,7 +182,7 @@ feature adoption across repositories.
 **Repo-specific extras**
 - [ ] Mark as **Template** repo
 - [ ] “Use this template” one‑page walkthrough + screenshot/GIF
-- [ ] Option to inject best‑practice scaffolding via `--save-dev`
+- [x] Option to inject best‑practice scaffolding via `--save-dev`
 
 </details>
 
