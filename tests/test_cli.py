@@ -79,3 +79,15 @@ def test_cli_help():
     )
     assert "init" in result.stdout
     assert "crawl" in result.stdout
+
+
+def test_runbook_cli():
+    result = subprocess.run(
+        [sys.executable, "-m", "flywheel", "runbook"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert "Stage: bootstrap" in result.stdout
+    expected = "- clone: Use the GitHub template and run ./scripts/setup.sh"
+    assert expected in result.stdout

@@ -5,3 +5,4 @@ trimesh
 tabulate
 pygltflib
 assimp_py
+PyYAML

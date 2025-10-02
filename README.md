@@ -49,7 +49,7 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - Bright pattern catalog in `docs/bright-patterns.md`
 - Fast Python installs powered by [uv](https://github.com/astral-sh/uv)
 - Example code and templates
-- Python CLI with subcommands `init`, `update`, `audit`, `prompt`, and `crawl` that prompts interactively unless `--yes` is used
+- Python CLI with subcommands `init`, `update`, `audit`, `prompt`, `crawl`, and `runbook` that prompts interactively unless `--yes` is used
 - RepoCrawler detects installers like uv, pipx, pip/pip3, and poetry in workflows
 - [AGENTS.md](AGENTS.md) detailing included LLM assistants
 - [llms.txt](llms.txt) with quick context for AI helpers
@@ -167,6 +167,16 @@ Verify that a repository contains the expected CI workflows and config files:
 ```bash
 flywheel audit path/to/repo
 ```
+
+### Printing the runbook
+
+View the YAML checklist defined in [`runbook.yml`](runbook.yml):
+
+```bash
+flywheel runbook
+```
+
+Override the file path with `--file path/to/runbook.yml` to inspect other repositories.
 
 ### Scanning other repositories
 
