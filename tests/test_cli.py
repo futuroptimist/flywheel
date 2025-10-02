@@ -1,4 +1,5 @@
 import hashlib
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -34,6 +35,29 @@ def test_init_idempotent(tmp_path):
     assert (target / "pyproject.toml").exists()
     wf = target / ".github" / "workflows" / "01-lint-format.yml"
     assert wf.exists()
+
+
+def test_init_copies_dev_tooling(tmp_path):
+    target = tmp_path / "repo"
+    cmd = [
+        sys.executable,
+        "-m",
+        "flywheel",
+        "init",
+        str(target),
+        "--language",
+        "python",
+        "--save-dev",
+        "--yes",
+    ]
+    subprocess.run(cmd, check=True)
+
+    precommit = target / ".pre-commit-config.yaml"
+    checks = target / "scripts" / "checks.sh"
+
+    assert precommit.exists()
+    assert checks.exists()
+    assert os.access(checks, os.X_OK)
 
 
 def test_prompt(tmp_path):
