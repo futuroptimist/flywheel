@@ -2,6 +2,12 @@
 
 This guide catalogs user-hostile design tactics, explains why they are problematic, and offers "bright pattern" alternatives that respect the user's agency. See [bright-patterns.md](bright-patterns.md) for a dedicated catalog of pro-user practices. The repo crawler counts potential dark patterns across related projects and records the results in `docs/repo-feature-summary.md`.
 
+Regenerate the summary with up-to-date dark and bright pattern counts by running:
+
+```bash
+python scripts/update_repo_feature_summary.py --repos-from docs/repo_list.txt --out docs/repo-feature-summary.md
+```
+
 ## Why avoid dark patterns?
 
 Manipulative interfaces erode trust and may even violate privacy or consumer protection laws. Sustainable communities grow when contributors feel respected and in control of their data.
