@@ -47,6 +47,7 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - Detailed best practice explanations in `docs/best_practices_catalog.md`
 - Dark pattern guidance in `docs/dark-patterns.md`
 - Bright pattern catalog in `docs/bright-patterns.md`
+- Secret scanning helper `scripts/scan-secrets.py` that blocks common tokens in staged diffs
 - Fast Python installs powered by [uv](https://github.com/astral-sh/uv)
 - Example code and templates
 - Python CLI with subcommands `init`, `update`, `audit`, `prompt`, and `crawl` that prompts interactively unless `--yes` is used
@@ -125,6 +126,10 @@ Install the CLI and inject dev tooling. Without `--yes`, the command prompts for
 ```bash
 pipx run flywheel init . --language python --save-dev --yes
 ```
+
+The `--save-dev` flag copies standard workflows, linting configs,
+`.pre-commit-config.yaml`, and `scripts/checks.sh` so new projects inherit the
+full dev tooling out of the box.
 
 ### Updating dev tooling
 

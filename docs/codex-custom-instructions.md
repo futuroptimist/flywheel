@@ -36,7 +36,9 @@ Refs: #issue-id
 
 # Security & privacy checks
 - Strip or mask credential-like strings before writing to disk.
-- Run `git diff --cached | ./scripts/scan-secrets.py` before commit.
+- Run `git diff --cached | ./scripts/scan-secrets.py` before commit. The scanner flags
+  GitHub, AWS, Stripe, and Slack tokens as well as private key blocks and exits non-zero
+  when it spots suspicious additions.
 - Tools allowed: ripsecrets, detect-secrets, git-secrets.
 
 # Quick-reference
