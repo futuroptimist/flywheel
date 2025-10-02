@@ -127,6 +127,10 @@ Install the CLI and inject dev tooling. Without `--yes`, the command prompts for
 pipx run flywheel init . --language python --save-dev --yes
 ```
 
+The `--save-dev` flag copies standard workflows, linting configs,
+`.pre-commit-config.yaml`, and `scripts/checks.sh` so new projects inherit the
+full dev tooling out of the box.
+
 ### Updating dev tooling
 
 Refresh CI workflows and config files in an existing repo:

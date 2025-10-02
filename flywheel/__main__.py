@@ -19,6 +19,8 @@ OTHER_FILES = [
     ".github/release-drafter.yml",
     ".eslintrc.json",
     ".prettierrc",
+    ".pre-commit-config.yaml",
+    "scripts/checks.sh",
 ]
 
 PY_FILES = [
