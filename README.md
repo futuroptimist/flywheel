@@ -50,7 +50,7 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - Secret scanning helper `scripts/scan-secrets.py` that blocks common tokens in staged diffs
 - Fast Python installs powered by [uv](https://github.com/astral-sh/uv)
 - Example code and templates
-- Python CLI with subcommands `init`, `update`, `audit`, `prompt`, and `crawl` that prompts interactively unless `--yes` is used
+- Python CLI with subcommands `init`, `update`, `audit`, `prompt`, `crawl`, and `runbook` that prompts interactively unless `--yes` is used
 - RepoCrawler detects installers like uv (including `uv pip install` usage), pipx, pip/pip3, and poetry in workflows
 - [AGENTS.md](AGENTS.md) detailing included LLM assistants
 - [llms.txt](llms.txt) with quick context for AI helpers
@@ -76,11 +76,11 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - CI troubleshooting tips in `docs/ci-guide.md`
 - Nightly STL exports are committed back to `stl/` after each run
 - Sunlu spool core sleeve adapters for Bambu Lab AMS:
-  [63→64 mm](./stl/spool_core_sleeve/sunlu55_to63_len60.stl) and
-  [73→74 mm](./stl/spool_core_sleeve/sunlu55_to73_len60.stl) sleeves with
+  [63→64 mm](./stl/spool_core_sleeve/sunlu55_to63_len60.stl) and
+  [73→74 mm](./stl/spool_core_sleeve/sunlu55_to73_len60.stl) sleeves with
   matching wedge-removal cylinders
-  ([63 mm](./stl/spool_core_sleeve/sunlu55_to63cyl_len60.stl) and
-  [73 mm](./stl/spool_core_sleeve/sunlu55_to73cyl_len60.stl))
+  ([63 mm](./stl/spool_core_sleeve/sunlu55_to63cyl_len60.stl) and
+  [73 mm](./stl/spool_core_sleeve/sunlu55_to73cyl_len60.stl))
 - Flywheel construction guide in `docs/flywheel-construction.md` with CAD files in `cad/`
   including `stand.scad`, `shaft.scad`, and `adapter.scad`. Assembly details live in `docs/flywheel-stand.md`, clamp instructions in `docs/flywheel-adapter.md`, and physics in `docs/flywheel-physics.md`
 
@@ -172,6 +172,16 @@ Verify that a repository contains the expected CI workflows and config files:
 ```bash
 flywheel audit path/to/repo
 ```
+
+### Printing the runbook
+
+View the YAML checklist defined in [`runbook.yml`](runbook.yml):
+
+```bash
+flywheel runbook
+```
+
+Override the file path with `--file path/to/runbook.yml` to inspect other repositories.
 
 ### Scanning other repositories
 

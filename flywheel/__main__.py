@@ -2,6 +2,8 @@ import argparse
 import shutil
 from pathlib import Path
 
+import yaml
+
 from .repocrawler import RepoCrawler
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -135,6 +137,36 @@ def crawl(args: argparse.Namespace) -> None:
     out.write_text(md)
 
 
+def runbook(args: argparse.Namespace) -> None:
+    path = Path(args.file)
+    if not path.exists():
+        raise SystemExit(f"Runbook file not found: {path}")
+    data = yaml.safe_load(path.read_text()) or {}
+    workflow = data.get("workflow", [])
+    for stage in workflow:
+        if isinstance(stage, dict):
+            name = stage.get("stage", "")
+            tasks = stage.get("tasks", [])
+        else:
+            name = str(stage)
+            tasks = []
+        if name:
+            print(f"Stage: {name}")
+        for task in tasks:
+            if isinstance(task, dict):
+                task_id = task.get("id")
+                desc = task.get("description", "")
+                if task_id and desc:
+                    print(f"- {task_id}: {desc}")
+                elif task_id:
+                    print(f"- {task_id}")
+                elif desc:
+                    print(f"- {desc}")
+            else:
+                print(f"- {task}")
+        print()
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="flywheel")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -203,6 +235,15 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
     )
     p_crawl.set_defaults(func=crawl)
+
+    p_runbook = sub.add_parser("runbook", help="print runbook checklist")
+    p_runbook.add_argument(
+        "--file",
+        default=ROOT / "runbook.yml",
+        type=Path,
+        help="path to runbook YAML file",
+    )
+    p_runbook.set_defaults(func=runbook)
 
     return parser
 

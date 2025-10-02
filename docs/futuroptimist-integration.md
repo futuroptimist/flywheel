@@ -31,4 +31,4 @@ Beyond the core commands, a small wrapper around Flywheel's `flywheel prompt` co
 python -m futuroptimist.prompt  # surfaces # Purpose, # Context and # Request sections
 ```
 
-Another idea is to convert the Markdown runbook to `runbook.yml`. A `flywheel runbook` subcommand could then parse the YAML and output the same checklist, letting Axel or other tools reason over the steps automatically.
+Flywheel now ships a `flywheel runbook` subcommand that reads `runbook.yml` and prints the staged checklist, so Futuroptimist can adopt the same pattern to expose its production tasks for automation.
