@@ -62,7 +62,7 @@ Scans repositories for prompt docs and rebuilds `prompt-docs-summary.md`.
 
 | Option            | Description                                             |
 |-------------------|---------------------------------------------------------|
-| `--repos-from`    | Optional path to a list of extra repositories to scan.  |
+| `--repos-from`    | Optional extra repo list. Default: `dict/prompt-doc-repos.txt`; repeat to append. |
 | `--out`           | Output file path (default: `docs/prompt-docs-summary.md`). |
 
 The generated table contains the columns `Path`, `Prompt`, `Type`, and

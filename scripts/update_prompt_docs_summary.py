@@ -10,10 +10,17 @@ import sys
 from collections import defaultdict
 from datetime import date
 from pathlib import Path
-from typing import DefaultDict, Iterable, List
+from typing import DefaultDict, Iterable, List, Sequence
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from flywheel.repocrawler import RepoCrawler  # noqa: E402
+
+DEFAULT_REPO_LIST = (
+    Path(__file__).resolve().parents[1] / "dict" / "prompt-doc-repos.txt"
+)
+DEFAULT_OUTPUT_PATH = (
+    Path(__file__).resolve().parents[1] / "docs" / "prompt-docs-summary.md"
+)
 
 
 def load_repos(path: Path) -> List[str]:
@@ -215,16 +222,54 @@ def normalize_heading_spacing(path: Path) -> None:
         path.write_text(normalized + newline)
 
 
-def main() -> None:
+def main(argv: Sequence[str] | None = None) -> None:
     from tabulate import tabulate
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--repos-from", type=Path, required=True)
-    parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument(
+        "--repos-from",
+        type=Path,
+        action="append",
+        help=(
+            "Path to a newline-delimited repository list. Defaults to "
+            "dict/prompt-doc-repos.txt and can be repeated to include "
+            "additional lists."
+        ),
+    )
+    parser.add_argument(
+        "--out",
+        type=Path,
+        default=DEFAULT_OUTPUT_PATH,
+        help="Output file path (default: docs/prompt-docs-summary.md).",
+    )
     parser.add_argument("--token")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
-    repos = load_repos(args.repos_from)
+    repo_files = [DEFAULT_REPO_LIST]
+    if args.repos_from:
+        repo_files.extend(args.repos_from)
+
+    resolved_files: list[Path] = []
+    seen: set[Path] = set()
+    for repo_path in repo_files:
+        if repo_path.is_absolute():
+            absolute = repo_path
+        else:
+            absolute = repo_path.resolve()
+        if absolute in seen:
+            continue
+        if not absolute.exists():
+            raise SystemExit(f"Repository list file not found: {repo_path}")
+        seen.add(absolute)
+        resolved_files.append(absolute)
+
+    repos: list[str] = []
+    for repo_path in resolved_files:
+        repos.extend(load_repos(repo_path))
+    if not repos:
+        raise SystemExit("Repository list is empty.")
+    repos = list(dict.fromkeys(repos))
+
     crawler = RepoCrawler(repos, token=args.token)
 
     grouped: DefaultDict[str, List[List[str]]] = defaultdict(list)
@@ -291,10 +336,11 @@ def main() -> None:
     total_prompts = sum(counts.values())
     repo_count = len(grouped)
 
+    out_path = args.out
     repo_root = Path(__file__).resolve().parents[1]
     scripts_path = repo_root / "scripts" / "update_prompt_docs_summary.py"
     script_display = scripts_path.relative_to(repo_root).as_posix()
-    script_relpath = os.path.relpath(scripts_path, args.out.parent)
+    script_relpath = os.path.relpath(scripts_path, out_path.parent)
     script_href = Path(script_relpath).as_posix()
 
     lines = [
@@ -429,9 +475,10 @@ def main() -> None:
         )
 
     lines.extend([f"_Updated automatically: {date.today()}_", ""])
-    args.out.write_text("\n".join(line.rstrip() for line in lines))
-    format_markdown(args.out)
-    normalize_heading_spacing(args.out)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text("\n".join(line.rstrip() for line in lines))
+    format_markdown(out_path)
+    normalize_heading_spacing(out_path)
 
 
 if __name__ == "__main__":
