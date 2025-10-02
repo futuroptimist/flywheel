@@ -48,6 +48,7 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - Dark pattern guidance in `docs/dark-patterns.md`
 - Bright pattern catalog in `docs/bright-patterns.md`
 - Secret scanning helper `scripts/scan-secrets.py` that blocks common tokens in staged diffs
+- README status helper (`python -m src.repo_status`) that handles mixed-case workflow conclusions and validates attempt counts
 - Fast Python installs powered by [uv](https://github.com/astral-sh/uv)
 - Example code and templates
 - Python CLI with subcommands `init`, `update`, `audit`, `prompt`, `crawl`, and `runbook` that prompts interactively unless `--yes` is used
@@ -196,6 +197,18 @@ ignores directories. File names are sorted case-insensitively. Existing paths un
 scanner's work area are removed before each clone so reports reflect a fresh snapshot.
 Missing parent directories are created automatically when cloning.
 
+### Refreshing Related Projects statuses
+
+Update the `## Related Projects` list with workflow emojis:
+
+```bash
+python -m src.repo_status --readme README.md --attempts 3
+```
+
+Provide `--token` or set `GITHUB_TOKEN` to authenticate requests. The `--attempts` flag controls
+how many times each workflow run is fetched to detect inconsistent API responses; values below 1
+are rejected.
+
 ### Viewing the 3D flywheel
 
 Run the bundled Flask app to explore the CAD models:
@@ -302,14 +315,14 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [Axel](https://github.com/futuroptimist/axel) –  \
   personal LLM accelerator for repository quests.  \
   See `docs/axel-integration.md` for pairings.
-- ❌ [Sigma](https://github.com/futuroptimist/sigma) –  \
+- ✅ [Sigma](https://github.com/futuroptimist/sigma) –  \
   ESP32 "AI pin" hardware.  \
   See `docs/sigma-integration.md`.
 - ✅ [gitshelves](https://github.com/futuroptimist/gitshelves) –  \
   3D-printable block models from GitHub commits.
 - ✅ [wove](https://github.com/futuroptimist/wove) –  \
   toolkit for knitting and robotic looms.
-- ✅ [sugarkube](https://github.com/futuroptimist/sugarkube) –  \
+- ❌ [sugarkube](https://github.com/futuroptimist/sugarkube) –  \
   k3s platform for off-grid Raspberry Pi clusters.  \
   See `docs/sugarkube-integration.md`.
 - ✅ [jobbot3000](https://github.com/futuroptimist/jobbot3000) –  \\
