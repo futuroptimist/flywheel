@@ -178,10 +178,10 @@ def test_has_ci_only_deploy_returns_false():
 @pytest.mark.parametrize(
     "snippet,expected",
     [
-        ("uv pip install -r req.txt", "pip"),
-        ("uv pip install && pip install black", "pip"),
+        ("uv pip install -r req.txt", "uv"),
+        ("uv pip install && pip install black", "uv"),
         ("python -m pip install -r requirements.txt", "pip"),
-        ("RUN pip3 install uv && uv pip install .", "pip"),
+        ("RUN pip3 install uv && uv pip install .", "uv"),
         ("pip3 install -r requirements.txt", "pip"),
     ],
 )
