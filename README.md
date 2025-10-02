@@ -302,7 +302,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [Axel](https://github.com/futuroptimist/axel) –  \
   personal LLM accelerator for repository quests.  \
   See `docs/axel-integration.md` for pairings.
-- ❌ [Sigma](https://github.com/futuroptimist/sigma) –  \
+- ✅ [Sigma](https://github.com/futuroptimist/sigma) –  \
   ESP32 "AI pin" hardware.  \
   See `docs/sigma-integration.md`.
 - ✅ [gitshelves](https://github.com/futuroptimist/gitshelves) –  \
