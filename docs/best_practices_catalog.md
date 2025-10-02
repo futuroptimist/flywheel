@@ -77,7 +77,7 @@ hooks format code, lint for errors, and run tests locally.
 
 **Why:** The `.local` folder lets each contributor store private configuration without committing it to the repository.
 
-**How it works:** `./scripts/setup.sh YOURNAME YOURREPO` scaffolds `.local` and populates basic templates. Git ignores everything inside so secrets remain private.
+**How it works:** `./scripts/setup.sh YOURNAME YOURREPO` scaffolds `.local/README.md` and `.local/settings.env.example`, then ensures `.local/` appears in `.gitignore`. Git ignores everything inside so secrets remain private.
 
 **Maintenance:** Remind contributors to rerun the setup script when new templates are added. LLMs should never log contents of `.local`.
 

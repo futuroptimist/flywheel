@@ -17,6 +17,7 @@ dist/
 coverage/
 dictionary.dic
 .venv/
+.local/
 playwright-report/
 test-results/
 reports/
