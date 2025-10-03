@@ -97,6 +97,15 @@ def test_verify_fit_custom_tol(monkeypatch):
         ff.verify_fit(CAD_DIR, STL_DIR, tol=0.001)
 
 
+def test_verify_fit_strict_tol_real_models():
+    with pytest.raises(AssertionError):
+        ff.verify_fit(CAD_DIR, STL_DIR, tol=0.05)
+
+
+def test_verify_fit_relaxed_tol_real_models():
+    assert ff.verify_fit(CAD_DIR, STL_DIR, tol=0.2)
+
+
 def test_ensure_obj_models_mock(monkeypatch, tmp_path):
     import shutil
     import subprocess

@@ -242,7 +242,9 @@ All parts fit together.
 ```
 
 Call ``verify_fit`` directly with a custom ``tol`` value to tighten or relax
-the default ``0.1`` mm tolerance.
+the default ``0.1`` mm tolerance. Larger diameters use six times the supplied
+``tol`` to accommodate mesh tessellation, so shrinking the tolerance also
+narrows those comparisons.
 
 Lines may include inline ``//`` comments, negative values, decimals without a
 leading zero, trailing decimal points, scientific notation, and underscore digit
