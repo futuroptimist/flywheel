@@ -59,6 +59,7 @@ class RepoCrawler:
     _PIP = re.compile(r"\bpip(?:3)?\s+install", re.I)
     _PIPX = re.compile(r"\bpipx\s+install", re.I)
     _POETRY = re.compile(r"poetry\s+install", re.I)
+    _UV_PIP = re.compile(r"uv\s+pip\s+install", re.I)
     DARK_PATTERNS = [
         re.compile(r"onbeforeunload", re.I),
         re.compile(r"navigator\.clipboard\.writeText", re.I),
@@ -485,19 +486,31 @@ class RepoCrawler:
     def _detect_installer(self, text: str) -> str:
         """Return installer hint based on workflow snippets.
 
-        Detects ``uv``, ``pipx``, ``pip`` and ``poetry`` keywords (including
-        workflows that invoke ``uv pip install``) and returns ``partial`` when
-        no installer is found.
+        Detects ``uv``, ``pipx``, ``pip`` and ``poetry`` keywords. Workflows
+        that invoke ``uv pip install`` count as ``uv`` usage even though they
+        contain the word ``pip``. When ``uv`` commands appear alongside
+        standalone ``pip`` invocations the result is ``partial`` to highlight
+        mixed installer usage. ``none`` is returned when no installer keywords
+        are detected.
         """
-        if self._UV.search(text):
+        uv_present = bool(self._UV.search(text))
+        pipx_present = bool(self._PIPX.search(text))
+        poetry_present = bool(self._POETRY.search(text))
+
+        scrubbed = self._UV_PIP.sub("uv install", text) if uv_present else text
+        pip_present = bool(self._PIP.search(scrubbed))
+
+        if uv_present and pip_present:
+            return "partial"
+        if uv_present:
             return "uv"
-        if self._PIPX.search(text):
+        if pipx_present:
             return "pipx"
-        if self._PIP.search(text):
+        if pip_present:
             return "pip"
-        if self._POETRY.search(text):
+        if poetry_present:
             return "poetry"
-        return "partial"
+        return "none"
 
     # ------------------------ Coverage helpers ------------------------ #
     def _project_coverage_from_codecov(
@@ -776,6 +789,8 @@ class RepoCrawler:
                 inst = "🚀 uv"
             elif info.installer == "partial":
                 inst = "🔶 partial"
+            elif info.installer == "none":
+                inst = "⚪ none"
             else:
                 inst = info.installer
 
@@ -849,12 +864,22 @@ class RepoCrawler:
         lines.extend(pattern_rows)
         lines.append("")
         lines.append(
-            "Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. "  # noqa: E501
-            "🔶 partial signals a mix of uv and pip.\n"
-            "Coverage percentages are parsed from their badges where available. Codecov shows ✅ when a Codecov config or badge is present. "  # noqa: E501
-            "Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses.\n"  # noqa: E501
-            "The commit column shows the short SHA of the latest default branch commit at crawl time. The Trunk column indicates whether CI is green for that commit. "  # noqa: E501
-            "Dark Patterns and Bright Patterns list counts of suspicious or positive code snippets detected.\n"  # noqa: E501
-            "Last-Updated (UTC) records the date of the commit used for each row."  # noqa: E501
+            "Legend: ✅ indicates the repo has adopted "
+            "that feature from flywheel. "
+            "🚀 uv means only uv was found. "
+            "🔶 partial signals a mix of uv and pip. "
+            "⚪ none indicates no installer keywords were detected.\n"
+            "Coverage percentages are parsed from their badges "
+            "where available. "
+            "Codecov shows ✅ when a Codecov config or badge is present. "
+            "Patch shows ✅ when diff coverage is at least 90% and ❌ "
+            "otherwise, with the percentage in parentheses.\n"
+            "The commit column shows the short SHA of the latest default "
+            "branch commit at crawl time. The Trunk column indicates whether "
+            "CI is green for that commit. "
+            "Dark Patterns and Bright Patterns list counts of suspicious "
+            "or positive code snippets detected.\n"
+            "Last-Updated (UTC) records the date of the commit used "
+            "for each row."
         )
         return "\n".join(lines)

@@ -179,9 +179,9 @@ def test_has_ci_only_deploy_returns_false():
     "snippet,expected",
     [
         ("uv pip install -r req.txt", "uv"),
-        ("uv pip install && pip install black", "uv"),
+        ("uv pip install && pip install black", "partial"),
         ("python -m pip install -r requirements.txt", "pip"),
-        ("RUN pip3 install uv && uv pip install .", "uv"),
+        ("RUN pip3 install uv && uv pip install .", "partial"),
         ("pip3 install -r requirements.txt", "pip"),
     ],
 )
@@ -195,7 +195,16 @@ def test_installer_additional():
     assert c._detect_installer("setup-uv") == "uv"
     assert c._detect_installer("poetry install") == "poetry"
     assert c._detect_installer("pipx install flywheel") == "pipx"
-    assert c._detect_installer("echo nothing") == "partial"
+    assert c._detect_installer("echo nothing") == "none"
+
+
+def test_installer_partial_mix():
+    c = RepoCrawler([])
+    snippet = """
+    uv venv project
+    pip install -r requirements.txt
+    """
+    assert c._detect_installer(snippet) == "partial"
 
 
 def test_network_exceptions_handled():
