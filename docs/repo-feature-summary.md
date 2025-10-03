@@ -6,19 +6,19 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `105ecc9` | ✅ | 0 | 4 | 2025-10-03 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `5d8f0e9` | ✅ | 0 | 1 | 2025-10-03 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `4fd3a2f` | ✅ | 3 | 38 | 2025-10-03 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `00c8959` | ✅ | 0 | 4 | 2025-10-03 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `2f391ed` | ✅ | 0 | 0 | 2025-10-03 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `0d918e6` | ✅ | 3 | 37 | 2025-10-03 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `e093f2d` | ❌ | 6 | 9 | 2025-10-02 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `ece9854` | ✅ | 0 | 1 | 2025-10-02 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `f403482` | ✅ | 1 | 0 | 2025-10-02 |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `62a1e10` | ✅ | 0 | 1 | 2025-10-02 |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `62a1e10` | ✅ | 0 | 5 | 2025-10-02 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `5059982` | ✅ | 0 | 1 | 2025-10-02 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `9d0fd8e` | ✅ | 0 | 1 | 2025-10-02 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `6199d82` | ❌ | 0 | 1 | 2025-10-02 |
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `6449a70` | ✅ | 0 | 0 | 2025-10-02 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `a7876db` | ✅ | 0 | 0 | 2025-09-27 |
-| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `1e797ba` | ✅ | 0 | 4 | 2025-10-03 |
+| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `8efe2e2` | ✅ | 0 | 3 | 2025-10-03 |
 | [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `2991b94` | ✅ | 0 | 0 | 2025-10-02 |
 
 ## Coverage & Installer
