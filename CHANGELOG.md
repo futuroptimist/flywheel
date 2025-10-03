@@ -1,4 +1,7 @@
 # Changelog
+## 2025-10-07
+- feat: scale `verify_fit` tolerances with the custom `tol` parameter and
+  document stricter checks.
 
 ## 2025-10-03
 - feat: add CLI entry point for README related-project status updates

@@ -7,6 +7,8 @@ from typing import Dict, Tuple
 
 import trimesh
 
+LOOSE_TOL_MULTIPLIER = 6.0
+
 _DEF_RE = re.compile(
     r"^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*"
     r"([-+]?(?:\d(?:_?\d)*(?:\.(?:\d(?:_?\d)*)?)?|\.\d(?:_?\d)*)"
@@ -89,7 +91,10 @@ def verify_fit(
         scad_dir: Directory containing the source ``.scad`` files.
         stl_dir: Directory containing the exported ``.stl`` meshes.
         tol: Maximum allowed deviation when comparing dimensions in
-            millimeters. Defaults to ``0.1``.
+            millimeters. Defaults to ``0.1``. Larger diameters and heights use
+            ``tol`` scaled by ``LOOSE_TOL_MULTIPLIER`` to account for mesh
+            tessellation while still shrinking or expanding with the supplied
+            tolerance.
     """
     adapter = parse_scad_vars(scad_dir / "adapter.scad")
     shaft = parse_scad_vars(scad_dir / "shaft.scad")
@@ -101,16 +106,24 @@ def verify_fit(
     assert wheel["shaft_diameter"] >= shaft["shaft_diameter"]
     assert stand["bearing_outer_d"] > shaft["shaft_diameter"]
 
+    loose_tol = tol * LOOSE_TOL_MULTIPLIER
+
     shaft_dims = _dims(stl_dir / "shaft.stl")
     assert abs(shaft_dims[2] - shaft["shaft_length"]) < tol
-    assert any(abs(d - shaft["shaft_diameter"]) < tol for d in shaft_dims[:2])
+    shaft_diameter = shaft["shaft_diameter"]
+    shaft_delta = max(abs(dim - shaft_diameter) for dim in shaft_dims[:2])
+    assert shaft_delta < tol
 
     wheel_dims = _dims(stl_dir / "flywheel.stl")
-    assert abs(wheel_dims[0] - wheel["diameter"]) < 1.0
+    wheel_diameter = wheel["diameter"]
+    wheel_delta = max(abs(dim - wheel_diameter) for dim in wheel_dims[:2])
+    assert wheel_delta < loose_tol
     assert abs(wheel_dims[2] - wheel["height"]) < tol
 
     adapter_dims = _dims(stl_dir / "adapter.stl")
-    assert abs(adapter_dims[0] - adapter["outer_diameter"]) < 1.0
+    adapter_outer = adapter["outer_diameter"]
+    adapter_delta = max(abs(dim - adapter_outer) for dim in adapter_dims[:2])
+    assert adapter_delta < loose_tol
     assert abs(adapter_dims[2] - adapter["length"]) < tol
 
     stand_dims = _dims(stl_dir / "stand.stl")
@@ -121,7 +134,7 @@ def verify_fit(
     )
     assert abs(stand_dims[0] - stand["base_length"]) < tol
     assert abs(stand_dims[1] - stand["base_width"]) < tol
-    assert abs(stand_dims[2] - expected_z) < 1.0
+    assert abs(stand_dims[2] - expected_z) < loose_tol
 
     return True
 
