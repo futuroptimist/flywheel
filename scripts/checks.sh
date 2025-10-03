@@ -48,6 +48,15 @@ pytest -q
 run_security_checks
 
 # docs checks
+if command -v codespell >/dev/null 2>&1; then
+  codespell \
+    --ignore-words dict/allow.txt \
+    --skip ".git,.venv,node_modules,dist,build,docs-site,coverage,*.lock,*.min.js,*.stl,*.obj,*.glb,*.gltf,*.png,*.jpg" \
+    --quiet-level 2
+else
+  echo "codespell not installed; skipping spell check"
+fi
+
 if command -v pyspelling >/dev/null 2>&1 && [ -f .spellcheck.yaml ]; then
   pyspelling -c .spellcheck.yaml || true
 fi
