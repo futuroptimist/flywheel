@@ -207,6 +207,15 @@ def test_installer_partial_mix():
     assert c._detect_installer(snippet) == "partial"
 
 
+def test_installer_setup_uv_then_pip_is_partial():
+    c = RepoCrawler([])
+    snippet = """
+    uses: astral-sh/setup-uv@v4
+    run: pip install -r requirements.txt
+    """
+    assert c._detect_installer(snippet) == "partial"
+
+
 def test_network_exceptions_handled():
     class ErrSession:
         def __init__(self):

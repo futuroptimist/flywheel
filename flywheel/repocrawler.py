@@ -59,7 +59,9 @@ class RepoCrawler:
     _PIP = re.compile(r"\bpip(?:3)?\s+install", re.I)
     _PIPX = re.compile(r"\bpipx\s+install", re.I)
     _POETRY = re.compile(r"poetry\s+install", re.I)
-    _UV_PIP = re.compile(r"uv\s+pip\s+install", re.I)
+    _UV_PIP = re.compile(
+        r"(?:^|(?<=\n)|(?<=\r)|(?<=[ \t]))uv[ \t]+pip[ \t]+install\b", re.I
+    )
     DARK_PATTERNS = [
         re.compile(r"onbeforeunload", re.I),
         re.compile(r"navigator\.clipboard\.writeText", re.I),
