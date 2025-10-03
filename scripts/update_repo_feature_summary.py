@@ -108,7 +108,7 @@ def main() -> None:
             emoji = "✅" if info.patch_percent >= 90 else "❌"
             patch = f"{emoji} ({info.patch_percent:.0f}%)"
 
-        inst_map = {"uv": "🚀 uv", "partial": "🔶 partial"}
+        inst_map = {"uv": "🚀 uv", "partial": "🔶 partial", "none": "⚪ none"}
         inst = inst_map.get(info.installer, info.installer)
         codecov = "✅" if info.uses_codecov else "❌"
         coverage.append([link, cov, patch, codecov, inst, updated])
@@ -164,7 +164,7 @@ def main() -> None:
     lines.append("")
     lines.append(
         "Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. "  # noqa: E501
-        "🔶 partial signals a mix of uv and pip.\n"  # noqa: E501
+        "🔶 partial signals a mix of uv and pip. ⚪ none indicates no installer keywords were detected.\n"  # noqa: E501
         "Coverage percentages are parsed from Codecov when available. Codecov shows ✅ when a Codecov config or badge is present. "  # noqa: E501
         "Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise. The commit column shows the short SHA of the latest default branch commit at crawl time.\n"  # noqa: E501
         "Last-Updated (UTC) records the date of that commit.\n"

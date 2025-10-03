@@ -268,13 +268,29 @@ def test_generate_summary_installer_variants(monkeypatch):
         commit_date="2024-01-01",
     )
     info_partial = info_uv.__class__(
-        **{**info_uv.__dict__, "name": "demo/partial", "installer": "partial"}
+        **{
+            **info_uv.__dict__,
+            "name": "demo/partial",
+            "installer": "partial",
+        }
+    )
+    info_none = info_uv.__class__(
+        **{
+            **info_uv.__dict__,
+            "name": "demo/none",
+            "installer": "none",
+        }
     )
     crawler = rc.RepoCrawler([])
-    monkeypatch.setattr(crawler, "crawl", lambda: [info_uv, info_partial])
+    monkeypatch.setattr(
+        crawler,
+        "crawl",
+        lambda: [info_uv, info_partial, info_none],
+    )
     summary = crawler.generate_summary()
     assert "🚀 uv" in summary
     assert "🔶 partial" in summary
+    assert "⚪ none" in summary
 
 
 def test_generate_summary_other_installer(monkeypatch):
