@@ -305,7 +305,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [DSPACE](https://github.com/democratizedspace/dspace) –  \
   offline-first idle simulation with maker quests.  \
   See `docs/dspace-integration.md` for quest ideas.
-- ❌ [flywheel](https://github.com/futuroptimist/flywheel) –  \
+- ✅ [flywheel](https://github.com/futuroptimist/flywheel) –  \
   boilerplate for reproducible CI and releases.
 - ✅ [Gabriel](https://github.com/futuroptimist/gabriel) –  \
   "guardian angel" LLM focused on security.  \
