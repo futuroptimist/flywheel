@@ -3,6 +3,7 @@ responses
 Flask
 trimesh
 tabulate
+codespell
 pygltflib
 assimp_py
 PyYAML
