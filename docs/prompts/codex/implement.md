@@ -7,7 +7,7 @@ slug: "codex-implement"
 
 Use this prompt when Flywheel already documents a feature or behavior that has
 not yet shipped. The goal is to finish the promised functionality with tight
-feedback loops and green checks.
+feedback loops, complete tests, and green checks.
 
 ## When to use it
 
@@ -39,16 +39,20 @@ CONTEXT:
 - Source lives in `flywheel/` (Python), `webapp/` (Next.js/TypeScript), and
   `viewer/` (three.js). Tests live in `tests/`, `webapp/`, and co-located
   modules.
-- Run the full suite before committing: `pre-commit run --all-files`,
-  `pytest -q`, `npm run test:ci`, `python -m flywheel.fit`, and
-  `bash scripts/checks.sh`. Install dependencies with `pip install -r
-  requirements.txt` and `npm ci` when needed.
+- Run the full suite before committing: `pre-commit run --all-files`, `pytest -q`,
+  `npm run lint`, `npm run format:check`, `npm run test:ci`, `python -m flywheel.fit`,
+  and `bash scripts/checks.sh`. Install dependencies with `pip install -r
+  requirements.txt` (or `uv pip install --system -r requirements.txt`) and `npm ci`
+  when needed.
+- CI enforces 100% Python coverage and runs Playwright-backed JS tests, so expand test
+  cases until the suite passes locally.
 - Use `rg` (ripgrep) to enumerate TODO, FIXME, and design promises across code
   and docs. Prioritize work items that ship immediate value.
 - Add targeted tests first, then make them pass. Keep patch coverage high and
   avoid regressions.
-- Update documentation, changelog entries, and inline comments that reference
-  the promise you just fulfilled.
+- Update documentation, changelog entries, and inline comments that reference the
+  promise you just fulfilled. Ensure any code samples compile (for TypeScript, prefer
+  `ts-node` runnable snippets).
 - Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
 - Refresh `docs/prompt-docs-summary.md` via
   `python scripts/update_prompt_docs_summary.py --repos-from \
