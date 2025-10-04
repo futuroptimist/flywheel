@@ -299,7 +299,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [Futuroptimist](https://github.com/futuroptimist/futuroptimist) –  \
   scripts and metadata for the channel.  \
   See `docs/futuroptimist-integration.md` for lessons this repo borrows and improvement ideas.
-- ❌ [token.place](https://github.com/futuroptimist/token.place) –  \
+- ✅ [token.place](https://github.com/futuroptimist/token.place) –  \
   stateless faucet for LLM inference.  \
   See `docs/tokenplace-features.md` and related docs.
 - ✅ [DSPACE](https://github.com/democratizedspace/dspace) –  \
