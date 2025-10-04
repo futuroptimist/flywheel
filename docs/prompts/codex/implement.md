@@ -7,7 +7,7 @@ slug: "codex-implement"
 
 Use this prompt when Flywheel already documents a feature or behavior that has
 not yet shipped. The goal is to finish the promised functionality with tight
-feedback loops and green checks.
+feedback loops, verified tests, and green checks.
 
 ## When to use it
 
@@ -28,21 +28,26 @@ Ship a documented but unimplemented Flywheel feature with tests and docs.
 
 USAGE NOTES:
 - Prompt name: `prompt-implement`.
-- Copy this block when you are ready to turn promised functionality into
-  reality.
+- Copy this block when you are ready to turn a documented promise into reality.
 - Keep the change minimal, well-tested, and scoped to a single PR.
 
 CONTEXT:
 - Follow `AGENTS.md`, `README.md`, and neighboring module docs for local
   conventions.
-- Inspect `.github/workflows/` so local runs mirror required CI checks.
+- Inspect `.github/workflows/` so local runs mirror required CI checks and
+  include `npm run lint` alongside `npm run test:ci`.
 - Source lives in `flywheel/` (Python), `webapp/` (Next.js/TypeScript), and
   `viewer/` (three.js). Tests live in `tests/`, `webapp/`, and co-located
   modules.
-- Run the full suite before committing: `pre-commit run --all-files`,
-  `pytest -q`, `npm run test:ci`, `python -m flywheel.fit`, and
-  `bash scripts/checks.sh`. Install dependencies with `pip install -r
-  requirements.txt` and `npm ci` when needed.
+- Prepare tooling as needed with `pip install -r requirements.txt`,
+  `pip install -r requirements-dev.txt` (if present), and `npm ci`.
+- Run the full suite before committing:
+  - `pre-commit run --all-files`
+  - `pytest -q`
+  - `npm run lint`
+  - `npm run test:ci`
+  - `python -m flywheel.fit`
+  - `bash scripts/checks.sh`
 - Use `rg` (ripgrep) to enumerate TODO, FIXME, and design promises across code
   and docs. Prioritize work items that ship immediate value.
 - Add targeted tests first, then make them pass. Keep patch coverage high and
@@ -89,8 +94,9 @@ USAGE NOTES:
 
 CONTEXT:
 - Follow `AGENTS.md`, `README.md`, and `.github/workflows/` for guardrails.
-- Run `pre-commit run --all-files`, `pytest -q`, `npm run test:ci`,
-  `python -m flywheel.fit`, and `bash scripts/checks.sh` before committing.
+- Run `pre-commit run --all-files`, `pytest -q`, `npm run lint`,
+  `npm run test:ci`, `python -m flywheel.fit`, and `bash scripts/checks.sh`
+  before committing.
 - Confirm referenced files exist; update `docs/prompt-docs-summary.md` with
   `python scripts/update_prompt_docs_summary.py --repos-from \
   dict/prompt-doc-repos.txt --out docs/prompt-docs-summary.md` if prompt docs
