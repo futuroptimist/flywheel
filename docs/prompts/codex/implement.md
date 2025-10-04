@@ -34,9 +34,6 @@ USAGE NOTES:
 - Keep the change minimal, well-tested, and scoped to a single PR.
 
 CONTEXT:
-- Follow `AGENTS.md`, `README.md`, and neighboring module docs for local
-  conventions.
-- Inspect `.github/workflows/` so local runs mirror required CI checks.
 - Primary source lives in `flywheel/` (Python agents and tooling), `webapp/`
   (Next.js/TypeScript UI), `viewer/` (three.js), and `docs/` (guides and
   prompts). Tests live in `tests/`, `webapp/`, and co-located modules.
@@ -49,8 +46,9 @@ CONTEXT:
   and docs. Prioritize work items that ship immediate value.
 - Add targeted tests first, then make them pass. Keep patch coverage high and
   avoid regressions.
-- Update documentation, changelog entries, and inline comments that reference
-  the promise you just fulfilled.
+- Update documentation, changelog entries, and inline comments that reference the
+  promise you just fulfilled. Ensure any code samples compile (for TypeScript, prefer
+  `ts-node` runnable snippets).
 - Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`.
 - Refresh `docs/prompt-docs-summary.md` via
   `python scripts/update_prompt_docs_summary.py --repos-from \
