@@ -1,4 +1,7 @@
 # Changelog
+## 2025-10-08
+- feat: add drag-to-rotate and scroll-to-zoom controls to the OBJ viewer with
+  automated tests.
 ## 2025-10-07
 - feat: scale `verify_fit` tolerances with the custom `tol` parameter and
   document stricter checks.
