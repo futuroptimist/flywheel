@@ -28,7 +28,11 @@ npm run playwright:install
 python webapp/app.py
 ```
 
-Visit [http://localhost:5000](http://localhost:5000) and select a model. Drag the mouse to rotate and scroll to zoom.
+The development server listens on port 5000 by default, matching Flask's
+standard quickstart URL. Set ``FLYWHEEL_WEBAPP_PORT`` to override it, for
+example ``FLYWHEEL_WEBAPP_PORT=8123 python webapp/app.py``. Visit
+[http://localhost:5000](http://localhost:5000) (or your chosen port) and select
+a model. Drag the mouse to rotate and scroll to zoom.
 
 ## Three.js Demo
 

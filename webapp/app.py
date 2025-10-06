@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from flask import Flask, render_template, send_from_directory
@@ -7,6 +8,29 @@ app = Flask(__name__)
 
 MODEL_DIR = Path(__file__).resolve().parent / "static" / "models"
 SCAD_DIR = Path(__file__).resolve().parent.parent / "cad"
+
+DEFAULT_PORT = 5000
+PORT_ENV_VAR = "FLYWHEEL_WEBAPP_PORT"
+
+
+def resolve_port(default: int = DEFAULT_PORT) -> int:
+    """Return the port the development server should bind to.
+
+    The default matches the documented quickstart (`http://localhost:5000`).
+    Set ``FLYWHEEL_WEBAPP_PORT`` to override the port. Invalid values fall back
+    to ``default`` so a mistyped environment variable does not crash the app.
+    """
+
+    raw = os.environ.get(PORT_ENV_VAR)
+    if raw:
+        try:
+            port = int(raw)
+        except ValueError:
+            port = None
+        else:
+            if 0 < port < 65536:
+                return port
+    return default
 
 
 def ensure_obj_models():
@@ -89,7 +113,6 @@ def models(filename):
 
 
 if __name__ == "__main__":
-    # Hard-coded port chosen arbitrarily within the dynamic/private range.
-    port = 42165
+    port = resolve_port()
     print(f"Starting Flask development server on port {port}…")
     app.run(debug=True, port=port)
