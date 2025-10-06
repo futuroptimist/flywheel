@@ -226,7 +226,7 @@ def test_main_entry(monkeypatch):
 
     monkeypatch.setattr("flask.app.Flask.run", fake_run)
     runpy.run_module("webapp.app", run_name="__main__")
-    assert called.get("port") == 42165
+    assert called.get("port") == 5000
 
 
 def test_fit_module_main(monkeypatch):

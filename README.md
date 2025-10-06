@@ -217,7 +217,8 @@ Run the bundled Flask app to explore the CAD models:
 python webapp/app.py
 ```
 
-Visit `http://localhost:42165` and watch the wheel spin in your browser.
+Visit `http://localhost:5000` (or the port set via ``FLYWHEEL_WEBAPP_PORT``)
+and watch the wheel spin in your browser.
 
 Alternatively, open `viewer/threejs.html` for a standalone Three.js demo that loads the STL parts and shows simple ball bearings.
 

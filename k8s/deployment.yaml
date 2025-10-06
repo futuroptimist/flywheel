@@ -16,4 +16,4 @@ spec:
         - name: flywheel
           image: ghcr.io/owner/flywheel:latest
           ports:
-            - containerPort: 42165
+            - containerPort: 5000
