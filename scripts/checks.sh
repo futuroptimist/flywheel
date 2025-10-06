@@ -48,6 +48,9 @@ pytest -q
 run_security_checks
 
 # docs checks
+if [ -f package.json ]; then
+  npm run docs-lint
+fi
 if command -v codespell >/dev/null 2>&1; then
   codespell \
     --ignore-words dict/allow.txt \
