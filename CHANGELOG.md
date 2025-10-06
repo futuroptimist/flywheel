@@ -10,6 +10,7 @@
 
 ## 2025-10-06
 - feat: detect mixed uv/pip installers and label workflows without installers as none.
+- test: enforce parity between `docs/repo_list.txt` and `dict/prompt-doc-repos.txt` for prompt propagation.
 
 ## 2025-10-03
 - feat: add CLI entry point for README related-project status updates
