@@ -1,5 +1,7 @@
 # Changelog
 ## 2025-10-08
+- feat: add drag-to-rotate and scroll-to-zoom controls to the OBJ viewer with
+  automated tests.
 - feat: add `docs-lint` table consistency script and tests.
 
 ## 2025-10-07
