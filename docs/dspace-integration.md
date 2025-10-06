@@ -5,21 +5,18 @@
 ## Why DSPACE Matters
 
 - Demonstrates offline-friendly patterns for storing quest data.
-- Provides a concrete target for the `quest-generator` script included here.
+- Provides a concrete target for Flywheel's generalized quest tooling.
 - Shares the same CI and documentation style as Flywheel for frictionless contributions.
 - Maintains a structured outage catalog under `/outages` so fixes propagate across repositories.
 
 ## Quick start
 
-Clone both repositories side by side and run the quest generator:
+Clone both repositories side by side to share prompts, automation patterns, and
+testing utilities. DSPACE maintains its own quest scaffolding scripts, so refer
+to that repository when you need to author new quests.
 
-```bash
-git clone https://github.com/democratizedspace/dspace
-# assuming flywheel lives next to it
-npm run generate-quest --prefix dspace
-```
-
-Future iterations will tighten the integration so quests can be drafted in Flywheel and consumed directly by DSPACE.
+Future iterations will focus on reusable quest infrastructure inside Flywheel
+rather than shipping DSPACE-specific generators here.
 
 ## Codex Automation
 
