@@ -6,8 +6,8 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `eb64066` | ✅ | 0 | 5 | 2025-10-06 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `055d9c4` | ✅ | 0 | 0 | 2025-10-06 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `81c503e` | ✅ | 0 | 5 | 2025-10-06 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `19f685d` | ✅ | 0 | 0 | 2025-10-06 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `62caf91` | ✅ | 3 | 37 | 2025-10-04 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `41058e0` | ✅ | 6 | 9 | 2025-10-04 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `fa30182` | ✅ | 0 | 1 | 2025-10-04 |
