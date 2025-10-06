@@ -218,7 +218,8 @@ python webapp/app.py
 ```
 
 Visit `http://localhost:5000` (or the port set via ``FLYWHEEL_WEBAPP_PORT``)
-and watch the wheel spin in your browser.
+and watch the wheel spin in your browser. Drag the canvas to rotate the model
+and use your mouse wheel to zoom in or out while you inspect details.
 
 Alternatively, open `viewer/threejs.html` for a standalone Three.js demo that loads the STL parts and shows simple ball bearings.
 

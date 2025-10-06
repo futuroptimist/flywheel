@@ -40,6 +40,8 @@ Open `viewer/threejs.html` directly in your browser to spin the STL-based flywhe
 
 ## User Journeys
 
-- **Rotate:** left-click and drag on the canvas.
-- **Zoom:** scroll your mouse wheel.
+- **Rotate:** left-click and drag on the canvas. The viewer captures the pointer while
+  the button is held so rotations stay smooth even if the cursor leaves the canvas.
+- **Zoom:** scroll your mouse wheel to move the camera in and out with gentle limits to
+  avoid clipping through the model.
 - **Switch models:** use the dropdown above the viewer to load a different OBJ file.

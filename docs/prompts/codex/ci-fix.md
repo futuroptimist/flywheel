@@ -91,6 +91,8 @@ git diff --cached | ./scripts/scan-secrets.py
 ```
 
 Verify `dict/prompt-doc-repos.txt` matches `docs/repo_list.txt`.
+Flywheel now enforces this parity with an automated test, so keep both
+manifests aligned before committing.
 
 Run `npm --prefix docs-site run build` (or your docs generator) to ensure no broken links.
 
