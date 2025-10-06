@@ -65,7 +65,7 @@ immediately actionable.
 
 - One-table-per-PR keeps reviews short and rollbacks easy.
 - Use the CI matrix to test on Node 18 LTS and the latest Node 20.
-- Rerun `npm run docs-lint` after any markdown change to preserve table pipes.
+- Rerun `npm run docs-lint` after any markdown change to preserve table pipes; it validates that each table row keeps the same pipe count.
 - Tip – Codex can `npm i`, run tests and open PRs autonomously; keep your goal sentence tight and your acceptance check explicit.
 
 ## Upgrade Prompt

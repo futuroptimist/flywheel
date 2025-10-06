@@ -6,6 +6,7 @@
     "lint": "echo skip",
     "format": "echo skip",
     "format:check": "echo skip",
+    "docs-lint": "node scripts/docs-lint.mjs",
     "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "coverage": "npm run jest -- --coverage",
     "playwright": "playwright test",

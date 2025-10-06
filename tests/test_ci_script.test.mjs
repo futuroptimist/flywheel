@@ -11,3 +11,9 @@ test('package.json includes test:ci script', async () => {
   const pkg = await loadPackage();
   expect(pkg.scripts['test:ci']).toBeDefined();
 });
+
+test('package.json provides docs-lint table check', async () => {
+  const pkg = await loadPackage();
+  expect(pkg.scripts['docs-lint']).toBeDefined();
+  expect(pkg.scripts['docs-lint']).toContain('scripts/docs-lint.mjs');
+});
