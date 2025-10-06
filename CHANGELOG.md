@@ -1,4 +1,6 @@
 # Changelog
+## 2025-10-08
+- fix: mask short secrets when reporting scan-secrets findings.
 ## 2025-10-07
 - feat: scale `verify_fit` tolerances with the custom `tol` parameter and
   document stricter checks.
