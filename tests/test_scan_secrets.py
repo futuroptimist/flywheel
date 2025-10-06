@@ -36,6 +36,18 @@ def test_detects_github_token():
     assert "…" in finding.masked
 
 
+def test_masks_short_token_without_leaking():
+    desc = "Potential token"
+    finding = scan_secrets.Finding("demo.txt", 1, "ghp_abcd", desc)
+    assert finding.masked == "g…d"
+    assert finding.masked != finding.match
+
+
+def test_masks_very_short_token():
+    finding = scan_secrets.Finding("demo.txt", 1, "sk", "Potential token")
+    assert finding.masked == "……"
+
+
 def test_ignores_removed_lines():
     removal = "ghp_" + "abcd" * 9
     diff = (

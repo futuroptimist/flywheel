@@ -64,8 +64,13 @@ class Finding:
     @property
     def masked(self) -> str:
         token = self.match.strip()
-        if len(token) <= 8:
-            return token
+        length = len(token)
+        if length == 0:
+            return ""
+        if length <= 2:
+            return "…" * length
+        if length <= 8:
+            return f"{token[0]}…{token[-1]}"
         return f"{token[:4]}…{token[-4:]}"
 
 
