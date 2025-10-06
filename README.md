@@ -301,7 +301,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [Futuroptimist](https://github.com/futuroptimist/futuroptimist) –  \
   scripts and metadata for the channel.  \
   See `docs/futuroptimist-integration.md` for lessons this repo borrows and improvement ideas.
-- ✅ [token.place](https://github.com/futuroptimist/token.place) –  \
+- ❌ [token.place](https://github.com/futuroptimist/token.place) –  \
   stateless faucet for LLM inference.  \
   See `docs/tokenplace-features.md` and related docs.
 - ✅ [DSPACE](https://github.com/democratizedspace/dspace) –  \
@@ -324,7 +324,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   See `docs/sigma-integration.md`.
 - ✅ [gitshelves](https://github.com/futuroptimist/gitshelves) –  \
   3D-printable block models from GitHub commits.
-- ✅ [wove](https://github.com/futuroptimist/wove) –  \
+- ❌ [wove](https://github.com/futuroptimist/wove) –  \
   toolkit for knitting and robotic looms.
 - ✅ [sugarkube](https://github.com/futuroptimist/sugarkube) –  \
   k3s platform for off-grid Raspberry Pi clusters.  \
