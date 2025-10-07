@@ -135,13 +135,16 @@ full dev tooling out of the box.
 
 ### Updating dev tooling
 
-Refresh CI workflows and config files in an existing repo:
+Refresh CI workflows and config files in an existing repo. The command asks
+whether to inject Flywheel's dev tooling; pass `--yes` to accept the defaults
+non-interactively:
 
 ```bash
 flywheel update path/to/repo
 ```
 
-Skip copying dev tooling with `--no-save-dev`.
+Skip copying dev tooling with `--no-save-dev` or combine it with
+`--yes` for unattended runs.
 
 ### Generating Codex prompts
 

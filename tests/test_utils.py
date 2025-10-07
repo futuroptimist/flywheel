@@ -47,3 +47,40 @@ def test_init_repo_interactive(monkeypatch, tmp_path):
 
     assert (repo / "package.json").exists()
     assert (repo / ".github" / "workflows" / "01-lint-format.yml").exists()
+
+
+def test_update_repo_interactive_accept(monkeypatch, tmp_path):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    inputs = iter([""])
+    monkeypatch.setattr(builtins, "input", lambda _: next(inputs))
+
+    args = argparse.Namespace(path=str(repo), save_dev=None, yes=False)
+    fm.update_repo(args)
+
+    wf = repo / ".github" / "workflows" / "01-lint-format.yml"
+    assert wf.exists()
+
+
+def test_update_repo_interactive_decline(monkeypatch, tmp_path):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    inputs = iter(["n"])
+    monkeypatch.setattr(builtins, "input", lambda _: next(inputs))
+
+    args = argparse.Namespace(path=str(repo), save_dev=None, yes=False)
+    fm.update_repo(args)
+
+    wf = repo / ".github" / "workflows" / "01-lint-format.yml"
+    assert not wf.exists()
+
+
+def test_update_repo_yes_flag(tmp_path):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+
+    args = argparse.Namespace(path=str(repo), save_dev=None, yes=True)
+    fm.update_repo(args)
+
+    wf = repo / ".github" / "workflows" / "01-lint-format.yml"
+    assert wf.exists()

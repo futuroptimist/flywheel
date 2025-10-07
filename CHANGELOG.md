@@ -1,4 +1,7 @@
 # Changelog
+## 2025-10-10
+- feat: prompt before injecting dev tooling in `flywheel update` and document
+  the `--yes` flag.
 ## 2025-10-09
 - fix: mark repo summary trunk status as n/a when CI is pending or missing.
 
