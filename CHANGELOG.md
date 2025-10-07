@@ -1,6 +1,8 @@
 # Changelog
 ## 2025-10-09
 - fix: mark repo summary trunk status as n/a when CI is pending or missing.
+- fix: allow the repo feature summary CLI to run directly by ensuring the flywheel package is on
+  `sys.path`.
 
 ## 2025-10-08
 - fix: mask short secrets when reporting scan-secrets findings.
