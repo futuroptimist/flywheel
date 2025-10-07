@@ -6,16 +6,16 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `58c123c` | ✅ | 0 | 6 | 2025-10-07 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `247f66c` | ✅ | 0 | 5 | 2025-10-07 |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `652191d` | ✅ | 0 | 0 | 2025-10-07 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `f9997dd` | ✅ | 3 | 41 | 2025-10-07 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `6808605` | ✅ | 6 | 12 | 2025-10-07 |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `8b98012` | ✅ | 0 | 2 | 2025-10-06 |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `8b98012` | ✅ | 0 | 5 | 2025-10-06 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `b9ee9b3` | ✅ | 1 | 0 | 2025-10-07 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `3b313d4` | ✅ | 0 | 1 | 2025-10-07 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `b4f5929` | ✅ | 0 | 0 | 2025-10-07 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `fbc1738` | ✅ | 0 | 1 | 2025-10-07 |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `9ccb2eb` | ✅ | 0 | 3 | 2025-10-07 |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `f9fda32` | ✅ | 0 | 1 | 2025-10-07 |
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `eec1b22` | ✅ | 0 | 0 | 2025-10-07 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `34ed6be` | ✅ | 0 | 0 | 2025-10-06 |
 | [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `525984d` | ✅ | 0 | 5 | 2025-10-07 |
