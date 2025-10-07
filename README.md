@@ -50,7 +50,8 @@ or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 - Secret scanning helper `scripts/scan-secrets.py` that blocks common tokens in staged diffs
 - README status helper (`python -m src.repo_status`) that handles mixed-case workflow conclusions and validates attempt counts
 - Fast Python installs powered by [uv](https://github.com/astral-sh/uv)
-- Example code and templates
+- Example code and templates, including `examples/basic.py` for calling the CLI
+  programmatically
 - Python CLI with subcommands `init`, `update`, `audit`, `prompt`, `crawl`, and `runbook` that prompts interactively unless `--yes` is used
 - RepoCrawler detects installers like uv (including `uv pip install` usage), pipx, pip/pip3, and poetry in workflows
 - [AGENTS.md](AGENTS.md) detailing included LLM assistants
