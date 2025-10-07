@@ -60,3 +60,32 @@ class DummyTimeout:
 def test_default_branch_uses_timeout():
     crawler = RepoCrawler([], session=DummyTimeout())
     assert crawler._default_branch("demo/repo") == "dev"
+
+
+class DummyMissingStatuses:
+    def __init__(self):
+        self.headers = {}
+
+    def get(self, url, **kw):
+        class Resp:
+            def __init__(self, status_code: int, body: str):
+                self.status_code = status_code
+                self._body = body
+
+            def json(self):
+                import json
+
+                if not self._body:
+                    raise ValueError("no json")
+                return json.loads(self._body)
+
+        if "/actions/runs" in url:
+            return Resp(200, '{"workflow_runs": []}')
+        if "/commits/" in url and url.endswith("/status"):
+            return Resp(404, "")
+        return Resp(200, "{}")
+
+
+def test_branch_green_missing_status_returns_none():
+    crawler = RepoCrawler([], session=DummyMissingStatuses())
+    assert crawler._branch_green("demo/repo", "main", "abcdef0") is None
