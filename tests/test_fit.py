@@ -117,6 +117,139 @@ def test_verify_fit_reports_mismatch_details(monkeypatch):
     assert "shaft.stl diameter mismatch" in str(exc.value)
 
 
+def test_verify_fit_reports_shaft_length_delta(monkeypatch):
+    original = ff._dims
+
+    def stretch_shaft(path):
+        dims = original(path)
+        if path.name == "shaft.stl":
+            return dims[0], dims[1], dims[2] + 0.2
+        return dims
+
+    monkeypatch.setattr(ff, "_dims", stretch_shaft)
+
+    with pytest.raises(AssertionError) as exc:
+        ff.verify_fit(CAD_DIR, STL_DIR)
+
+    msg = str(exc.value)
+    assert "shaft.stl length off by" in msg
+    assert "0.200" in msg
+
+
+def test_verify_fit_reports_wheel_height_delta(monkeypatch):
+    original = ff._dims
+
+    def bump_wheel_height(path):
+        dims = original(path)
+        if path.name == "flywheel.stl":
+            return dims[0], dims[1], dims[2] - 0.2
+        return dims
+
+    monkeypatch.setattr(ff, "_dims", bump_wheel_height)
+
+    with pytest.raises(AssertionError) as exc:
+        ff.verify_fit(CAD_DIR, STL_DIR)
+
+    msg = str(exc.value)
+    assert "flywheel.stl height off by" in msg
+    assert "0.200" in msg
+
+
+def test_verify_fit_reports_adapter_outer_delta(monkeypatch):
+    original = ff._dims
+
+    def expand_adapter_outer(path):
+        dims = original(path)
+        if path.name == "adapter.stl":
+            return dims[0] + 0.7, dims[1], dims[2]
+        return dims
+
+    monkeypatch.setattr(ff, "_dims", expand_adapter_outer)
+
+    with pytest.raises(AssertionError) as exc:
+        ff.verify_fit(CAD_DIR, STL_DIR)
+
+    msg = str(exc.value)
+    assert "adapter.stl outer diameter mismatch" in msg
+    assert "0.700" in msg
+
+
+def test_verify_fit_reports_adapter_length_delta(monkeypatch):
+    original = ff._dims
+
+    def stretch_adapter(path):
+        dims = original(path)
+        if path.name == "adapter.stl":
+            return dims[0], dims[1], dims[2] + 0.2
+        return dims
+
+    monkeypatch.setattr(ff, "_dims", stretch_adapter)
+
+    with pytest.raises(AssertionError) as exc:
+        ff.verify_fit(CAD_DIR, STL_DIR)
+
+    msg = str(exc.value)
+    assert "adapter.stl length off by" in msg
+    assert "0.200" in msg
+
+
+def test_verify_fit_reports_stand_base_length_delta(monkeypatch):
+    original = ff._dims
+
+    def stretch_stand_length(path):
+        dims = original(path)
+        if path.name == "stand.stl":
+            return dims[0] + 0.2, dims[1], dims[2]
+        return dims
+
+    monkeypatch.setattr(ff, "_dims", stretch_stand_length)
+
+    with pytest.raises(AssertionError) as exc:
+        ff.verify_fit(CAD_DIR, STL_DIR)
+
+    msg = str(exc.value)
+    assert "stand.stl base length off by" in msg
+    assert "0.200" in msg
+
+
+def test_verify_fit_reports_stand_base_width_delta(monkeypatch):
+    original = ff._dims
+
+    def stretch_stand_width(path):
+        dims = original(path)
+        if path.name == "stand.stl":
+            return dims[0], dims[1] - 0.2, dims[2]
+        return dims
+
+    monkeypatch.setattr(ff, "_dims", stretch_stand_width)
+
+    with pytest.raises(AssertionError) as exc:
+        ff.verify_fit(CAD_DIR, STL_DIR)
+
+    msg = str(exc.value)
+    assert "stand.stl base width off by" in msg
+    assert "0.200" in msg
+
+
+def test_verify_fit_reports_stand_height_delta(monkeypatch):
+    original = ff._dims
+
+    def raise_stand_height(path):
+        dims = original(path)
+        if path.name == "stand.stl":
+            return dims[0], dims[1], dims[2] + 1.0
+        return dims
+
+    monkeypatch.setattr(ff, "_dims", raise_stand_height)
+
+    with pytest.raises(AssertionError) as exc:
+        ff.verify_fit(CAD_DIR, STL_DIR)
+
+    msg = str(exc.value)
+    assert "stand.stl height off by" in msg
+    assert "1.000" in msg
+
+
 def test_verify_fit_reports_adapter_shaft_delta(monkeypatch):
     def fake_parse(path):
         name = Path(path).name
