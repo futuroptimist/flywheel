@@ -130,12 +130,20 @@ def prompt(args: argparse.Namespace) -> None:
 
 
 def crawl(args: argparse.Namespace) -> None:
-    repos = list(args.repos)
+    cli_repos = list(args.repos)
     repo_file = Path(args.repos_file)
+    combined: list[str] = []
     if repo_file.exists():
         lines = repo_file.read_text().splitlines()
         file_repos = [line.strip() for line in lines if line.strip()]
-        repos = file_repos + repos
+        combined.extend(file_repos)
+    combined.extend(cli_repos)
+    seen: set[str] = set()
+    repos: list[str] = []
+    for spec in combined:
+        if spec not in seen:
+            repos.append(spec)
+            seen.add(spec)
     if not repos:
         raise SystemExit("No repositories provided")
     crawler = RepoCrawler(repos, token=args.token)

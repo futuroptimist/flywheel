@@ -61,6 +61,36 @@ def test_main_crawl_creates_parent_dirs(monkeypatch, tmp_path):
     assert out.read_text() == "report"
 
 
+def test_main_crawl_deduplicates_repos(monkeypatch, tmp_path):
+    repo_file = tmp_path / "repos.txt"
+    repo_file.write_text("foo/bar\nbaz/qux\n")
+    out = tmp_path / "sum.md"
+    seen = {}
+
+    class DummyCrawler:
+        def __init__(self, repos, token=None):
+            seen["repos"] = list(repos)
+
+        def generate_summary(self):
+            return "report"
+
+    monkeypatch.setattr(fm, "RepoCrawler", DummyCrawler)
+    fm.main(
+        [
+            "crawl",
+            "baz/qux",
+            "foo/bar",
+            "extra/repo",
+            "--repos-file",
+            str(repo_file),
+            "--output",
+            str(out),
+        ]
+    )
+    assert out.read_text() == "report"
+    assert seen["repos"] == ["foo/bar", "baz/qux", "extra/repo"]
+
+
 def test_main_crawl_no_repos(tmp_path):
     repo_file = tmp_path / "repos.txt"
     repo_file.write_text("")
