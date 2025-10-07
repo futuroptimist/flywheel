@@ -4,13 +4,18 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from datetime import date
 from pathlib import Path
 from typing import List
 
 from tabulate import tabulate
 
-from flywheel.repocrawler import RepoCrawler
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
+
+from flywheel.repocrawler import RepoCrawler  # noqa: E402
 
 
 def load_repos(path: Path) -> List[str]:
