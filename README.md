@@ -243,6 +243,12 @@ A successful run prints:
 All parts fit together.
 ```
 
+If any measurement drifts beyond the tolerance, the checker pinpoints the
+affected part and the exact deviation so you can adjust the CAD parameters or
+STL exports before printing. Equality checks now include a signed ``Δ`` value
+to show whether the measured feature is oversized or undersized, for example
+``Δ -0.200 mm`` when a wheel bore is 0.2 mm too small.
+
 Call ``verify_fit`` directly with a custom ``tol`` value to tighten or relax
 the default ``0.1`` mm tolerance. Larger diameters use six times the supplied
 ``tol`` to accommodate mesh tessellation, so shrinking the tolerance also
