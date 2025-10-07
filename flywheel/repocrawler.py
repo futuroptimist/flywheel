@@ -312,7 +312,8 @@ class RepoCrawler:
             return None, None
         return None, None
 
-    PASS_CONCLUSIONS = {"success", "neutral", "skipped", "no_status"}
+    PASS_CONCLUSIONS = {"success", "neutral", "skipped"}
+    INCOMPLETE_RUN_STATUSES = {"queued", "in_progress"}
 
     def _branch_green(
         self,
@@ -349,6 +350,9 @@ class RepoCrawler:
                 runs = []
             for run in runs:
                 if run.get("head_sha", "").startswith(sha):
+                    status = (run.get("status") or "").lower()
+                    if status in self.INCOMPLETE_RUN_STATUSES:
+                        return None
                     conclusion = run.get("conclusion")
                     if conclusion:
                         return conclusion in self.PASS_CONCLUSIONS
@@ -374,9 +378,12 @@ class RepoCrawler:
         except Exception:
             return False
 
+        state = (body.get("state") or "").lower()
         # 1. Fast-path: combined status already success
-        if body.get("state") == "success":
+        if state == "success":
             return True
+        if state in {"pending", "no_status"}:
+            return None
 
         statuses = body.get("statuses", [])
 
@@ -384,10 +391,14 @@ class RepoCrawler:
 
         hard_failure = False
         has_success = False
+        incomplete = False
         for st in statuses:
             ctx = st.get("context", "")
-            state = st.get("state")
+            state = (st.get("state") or "").lower()
             if ctx in _COVERAGE_CONTEXTS:
+                continue
+            if state == "pending" or state in self.INCOMPLETE_RUN_STATUSES:
+                incomplete = True
                 continue
             if state == "success":
                 has_success = True
@@ -396,6 +407,8 @@ class RepoCrawler:
 
         if hard_failure:
             return False
+        if incomplete:
+            return None
         if has_success:
             return True
 
@@ -412,16 +425,39 @@ class RepoCrawler:
             if r.status_code == 200:
                 runs = r.json().get("check_runs", [])
                 if runs:
-                    conclusions = {run.get("conclusion") for run in runs}
-                    if conclusions <= {"success", "neutral", "skipped"}:
-                        return True
-                    if {"failure", "cancelled", "timed_out"} & conclusions:
+                    conclusions = {
+                        (run.get("conclusion") or "").lower()
+                        for run in runs
+                        if run.get("conclusion")
+                    }
+                    pending = any(
+                        (run.get("status") or "").lower()
+                        in self.INCOMPLETE_RUN_STATUSES
+                        or run.get("conclusion") is None
+                        for run in runs
+                    )
+                    if {
+                        "failure",
+                        "cancelled",
+                        "timed_out",
+                        "action_required",
+                    } & conclusions:
                         return False
+                    if conclusions and conclusions <= {
+                        "success",
+                        "neutral",
+                        "skipped",
+                    }:
+                        if not pending:
+                            return True
+                        return None
+                    if pending or not conclusions:
+                        return None
         except RequestException:  # pragma: no cover - network error handling
             pass
 
-        # 3. Last resort: no CI contexts present → treat as green
-        return True
+        # 3. Last resort: no CI contexts present → status unknown
+        return None
 
     def _recent_commits(
         self,
@@ -877,8 +913,9 @@ class RepoCrawler:
             "Patch shows ✅ when diff coverage is at least 90% and ❌ "
             "otherwise, with the percentage in parentheses.\n"
             "The commit column shows the short SHA of the latest default "
-            "branch commit at crawl time. The Trunk column indicates whether "
-            "CI is green for that commit. "
+            "branch commit at crawl time. The Trunk column shows ✅ when "
+            "CI succeeded, ❌ when it failed, and n/a when CI is missing or "
+            "still running. "
             "Dark Patterns and Bright Patterns list counts of suspicious "
             "or positive code snippets detected.\n"
             "Last-Updated (UTC) records the date of the commit used "
