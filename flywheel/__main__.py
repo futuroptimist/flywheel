@@ -93,9 +93,17 @@ def init_repo(args: argparse.Namespace) -> None:
         inject_dev(target)
 
 
-def update_repo(args: argparse.Namespace) -> None:  # pragma: no cover
+def update_repo(args: argparse.Namespace) -> None:
     target = Path(args.path).resolve()
-    if args.save_dev:
+
+    save_dev = args.save_dev
+    if save_dev is None:
+        if args.yes:
+            save_dev = True
+        else:
+            save_dev = prompt_bool("Inject dev tooling?", True)
+
+    if save_dev:
         inject_dev(target)
 
 
@@ -193,7 +201,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_update.add_argument(
         "--save-dev",
         action="store_true",
-        default=True,
+        dest="save_dev",
         help="inject dev tooling",
     )
     p_update.add_argument(
@@ -202,7 +210,12 @@ def build_parser() -> argparse.ArgumentParser:
         dest="save_dev",
         help="skip dev tooling",
     )
-    p_update.set_defaults(func=update_repo)
+    p_update.add_argument(
+        "--yes",
+        action="store_true",
+        help="run non-interactively",
+    )
+    p_update.set_defaults(save_dev=None, func=update_repo)
 
     p_audit = sub.add_parser("audit", help="check for missing tooling")
     p_audit.add_argument("path", help="repository path")
