@@ -73,3 +73,14 @@ def test_update_repo_interactive_decline(monkeypatch, tmp_path):
 
     wf = repo / ".github" / "workflows" / "01-lint-format.yml"
     assert not wf.exists()
+
+
+def test_update_repo_yes_flag(tmp_path):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+
+    args = argparse.Namespace(path=str(repo), save_dev=None, yes=True)
+    fm.update_repo(args)
+
+    wf = repo / ".github" / "workflows" / "01-lint-format.yml"
+    assert wf.exists()
