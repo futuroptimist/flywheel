@@ -316,7 +316,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   See `docs/dspace-integration.md` for quest ideas.
 - ✅ [flywheel](https://github.com/futuroptimist/flywheel) –  \
   boilerplate for reproducible CI and releases.
-- ✅ [Gabriel](https://github.com/futuroptimist/gabriel) –  \
+- ❌ [Gabriel](https://github.com/futuroptimist/gabriel) –  \
   "guardian angel" LLM focused on security.  \
   Its `docs/FLYWHEEL_RISK_MODEL.md` discusses how automation changes your threat model.  \
   See `docs/gabriel-integration.md` for ways these repositories will share tooling.
