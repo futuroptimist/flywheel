@@ -6,20 +6,20 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `59ab0d8` | ✅ | 0 | 4 | 2025-10-07 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `652191d` | n/a | 0 | 0 | 2025-10-07 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `8a2ad20` | ✅ | 3 | 40 | 2025-10-07 |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `6808605` | ✅ | 6 | 12 | 2025-10-07 |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `fbecc07` | ❌ | 0 | 4 | 2025-10-07 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `fb07c77` | ✅ | 0 | 5 | 2025-10-07 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `7eb06f8` | ✅ | 0 | 0 | 2025-10-07 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `881163d` | ✅ | 3 | 38 | 2025-10-07 |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `0f27939` | ✅ | 6 | 11 | 2025-10-07 |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `fbecc07` | ❌ | 0 | 0 | 2025-10-07 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `b9ee9b3` | ✅ | 1 | 0 | 2025-10-07 |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `3b313d4` | ✅ | 0 | 1 | 2025-10-07 |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `f1a06d1` | ✅ | 0 | 1 | 2025-10-07 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `b4f5929` | ✅ | 0 | 0 | 2025-10-07 |
-| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `fbc1738` | ✅ | 0 | 1 | 2025-10-07 |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `f9fda32` | ✅ | 0 | 1 | 2025-10-07 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `eec1b22` | ✅ | 0 | 0 | 2025-10-07 |
+| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `fc8a3af` | ✅ | 0 | 1 | 2025-10-07 |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `416eabf` | ✅ | 0 | 0 | 2025-10-07 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `b664d3c` | ✅ | 0 | 2 | 2025-10-07 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `34ed6be` | ✅ | 0 | 0 | 2025-10-06 |
-| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `525984d` | ✅ | 0 | 5 | 2025-10-07 |
-| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `41f2420` | ✅ | 0 | 1 | 2025-10-07 |
+| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `b544066` | n/a | 0 | 5 | 2025-10-07 |
+| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `5c32ccb` | ✅ | 0 | 0 | 2025-10-07 |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |
