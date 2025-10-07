@@ -1,4 +1,7 @@
 # Changelog
+## 2025-10-09
+- fix: mark repo summary trunk status as n/a when CI is pending or missing.
+
 ## 2025-10-08
 - fix: mask short secrets when reporting scan-secrets findings.
 - feat: add drag-to-rotate and scroll-to-zoom controls to the OBJ viewer with

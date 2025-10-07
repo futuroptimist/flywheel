@@ -408,7 +408,7 @@ def test_branch_green_fallback_success():
     assert crawler._branch_green("demo/repo", "main", "cafe") is True
 
 
-def test_branch_green_no_status_treated_as_pass():
+def test_branch_green_no_status_returns_none():
     sess = make_session(
         {
             "/actions/runs": DummyResp(200, json_data={"workflow_runs": []}),
@@ -419,7 +419,7 @@ def test_branch_green_no_status_treated_as_pass():
         }
     )
     crawler = RepoCrawler([], session=sess)
-    assert crawler._branch_green("demo/repo", "main", "nosh") is True
+    assert crawler._branch_green("demo/repo", "main", "nosh") is None
 
 
 def test_branch_green_pending_status():
@@ -430,10 +430,36 @@ def test_branch_green_pending_status():
                 200,
                 json_data={"state": "pending"},
             ),
+            "/commits/pend/check-runs": DummyResp(
+                200,
+                json_data={"check_runs": []},
+            ),
         }
     )
     crawler = RepoCrawler([], session=sess)
-    assert crawler._branch_green("demo/repo", "main", "pend") is True
+    assert crawler._branch_green("demo/repo", "main", "pend") is None
+
+
+def test_branch_green_pending_check_run_returns_none():
+    sess = make_session(
+        {
+            "/actions/runs": DummyResp(200, json_data={"workflow_runs": []}),
+            "/commits/spin/status": DummyResp(
+                200,
+                json_data={"state": "pending"},
+            ),
+            "/commits/spin/check-runs": DummyResp(
+                200,
+                json_data={
+                    "check_runs": [
+                        {"status": "in_progress", "conclusion": None},
+                    ]
+                },
+            ),
+        }
+    )
+    crawler = RepoCrawler([], session=sess)
+    assert crawler._branch_green("demo/repo", "main", "spin") is None
 
 
 def test_branch_green_actions_bad_json_fallback():

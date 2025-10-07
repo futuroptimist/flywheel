@@ -77,5 +77,5 @@ This table tracks which flywheel features each related repository has adopted.
 
 Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip. ⚪ none indicates no installer keywords were detected.
 Coverage percentages are parsed from their badges where available. Codecov shows ✅ when a Codecov config or badge is present. Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses.
-The commit column shows the short SHA of the latest default branch commit at crawl time. The Trunk column indicates whether CI is green for that commit. Dark Patterns and Bright Patterns list counts of suspicious or positive code snippets detected.
+The commit column shows the short SHA of the latest default branch commit at crawl time. The Trunk column shows ✅ when CI succeeded, ❌ when it failed, and n/a when CI is missing or still running. Dark Patterns and Bright Patterns list counts of suspicious or positive code snippets detected.
 Last-Updated (UTC) records the date of the commit used for each row.

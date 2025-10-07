@@ -94,7 +94,7 @@ def test_generate_summary(monkeypatch):
     )
     assert (
         "| **[foo/bar](https://github.com/foo/bar)** | main | `deadbee` | "
-        "✅ | 123 | 4 | 2024-01-01 |" in first_row_basics
+        "n/a | 123 | 4 | 2024-01-01 |" in first_row_basics
     )
     idx = lines.index("## Coverage & Installer")
     first_row = lines[idx + 3]

@@ -31,7 +31,10 @@ def test_summary_generation(monkeypatch):
     assert "(95%)" in summary
     assert "✅ (88%)" not in summary
     assert "—" not in summary
-    assert "n/a" not in summary
+    assert (
+        "| **[foo/bar](https://github.com/foo/bar)** | main | `deadbee` | ✅ |"
+        in summary
+    )
     assert (
         "| Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |"  # noqa: E501
         in summary
@@ -40,6 +43,45 @@ def test_summary_generation(monkeypatch):
         "| Repo | Branch | Commit | Trunk | Stars | "
         "Open Issues | Last-Updated (UTC) |" in summary
     )
+
+
+def test_summary_marks_trunk_unknown(monkeypatch):
+    crawler = RepoCrawler(["foo/bar"])
+    monkeypatch.setattr(
+        crawler,
+        "_parse_coverage",
+        lambda *a, **kw: None,
+    )
+    monkeypatch.setattr(
+        crawler,
+        "_patch_coverage_from_codecov",
+        lambda *a, **kw: None,
+    )
+    monkeypatch.setattr(crawler, "_default_branch", lambda *a, **kw: "main")
+    monkeypatch.setattr(crawler, "_fetch_file", lambda *a, **kw: "")
+    monkeypatch.setattr(crawler, "_list_workflows", lambda *a, **kw: set())
+    monkeypatch.setattr(
+        crawler, "_latest_commit", lambda *a, **kw: ("deadbee", "2024-01-01")
+    )
+    monkeypatch.setattr(crawler, "_branch_green", lambda *a, **kw: None)
+    monkeypatch.setattr(
+        crawler,
+        "_detect_installer",
+        lambda *a, **kw: "none",
+    )
+    monkeypatch.setattr(crawler, "_has_file", lambda *a, **kw: False)
+    monkeypatch.setattr(crawler, "_repo_stats", lambda *a, **kw: (0, 0))
+
+    summary = crawler.generate_summary()
+    expected = " | ".join(
+        [
+            "| **[foo/bar](https://github.com/foo/bar)**",
+            "main",
+            "`deadbee`",
+            "n/a |",
+        ]
+    )
+    assert expected in summary
 
 
 def test_summary_generation_missing_commit(monkeypatch):
