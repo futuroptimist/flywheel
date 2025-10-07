@@ -63,17 +63,36 @@ def _query_rest(owner: str, repo: str, sha: str) -> str | None:
     return "SUCCESS"
 
 
-def ci_state(owner: str, repo: str, sha: str) -> str:
-    """
-    Return 'green' or 'red' for the dashboard.
-    Logic order:
-      1. GraphQL rollup
-      2. REST checks fall-back
-    """
-    state = _query_graphql(owner, repo, sha)
-    if state is None:
-        state = _query_rest(owner, repo, sha)
+_GRAPHQL_UNKNOWN_STATES = {
+    "EXPECTED",
+    "PENDING",
+    "QUEUED",
+    "IN_PROGRESS",
+    "WAITING",
+    "STALE",
+}
 
-    if state in ("SUCCESS", "PENDING", "NO_CI"):
+_REST_UNKNOWN_STATES = {"NO_CI"}
+
+
+def _normalize_state(state: str | None) -> str | None:
+    return state.upper() if state else None
+
+
+def ci_state(owner: str, repo: str, sha: str) -> str:
+    """Return the traffic-light CI state for the repo summary."""
+
+    state = _normalize_state(_query_graphql(owner, repo, sha))
+    if state is None:
+        state = _normalize_state(_query_rest(owner, repo, sha))
+
+    if state is None:
+        return "unknown"
+
+    if state == "SUCCESS":
         return "green"
+
+    if state in _GRAPHQL_UNKNOWN_STATES or state in _REST_UNKNOWN_STATES:
+        return "unknown"
+
     return "red"

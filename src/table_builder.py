@@ -8,4 +8,8 @@ def trunk_cell(owner: str, repo: str, sha: str) -> str:
     if not sha:
         return "n/a"
     state = ci_state(owner, repo, sha)
-    return "✅" if state == "green" else "❌"
+    if state == "green":
+        return "✅"
+    if state == "unknown":
+        return "n/a"
+    return "❌"
