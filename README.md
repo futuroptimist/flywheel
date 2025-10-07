@@ -320,7 +320,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   See `docs/dspace-integration.md` for quest ideas.
 - ✅ [flywheel](https://github.com/futuroptimist/flywheel) –  \
   boilerplate for reproducible CI and releases.
-- ❌ [Gabriel](https://github.com/futuroptimist/gabriel) –  \
+- ✅ [Gabriel](https://github.com/futuroptimist/gabriel) –  \
   "guardian angel" LLM focused on security.  \
   Its `docs/FLYWHEEL_RISK_MODEL.md` discusses how automation changes your threat model.  \
   See `docs/gabriel-integration.md` for ways these repositories will share tooling.
@@ -335,7 +335,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   See `docs/sigma-integration.md`.
 - ✅ [gitshelves](https://github.com/futuroptimist/gitshelves) –  \
   3D-printable block models from GitHub commits.
-- ❌ [wove](https://github.com/futuroptimist/wove) –  \
+- ✅ [wove](https://github.com/futuroptimist/wove) –  \
   toolkit for knitting and robotic looms.
 - ✅ [sugarkube](https://github.com/futuroptimist/sugarkube) –  \
   k3s platform for off-grid Raspberry Pi clusters.  \
