@@ -498,7 +498,10 @@ def test_branch_green_status_incomplete_context_returns_none():
                     ],
                 },
             ),
-            "/commits/queue/check-runs": DummyResp(200, json_data={"check_runs": []}),
+            "/commits/queue/check-runs": DummyResp(
+                200,
+                json_data={"check_runs": []},
+            ),
         }
     )
     crawler = RepoCrawler([], session=sess)
