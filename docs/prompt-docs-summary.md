@@ -354,6 +354,12 @@ _❌ Note: Prompt docs also found outside `docs/prompts/codex/`: `.axel/hillclim
 
 _❌ Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/archived`, `docs/prompts`, `docs/templates`._
 
+## [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper)
+
+| Path                                                                                                                      | Prompt                                                                                                                                   | Type      | One-click? |
+| ------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------- |
+| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/pr-reaper/blob/main/docs/prompts/codex/automation.md) | [Codex Automation Prompt](https://github.com/futuroptimist/pr-reaper/blob/main/docs/prompts/codex/automation.md#codex-automation-prompt) | evergreen | yes        |
+
 ## [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000)
 
 | Path                                                                                                                               | Prompt                                                                                                                                                | Type      | One-click? |
@@ -379,12 +385,6 @@ _❌ Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/archived`
 | [docs/prompts/codex/spellcheck.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/spellcheck.md)         | [Codex Spellcheck Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/spellcheck.md#codex-spellcheck-prompt)             | evergreen | yes        |
 | [docs/prompts/codex/style.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/style.md)                   | [Codex Style Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/style.md#codex-style-prompt)                            | evergreen | yes        |
 | [docs/prompts/codex/test.md](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/test.md)                     | [Codex Test Prompt](https://github.com/futuroptimist/jobbot3000/blob/main/docs/prompts/codex/test.md#codex-test-prompt)                               | evergreen | yes        |
-
-## [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper)
-
-| Path                                                                                                                      | Prompt                                                                                                                                   | Type      | One-click? |
-| ------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------- |
-| [docs/prompts/codex/automation.md](https://github.com/futuroptimist/pr-reaper/blob/main/docs/prompts/codex/automation.md) | [Codex Automation Prompt](https://github.com/futuroptimist/pr-reaper/blob/main/docs/prompts/codex/automation.md#codex-automation-prompt) | evergreen | yes        |
 
 ## [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io)
 
@@ -507,4 +507,4 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/wove          | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md)                                                                         | unknown   |       |
 | futuroptimist/wove          | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md)                                                                       | unknown   |       |
 
-_Updated automatically: 2025-10-06_
+_Updated automatically: 2025-10-07_
