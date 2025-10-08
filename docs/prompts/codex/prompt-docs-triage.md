@@ -13,6 +13,8 @@ into `docs/prompt-docs-summary.md`.
 
 1. Ensure `docs/prompt-docs-todos.md` lists TODO entries in the four-column table format.
 2. Run `python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --out docs/prompt-docs-summary.md`.
+   The script automatically sorts the TODO table by type and repository, so manual edits
+   can be added in any order.
 3. Review the updated summary and commit both files.
 
 ```text

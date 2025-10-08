@@ -15,6 +15,8 @@ from typing import DefaultDict, Iterable, List, Sequence
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from flywheel.repocrawler import RepoCrawler  # noqa: E402
 
+TYPE_SORT_ORDER = {"evergreen": 0, "one-off": 1, "unknown": 2}
+
 DEFAULT_REPO_LIST = (
     Path(__file__).resolve().parents[1] / "dict" / "prompt-doc-repos.txt"
 )
@@ -26,6 +28,107 @@ DEFAULT_OUTPUT_PATH = (
 def load_repos(path: Path) -> List[str]:
     lines = path.read_text().splitlines()
     return [line.strip() for line in lines if line.strip()]
+
+
+def _ensure_newline(text: str) -> str:
+    if text.endswith("\n"):
+        return text
+    if text == "":
+        return "\n"
+    return text + "\n"
+
+
+def _is_table_line(line: str) -> bool:
+    return line.strip().startswith("|")
+
+
+def _normalized_type(value: str) -> str:
+    return value.strip().lower()
+
+
+def _type_rank(value: str) -> int:
+    return TYPE_SORT_ORDER.get(_normalized_type(value), 1)
+
+
+def _todo_sort_key(cells: List[str]) -> tuple[int, str, str]:
+    prompt_type = _normalized_type(cells[2])
+    repo = cells[0].strip().lower()
+    prompt = cells[1].strip().lower()
+    return (
+        TYPE_SORT_ORDER.get(prompt_type, len(TYPE_SORT_ORDER)),
+        repo,
+        prompt,
+    )
+
+
+def _format_todo_row(cells: List[str]) -> str:
+    repo, prompt, ptype, notes = (cell.strip() for cell in (cells + [""])[:4])
+    if notes:
+        notes_cell = f" {notes} "
+    else:
+        notes_cell = " "
+    return f"| {repo} | {prompt} | {ptype} |{notes_cell}|"
+
+
+def sort_prompt_todo_table(text: str) -> str:
+    """Return ``text`` with TODO rows sorted by type then repository."""
+
+    stripped = text.splitlines()
+    if not stripped:
+        return _ensure_newline(text)
+
+    header_idx = next(
+        (idx for idx, line in enumerate(stripped) if _is_table_line(line)),
+        None,
+    )
+    if header_idx is None:
+        return _ensure_newline(text)
+
+    separator_idx = header_idx + 1
+    if separator_idx >= len(stripped):
+        return _ensure_newline(text)
+    has_separator = _is_table_line(stripped[separator_idx])
+    if not has_separator:
+        return _ensure_newline(text)
+
+    rows: List[List[str]] = []
+    end_idx = separator_idx + 1
+    for idx in range(separator_idx + 1, len(stripped)):
+        line = stripped[idx]
+        if not _is_table_line(line):
+            break
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) < 4:
+            cells.extend([""] * (4 - len(cells)))
+        rows.append(cells[:4])
+        end_idx = idx + 1
+
+    if not rows:
+        return _ensure_newline(text)
+
+    formatted_rows = [
+        _format_todo_row(cells) for cells in sorted(rows, key=_todo_sort_key)
+    ]
+
+    header_line = stripped[header_idx].strip()
+    separator_line = stripped[separator_idx].strip()
+    new_lines = (
+        stripped[:header_idx]
+        + [header_line, separator_line]
+        + formatted_rows
+        + stripped[end_idx:]
+    )
+    return "\n".join(new_lines).rstrip() + "\n"
+
+
+def normalize_prompt_todo_table(path: Path) -> str:
+    """Sort TODO table rows in-place and return the normalized text."""
+
+    original = path.read_text()
+    normalized = sort_prompt_todo_table(original)
+    if normalized != original:
+        path.write_text(normalized)
+    return normalized
 
 
 def extract_title(text: str) -> str:
@@ -325,14 +428,14 @@ def main(argv: Sequence[str] | None = None) -> None:
                             describe_noncanonical_location(path)
                         )
 
-    type_order = {"evergreen": 0, "unknown": 1, "one-off": 2}
     for repo_prompts in grouped.values():
-        repo_prompts.sort(key=lambda row: type_order.get(row[2], 1))
+        repo_prompts.sort(key=lambda row: _type_rank(row[2]))
 
-    counts = {"evergreen": 0, "one-off": 0, "unknown": 0}
+    counts = {key: 0 for key in TYPE_SORT_ORDER}
     for repo_prompts in grouped.values():
         for _, _, ptype, _ in repo_prompts:
-            counts[ptype] = counts.get(ptype, 0) + 1
+            kind = _normalized_type(ptype)
+            counts[kind] = counts.get(kind, 0) + 1
     total_prompts = sum(counts.values())
     repo_count = len(grouped)
 
@@ -463,8 +566,11 @@ def main(argv: Sequence[str] | None = None) -> None:
             lines.append("")
 
     todo_file = docs_root / "prompt-docs-todos.md"
-    if todo_file.exists() and todo_file.read_text().strip():
-        todo_content = todo_file.read_text().strip()
+    if todo_file.exists():
+        todo_content = normalize_prompt_todo_table(todo_file).strip()
+    else:
+        todo_content = ""
+    if todo_content:
         lines.extend(
             [
                 "## TODO Prompts for Other Repos",

@@ -2,6 +2,8 @@
 ## 2025-10-10
 - feat: prompt before injecting dev tooling in `flywheel update` and document
   the `--yes` flag.
+- feat: auto-sort the prompt docs TODO table by type and repository to match
+  triage guidance.
 - fix: treat CI status API errors as failures when computing repo summary trunk
   status.
 ## 2025-10-09
