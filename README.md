@@ -37,6 +37,9 @@ bash scripts/checks.sh
 If browser dependencies are missing, run `npm run playwright:install`
 or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 
+The link-checking step runs `linkchecker --no-warnings README.md docs/` to
+surface broken links without flooding CI logs with informational warnings.
+
 ## Contents
 
 - CI workflows for linting, tests, and docs

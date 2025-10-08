@@ -63,4 +63,4 @@ fi
 if command -v pyspelling >/dev/null 2>&1 && [ -f .spellcheck.yaml ]; then
   pyspelling -c .spellcheck.yaml || true
 fi
-linkchecker README.md docs/ || true
+linkchecker --no-warnings README.md docs/ || true

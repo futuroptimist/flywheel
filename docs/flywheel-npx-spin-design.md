@@ -331,4 +331,3 @@ impacted files, diff preview, dependencies, and confidence score between 0 and 1
 - Time taken from command start to completion? (minutes)
 - Preferred LLM provider? (token.place/OpenAI/Anthropic/Other)
 - Feature requests or pain points?
-
