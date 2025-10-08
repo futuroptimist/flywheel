@@ -172,7 +172,7 @@ Duplicates are removed automatically so each repository is crawled once.
 Pass `--token YOURTOKEN` or set `GITHUB_TOKEN` to avoid API rate limits.
 Missing parent directories for the output path are created automatically.
 The `Update Repo Feature Summary` workflow runs nightly and after each merge, committing `docs/repo-feature-summary.md` to `main` so the table stays fresh.
-The summary records the short SHA of the latest commit, the name of each repository's default branch, and whether the latest commit passed CI on that branch. If CI metadata is unavailable—because workflows are still running or the GitHub API denies access—the Trunk column shows `n/a` instead of marking the build as failed.
+The summary records the short SHA of the latest commit, the name of each repository's default branch, and whether the latest commit passed CI on that branch. If CI metadata is unavailable because workflows are still running, the Trunk column shows `n/a`. API errors are treated as failures so flaky endpoints surface as `❌` instead of disappearing into the unknown state.
 
 ### Auditing dev tooling
 
