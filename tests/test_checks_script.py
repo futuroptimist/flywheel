@@ -35,6 +35,13 @@ def test_checks_script_runs_codespell(tmp_path):
         "codespell",
         f'echo codespell "$@" >> "{log_file}"\nexit 0',
     )
+    link_log = tmp_path / "linkchecker.log"
+
+    stub(
+        "linkchecker",
+        f'echo linkchecker "$@" >> "{link_log}"\nexit 0',
+    )
+
     for cmd in [
         "flake8",
         "isort",
@@ -44,7 +51,6 @@ def test_checks_script_runs_codespell(tmp_path):
         "bandit",
         "safety",
         "pyspelling",
-        "linkchecker",
     ]:
         stub(cmd)
 
@@ -65,3 +71,8 @@ def test_checks_script_runs_codespell(tmp_path):
     logged = log_file.read_text().strip()
     assert logged.startswith("codespell ")
     assert "--ignore-words" in logged
+
+    assert link_log.exists()
+    link_logged = link_log.read_text().strip()
+    assert link_logged.startswith("linkchecker ")
+    assert "--no-warnings" in link_logged
