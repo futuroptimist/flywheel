@@ -18,4 +18,12 @@ cd sugarkube
 # follow the README to provision the cluster
 ```
 
-Future updates may sync agent prompts and automation between Flywheel and sugarkube for consistent deployments.
+Use the prompt sync report to compare Flywheel's prompts with sugarkube's copy and
+identify anything to port over:
+
+```bash
+python -m flywheel.promptsync --target-repo futuroptimist/sugarkube
+```
+
+The command reads `docs/prompt-docs-summary.md` and prints the prompts missing from
+either repository so you can open a PR downstream.

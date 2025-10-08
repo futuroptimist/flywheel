@@ -38,6 +38,8 @@ CONTEXT:
 REQUEST:
 1. Run the spellcheck command and inspect the results.
 2. Correct misspellings or update `dict/allow.txt` as needed.
+   `tests/test_spellcheck_allowlist.py` guards the shared vocabulary so spellcheck
+   stays green across repositories.
 3. Re-run the spellcheck until it reports no errors.
 4. Run all checks listed above.
 5. Commit the changes with a concise message and open a pull request.
