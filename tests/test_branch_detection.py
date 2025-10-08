@@ -88,4 +88,4 @@ class DummyMissingStatuses:
 
 def test_branch_green_missing_status_returns_none():
     crawler = RepoCrawler([], session=DummyMissingStatuses())
-    assert crawler._branch_green("demo/repo", "main", "abcdef0") is None
+    assert crawler._branch_green("demo/repo", "main", "abcdef0") is False
