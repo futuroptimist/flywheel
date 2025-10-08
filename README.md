@@ -321,7 +321,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [DSPACE](https://github.com/democratizedspace/dspace) –  \
   offline-first idle simulation with maker quests.  \
   See `docs/dspace-integration.md` for quest ideas.
-- ✅ [flywheel](https://github.com/futuroptimist/flywheel) –  \
+- ❌ [flywheel](https://github.com/futuroptimist/flywheel) –  \
   boilerplate for reproducible CI and releases.
 - ❌ [Gabriel](https://github.com/futuroptimist/gabriel) –  \
   "guardian angel" LLM focused on security.  \
@@ -340,7 +340,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   3D-printable block models from GitHub commits.
 - ✅ [wove](https://github.com/futuroptimist/wove) –  \
   toolkit for knitting and robotic looms.
-- ❌ [sugarkube](https://github.com/futuroptimist/sugarkube) –  \
+- ✅ [sugarkube](https://github.com/futuroptimist/sugarkube) –  \
   k3s platform for off-grid Raspberry Pi clusters.  \
   See `docs/sugarkube-integration.md`.
 - ✅ [jobbot3000](https://github.com/futuroptimist/jobbot3000) –  \\
