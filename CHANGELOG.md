@@ -2,6 +2,8 @@
 ## 2025-10-10
 - feat: prompt before injecting dev tooling in `flywheel update` and document
   the `--yes` flag.
+- feat: auto-sort the prompt docs TODO table by type and repository to match
+  triage guidance.
 ## 2025-10-09
 - fix: mark repo summary trunk status as n/a when CI is pending or missing.
 - fix: allow the repo feature summary CLI to run directly by ensuring the flywheel package is on
