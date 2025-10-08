@@ -4,6 +4,8 @@
   the `--yes` flag.
 - feat: auto-sort the prompt docs TODO table by type and repository to match
   triage guidance.
+- fix: treat CI status API errors as failures when computing repo summary trunk
+  status.
 ## 2025-10-09
 - fix: mark repo summary trunk status as n/a when CI is pending or missing.
 - fix: allow the repo feature summary CLI to run directly by ensuring the flywheel package is on
