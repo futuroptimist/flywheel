@@ -6,6 +6,8 @@ from pathlib import Path
 import pytest
 
 from flywheel.promptsync import (
+    _extract_table_rows,
+    _normalize_repo,
     compare_prompt_sets,
     format_prompt_sync_report,
     main,
@@ -82,6 +84,28 @@ def test_parse_prompt_summary_extracts_rows(sample_summary: str) -> None:
         "docs/prompts/codex/automation.md",
         "docs/prompts/codex/docs.md",
     }
+
+
+def test_normalize_repo_extracts_link_text() -> None:
+    header_line = "**[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)**"
+
+    normalized = _normalize_repo(header_line)
+
+    assert normalized == "futuroptimist/flywheel"
+
+
+def test_extract_table_rows_skips_headers_and_blanks() -> None:
+    rows = _extract_table_rows(
+        [
+            "| Path | Prompt |",
+            "| ---- | ------ |",
+            "| [docs/prompts/codex/automation.md](https://example.com/auto) |",
+            "|  |  |",
+            "not a table row",
+        ]
+    )
+
+    assert rows == {"docs/prompts/codex/automation.md"}
 
 
 def test_format_prompt_sync_report_when_no_differences() -> None:
