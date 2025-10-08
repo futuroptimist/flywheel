@@ -1,6 +1,7 @@
 import argparse
 import shutil
 from pathlib import Path
+from typing import Sequence
 
 import yaml
 
@@ -32,6 +33,8 @@ PY_FILES = [
 
 JS_FILES = ["templates/javascript/package.json"]
 
+PROMPT_DOCS = [Path("docs/prompts/codex/automation.md")]
+
 
 def copy_file(src: Path, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -43,6 +46,29 @@ def copy_file(src: Path, dest: Path) -> None:
 def inject_dev(target: Path) -> None:
     for rel in WORKFLOW_FILES + OTHER_FILES:
         copy_file(ROOT / rel, target / rel)
+
+
+def sync_prompt_docs(
+    target: Path, prompt_paths: Sequence[Path] | None = None
+) -> list[Path]:
+    """Copy prompt docs into ``target`` and return updated paths."""
+
+    resolved_target = target.resolve()
+    resolved_target.mkdir(parents=True, exist_ok=True)
+    prompts = [Path(rel) for rel in (prompt_paths or PROMPT_DOCS)]
+    updated: list[Path] = []
+    for rel in prompts:
+        src = ROOT / rel
+        if not src.exists():
+            raise FileNotFoundError(f"Prompt file not found: {src}")
+        dest = resolved_target / rel
+        src_bytes = src.read_bytes()
+        dest_bytes = dest.read_bytes() if dest.exists() else None
+        should_copy = dest_bytes != src_bytes
+        copy_file(src, dest)
+        if should_copy:
+            updated.append(dest)
+    return updated
 
 
 def audit_repo(target: Path) -> None:
@@ -183,6 +209,19 @@ def runbook(args: argparse.Namespace) -> None:
         print()
 
 
+def sync_prompts_cli(args: argparse.Namespace) -> None:
+    target = Path(args.target).resolve()
+    prompt_paths = None
+    if args.files:
+        prompt_paths = [Path(rel) for rel in args.files]
+    updated = sync_prompt_docs(target, prompt_paths=prompt_paths)
+    if updated:
+        for path in updated:
+            print(f"Updated {path}")
+    else:
+        print("Prompt docs already up to date.")
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="flywheel")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -265,6 +304,19 @@ def build_parser() -> argparse.ArgumentParser:
         help="path to runbook YAML file",
     )
     p_runbook.set_defaults(func=runbook)
+
+    p_sync = sub.add_parser(
+        "sync-prompts",
+        help="sync prompt docs to target repo",
+    )
+    p_sync.add_argument("target", help="target repository path")
+    p_sync.add_argument(
+        "--files",
+        nargs="+",
+        type=Path,
+        help="prompt doc paths relative to the repository root",
+    )
+    p_sync.set_defaults(func=sync_prompts_cli, files=None)
 
     return parser
 

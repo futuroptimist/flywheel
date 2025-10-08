@@ -18,4 +18,15 @@ cd sugarkube
 # follow the README to provision the cluster
 ```
 
-Future updates may sync agent prompts and automation between Flywheel and sugarkube for consistent deployments.
+## Syncing automation prompts
+
+Keep sugarkube's automation instructions aligned with Flywheel by copying the
+canonical prompt doc into the repository:
+
+```bash
+flywheel sync-prompts /path/to/sugarkube
+```
+
+The command writes `docs/prompts/codex/automation.md` into the target repo and
+skips files that are already identical. Run it after updating the automation
+prompt so both projects share the same baseline instructions.
