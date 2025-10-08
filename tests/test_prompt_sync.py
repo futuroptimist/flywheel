@@ -43,7 +43,9 @@ def test_sync_prompt_docs_missing_source(tmp_path: Path) -> None:
         )
 
 
-def test_sync_prompts_cli_reports_updates(tmp_path: Path, capsys: pytest.CaptureFixture) -> None:
+def test_sync_prompts_cli_reports_updates(
+    tmp_path: Path, capsys: pytest.CaptureFixture
+) -> None:
     target = tmp_path / "sugarkube"
 
     args = Namespace(target=str(target), files=None)
@@ -55,7 +57,9 @@ def test_sync_prompts_cli_reports_updates(tmp_path: Path, capsys: pytest.Capture
     assert captured == expected_lines
 
 
-def test_sync_prompts_cli_handles_files_arg(tmp_path: Path, capsys: pytest.CaptureFixture) -> None:
+def test_sync_prompts_cli_handles_files_arg(
+    tmp_path: Path, capsys: pytest.CaptureFixture
+) -> None:
     target = tmp_path / "sugarkube"
     path = Path("docs/prompts/codex/automation.md")
 
