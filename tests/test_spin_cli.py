@@ -137,7 +137,9 @@ def test_iter_project_files_skips_unwanted_entries(tmp_path: Path) -> None:
     assert ".cache" not in relative
 
 
-def test_iter_project_files_guard_skipped_dirs(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+def test_iter_project_files_guard_skipped_dirs(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
     repo = tmp_path / "synthetic"
     repo.mkdir()
 
@@ -205,7 +207,9 @@ def test_detect_tests_handles_multiple_patterns(tmp_path: Path) -> None:
     assert _detect_tests(repo, files) is True
 
 
-def test_detect_tests_scans_code_paths_without_tests_dir(tmp_path: Path) -> None:
+def test_detect_tests_scans_code_paths_without_tests_dir(
+    tmp_path: Path,
+) -> None:
     repo = tmp_path / "codebase"
     repo.mkdir()
 
@@ -267,7 +271,10 @@ def test_analyze_repository_returns_sorted_extensions(tmp_path: Path) -> None:
 
     tests_dir = repo / "tests"
     tests_dir.mkdir()
-    (tests_dir / "test_widget.py").write_text("def test_widget():\n    assert True\n")
+    (tests_dir / "test_widget.py").write_text(
+        "def test_widget():\n"
+        "    assert True\n"
+    )
 
     stats, suggestions = _analyze_repository(repo)
 
@@ -303,7 +310,9 @@ def test_analyze_repository_reports_missing_assets(tmp_path: Path) -> None:
     ]
 
 
-def test_spin_dry_run_outputs_json_inline(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_spin_dry_run_outputs_json_inline(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
     repo = tmp_path / "inline"
     repo.mkdir()
 
