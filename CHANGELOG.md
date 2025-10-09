@@ -1,4 +1,9 @@
 # Changelog
+## 2025-10-11
+- feat: flag missing dependency lockfiles in `flywheel spin --dry-run` output and
+  include lockfile metadata in the stats payload.
+- feat: expose repository `language_mix` stats in `flywheel spin --dry-run` to
+  honor the prompt doc requirement for language mix metrics.
 ## 2025-10-10
 - feat: add `flywheel spin --dry-run` to surface heuristic suggestions before
   LLM-backed workflows land.

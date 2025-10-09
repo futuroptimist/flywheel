@@ -70,6 +70,74 @@ def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
     assert result["suggestions"] == []
 
 
+def test_spin_reports_missing_lockfile(tmp_path: Path) -> None:
+    repo = tmp_path / "pkg"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+
+    result = run_spin_dry_run(repo)
+
+    dep = result["stats"]["dependency_health"]
+    assert dep["status"] == "lockfile-missing"
+    assert dep["manifests"] == ["package.json"]
+    assert dep["missing_lockfiles"] == ["package.json"]
+
+    suggestion_ids = {entry["id"] for entry in result["suggestions"]}
+    assert "commit-lockfiles" in suggestion_ids
+    for entry in result["suggestions"]:
+        if entry["id"] == "commit-lockfiles":
+            lock_suggestion = entry
+            break
+    else:  # pragma: no cover - defensive fallback
+        raise AssertionError("commit-lockfiles suggestion missing")
+    assert "package.json" in lock_suggestion["files"]
+
+
+def test_spin_ignores_present_lockfile(tmp_path: Path) -> None:
+    repo = tmp_path / "pkg"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+    (repo / "package-lock.json").write_text("{}\n")
+
+    result = run_spin_dry_run(repo)
+
+    dep = result["stats"]["dependency_health"]
+    assert dep["status"] == "ok"
+    assert dep["missing_lockfiles"] == []
+    suggestion_ids = {entry["id"] for entry in result["suggestions"]}
+    assert "commit-lockfiles" not in suggestion_ids
+
+
+def test_spin_reports_language_mix(tmp_path: Path) -> None:
+    repo = tmp_path / "polyglot"
+    repo.mkdir()
+
+    scripts = repo / "scripts"
+    scripts.mkdir()
+    (scripts / "build.py").write_text("print('hi')\n")
+
+    services = repo / "services"
+    services.mkdir()
+    (services / "worker.py").write_text("print('hello')\n")
+
+    frontend = repo / "frontend"
+    frontend.mkdir()
+    (frontend / "main.ts").write_text("export const foo = 1;\n")
+
+    ui = repo / "ui"
+    ui.mkdir()
+    (ui / "App.jsx").write_text("export default () => null;\n")
+
+    result = run_spin_dry_run(repo)
+
+    mix = result["stats"]["language_mix"]
+    assert mix == [
+        {"language": "Python", "count": 2},
+        {"language": "JavaScript", "count": 1},
+        {"language": "TypeScript", "count": 1},
+    ]
+
+
 def test_spin_requires_existing_directory(tmp_path: Path) -> None:
     missing = tmp_path / "does-not-exist"
     args = argparse.Namespace(path=str(missing), dry_run=True)
