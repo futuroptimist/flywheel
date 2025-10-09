@@ -169,8 +169,10 @@ Create a Markdown table showing which flywheel files each repo uses:
 flywheel crawl --repos-file docs/repo_list.txt --output docs/repo-feature-summary.md
 ```
 
-Append `@branch` to any repo to crawl a non-default branch, e.g. `owner/name@dev`. Lines in `docs/repo_list.txt` are combined with any repos passed on the command line.
-Duplicates are removed automatically so each repository is crawled once.
+Append `@branch` to any repo to crawl a non-default branch, e.g. `owner/name@dev`. Lines in
+`docs/repo_list.txt` are combined with any repos passed on the command line. Duplicates are removed
+automatically so each repository is crawled once, and when the same repo appears multiple times the
+crawler keeps a single entry that honors the most recently specified branch override.
 Pass `--token YOURTOKEN` or set `GITHUB_TOKEN` to avoid API rate limits.
 Missing parent directories for the output path are created automatically.
 The `Update Repo Feature Summary` workflow runs nightly and after each merge, committing `docs/repo-feature-summary.md` to `main` so the table stays fresh.
