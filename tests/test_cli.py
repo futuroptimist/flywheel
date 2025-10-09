@@ -63,6 +63,9 @@ def test_init_copies_dev_tooling(tmp_path):
 def test_prompt(tmp_path):
     readme = tmp_path / "README.md"
     readme.write_text("Hello")
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "src").mkdir()
+    (tmp_path / "pyproject.toml").write_text("[tool]")
     result = subprocess.run(
         [sys.executable, "-m", "flywheel", "prompt", str(tmp_path)],
         capture_output=True,
@@ -70,6 +73,13 @@ def test_prompt(tmp_path):
         check=True,
     )
     assert "# Purpose" in result.stdout
+    assert "# Repo Snapshot" in result.stdout
+    lines = result.stdout.splitlines()
+    snapshot_line = next(
+        line for line in lines if line.startswith("Top-level entries:")
+    )
+    for expected in ("README.md", "docs/", "pyproject.toml", "src/"):
+        assert expected in snapshot_line
 
 
 def test_prompt_no_readme(tmp_path):
@@ -80,6 +90,12 @@ def test_prompt_no_readme(tmp_path):
         check=True,
     )
     assert "No README found." in result.stdout
+    snapshot_line = next(
+        line
+        for line in result.stdout.splitlines()
+        if line.startswith("Top-level entries:")
+    )
+    assert "(no non-hidden files found)" in snapshot_line
 
 
 def test_prompt_handles_braces(tmp_path):
@@ -92,6 +108,25 @@ def test_prompt_handles_braces(tmp_path):
         check=True,
     )
     assert "{braced}" in result.stdout
+
+
+def test_prompt_snapshot_truncates(tmp_path):
+    readme = tmp_path / "README.md"
+    readme.write_text("Intro")
+    for idx in range(12):
+        (tmp_path / f"file{idx}.txt").write_text("data")
+    result = subprocess.run(
+        [sys.executable, "-m", "flywheel", "prompt", str(tmp_path)],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    snapshot_line = next(
+        line
+        for line in result.stdout.splitlines()
+        if line.startswith("Top-level entries:")
+    )
+    assert "… (+" in snapshot_line
 
 
 def test_cli_help():

@@ -195,15 +195,25 @@ class RepoCrawler:
     ) -> None:
         """Initialize with an optional list of ``owner/name@branch`` specs."""
 
-        self.repos: list[str] = []
-        self._branch_overrides: dict[str, str] = {}
-        for r in repos:
-            if "@" in r:
-                name, branch = r.split("@", 1)
-                self.repos.append(name)
-                self._branch_overrides[name] = branch
+        repo_map: dict[str, str | None] = {}
+        for spec in repos:
+            if "@" in spec:
+                name, branch = spec.split("@", 1)
+                name = name.strip()
+                branch = branch.strip()
             else:
-                self.repos.append(r)
+                name = spec.strip()
+                branch = None
+            if not name:
+                continue
+            if name not in repo_map:
+                repo_map[name] = branch or None
+            elif branch:
+                repo_map[name] = branch
+        self.repos = list(repo_map)
+        self._branch_overrides = {
+            name: branch for name, branch in repo_map.items() if branch
+        }
         if session is not None:
             self.session = session
         elif requests_cache:

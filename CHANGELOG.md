@@ -2,12 +2,17 @@
 ## 2025-10-10
 - feat: add `flywheel spin --dry-run` to surface heuristic suggestions before
   LLM-backed workflows land.
+- feat: include signed Δ values in `verify_fit` mesh dimension errors to match
+  README guidance on highlighting oversize vs undersize parts.
 - feat: prompt before injecting dev tooling in `flywheel update` and document
   the `--yes` flag.
 - feat: auto-sort the prompt docs TODO table by type and repository to match
   triage guidance.
+- feat: include repo snapshots in `flywheel prompt` output for richer context.
 - fix: treat CI status API errors as failures when computing repo summary trunk
   status.
+- fix: dedupe repo crawl specs so branch overrides do not trigger duplicate
+  entries.
 ## 2025-10-09
 - fix: mark repo summary trunk status as n/a when CI is pending or missing.
 - fix: allow the repo feature summary CLI to run directly by ensuring the flywheel package is on

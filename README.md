@@ -157,7 +157,9 @@ Invoke the prompt agent to get repo-aware suggestions:
 flywheel prompt
 ```
 
-README content containing `{` or `}` characters is handled safely.
+README content containing `{` or `}` characters is handled safely. The command
+also prints a repo snapshot that lists non-hidden files at the repository root
+so prompt runners immediately see the project's structure.
 
 ### Generating repo feature summary
 
@@ -167,8 +169,10 @@ Create a Markdown table showing which flywheel files each repo uses:
 flywheel crawl --repos-file docs/repo_list.txt --output docs/repo-feature-summary.md
 ```
 
-Append `@branch` to any repo to crawl a non-default branch, e.g. `owner/name@dev`. Lines in `docs/repo_list.txt` are combined with any repos passed on the command line.
-Duplicates are removed automatically so each repository is crawled once.
+Append `@branch` to any repo to crawl a non-default branch, e.g. `owner/name@dev`. Lines in
+`docs/repo_list.txt` are combined with any repos passed on the command line. Duplicates are removed
+automatically so each repository is crawled once, and when the same repo appears multiple times the
+crawler keeps a single entry that honors the most recently specified branch override.
 Pass `--token YOURTOKEN` or set `GITHUB_TOKEN` to avoid API rate limits.
 Missing parent directories for the output path are created automatically.
 The `Update Repo Feature Summary` workflow runs nightly and after each merge, committing `docs/repo-feature-summary.md` to `main` so the table stays fresh.
@@ -330,12 +334,12 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [token.place](https://github.com/futuroptimist/token.place) –  \
   stateless faucet for LLM inference.  \
   See `docs/tokenplace-features.md` and related docs.
-- ✅ [DSPACE](https://github.com/democratizedspace/dspace) –  \
+- ❌ [DSPACE](https://github.com/democratizedspace/dspace) –  \
   offline-first idle simulation with maker quests.  \
   See `docs/dspace-integration.md` for quest ideas.
-- ❌ [flywheel](https://github.com/futuroptimist/flywheel) –  \
+- ✅ [flywheel](https://github.com/futuroptimist/flywheel) –  \
   boilerplate for reproducible CI and releases.
-- ❌ [Gabriel](https://github.com/futuroptimist/gabriel) –  \
+- ✅ [Gabriel](https://github.com/futuroptimist/gabriel) –  \
   "guardian angel" LLM focused on security.  \
   Its `docs/FLYWHEEL_RISK_MODEL.md` discusses how automation changes your threat model.  \
   See `docs/gabriel-integration.md` for ways these repositories will share tooling.
