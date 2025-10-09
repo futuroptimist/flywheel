@@ -1,5 +1,7 @@
 # Changelog
 ## 2025-10-10
+- feat: add `flywheel spin --dry-run` to surface heuristic suggestions before
+  LLM-backed workflows land.
 - feat: include signed Δ values in `verify_fit` mesh dimension errors to match
   README guidance on highlighting oversize vs undersize parts.
 - feat: prompt before injecting dev tooling in `flywheel update` and document
