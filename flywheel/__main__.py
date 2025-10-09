@@ -1,5 +1,8 @@
 import argparse
+import json
+import os
 import shutil
+from collections import Counter
 from pathlib import Path
 from typing import Sequence
 
@@ -34,6 +37,48 @@ PY_FILES = [
 JS_FILES = ["templates/javascript/package.json"]
 
 PROMPT_DOCS = [Path("docs/prompts/codex/automation.md")]
+
+SPIN_SKIP_DIRECTORIES = {
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".svn",
+    ".tox",
+    "__pycache__",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    ".venv",
+}
+SPIN_ALLOWED_HIDDEN = {".github"}
+CODE_FILE_SUFFIXES = {
+    ".cjs",
+    ".js",
+    ".jsx",
+    ".mjs",
+    ".py",
+    ".ts",
+    ".tsx",
+}
+TEST_FILENAME_SUFFIXES = (
+    "_test.py",
+    "_test.ts",
+    "_test.tsx",
+    "_test.js",
+    "_test.jsx",
+    ".test.py",
+    ".test.ts",
+    ".test.tsx",
+    ".test.js",
+    ".test.jsx",
+    ".spec.py",
+    ".spec.ts",
+    ".spec.tsx",
+    ".spec.js",
+    ".spec.jsx",
+)
 
 
 def copy_file(src: Path, dest: Path) -> None:
@@ -153,6 +198,147 @@ def prompt(args: argparse.Namespace) -> None:
         snippet = "No README found."  # pragma: no cover
     # Avoid ``str.format`` so braces in README snippets don't break formatting
     print(PROMPT_TMPL.replace("{snippet}", snippet))
+
+
+def _iter_project_files(root: Path) -> list[Path]:
+    files: list[Path] = []
+    allowed_hidden = SPIN_ALLOWED_HIDDEN
+    skip_dirs = SPIN_SKIP_DIRECTORIES
+    for dirpath, dirnames, filenames in os.walk(root):
+        current = Path(dirpath)
+        rel_parts = current.relative_to(root).parts if current != root else ()
+        if any(part in skip_dirs for part in rel_parts):
+            dirnames[:] = []
+            continue
+        pruned: list[str] = []
+        for name in dirnames:
+            if name in skip_dirs:
+                continue
+            if name.startswith(".") and name not in allowed_hidden:
+                continue
+            pruned.append(name)
+        dirnames[:] = pruned
+        for filename in filenames:
+            if filename.startswith(".") and current.name not in allowed_hidden:
+                continue
+            files.append(current / filename)
+    return files
+
+
+def _has_ci_workflows(root: Path) -> bool:
+    workflows = root / ".github" / "workflows"
+    if not workflows.exists():
+        return False
+    for path in workflows.iterdir():
+        if path.is_file() and path.suffix.lower() in {".yml", ".yaml"}:
+            return True
+    return False
+
+
+def _detect_tests(root: Path, files: Sequence[Path]) -> bool:
+    tests_dir = root / "tests"
+    if tests_dir.exists():
+        for path in tests_dir.rglob("*"):
+            if path.is_file():
+                return True
+    for path in files:
+        suffix = path.suffix.lower()
+        if suffix not in CODE_FILE_SUFFIXES:
+            continue
+        name = path.name.lower()
+        if name.startswith("test_"):
+            return True
+        if any(name.endswith(sfx) for sfx in TEST_FILENAME_SUFFIXES):
+            return True
+        parent_parts = [part.lower() for part in path.parts[:-1]]
+        if any(part in {"tests", "__tests__"} for part in parent_parts):
+            return True
+    return False
+
+
+def _analyze_repository(
+    root: Path,
+) -> tuple[dict[str, object], list[dict[str, object]]]:
+    files = _iter_project_files(root)
+    ext_counts = Counter((path.suffix.lower() or "<none>") for path in files)
+    top_extensions = [
+        {"extension": ext, "count": count}
+        for ext, count in sorted(
+            ext_counts.items(), key=lambda item: (-item[1], item[0])
+        )[:5]
+    ]
+    has_readme = (root / "README.md").exists()
+    has_ci = _has_ci_workflows(root)
+    has_tests = _detect_tests(root, files)
+    stats: dict[str, object] = {
+        "total_files": len(files),
+        "top_extensions": top_extensions,
+        "has_readme": has_readme,
+        "has_tests": has_tests,
+        "has_ci_workflows": has_ci,
+    }
+    suggestions: list[dict[str, object]] = []
+    if not has_readme:
+        suggestions.append(
+            {
+                "id": "add-readme",
+                "title": "Add README.md",
+                "description": (
+                    "Document the project purpose, setup instructions, and"
+                    " test commands so new contributors ramp up quickly."
+                ),
+                "impact": "medium",
+                "files": ["README.md"],
+            }
+        )
+    if not has_ci:
+        suggestions.append(
+            {
+                "id": "configure-ci",
+                "title": "Add CI workflows",
+                "description": (
+                    "Add GitHub Actions workflows "
+                    "under .github/workflows "
+                    "so lint, test, and docs jobs run on every push."
+                ),
+                "impact": "high",
+                "files": [".github/workflows/"],
+            }
+        )
+    if not has_tests:
+        suggestions.append(
+            {
+                "id": "add-tests",
+                "title": "Bootstrap an automated test suite",
+                "description": (
+                    "Create a tests/ directory or add language-appropriate"
+                    " test files to prevent regressions."
+                ),
+                "impact": "high",
+                "files": ["tests/"],
+            }
+        )
+    suggestions.sort(key=lambda item: item["id"])
+    return stats, suggestions
+
+
+def spin(args: argparse.Namespace) -> None:
+    target = Path(args.path or ".").resolve()
+    if not target.exists():
+        raise SystemExit(f"Target path not found: {target}")
+    if not target.is_dir():
+        raise SystemExit(f"Target path is not a directory: {target}")
+    if not args.dry_run:
+        msg = "Only --dry-run mode is supported; re-run with --dry-run."
+        raise SystemExit(msg)
+    stats, suggestions = _analyze_repository(target)
+    result = {
+        "target": str(target),
+        "mode": "dry-run",
+        "stats": stats,
+        "suggestions": suggestions,
+    }
+    print(json.dumps(result, indent=2, sort_keys=True))
 
 
 def crawl(args: argparse.Namespace) -> None:
@@ -276,6 +462,23 @@ def build_parser() -> argparse.ArgumentParser:
         help="repository path",
     )
     p_prompt.set_defaults(func=prompt)
+
+    p_spin = sub.add_parser(
+        "spin",
+        help="analyze a repository and suggest improvements",
+    )
+    p_spin.add_argument(
+        "path",
+        nargs="?",
+        default=".",
+        help="repository path to analyze",
+    )
+    p_spin.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="generate heuristic suggestions without applying changes",
+    )
+    p_spin.set_defaults(func=spin)
 
     p_crawl = sub.add_parser("crawl", help="generate repo feature summary")
     p_crawl.add_argument("repos", nargs="*", help="repos in owner/name form")

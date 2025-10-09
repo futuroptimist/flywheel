@@ -48,6 +48,11 @@ release management, and operational readiness.
 - 80% user satisfaction rating in feedback prompts for suggestion relevance.
 - <2% regression rate measured by failing `npm run test:ci` after automated patch application.
 
+## Implementation Progress
+- **2025-10-10:** Added a Python `flywheel spin --dry-run` subcommand that emits
+  heuristic suggestions in JSON. This provides a lightweight preview while the
+  npm packaging and LLM integration remain under development.
+
 ## Architecture Overview
 ```mermaid
 graph TD

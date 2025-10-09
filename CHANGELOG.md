@@ -1,5 +1,7 @@
 # Changelog
 ## 2025-10-10
+- feat: add `flywheel spin --dry-run` to surface heuristic suggestions before
+  LLM-backed workflows land.
 - feat: prompt before injecting dev tooling in `flywheel update` and document
   the `--yes` flag.
 - feat: auto-sort the prompt docs TODO table by type and repository to match

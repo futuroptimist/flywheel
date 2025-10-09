@@ -192,6 +192,18 @@ flywheel runbook
 
 Override the file path with `--file path/to/runbook.yml` to inspect other repositories.
 
+### Previewing repo suggestions
+
+Generate heuristic improvement ideas without invoking an LLM:
+
+```bash
+flywheel spin --dry-run path/to/repo
+```
+
+The command scans the repository structure for missing documentation, tests,
+and CI workflows, then prints a JSON report summarizing the findings. Use it to
+sanity-check a project before handing it to `npx flywheel spin`.
+
 ### Scanning other repositories
 
 Clone a set of repos and generate Markdown reports:
