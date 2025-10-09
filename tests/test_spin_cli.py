@@ -138,6 +138,69 @@ def test_spin_reports_language_mix(tmp_path: Path) -> None:
     ]
 
 
+def test_dependency_health_tracks_manifests_and_lockfiles(tmp_path: Path) -> None:
+    repo = tmp_path / "deps"
+    repo.mkdir()
+
+    node_dir = repo / "web"
+    node_dir.mkdir()
+    (node_dir / "package.json").write_text("{}\n")
+    (node_dir / "pnpm-lock.yaml").write_text("lock\n")
+
+    python_dir = repo / "api"
+    python_dir.mkdir()
+    (python_dir / "Pipfile").write_text("[packages]\n")
+
+    files = [
+        node_dir / "package.json",
+        node_dir / "pnpm-lock.yaml",
+        python_dir / "Pipfile",
+        Path("outside/package.json"),
+    ]
+
+    health = main_module._analyze_dependency_health(repo, files)
+
+    assert health["manifests"] == [
+        "api/Pipfile",
+        "outside/package.json",
+        "web/package.json",
+    ]
+    assert health["lockfiles"] == ["web/pnpm-lock.yaml"]
+    assert health["missing_lockfiles"] == [
+        "api/Pipfile",
+        "outside/package.json",
+    ]
+    assert health["status"] == "lockfile-missing"
+
+
+def test_dependency_health_handles_pipfile_lock(tmp_path: Path) -> None:
+    repo = tmp_path / "pipenv"
+    repo.mkdir()
+
+    (repo / "Pipfile").write_text("[packages]\n")
+    (repo / "Pipfile.lock").write_text("{}\n")
+
+    files = [repo / "Pipfile", repo / "Pipfile.lock"]
+
+    health = main_module._analyze_dependency_health(repo, files)
+
+    assert health["manifests"] == ["Pipfile"]
+    assert health["lockfiles"] == ["Pipfile.lock"]
+    assert health["missing_lockfiles"] == []
+    assert health["status"] == "ok"
+
+
+def test_analyze_repository_emits_lockfile_suggestion(tmp_path: Path) -> None:
+    repo = tmp_path / "service"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+
+    stats, suggestions = main_module._analyze_repository(repo)
+
+    assert stats["dependency_health"]["missing_lockfiles"] == ["package.json"]
+    assert any(entry["id"] == "commit-lockfiles" for entry in suggestions)
+
+
 def test_spin_requires_existing_directory(tmp_path: Path) -> None:
     missing = tmp_path / "does-not-exist"
     args = argparse.Namespace(path=str(missing), dry_run=True)
