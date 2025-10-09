@@ -91,6 +91,66 @@ def test_main_crawl_deduplicates_repos(monkeypatch, tmp_path):
     assert seen["repos"] == ["foo/bar", "baz/qux", "extra/repo"]
 
 
+def test_main_crawl_prefers_latest_branch_override(monkeypatch, tmp_path):
+    repo_file = tmp_path / "repos.txt"
+    repo_file.write_text("foo/bar\n")
+    out = tmp_path / "summary.md"
+    seen: dict[str, list[str]] = {}
+
+    class DummyCrawler:
+        def __init__(self, repos, token=None):
+            seen["repos"] = list(repos)
+
+        def generate_summary(self):
+            return "report"
+
+    monkeypatch.setattr(fm, "RepoCrawler", DummyCrawler)
+    fm.main(
+        [
+            "crawl",
+            "foo/bar@main",
+            "foo/bar@dev",
+            "--repos-file",
+            str(repo_file),
+            "--output",
+            str(out),
+        ]
+    )
+
+    assert out.read_text() == "report"
+    assert seen["repos"] == ["foo/bar@dev"]
+
+
+def test_main_crawl_skips_blank_and_branch_only_specs(monkeypatch, tmp_path):
+    out = tmp_path / "summary.md"
+    seen: dict[str, list[str]] = {}
+
+    class DummyCrawler:
+        def __init__(self, repos, token=None):
+            seen["repos"] = list(repos)
+
+        def generate_summary(self):
+            return "report"
+
+    monkeypatch.setattr(fm, "RepoCrawler", DummyCrawler)
+    missing_list = tmp_path / "missing.txt"
+    fm.main(
+        [
+            "crawl",
+            "   ",
+            "@dev",
+            "foo/bar",
+            "--repos-file",
+            str(missing_list),
+            "--output",
+            str(out),
+        ]
+    )
+
+    assert out.read_text() == "report"
+    assert seen["repos"] == ["foo/bar"]
+
+
 def test_main_crawl_no_repos(tmp_path):
     repo_file = tmp_path / "repos.txt"
     repo_file.write_text("")
