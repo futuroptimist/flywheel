@@ -7,6 +7,13 @@ from typing import Dict, Tuple
 
 import trimesh
 
+
+def _delta_text(delta: float) -> str:
+    """Return a human-readable delta with sign and units."""
+
+    return f"Δ {delta:+.3f} mm"
+
+
 LOOSE_TOL_MULTIPLIER = 6.0
 
 _DEF_RE = re.compile(
@@ -151,43 +158,53 @@ def verify_fit(
     if abs(shaft_len_delta) >= tol:
         raise AssertionError(
             (
-                "shaft.stl length off by {delta:.3f} mm "
+                "shaft.stl length mismatch {delta} "
                 "(expected {exp:.3f}, got {got:.3f}, tol {tol:.3f})"
             ).format(
-                delta=shaft_len_delta,
+                delta=_delta_text(shaft_len_delta),
                 exp=shaft_length,
                 got=shaft_dims[2],
                 tol=tol,
             )
         )
-    shaft_delta = max(abs(dim - shaft_diameter) for dim in shaft_dims[:2])
-    if shaft_delta >= tol:
+    shaft_diffs = [dim - shaft_diameter for dim in shaft_dims[:2]]
+    shaft_delta = max(shaft_diffs, key=lambda value: abs(value))
+    if abs(shaft_delta) >= tol:
         raise AssertionError(
             (
-                "shaft.stl diameter mismatch {delta:.3f} mm exceeds tol "
+                "shaft.stl diameter mismatch {delta} exceeds tol "
                 "{tol:.3f} (target {target:.3f})"
-            ).format(delta=shaft_delta, tol=tol, target=shaft_diameter)
+            ).format(
+                delta=_delta_text(shaft_delta),
+                tol=tol,
+                target=shaft_diameter,
+            )
         )
 
     wheel_dims = _dims(stl_dir / "flywheel.stl")
     wheel_diameter = wheel["diameter"]
-    wheel_delta = max(abs(dim - wheel_diameter) for dim in wheel_dims[:2])
-    if wheel_delta >= loose_tol:
+    wheel_diffs = [dim - wheel_diameter for dim in wheel_dims[:2]]
+    wheel_delta = max(wheel_diffs, key=lambda value: abs(value))
+    if abs(wheel_delta) >= loose_tol:
         raise AssertionError(
             (
-                "flywheel.stl diameter mismatch {delta:.3f} mm exceeds tol "
+                "flywheel.stl diameter mismatch {delta} exceeds tol "
                 "{tol:.3f} (target {target:.3f})"
-            ).format(delta=wheel_delta, tol=loose_tol, target=wheel_diameter)
+            ).format(
+                delta=_delta_text(wheel_delta),
+                tol=loose_tol,
+                target=wheel_diameter,
+            )
         )
     wheel_height = wheel["height"]
     wheel_height_delta = wheel_dims[2] - wheel_height
     if abs(wheel_height_delta) >= tol:
         raise AssertionError(
             (
-                "flywheel.stl height off by {delta:.3f} mm "
+                "flywheel.stl height mismatch {delta} "
                 "(expected {exp:.3f}, got {got:.3f}, tol {tol:.3f})"
             ).format(
-                delta=wheel_height_delta,
+                delta=_delta_text(wheel_height_delta),
                 exp=wheel_height,
                 got=wheel_dims[2],
                 tol=tol,
@@ -196,23 +213,28 @@ def verify_fit(
 
     adapter_dims = _dims(stl_dir / "adapter.stl")
     adapter_outer = adapter["outer_diameter"]
-    adapter_delta = max(abs(dim - adapter_outer) for dim in adapter_dims[:2])
-    if adapter_delta >= loose_tol:
+    adapter_diffs = [dim - adapter_outer for dim in adapter_dims[:2]]
+    adapter_delta = max(adapter_diffs, key=lambda value: abs(value))
+    if abs(adapter_delta) >= loose_tol:
         raise AssertionError(
             (
-                "adapter.stl outer diameter mismatch {delta:.3f} mm "
+                "adapter.stl outer diameter mismatch {delta} "
                 "exceeds tol {tol:.3f} (target {target:.3f})"
-            ).format(delta=adapter_delta, tol=loose_tol, target=adapter_outer)
+            ).format(
+                delta=_delta_text(adapter_delta),
+                tol=loose_tol,
+                target=adapter_outer,
+            )
         )
     adapter_length = adapter["length"]
     adapter_len_delta = adapter_dims[2] - adapter_length
     if abs(adapter_len_delta) >= tol:
         raise AssertionError(
             (
-                "adapter.stl length off by {delta:.3f} mm "
+                "adapter.stl length mismatch {delta} "
                 "(expected {exp:.3f}, got {got:.3f}, tol {tol:.3f})"
             ).format(
-                delta=adapter_len_delta,
+                delta=_delta_text(adapter_len_delta),
                 exp=adapter_length,
                 got=adapter_dims[2],
                 tol=tol,
@@ -230,10 +252,10 @@ def verify_fit(
     if abs(base_len_delta) >= tol:
         raise AssertionError(
             (
-                "stand.stl base length off by {delta:.3f} mm "
+                "stand.stl base length mismatch {delta} "
                 "(expected {exp:.3f}, got {got:.3f}, tol {tol:.3f})"
             ).format(
-                delta=base_len_delta,
+                delta=_delta_text(base_len_delta),
                 exp=base_length,
                 got=stand_dims[0],
                 tol=tol,
@@ -244,10 +266,10 @@ def verify_fit(
     if abs(base_width_delta) >= tol:
         raise AssertionError(
             (
-                "stand.stl base width off by {delta:.3f} mm "
+                "stand.stl base width mismatch {delta} "
                 "(expected {exp:.3f}, got {got:.3f}, tol {tol:.3f})"
             ).format(
-                delta=base_width_delta,
+                delta=_delta_text(base_width_delta),
                 exp=base_width,
                 got=stand_dims[1],
                 tol=tol,
@@ -257,10 +279,10 @@ def verify_fit(
     if abs(stand_height_delta) >= loose_tol:
         raise AssertionError(
             (
-                "stand.stl height off by {delta:.3f} mm "
+                "stand.stl height mismatch {delta} "
                 "(expected {exp:.3f}, got {got:.3f}, tol {tol:.3f})"
             ).format(
-                delta=stand_height_delta,
+                delta=_delta_text(stand_height_delta),
                 exp=expected_z,
                 got=stand_dims[2],
                 tol=loose_tol,

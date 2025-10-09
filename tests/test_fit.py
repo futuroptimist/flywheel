@@ -114,7 +114,9 @@ def test_verify_fit_reports_mismatch_details(monkeypatch):
     monkeypatch.setattr(ff, "_dims", skew_shaft)
     with pytest.raises(AssertionError) as exc:
         ff.verify_fit(CAD_DIR, STL_DIR, tol=0.05)
-    assert "shaft.stl diameter mismatch" in str(exc.value)
+    msg = str(exc.value)
+    assert "shaft.stl diameter mismatch" in msg
+    assert "Δ +0.200 mm" in msg
 
 
 def test_verify_fit_reports_shaft_length_delta(monkeypatch):
@@ -132,8 +134,8 @@ def test_verify_fit_reports_shaft_length_delta(monkeypatch):
         ff.verify_fit(CAD_DIR, STL_DIR)
 
     msg = str(exc.value)
-    assert "shaft.stl length off by" in msg
-    assert "0.200" in msg
+    assert "shaft.stl length mismatch" in msg
+    assert "Δ +0.200 mm" in msg
 
 
 def test_verify_fit_reports_wheel_height_delta(monkeypatch):
@@ -151,8 +153,8 @@ def test_verify_fit_reports_wheel_height_delta(monkeypatch):
         ff.verify_fit(CAD_DIR, STL_DIR)
 
     msg = str(exc.value)
-    assert "flywheel.stl height off by" in msg
-    assert "0.200" in msg
+    assert "flywheel.stl height mismatch" in msg
+    assert "Δ -0.200 mm" in msg
 
 
 def test_verify_fit_reports_adapter_outer_delta(monkeypatch):
@@ -171,7 +173,7 @@ def test_verify_fit_reports_adapter_outer_delta(monkeypatch):
 
     msg = str(exc.value)
     assert "adapter.stl outer diameter mismatch" in msg
-    assert "0.700" in msg
+    assert "Δ +0.700 mm" in msg
 
 
 def test_verify_fit_reports_adapter_length_delta(monkeypatch):
@@ -189,8 +191,8 @@ def test_verify_fit_reports_adapter_length_delta(monkeypatch):
         ff.verify_fit(CAD_DIR, STL_DIR)
 
     msg = str(exc.value)
-    assert "adapter.stl length off by" in msg
-    assert "0.200" in msg
+    assert "adapter.stl length mismatch" in msg
+    assert "Δ +0.200 mm" in msg
 
 
 def test_verify_fit_reports_stand_base_length_delta(monkeypatch):
@@ -208,8 +210,8 @@ def test_verify_fit_reports_stand_base_length_delta(monkeypatch):
         ff.verify_fit(CAD_DIR, STL_DIR)
 
     msg = str(exc.value)
-    assert "stand.stl base length off by" in msg
-    assert "0.200" in msg
+    assert "stand.stl base length mismatch" in msg
+    assert "Δ +0.200 mm" in msg
 
 
 def test_verify_fit_reports_stand_base_width_delta(monkeypatch):
@@ -227,8 +229,8 @@ def test_verify_fit_reports_stand_base_width_delta(monkeypatch):
         ff.verify_fit(CAD_DIR, STL_DIR)
 
     msg = str(exc.value)
-    assert "stand.stl base width off by" in msg
-    assert "0.200" in msg
+    assert "stand.stl base width mismatch" in msg
+    assert "Δ -0.200 mm" in msg
 
 
 def test_verify_fit_reports_stand_height_delta(monkeypatch):
@@ -246,8 +248,8 @@ def test_verify_fit_reports_stand_height_delta(monkeypatch):
         ff.verify_fit(CAD_DIR, STL_DIR)
 
     msg = str(exc.value)
-    assert "stand.stl height off by" in msg
-    assert "1.000" in msg
+    assert "stand.stl height mismatch" in msg
+    assert "Δ +1.000 mm" in msg
 
 
 def test_verify_fit_reports_adapter_shaft_delta(monkeypatch):
