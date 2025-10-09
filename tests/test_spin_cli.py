@@ -45,6 +45,14 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
 
     suggestion_ids = {entry["id"] for entry in result["suggestions"]}
     assert suggestion_ids == {"add-readme", "add-tests", "configure-ci"}
+    categories: dict[str, str] = {}
+    for entry in result["suggestions"]:
+        categories[entry["id"]] = entry["category"]
+    assert categories == {
+        "add-readme": "docs",
+        "add-tests": "fix",
+        "configure-ci": "chore",
+    }
 
 
 def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
@@ -443,6 +451,14 @@ def test_analyze_repository_reports_missing_assets(tmp_path: Path) -> None:
         "add-tests",
         "configure-ci",
     ]
+    category_map: dict[str, str] = {}
+    for entry in suggestions:
+        category_map[entry["id"]] = entry["category"]
+    assert category_map == {
+        "add-readme": "docs",
+        "add-tests": "fix",
+        "configure-ci": "chore",
+    }
 
 
 def test_spin_dry_run_outputs_json_inline(
@@ -461,3 +477,11 @@ def test_spin_dry_run_outputs_json_inline(
     assert payload["mode"] == "dry-run"
     assert payload["target"] == str(repo.resolve())
     assert payload["stats"]["has_readme"] is False
+    snapshot_categories: dict[str, str] = {}
+    for item in payload["suggestions"]:
+        snapshot_categories[item["id"]] = item["category"]
+    assert snapshot_categories == {
+        "add-readme": "docs",
+        "add-tests": "fix",
+        "configure-ci": "chore",
+    }

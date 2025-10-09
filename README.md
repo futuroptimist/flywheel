@@ -210,7 +210,9 @@ sanity-check a project before handing it to `npx flywheel spin`. The dry run
 also highlights dependency lockfile gaps—if a `package.json` or `Pipfile`
 appears without its corresponding lockfile, the report suggests generating and
 committing one so installs stay reproducible—and surfaces a `language_mix`
-summary showing the top languages detected in the repository.
+summary showing the top languages detected in the repository. Each suggestion
+includes a `category` field (`docs`, `fix`, or `chore`) so the output matches
+the [`flywheel spin` design](docs/flywheel-npx-spin-design.md) schema.
 
 ### Scanning other repositories
 
@@ -338,7 +340,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [token.place](https://github.com/futuroptimist/token.place) –  \
   stateless faucet for LLM inference.  \
   See `docs/tokenplace-features.md` and related docs.
-- ❌ [DSPACE](https://github.com/democratizedspace/dspace) –  \
+- ✅ [DSPACE](https://github.com/democratizedspace/dspace) –  \
   offline-first idle simulation with maker quests.  \
   See `docs/dspace-integration.md` for quest ideas.
 - ✅ [flywheel](https://github.com/futuroptimist/flywheel) –  \
