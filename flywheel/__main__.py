@@ -397,12 +397,20 @@ def crawl(args: argparse.Namespace) -> None:
         file_repos = [line.strip() for line in lines if line.strip()]
         combined.extend(file_repos)
     combined.extend(cli_repos)
-    seen: set[str] = set()
     repos: list[str] = []
-    for spec in combined:
-        if spec not in seen:
+    index_by_repo: dict[str, int] = {}
+    for raw_spec in combined:
+        spec = raw_spec.strip()
+        if not spec:
+            continue
+        base = spec.split("@", 1)[0].strip()
+        if not base:
+            continue
+        if base in index_by_repo:
+            repos[index_by_repo[base]] = spec
+        else:
+            index_by_repo[base] = len(repos)
             repos.append(spec)
-            seen.add(spec)
     if not repos:
         raise SystemExit("No repositories provided")
     crawler = RepoCrawler(repos, token=args.token)
