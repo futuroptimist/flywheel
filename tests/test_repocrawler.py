@@ -110,6 +110,20 @@ def test_generate_summary(monkeypatch):
     )
 
 
+def test_repo_list_dedupes_branch_overrides():
+    crawler = rc.RepoCrawler(
+        [
+            "foo/bar",
+            "foo/bar@dev",
+            "baz/qux@main",
+            "baz/qux",
+        ]
+    )
+    assert crawler.repos == ["foo/bar", "baz/qux"]
+    assert crawler._branch_overrides["foo/bar"] == "dev"
+    assert crawler._branch_overrides["baz/qux"] == "main"
+
+
 def test_generate_summary_partial_coverage(monkeypatch):
     crawler = rc.RepoCrawler(["foo/bar"])
     monkeypatch.setattr(
