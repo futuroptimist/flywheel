@@ -56,7 +56,7 @@ surface broken links without flooding CI logs with informational warnings.
 - Example code and templates, including `examples/basic.py` for calling the CLI
   programmatically
 - Python CLI with subcommands `init`, `update`, `audit`, `prompt`, `crawl`, and `runbook` that prompts interactively unless `--yes` is used
-- RepoCrawler detects installers like uv (including `uv pip install` usage), pipx, pip/pip3, and poetry in workflows
+- RepoCrawler detects installers like uv (including `uv pip install` usage), pipx, pip/pip3, and Poetry commands or actions in workflows
 - [AGENTS.md](AGENTS.md) detailing included LLM assistants
 - [llms.txt](llms.txt) with quick context for AI helpers
 - [CLAUDE.md](CLAUDE.md) summarizing Anthropic guidance

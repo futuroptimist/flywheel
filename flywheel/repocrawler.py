@@ -58,7 +58,10 @@ class RepoCrawler:
     _UV = re.compile(r"setup-uv|uv\s+venv|uv\s+pip\s+install", re.I)
     _PIP = re.compile(r"\bpip(?:3)?\s+install", re.I)
     _PIPX = re.compile(r"\bpipx\s+install", re.I)
-    _POETRY = re.compile(r"poetry\s+install", re.I)
+    _POETRY = re.compile(
+        r"(?:\bpoetry\s+[a-z][\w-]*|actions-poetry)",
+        re.I,
+    )
     _UV_PIP = re.compile(
         r"(?:^|(?<=\n)|(?<=\r)|(?<=[ \t]))uv[ \t]+pip[ \t]+install\b", re.I
     )
