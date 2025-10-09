@@ -6,9 +6,9 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `d8d2f73` | n/a | 0 | 5 | 2025-10-09 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `054bfae` | ✅ | 0 | 4 | 2025-10-09 |
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `3ca0aac` | n/a | 0 | 0 | 2025-10-09 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `dfb8679` | ❌ | 3 | 37 | 2025-10-09 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `dfb8679` | ❌ | 3 | 38 | 2025-10-09 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `4f2ddcb` | ✅ | 6 | 12 | 2025-10-09 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `14c0215` | ✅ | 0 | 0 | 2025-10-09 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `b9ee9b3` | ✅ | 1 | 0 | 2025-10-07 |
@@ -19,7 +19,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `b26d10e` | ✅ | 0 | 0 | 2025-10-09 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `34ed6be` | ✅ | 0 | 0 | 2025-10-06 |
 | [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `1f7ab4b` | ✅ | 0 | 7 | 2025-10-09 |
-| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `4b1b92c` | ✅ | 0 | 0 | 2025-10-09 |
+| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `4b1b92c` | ✅ | 0 | 1 | 2025-10-09 |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |
