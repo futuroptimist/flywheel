@@ -61,7 +61,8 @@ def test_summarize_repo_root_iter_error(monkeypatch, tmp_path):
         raise OSError("cannot list")
 
     monkeypatch.setattr(Path, "iterdir", boom)
-    assert fm.summarize_repo_root(repo) == "(unable to list repository contents)"
+    expected = "(unable to list repository contents)"
+    assert fm.summarize_repo_root(repo) == expected
 
 
 def test_summarize_repo_root_formats_entries(monkeypatch, tmp_path):
@@ -100,7 +101,7 @@ def test_summarize_repo_root_limits_entries(tmp_path):
         (repo / f"item{idx}").write_text("data")
 
     snapshot = fm.summarize_repo_root(repo, limit=5)
-    assert snapshot.count(",") == 5  # five commas == six entries listed
+    assert snapshot.count(",") == 5  # six entries listed
     assert snapshot.endswith("… (+7 more)")
 
 
