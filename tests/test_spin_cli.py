@@ -138,7 +138,9 @@ def test_spin_reports_language_mix(tmp_path: Path) -> None:
     ]
 
 
-def test_dependency_health_tracks_manifests_and_lockfiles(tmp_path: Path) -> None:
+def test_dependency_health_tracks_manifests_and_lockfiles(
+    tmp_path: Path,
+) -> None:
     repo = tmp_path / "deps"
     repo.mkdir()
 
@@ -173,7 +175,9 @@ def test_dependency_health_tracks_manifests_and_lockfiles(tmp_path: Path) -> Non
     assert health["status"] == "lockfile-missing"
 
 
-def test_dependency_health_handles_pipfile_lock(tmp_path: Path) -> None:
+def test_dependency_health_handles_pipfile_lock(
+    tmp_path: Path,
+) -> None:
     repo = tmp_path / "pipenv"
     repo.mkdir()
 
@@ -197,7 +201,8 @@ def test_analyze_repository_emits_lockfile_suggestion(tmp_path: Path) -> None:
 
     stats, suggestions = main_module._analyze_repository(repo)
 
-    assert stats["dependency_health"]["missing_lockfiles"] == ["package.json"]
+    dependency_health = stats["dependency_health"]
+    assert dependency_health["missing_lockfiles"] == ["package.json"]
     assert any(entry["id"] == "commit-lockfiles" for entry in suggestions)
 
 
