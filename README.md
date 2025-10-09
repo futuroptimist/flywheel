@@ -157,7 +157,9 @@ Invoke the prompt agent to get repo-aware suggestions:
 flywheel prompt
 ```
 
-README content containing `{` or `}` characters is handled safely.
+README content containing `{` or `}` characters is handled safely. The command
+also prints a repo snapshot that lists non-hidden files at the repository root
+so prompt runners immediately see the project's structure.
 
 ### Generating repo feature summary
 
