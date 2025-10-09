@@ -43,6 +43,46 @@ def copy_file(src: Path, dest: Path) -> None:
     shutil.copy2(src, dest)
 
 
+def summarize_repo_root(repo: Path, limit: int = 10) -> str:
+    """Return a comma-separated snapshot of top-level entries in ``repo``."""
+
+    if not repo.exists():
+        return "(directory not found)"
+    if not repo.is_dir():
+        return "(path is not a directory)"
+
+    try:
+        children = sorted(repo.iterdir(), key=lambda p: p.name.lower())
+    except OSError:
+        return "(unable to list repository contents)"
+
+    entries: list[str] = []
+    for child in children:
+        name = child.name
+        if name.startswith("."):
+            continue
+        try:
+            if child.is_dir():
+                entries.append(f"{name}/")
+            elif child.is_symlink():
+                entries.append(f"{name}@")
+            elif child.is_file():
+                entries.append(name)
+            else:
+                entries.append(name)
+        except OSError:
+            entries.append(name)
+
+    if not entries:
+        return "(no non-hidden files found)"
+
+    if len(entries) > limit:
+        remaining = len(entries) - limit
+        entries = entries[:limit] + [f"… (+{remaining} more)"]
+
+    return ", ".join(entries)
+
+
 def inject_dev(target: Path) -> None:
     for rel in WORKFLOW_FILES + OTHER_FILES:
         copy_file(ROOT / rel, target / rel)
@@ -139,6 +179,9 @@ Assist developers working on this repository.
 # Context
 {snippet}
 
+# Repo Snapshot
+Top-level entries: {snapshot}
+
 # Request
 Provide high level guidance or next steps.
 """
@@ -151,8 +194,12 @@ def prompt(args: argparse.Namespace) -> None:
         snippet = "\n".join(readme.read_text().splitlines()[:20])
     else:
         snippet = "No README found."  # pragma: no cover
+    snapshot = summarize_repo_root(repo)
     # Avoid ``str.format`` so braces in README snippets don't break formatting
-    print(PROMPT_TMPL.replace("{snippet}", snippet))
+    prompt_text = PROMPT_TMPL.replace("{snippet}", snippet).replace(
+        "{snapshot}", snapshot
+    )
+    print(prompt_text)
 
 
 def crawl(args: argparse.Namespace) -> None:
