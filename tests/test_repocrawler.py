@@ -125,11 +125,13 @@ def test_repo_list_dedupes_branch_overrides():
 
 
 def test_repo_list_skips_empty_specs():
-    crawler = rc.RepoCrawler([
-        "   ",
-        "@dev",
-        " foo/bar  ",
-    ])
+    crawler = rc.RepoCrawler(
+        [
+            "   ",
+            "@dev",
+            " foo/bar  ",
+        ]
+    )
 
     assert crawler.repos == ["foo/bar"]
     assert crawler._branch_overrides == {}
