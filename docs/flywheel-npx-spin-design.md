@@ -52,6 +52,8 @@ release management, and operational readiness.
 - **2025-10-10:** Added a Python `flywheel spin --dry-run` subcommand that emits
   heuristic suggestions in JSON. This provides a lightweight preview while the
   npm packaging and LLM integration remain under development.
+- **2025-10-11:** Tagged heuristic suggestions with `category` values so the
+  dry-run output matches the prompt schema (`docs`, `fix`, `chore`).
 
 ## Architecture Overview
 ```mermaid

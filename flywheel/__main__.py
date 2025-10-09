@@ -329,6 +329,7 @@ def _analyze_repository(
         suggestions.append(
             {
                 "id": "add-readme",
+                "category": "docs",
                 "title": "Add README.md",
                 "description": (
                     "Document the project purpose, setup instructions, and"
@@ -342,6 +343,7 @@ def _analyze_repository(
         suggestions.append(
             {
                 "id": "configure-ci",
+                "category": "chore",
                 "title": "Add CI workflows",
                 "description": (
                     "Add GitHub Actions workflows "
@@ -356,6 +358,7 @@ def _analyze_repository(
         suggestions.append(
             {
                 "id": "add-tests",
+                "category": "fix",
                 "title": "Bootstrap an automated test suite",
                 "description": (
                     "Create a tests/ directory or add language-appropriate"
