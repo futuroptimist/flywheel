@@ -10,10 +10,10 @@ import pytest
 
 import flywheel.__main__ as main_module
 from flywheel.__main__ import (
+    _analyze_repository,
     _detect_tests,
     _has_ci_workflows,
     _iter_project_files,
-    _analyze_repository,
     spin,
 )
 
