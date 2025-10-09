@@ -206,9 +206,13 @@ flywheel spin --dry-run path/to/repo
 
 The command scans the repository structure for missing documentation, tests,
 and CI workflows, then prints a JSON report summarizing the findings. Use it to
-sanity-check a project before handing it to `npx flywheel spin`. Each
-suggestion includes a `category` field (`docs`, `fix`, or `chore`) so the output
-matches the [`flywheel spin` design](docs/flywheel-npx-spin-design.md) schema.
+sanity-check a project before handing it to `npx flywheel spin`. The dry run
+also highlights dependency lockfile gaps—if a `package.json` or `Pipfile`
+appears without its corresponding lockfile, the report suggests generating and
+committing one so installs stay reproducible—and surfaces a `language_mix`
+summary showing the top languages detected in the repository. Each suggestion
+includes a `category` field (`docs`, `fix`, or `chore`) so the output matches
+the [`flywheel spin` design](docs/flywheel-npx-spin-design.md) schema.
 
 ### Scanning other repositories
 
