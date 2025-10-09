@@ -272,8 +272,7 @@ def test_analyze_repository_returns_sorted_extensions(tmp_path: Path) -> None:
     tests_dir = repo / "tests"
     tests_dir.mkdir()
     (tests_dir / "test_widget.py").write_text(
-        "def test_widget():\n"
-        "    assert True\n"
+        "def test_widget():\n" "    assert True\n"
     )
 
     stats, suggestions = _analyze_repository(repo)
