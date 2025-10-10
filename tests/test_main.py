@@ -91,10 +91,10 @@ def test_main_crawl_deduplicates_repos(monkeypatch, tmp_path):
     assert seen["repos"] == ["foo/bar", "baz/qux", "extra/repo"]
 
 
-def test_main_crawl_prefers_latest_branch_override(monkeypatch, tmp_path):
+def test_main_crawl_branch_override_prefers_latest(monkeypatch, tmp_path):
     repo_file = tmp_path / "repos.txt"
-    repo_file.write_text("foo/bar\n")
-    out = tmp_path / "summary.md"
+    repo_file.write_text("foo/bar@alpha\nfoo/bar\nfoo/bar@main\n")
+    out = tmp_path / "sum.md"
     seen: dict[str, list[str]] = {}
 
     class DummyCrawler:
@@ -108,17 +108,15 @@ def test_main_crawl_prefers_latest_branch_override(monkeypatch, tmp_path):
     fm.main(
         [
             "crawl",
-            "foo/bar@main",
-            "foo/bar@dev",
+            "foo/bar@beta",
             "--repos-file",
             str(repo_file),
             "--output",
             str(out),
         ]
     )
-
     assert out.read_text() == "report"
-    assert seen["repos"] == ["foo/bar@dev"]
+    assert seen["repos"] == ["foo/bar@beta"]
 
 
 def test_main_crawl_skips_blank_and_branch_only_specs(monkeypatch, tmp_path):
@@ -149,6 +147,18 @@ def test_main_crawl_skips_blank_and_branch_only_specs(monkeypatch, tmp_path):
 
     assert out.read_text() == "report"
     assert seen["repos"] == ["foo/bar"]
+
+
+def test_merge_repo_specs_skips_blank_entries():
+    merged = fm._merge_repo_specs(
+        [
+            "   ",
+            "@main",
+            "foo/bar",
+            "foo/bar@beta",
+        ]
+    )
+    assert merged == ["foo/bar@beta"]
 
 
 def test_main_crawl_no_repos(tmp_path):
