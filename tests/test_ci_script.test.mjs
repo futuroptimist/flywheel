@@ -1,5 +1,4 @@
 import { readFile } from 'fs/promises';
-import { fileURLToPath } from 'url';
 
 async function loadPackage() {
   const pkgPath = new URL('../package.json', import.meta.url);

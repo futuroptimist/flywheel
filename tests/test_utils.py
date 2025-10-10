@@ -46,6 +46,7 @@ def test_init_repo_interactive(monkeypatch, tmp_path):
     fm.init_repo(args)
 
     assert (repo / "package.json").exists()
+    assert (repo / "eslint.config.mjs").exists()
     assert (repo / ".github" / "workflows" / "01-lint-format.yml").exists()
 
 
@@ -59,7 +60,9 @@ def test_update_repo_interactive_accept(monkeypatch, tmp_path):
     fm.update_repo(args)
 
     wf = repo / ".github" / "workflows" / "01-lint-format.yml"
+    eslint_config = repo / "eslint.config.mjs"
     assert wf.exists()
+    assert eslint_config.exists()
 
 
 def test_update_repo_interactive_decline(monkeypatch, tmp_path):
@@ -72,7 +75,9 @@ def test_update_repo_interactive_decline(monkeypatch, tmp_path):
     fm.update_repo(args)
 
     wf = repo / ".github" / "workflows" / "01-lint-format.yml"
+    eslint_config = repo / "eslint.config.mjs"
     assert not wf.exists()
+    assert not eslint_config.exists()
 
 
 def test_update_repo_yes_flag(tmp_path):
@@ -83,4 +88,6 @@ def test_update_repo_yes_flag(tmp_path):
     fm.update_repo(args)
 
     wf = repo / ".github" / "workflows" / "01-lint-format.yml"
+    eslint_config = repo / "eslint.config.mjs"
     assert wf.exists()
+    assert eslint_config.exists()
