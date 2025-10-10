@@ -299,6 +299,19 @@ def _has_ci_workflows(root: Path) -> bool:
     return False
 
 
+def _has_docs_directory(root: Path) -> bool:
+    docs_dir = root / "docs"
+    if not docs_dir.exists():
+        return False
+    try:
+        for path in docs_dir.rglob("*"):
+            if path.is_file() and not path.name.startswith("."):
+                return True
+    except OSError:
+        return False
+    return False
+
+
 def _detect_tests(root: Path, files: Sequence[Path]) -> bool:
     tests_dir = root / "tests"
     if tests_dir.exists():
@@ -396,6 +409,7 @@ def _analyze_repository(
     ]
     has_readme = (root / "README.md").exists()
     has_ci = _has_ci_workflows(root)
+    has_docs = _has_docs_directory(root)
     has_tests = _detect_tests(root, files)
     language_mix = _summarize_language_mix(files)
     dependency_health = _analyze_dependency_health(root, files)
@@ -403,12 +417,28 @@ def _analyze_repository(
         "total_files": len(files),
         "top_extensions": top_extensions,
         "has_readme": has_readme,
+        "has_docs": has_docs,
         "has_tests": has_tests,
         "has_ci_workflows": has_ci,
         "language_mix": language_mix,
         "dependency_health": dependency_health,
     }
     suggestions: list[dict[str, object]] = []
+    if not has_docs:
+        suggestions.append(
+            {
+                "id": "add-docs",
+                "category": "docs",
+                "title": "Create docs/ with onboarding guides",
+                "description": (
+                    "Set up a docs/ directory with project guides and "
+                    "contributor onboarding notes so new collaborators ramp "
+                    "up quickly."
+                ),
+                "impact": "medium",
+                "files": ["docs/"],
+            }
+        )
     if not has_readme:
         suggestions.append(
             {

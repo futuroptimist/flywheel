@@ -13,6 +13,7 @@ from flywheel.__main__ import (
     _analyze_repository,
     _detect_tests,
     _has_ci_workflows,
+    _has_docs_directory,
     _iter_project_files,
     spin,
 )
@@ -40,15 +41,23 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     assert result["mode"] == "dry-run"
     stats = result["stats"]
     assert stats["has_readme"] is False
+    assert stats["has_docs"] is False
     assert stats["has_ci_workflows"] is False
     assert stats["has_tests"] is False
 
     suggestion_ids = {entry["id"] for entry in result["suggestions"]}
-    assert suggestion_ids == {"add-readme", "add-tests", "configure-ci"}
+    assert suggestion_ids == {
+        "add-docs",
+        "add-readme",
+        "add-tests",
+        "configure-ci",
+    }
+
     categories: dict[str, str] = {}
     for entry in result["suggestions"]:
         categories[entry["id"]] = entry["category"]
     assert categories == {
+        "add-docs": "docs",
         "add-readme": "docs",
         "add-tests": "fix",
         "configure-ci": "chore",
@@ -64,6 +73,9 @@ def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
     repo.mkdir(exist_ok=True)
 
     (repo / "README.md").write_text("Hello world\n")
+    docs_dir = repo / "docs"
+    docs_dir.mkdir()
+    (docs_dir / "index.md").write_text("# Overview\n")
     test_code = "def test_sample():\n    assert True\n"
     (tests_dir / "test_sample.py").write_text(test_code)
     (workflows / "ci.yml").write_text("name: CI\n")
@@ -72,10 +84,43 @@ def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
 
     stats = result["stats"]
     assert stats["has_readme"] is True
+    assert stats["has_docs"] is True
     assert stats["has_ci_workflows"] is True
     assert stats["has_tests"] is True
 
     assert result["suggestions"] == []
+
+
+def test_has_docs_directory_ignores_hidden_files(tmp_path: Path) -> None:
+    repo = tmp_path / "hidden-docs"
+    repo.mkdir()
+
+    docs_dir = repo / "docs"
+    docs_dir.mkdir()
+    (docs_dir / ".placeholder").write_text("hidden\n")
+
+    assert _has_docs_directory(repo) is False
+
+
+def test_has_docs_directory_handles_os_error(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    repo = tmp_path / "docs-error"
+    repo.mkdir()
+
+    docs_dir = repo / "docs"
+    docs_dir.mkdir()
+
+    original_rglob = Path.rglob
+
+    def raising_rglob(self: Path, pattern: str):
+        if self == docs_dir:
+            raise OSError("permission denied")
+        return original_rglob(self, pattern)
+
+    monkeypatch.setattr(Path, "rglob", raising_rglob)
+
+    assert _has_docs_directory(repo) is False
 
 
 def test_spin_reports_missing_lockfile(tmp_path: Path) -> None:
@@ -407,6 +452,10 @@ def test_analyze_repository_returns_sorted_extensions(tmp_path: Path) -> None:
     workflows.mkdir(parents=True)
     (workflows / "ci.yml").write_text("name: CI\n")
 
+    docs_dir = repo / "docs"
+    docs_dir.mkdir()
+    (docs_dir / "overview.md").write_text("# Docs\n")
+
     src = repo / "src"
     src.mkdir()
     (src / "main.py").write_text("print('hi')\n")
@@ -423,6 +472,7 @@ def test_analyze_repository_returns_sorted_extensions(tmp_path: Path) -> None:
 
     assert stats["total_files"] >= 4
     assert stats["has_readme"] is True
+    assert stats["has_docs"] is True
     assert stats["has_tests"] is True
     assert stats["has_ci_workflows"] is True
 
@@ -443,10 +493,12 @@ def test_analyze_repository_reports_missing_assets(tmp_path: Path) -> None:
     stats, suggestions = _analyze_repository(repo)
 
     assert stats["has_readme"] is False
+    assert stats["has_docs"] is False
     assert stats["has_ci_workflows"] is False
     assert stats["has_tests"] is False
 
     assert [entry["id"] for entry in suggestions] == [
+        "add-docs",
         "add-readme",
         "add-tests",
         "configure-ci",
@@ -455,6 +507,7 @@ def test_analyze_repository_reports_missing_assets(tmp_path: Path) -> None:
     for entry in suggestions:
         category_map[entry["id"]] = entry["category"]
     assert category_map == {
+        "add-docs": "docs",
         "add-readme": "docs",
         "add-tests": "fix",
         "configure-ci": "chore",
@@ -477,10 +530,13 @@ def test_spin_dry_run_outputs_json_inline(
     assert payload["mode"] == "dry-run"
     assert payload["target"] == str(repo.resolve())
     assert payload["stats"]["has_readme"] is False
+    assert payload["stats"]["has_docs"] is False
+
     snapshot_categories: dict[str, str] = {}
     for item in payload["suggestions"]:
         snapshot_categories[item["id"]] = item["category"]
     assert snapshot_categories == {
+        "add-docs": "docs",
         "add-readme": "docs",
         "add-tests": "fix",
         "configure-ci": "chore",
