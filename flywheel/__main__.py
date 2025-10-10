@@ -428,6 +428,7 @@ def _analyze_repository(
         suggestions.append(
             {
                 "id": "add-docs",
+                "category": "docs",
                 "title": "Create docs/ with onboarding guides",
                 "description": (
                     "Set up a docs/ directory with project guides and "

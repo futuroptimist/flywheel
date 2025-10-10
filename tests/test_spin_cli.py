@@ -507,6 +507,7 @@ def test_analyze_repository_reports_missing_assets(tmp_path: Path) -> None:
     for entry in suggestions:
         category_map[entry["id"]] = entry["category"]
     assert category_map == {
+        "add-docs": "docs",
         "add-readme": "docs",
         "add-tests": "fix",
         "configure-ci": "chore",
