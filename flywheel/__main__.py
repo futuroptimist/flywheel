@@ -518,6 +518,7 @@ def _analyze_repository(
         suggestions.append(
             {
                 "id": "commit-lockfiles",
+                "category": "chore",
                 "title": "Commit dependency lockfiles",
                 "description": (
                     "Generate and commit dependency lockfiles (for example, "

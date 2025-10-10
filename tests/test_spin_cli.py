@@ -144,6 +144,7 @@ def test_spin_reports_missing_lockfile(tmp_path: Path) -> None:
     else:  # pragma: no cover - defensive fallback
         raise AssertionError("commit-lockfiles suggestion missing")
     assert "package.json" in lock_suggestion["files"]
+    assert lock_suggestion["category"] == "chore"
 
 
 def test_spin_ignores_present_lockfile(tmp_path: Path) -> None:

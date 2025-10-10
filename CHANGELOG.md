@@ -4,6 +4,8 @@
   include lockfile metadata in the stats payload.
 - feat: expose repository `language_mix` stats in `flywheel spin --dry-run` to
   honor the prompt doc requirement for language mix metrics.
+- fix: tag the `commit-lockfiles` suggestion with a `chore` category in
+  `flywheel spin --dry-run` to match README guidance.
 ## 2025-10-10
 - feat: flag missing `docs/` directories in `flywheel spin --dry-run` output.
 - feat: add `flywheel spin --dry-run` to surface heuristic suggestions before
