@@ -375,6 +375,39 @@ def test_has_ci_workflows_requires_ci_keywords(tmp_path: Path) -> None:
     assert _has_ci_workflows(repo) is True
 
 
+def test_has_ci_workflows_handles_iterdir_error(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    repo = tmp_path / "repo"
+    workflows = repo / ".github" / "workflows"
+    workflows.mkdir(parents=True)
+
+    original_iterdir = Path.iterdir
+
+    def fake_iterdir(self: Path):
+        if self == workflows:
+            raise OSError("permission denied")
+        return original_iterdir(self)
+
+    monkeypatch.setattr(Path, "iterdir", fake_iterdir)
+
+    assert _has_ci_workflows(repo) is False
+
+
+def test_has_ci_workflows_ignores_directories(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    workflows = repo / ".github" / "workflows"
+    workflows.mkdir(parents=True)
+
+    (workflows / "nested").mkdir()
+
+    assert _has_ci_workflows(repo) is False
+
+    (workflows / "lint.yml").write_text("name: Lint\n")
+
+    assert _has_ci_workflows(repo) is True
+
+
 def test_detect_tests_handles_multiple_patterns(tmp_path: Path) -> None:
     repo = tmp_path / "project"
     repo.mkdir()
