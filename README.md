@@ -205,8 +205,11 @@ flywheel spin --dry-run path/to/repo
 ```
 
 The command scans the repository structure for missing documentation, tests,
-and CI workflows, then prints a JSON report summarizing the findings. Repos
-missing a populated `docs/` directory receive an `add-docs` suggestion alongside
+and CI workflows, then prints a JSON report summarizing the findings. CI
+detection follows the keyword heuristic in
+[`docs/ci-guide.md`](docs/ci-guide.md): workflow filenames must include `ci`,
+`test`, `lint`, `build`, `docs`, or `qa` to count. Repos missing a populated
+`docs/` directory receive an `add-docs` suggestion alongside
 `add-readme`, so onboarding guides live next to quickstart docs. The JSON
 payload includes a `has_docs` boolean to highlight whether the repository ships
 structured documentation. Use it to sanity-check a project before handing it to

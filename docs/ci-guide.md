@@ -14,7 +14,8 @@ The workflow commits `docs/repo-feature-summary.md` only when it runs on the `ma
 name contains common keywords like `ci`, `test`, `lint`, `build`, `docs`, or
 `qa`. A lone `deploy.yml` will be treated as missing CI. Include one of these
 keywords in at least one workflow filename so the feature summary reflects your
-setup accurately.
+setup accurately. The Python `flywheel spin --dry-run` command uses the same
+keyword filter when deciding whether to emit a `configure-ci` suggestion.
 
 ## Patch coverage reporting
 `flywheel crawl` records Codecov patch coverage even when it falls below the
