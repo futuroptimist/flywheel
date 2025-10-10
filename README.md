@@ -210,7 +210,13 @@ missing a populated `docs/` directory receive an `add-docs` suggestion alongside
 `add-readme`, so onboarding guides live next to quickstart docs. The JSON
 payload includes a `has_docs` boolean to highlight whether the repository ships
 structured documentation. Use it to sanity-check a project before handing it to
-`npx flywheel spin`.
+`npx flywheel spin`. The dry run also highlights dependency lockfile gaps—if a
+`package.json` or `Pipfile` appears without its corresponding lockfile, the
+report suggests generating and committing one so installs stay reproducible—and
+surfaces a `language_mix` summary showing the top languages detected in the
+repository. Each suggestion includes a `category` field (`docs`, `fix`, or
+`chore`) so the output matches the
+[`flywheel spin` design](docs/flywheel-npx-spin-design.md) schema.
 
 ### Scanning other repositories
 
@@ -360,7 +366,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   3D-printable block models from GitHub commits.
 - ✅ [wove](https://github.com/futuroptimist/wove) –  \
   toolkit for knitting and robotic looms.
-- ✅ [sugarkube](https://github.com/futuroptimist/sugarkube) –  \
+- ❌ [sugarkube](https://github.com/futuroptimist/sugarkube) –  \
   k3s platform for off-grid Raspberry Pi clusters.  \
   See `docs/sugarkube-integration.md`.
 - ✅ [jobbot3000](https://github.com/futuroptimist/jobbot3000) –  \\

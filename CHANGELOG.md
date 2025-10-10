@@ -1,4 +1,9 @@
 # Changelog
+## 2025-10-11
+- feat: flag missing dependency lockfiles in `flywheel spin --dry-run` output and
+  include lockfile metadata in the stats payload.
+- feat: expose repository `language_mix` stats in `flywheel spin --dry-run` to
+  honor the prompt doc requirement for language mix metrics.
 ## 2025-10-10
 - feat: flag missing `docs/` directories in `flywheel spin --dry-run` output.
 - feat: add `flywheel spin --dry-run` to surface heuristic suggestions before
@@ -14,6 +19,8 @@
   status.
 - fix: dedupe repo crawl specs so branch overrides do not trigger duplicate
   entries.
+- fix: ensure `flywheel crawl` keeps the latest branch override when the same
+  repository appears multiple times.
 ## 2025-10-09
 - fix: mark repo summary trunk status as n/a when CI is pending or missing.
 - fix: allow the repo feature summary CLI to run directly by ensuring the flywheel package is on
