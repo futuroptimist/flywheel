@@ -4,6 +4,8 @@
   include lockfile metadata in the stats payload.
 - feat: expose repository `language_mix` stats in `flywheel spin --dry-run` to
   honor the prompt doc requirement for language mix metrics.
+- feat: align `flywheel spin --dry-run` CI detection with the repo summary
+  keyword heuristic so deploy-only workflows no longer mask missing CI.
 ## 2025-10-10
 - feat: flag missing `docs/` directories in `flywheel spin --dry-run` output.
 - feat: add `flywheel spin --dry-run` to surface heuristic suggestions before

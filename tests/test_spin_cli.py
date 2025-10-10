@@ -354,7 +354,7 @@ def test_iter_project_files_guard_skipped_dirs(
     assert files == []
 
 
-def test_has_ci_workflows_detects_yaml_files(tmp_path: Path) -> None:
+def test_has_ci_workflows_requires_ci_keywords(tmp_path: Path) -> None:
     repo = tmp_path / "repo"
     repo.mkdir()
 
@@ -366,7 +366,11 @@ def test_has_ci_workflows_detects_yaml_files(tmp_path: Path) -> None:
 
     assert _has_ci_workflows(repo) is False
 
-    (workflows / "ci.yaml").write_text("name: CI\n")
+    (workflows / "deploy.yaml").write_text("name: Deploy\n")
+
+    assert _has_ci_workflows(repo) is False
+
+    (workflows / "lint.yml").write_text("name: Lint\n")
 
     assert _has_ci_workflows(repo) is True
 

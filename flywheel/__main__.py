@@ -325,8 +325,19 @@ def _has_ci_workflows(root: Path) -> bool:
     workflows = root / ".github" / "workflows"
     if not workflows.exists():
         return False
-    for path in workflows.iterdir():
-        if path.is_file() and path.suffix.lower() in {".yml", ".yaml"}:
+    try:
+        entries = list(workflows.iterdir())
+    except OSError:
+        return False
+
+    keywords = getattr(RepoCrawler, "CI_KEYWORDS", ())
+    for path in entries:
+        if not path.is_file():
+            continue
+        if path.suffix.lower() not in {".yml", ".yaml"}:
+            continue
+        name = path.name.lower()
+        if any(keyword in name for keyword in keywords):
             return True
     return False
 
