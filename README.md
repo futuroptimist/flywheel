@@ -214,8 +214,9 @@ structured documentation. Use it to sanity-check a project before handing it to
 `package.json` or `Pipfile` appears without its corresponding lockfile, the
 report suggests generating and committing one so installs stay reproducible—and
 surfaces a `language_mix` summary showing the top languages detected in the
-repository. Each suggestion includes a `category` field (`docs`, `fix`, or
-`chore`) so the output matches the
+repository. Lockfile gaps surface as a `chore` suggestion named
+`commit-lockfiles`, and every suggestion includes a `category` field (`docs`,
+`fix`, or `chore`) so the output matches the
 [`flywheel spin` design](docs/flywheel-npx-spin-design.md) schema.
 
 ### Scanning other repositories

@@ -256,7 +256,10 @@ def test_analyze_repository_emits_lockfile_suggestion(tmp_path: Path) -> None:
 
     dependency_health = stats["dependency_health"]
     assert dependency_health["missing_lockfiles"] == ["package.json"]
-    assert any(entry["id"] == "commit-lockfiles" for entry in suggestions)
+    lockfile_suggestion = next(
+        entry for entry in suggestions if entry["id"] == "commit-lockfiles"
+    )
+    assert lockfile_suggestion["category"] == "chore"
 
 
 def test_spin_requires_existing_directory(tmp_path: Path) -> None:
@@ -541,3 +544,22 @@ def test_spin_dry_run_outputs_json_inline(
         "add-tests": "fix",
         "configure-ci": "chore",
     }
+
+
+def test_spin_reports_lockfile_category(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    repo = tmp_path / "missing-lockfile"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+
+    args = argparse.Namespace(path=str(repo), dry_run=True)
+
+    spin(args)
+
+    payload = json.loads(capsys.readouterr().out)
+    suggestions = payload["suggestions"]
+    lockfile_entry = next(
+        item for item in suggestions if item["id"] == "commit-lockfiles"
+    )
+    assert lockfile_entry["category"] == "chore"
