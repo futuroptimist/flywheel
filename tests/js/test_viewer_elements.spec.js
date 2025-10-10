@@ -32,7 +32,7 @@ test('no failed JS resource requests', async ({ page }) => {
     try {
       const hostname = new URL(url).hostname;
       return hostname !== 'unpkg.com';
-    } catch (error) {
+    } catch {
       // Preserve entries with unparsable URLs so they surface as real failures.
       return true;
     }
