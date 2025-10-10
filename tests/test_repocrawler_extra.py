@@ -4,6 +4,7 @@ from types import SimpleNamespace
 import pytest
 import requests
 
+import flywheel.__main__ as cli
 import flywheel.repocrawler as rc
 from flywheel.repocrawler import RepoCrawler, RepoInfo
 
@@ -737,3 +738,31 @@ def test_branch_green_request_exception():
 def test_branch_green_no_sha():
     crawler = RepoCrawler([])
     assert crawler._branch_green("demo/repo", "main", "") is None
+
+
+def test_crawl_uses_latest_branch_override(tmp_path, monkeypatch):
+    repo_file = tmp_path / "repos.txt"
+    repo_file.write_text("foo/bar\nfoo/bar@stable\n")
+    output = tmp_path / "summary.md"
+    captured: dict[str, object] = {}
+
+    class DummyCrawler:
+        def __init__(self, repos, token=None):
+            captured["repos"] = list(repos)
+            captured["token"] = token
+
+        def generate_summary(self):
+            return "summary"
+
+    monkeypatch.setattr(cli, "RepoCrawler", DummyCrawler)
+    args = SimpleNamespace(
+        repos=["foo/bar@dev", "baz/qux", "baz/qux@feature"],
+        repos_file=repo_file,
+        output=output,
+        token=None,
+    )
+
+    cli.crawl(args)
+
+    assert captured["repos"] == ["foo/bar@dev", "baz/qux@feature"]
+    assert output.read_text() == "summary"

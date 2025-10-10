@@ -81,6 +81,38 @@ TEST_FILENAME_SUFFIXES = (
 )
 
 
+def _merge_repo_specs(specs: Sequence[str]) -> list[str]:
+    """Return deduplicated repo specs preserving latest branch overrides."""
+
+    order: list[str] = []
+    branches: dict[str, str | None] = {}
+    for raw in specs:
+        spec = raw.strip()
+        if not spec:
+            continue
+        if "@" in spec:
+            name, branch = spec.split("@", 1)
+            name = name.strip()
+            branch = branch.strip()
+        else:
+            name = spec
+            branch = ""
+        if not name:
+            continue
+        if name not in order:
+            order.append(name)
+        if branch:
+            branches[name] = branch
+        else:
+            branches.setdefault(name, None)
+
+    merged: list[str] = []
+    for name in order:
+        branch = branches.get(name)
+        merged.append(f"{name}@{branch}" if branch else name)
+    return merged
+
+
 def copy_file(src: Path, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
     if dest.exists() and dest.read_bytes() == src.read_bytes():
@@ -397,12 +429,7 @@ def crawl(args: argparse.Namespace) -> None:
         file_repos = [line.strip() for line in lines if line.strip()]
         combined.extend(file_repos)
     combined.extend(cli_repos)
-    seen: set[str] = set()
-    repos: list[str] = []
-    for spec in combined:
-        if spec not in seen:
-            repos.append(spec)
-            seen.add(spec)
+    repos = _merge_repo_specs(combined)
     if not repos:
         raise SystemExit("No repositories provided")
     crawler = RepoCrawler(repos, token=args.token)
