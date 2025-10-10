@@ -119,6 +119,16 @@ def test_main_crawl_branch_override_prefers_latest(monkeypatch, tmp_path):
     assert seen["repos"] == ["foo/bar@beta"]
 
 
+def test_merge_repo_specs_skips_blank_entries():
+    merged = fm._merge_repo_specs([
+        "   ",
+        "@main",
+        "foo/bar",
+        "foo/bar@beta",
+    ])
+    assert merged == ["foo/bar@beta"]
+
+
 def test_main_crawl_no_repos(tmp_path):
     repo_file = tmp_path / "repos.txt"
     repo_file.write_text("")
