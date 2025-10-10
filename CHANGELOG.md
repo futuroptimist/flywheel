@@ -1,5 +1,6 @@
 # Changelog
 ## 2025-10-10
+- feat: flag missing `docs/` directories in `flywheel spin --dry-run` output.
 - feat: add `flywheel spin --dry-run` to surface heuristic suggestions before
   LLM-backed workflows land.
 - feat: include signed Δ values in `verify_fit` mesh dimension errors to match
