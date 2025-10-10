@@ -13,6 +13,7 @@ from flywheel.__main__ import (
     _analyze_repository,
     _detect_tests,
     _has_ci_workflows,
+    _has_docs_directory,
     _iter_project_files,
     spin,
 )
@@ -78,6 +79,38 @@ def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
     assert stats["has_tests"] is True
 
     assert result["suggestions"] == []
+
+
+def test_has_docs_directory_ignores_hidden_files(tmp_path: Path) -> None:
+    repo = tmp_path / "hidden-docs"
+    repo.mkdir()
+
+    docs_dir = repo / "docs"
+    docs_dir.mkdir()
+    (docs_dir / ".placeholder").write_text("hidden\n")
+
+    assert _has_docs_directory(repo) is False
+
+
+def test_has_docs_directory_handles_os_error(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    repo = tmp_path / "docs-error"
+    repo.mkdir()
+
+    docs_dir = repo / "docs"
+    docs_dir.mkdir()
+
+    original_rglob = Path.rglob
+
+    def raising_rglob(self: Path, pattern: str):
+        if self == docs_dir:
+            raise OSError("permission denied")
+        return original_rglob(self, pattern)
+
+    monkeypatch.setattr(Path, "rglob", raising_rglob)
+
+    assert _has_docs_directory(repo) is False
 
 
 def test_spin_requires_existing_directory(tmp_path: Path) -> None:
