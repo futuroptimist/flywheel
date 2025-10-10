@@ -23,7 +23,7 @@ WORKFLOW_FILES = [
 OTHER_FILES = [
     ".github/dependabot.yml",
     ".github/release-drafter.yml",
-    ".eslintrc.json",
+    "eslint.config.mjs",
     ".prettierrc",
     ".pre-commit-config.yaml",
     "scripts/checks.sh",

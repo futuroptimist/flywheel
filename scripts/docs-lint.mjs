@@ -83,7 +83,9 @@ async function main() {
   if (problems.length > 0) {
     console.error('Docs lint failed: inconsistent table pipes detected.');
     for (const issue of problems) {
-      console.error(` - ${path.relative(ROOT, issue.file)}:${issue.line} ${issue.message}`);
+      console.error(
+        ` - ${path.relative(ROOT, issue.file)}:${issue.line} ${issue.message}`
+      );
     }
     process.exitCode = 1;
     return;

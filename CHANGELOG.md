@@ -9,6 +9,10 @@
 - feat: auto-sort the prompt docs TODO table by type and repository to match
   triage guidance.
 - feat: include repo snapshots in `flywheel prompt` output for richer context.
+- feat: run ESLint and Prettier via `npm run lint` and `npm run format:check`
+  to align with documented linting workflows.
+- fix: scaffold `eslint.config.mjs` for new projects so the CLI matches the
+  repository tooling update.
 - fix: treat CI status API errors as failures when computing repo summary trunk
   status.
 - fix: dedupe repo crawl specs so branch overrides do not trigger duplicate
