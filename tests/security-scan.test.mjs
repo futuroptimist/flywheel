@@ -1,36 +1,77 @@
 import { jest } from '@jest/globals';
 import fs from 'fs';
-import { scanRepo, renderTable, updateMarkdown, authHeaders, main } from '../scripts/security-scan.mjs';
+import {
+  scanRepo,
+  renderTable,
+  updateMarkdown,
+  authHeaders,
+  main,
+} from '../scripts/security-scan.mjs';
 
 describe('scanRepo', () => {
   test('detects security features', async () => {
-    global.fetch = jest.fn()
+    global.fetch = jest
+      .fn()
       // dependabot
       .mockResolvedValueOnce({ ok: true, json: async () => ({}) })
       // repo info
-      .mockResolvedValueOnce({ ok: true, json: async () => ({ security_and_analysis: { secret_scanning: { status: 'enabled' } }, default_branch: 'main' }) })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          security_and_analysis: { secret_scanning: { status: 'enabled' } },
+          default_branch: 'main',
+        }),
+      })
       // readme
-      .mockResolvedValueOnce({ ok: true, text: async () => '![CodeQL](badge) ![Snyk](badge)' });
+      .mockResolvedValueOnce({
+        ok: true,
+        text: async () => '![CodeQL](badge) ![Snyk](badge)',
+      });
     const result = await scanRepo('owner/repo');
-    expect(result).toEqual({ repo: 'owner/repo', dependabot: true, secretScanning: true, codeql: true, snyk: true });
+    expect(result).toEqual({
+      repo: 'owner/repo',
+      dependabot: true,
+      secretScanning: true,
+      codeql: true,
+      snyk: true,
+    });
   });
 
   test('handles missing features', async () => {
-    global.fetch = jest.fn()
+    global.fetch = jest
+      .fn()
       // dependabot 404
       .mockResolvedValueOnce({ ok: false, status: 404 })
       // repo info disabled
-      .mockResolvedValueOnce({ ok: true, json: async () => ({ security_and_analysis: { secret_scanning: { status: 'disabled' } }, default_branch: 'main' }) })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          security_and_analysis: { secret_scanning: { status: 'disabled' } },
+          default_branch: 'main',
+        }),
+      })
       // readme empty
       .mockResolvedValueOnce({ ok: true, text: async () => '' });
     const result = await scanRepo('owner/repo');
-    expect(result).toEqual({ repo: 'owner/repo', dependabot: false, secretScanning: false, codeql: false, snyk: false });
+    expect(result).toEqual({
+      repo: 'owner/repo',
+      dependabot: false,
+      secretScanning: false,
+      codeql: false,
+      snyk: false,
+    });
   });
 });
 
 describe('renderTable & updateMarkdown', () => {
   const sample = [
-    { repo: 'futuroptimist/flywheel', dependabot: true, secretScanning: true, codeql: true, snyk: false }
+    {
+      repo: 'futuroptimist/flywheel',
+      dependabot: true,
+      secretScanning: true,
+      codeql: true,
+      snyk: false,
+    },
   ];
   test('renders table', () => {
     const table = renderTable(sample);
@@ -40,7 +81,8 @@ describe('renderTable & updateMarkdown', () => {
   });
   test('inserts and replaces section', () => {
     const table = renderTable(sample);
-    const base = '# Title\n\n## Coverage & Installer\nfoo\n\n## Policies & Automation';
+    const base =
+      '# Title\n\n## Coverage & Installer\nfoo\n\n## Policies & Automation';
     const inserted = updateMarkdown(base, table);
     expect(inserted).toContain(table);
     const replaced = updateMarkdown(inserted, table.replace('❌', '✅'));
@@ -56,10 +98,17 @@ test('authHeaders includes token and main writes file', async () => {
   const repoListPath = '../tests/tmp-repos.txt';
   const mdPath = '../tests/tmp-summary.md';
   await fs.promises.writeFile('tests/tmp-repos.txt', 'owner/repo');
-  await fs.promises.writeFile('tests/tmp-summary.md', '# Title\n\n## Coverage & Installer\nfoo');
-  global.fetch = jest.fn()
+  await fs.promises.writeFile(
+    'tests/tmp-summary.md',
+    '# Title\n\n## Coverage & Installer\nfoo'
+  );
+  global.fetch = jest
+    .fn()
     .mockResolvedValueOnce({ ok: false, status: 404 })
-    .mockResolvedValueOnce({ ok: true, json: async () => ({ default_branch: 'main' }) })
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ default_branch: 'main' }),
+    })
     .mockResolvedValueOnce({ ok: true, text: async () => '' });
   await main({ repoListPath, markdownPath: mdPath });
   const updated = await fs.promises.readFile('tests/tmp-summary.md', 'utf8');

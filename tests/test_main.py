@@ -95,7 +95,7 @@ def test_main_crawl_branch_override_prefers_latest(monkeypatch, tmp_path):
     repo_file = tmp_path / "repos.txt"
     repo_file.write_text("foo/bar@alpha\nfoo/bar\nfoo/bar@main\n")
     out = tmp_path / "sum.md"
-    seen = {}
+    seen: dict[str, list[str]] = {}
 
     class DummyCrawler:
         def __init__(self, repos, token=None):
@@ -117,6 +117,36 @@ def test_main_crawl_branch_override_prefers_latest(monkeypatch, tmp_path):
     )
     assert out.read_text() == "report"
     assert seen["repos"] == ["foo/bar@beta"]
+
+
+def test_main_crawl_skips_blank_and_branch_only_specs(monkeypatch, tmp_path):
+    out = tmp_path / "summary.md"
+    seen: dict[str, list[str]] = {}
+
+    class DummyCrawler:
+        def __init__(self, repos, token=None):
+            seen["repos"] = list(repos)
+
+        def generate_summary(self):
+            return "report"
+
+    monkeypatch.setattr(fm, "RepoCrawler", DummyCrawler)
+    missing_list = tmp_path / "missing.txt"
+    fm.main(
+        [
+            "crawl",
+            "   ",
+            "@dev",
+            "foo/bar",
+            "--repos-file",
+            str(missing_list),
+            "--output",
+            str(out),
+        ]
+    )
+
+    assert out.read_text() == "report"
+    assert seen["repos"] == ["foo/bar"]
 
 
 def test_merge_repo_specs_skips_blank_entries():

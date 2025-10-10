@@ -23,7 +23,7 @@ WORKFLOW_FILES = [
 OTHER_FILES = [
     ".github/dependabot.yml",
     ".github/release-drafter.yml",
-    ".eslintrc.json",
+    "eslint.config.mjs",
     ".prettierrc",
     ".pre-commit-config.yaml",
     "scripts/checks.sh",
@@ -62,6 +62,15 @@ CODE_FILE_SUFFIXES = {
     ".ts",
     ".tsx",
 }
+LANGUAGE_BY_SUFFIX = {
+    ".py": "Python",
+    ".js": "JavaScript",
+    ".jsx": "JavaScript",
+    ".cjs": "JavaScript",
+    ".mjs": "JavaScript",
+    ".ts": "TypeScript",
+    ".tsx": "TypeScript",
+}
 TEST_FILENAME_SUFFIXES = (
     "_test.py",
     "_test.ts",
@@ -79,6 +88,14 @@ TEST_FILENAME_SUFFIXES = (
     ".spec.js",
     ".spec.jsx",
 )
+
+NODE_LOCKFILES = {
+    "package-lock.json",
+    "yarn.lock",
+    "pnpm-lock.yaml",
+    "bun.lockb",
+}
+PIPFILE_LOCK = "Pipfile.lock"
 
 
 def _merge_repo_specs(specs: Sequence[str]) -> list[str]:
@@ -314,6 +331,19 @@ def _has_ci_workflows(root: Path) -> bool:
     return False
 
 
+def _has_docs_directory(root: Path) -> bool:
+    docs_dir = root / "docs"
+    if not docs_dir.exists():
+        return False
+    try:
+        for path in docs_dir.rglob("*"):
+            if path.is_file() and not path.name.startswith("."):
+                return True
+    except OSError:
+        return False
+    return False
+
+
 def _detect_tests(root: Path, files: Sequence[Path]) -> bool:
     tests_dir = root / "tests"
     if tests_dir.exists():
@@ -335,6 +365,69 @@ def _detect_tests(root: Path, files: Sequence[Path]) -> bool:
     return False
 
 
+def _summarize_language_mix(files: Sequence[Path]) -> list[dict[str, object]]:
+    counts: Counter[str] = Counter()
+    for path in files:
+        language = LANGUAGE_BY_SUFFIX.get(path.suffix.lower())
+        if language:
+            counts[language] += 1
+    ordered = sorted(counts.items(), key=lambda item: (-item[1], item[0]))
+    top_languages: list[dict[str, object]] = []
+    for language, count in ordered[:5]:
+        top_languages.append({"language": language, "count": count})
+    return top_languages
+
+
+def _analyze_dependency_health(
+    root: Path,
+    files: Sequence[Path],
+) -> dict[str, object]:
+    manifests: list[str] = []
+    lockfiles: list[str] = []
+    missing: list[str] = []
+
+    files_by_dir: dict[Path, set[str]] = {}
+    for path in files:
+        try:
+            rel = path.relative_to(root)
+        except ValueError:
+            rel = path
+        directory = rel.parent
+        entries = files_by_dir.setdefault(directory, set())
+        entries.add(rel.name)
+
+    for directory, names in files_by_dir.items():
+        if "package.json" in names:
+            manifest_path = (directory / "package.json").as_posix()
+            manifests.append(manifest_path)
+            lock_found = False
+            for candidate in NODE_LOCKFILES:
+                if candidate in names:
+                    lock_found = True
+                    lockfiles.append((directory / candidate).as_posix())
+            if not lock_found:
+                missing.append(manifest_path)
+        if "Pipfile" in names:
+            manifest_path = (directory / "Pipfile").as_posix()
+            manifests.append(manifest_path)
+            lock_path = (directory / PIPFILE_LOCK).as_posix()
+            if PIPFILE_LOCK in names:
+                lockfiles.append(lock_path)
+            else:
+                missing.append(manifest_path)
+
+    manifests = sorted(set(manifests))
+    lockfiles = sorted(set(lockfiles))
+    missing = sorted(set(missing))
+    status = "ok" if not missing else "lockfile-missing"
+    return {
+        "manifests": manifests,
+        "lockfiles": lockfiles,
+        "missing_lockfiles": missing,
+        "status": status,
+    }
+
+
 def _analyze_repository(
     root: Path,
 ) -> tuple[dict[str, object], list[dict[str, object]]]:
@@ -348,19 +441,41 @@ def _analyze_repository(
     ]
     has_readme = (root / "README.md").exists()
     has_ci = _has_ci_workflows(root)
+    has_docs = _has_docs_directory(root)
     has_tests = _detect_tests(root, files)
+    language_mix = _summarize_language_mix(files)
+    dependency_health = _analyze_dependency_health(root, files)
     stats: dict[str, object] = {
         "total_files": len(files),
         "top_extensions": top_extensions,
         "has_readme": has_readme,
+        "has_docs": has_docs,
         "has_tests": has_tests,
         "has_ci_workflows": has_ci,
+        "language_mix": language_mix,
+        "dependency_health": dependency_health,
     }
     suggestions: list[dict[str, object]] = []
+    if not has_docs:
+        suggestions.append(
+            {
+                "id": "add-docs",
+                "category": "docs",
+                "title": "Create docs/ with onboarding guides",
+                "description": (
+                    "Set up a docs/ directory with project guides and "
+                    "contributor onboarding notes so new collaborators ramp "
+                    "up quickly."
+                ),
+                "impact": "medium",
+                "files": ["docs/"],
+            }
+        )
     if not has_readme:
         suggestions.append(
             {
                 "id": "add-readme",
+                "category": "docs",
                 "title": "Add README.md",
                 "description": (
                     "Document the project purpose, setup instructions, and"
@@ -374,6 +489,7 @@ def _analyze_repository(
         suggestions.append(
             {
                 "id": "configure-ci",
+                "category": "chore",
                 "title": "Add CI workflows",
                 "description": (
                     "Add GitHub Actions workflows "
@@ -388,6 +504,7 @@ def _analyze_repository(
         suggestions.append(
             {
                 "id": "add-tests",
+                "category": "fix",
                 "title": "Bootstrap an automated test suite",
                 "description": (
                     "Create a tests/ directory or add language-appropriate"
@@ -395,6 +512,20 @@ def _analyze_repository(
                 ),
                 "impact": "high",
                 "files": ["tests/"],
+            }
+        )
+    if dependency_health["missing_lockfiles"]:
+        suggestions.append(
+            {
+                "id": "commit-lockfiles",
+                "title": "Commit dependency lockfiles",
+                "description": (
+                    "Generate and commit dependency lockfiles (for example, "
+                    "package-lock.json or Pipfile.lock) so installs stay "
+                    "reproducible across environments."
+                ),
+                "impact": "medium",
+                "files": dependency_health["missing_lockfiles"],
             }
         )
     suggestions.sort(key=lambda item: item["id"])
@@ -429,7 +560,10 @@ def crawl(args: argparse.Namespace) -> None:
         file_repos = [line.strip() for line in lines if line.strip()]
         combined.extend(file_repos)
     combined.extend(cli_repos)
-    repos = _merge_repo_specs(combined)
+
+    # Merge repository specs while ensuring the latest branch override wins
+    repos: list[str] = _merge_repo_specs(combined)
+
     if not repos:
         raise SystemExit("No repositories provided")
     crawler = RepoCrawler(repos, token=args.token)

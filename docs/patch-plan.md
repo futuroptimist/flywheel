@@ -7,7 +7,7 @@ This patch extends the flywheel template with a Python CLI and agent hook.
   `init`, `update`, `audit`, `prompt`, and `crawl`.
 - `--save-dev` option copies ESLint/Prettier configs, CI workflows,
   DEPENDABOT settings and release scripts into a target repository.
-- added minimal `.eslintrc.json` and `.prettierrc` used as templates.
+- added minimal `eslint.config.mjs` and `.prettierrc` used as templates.
 - interactive prompts ask for language and dev tooling unless `--yes` is used.
 - repo crawler uses the `requests` library to fetch files.
 - repo crawler treats CI status API errors as failing to reduce unknowns.

@@ -1,5 +1,11 @@
 # Changelog
+## 2025-10-11
+- feat: flag missing dependency lockfiles in `flywheel spin --dry-run` output and
+  include lockfile metadata in the stats payload.
+- feat: expose repository `language_mix` stats in `flywheel spin --dry-run` to
+  honor the prompt doc requirement for language mix metrics.
 ## 2025-10-10
+- feat: flag missing `docs/` directories in `flywheel spin --dry-run` output.
 - feat: add `flywheel spin --dry-run` to surface heuristic suggestions before
   LLM-backed workflows land.
 - feat: include signed Δ values in `verify_fit` mesh dimension errors to match
@@ -9,6 +15,10 @@
 - feat: auto-sort the prompt docs TODO table by type and repository to match
   triage guidance.
 - feat: include repo snapshots in `flywheel prompt` output for richer context.
+- feat: run ESLint and Prettier via `npm run lint` and `npm run format:check`
+  to align with documented linting workflows.
+- fix: scaffold `eslint.config.mjs` for new projects so the CLI matches the
+  repository tooling update.
 - fix: treat CI status API errors as failures when computing repo summary trunk
   status.
 - fix: dedupe repo crawl specs so branch overrides do not trigger duplicate

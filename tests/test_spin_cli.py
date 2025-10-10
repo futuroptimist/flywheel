@@ -13,6 +13,7 @@ from flywheel.__main__ import (
     _analyze_repository,
     _detect_tests,
     _has_ci_workflows,
+    _has_docs_directory,
     _iter_project_files,
     spin,
 )
@@ -40,11 +41,27 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     assert result["mode"] == "dry-run"
     stats = result["stats"]
     assert stats["has_readme"] is False
+    assert stats["has_docs"] is False
     assert stats["has_ci_workflows"] is False
     assert stats["has_tests"] is False
 
     suggestion_ids = {entry["id"] for entry in result["suggestions"]}
-    assert suggestion_ids == {"add-readme", "add-tests", "configure-ci"}
+    assert suggestion_ids == {
+        "add-docs",
+        "add-readme",
+        "add-tests",
+        "configure-ci",
+    }
+
+    categories: dict[str, str] = {}
+    for entry in result["suggestions"]:
+        categories[entry["id"]] = entry["category"]
+    assert categories == {
+        "add-docs": "docs",
+        "add-readme": "docs",
+        "add-tests": "fix",
+        "configure-ci": "chore",
+    }
 
 
 def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
@@ -56,6 +73,9 @@ def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
     repo.mkdir(exist_ok=True)
 
     (repo / "README.md").write_text("Hello world\n")
+    docs_dir = repo / "docs"
+    docs_dir.mkdir()
+    (docs_dir / "index.md").write_text("# Overview\n")
     test_code = "def test_sample():\n    assert True\n"
     (tests_dir / "test_sample.py").write_text(test_code)
     (workflows / "ci.yml").write_text("name: CI\n")
@@ -64,10 +84,179 @@ def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
 
     stats = result["stats"]
     assert stats["has_readme"] is True
+    assert stats["has_docs"] is True
     assert stats["has_ci_workflows"] is True
     assert stats["has_tests"] is True
 
     assert result["suggestions"] == []
+
+
+def test_has_docs_directory_ignores_hidden_files(tmp_path: Path) -> None:
+    repo = tmp_path / "hidden-docs"
+    repo.mkdir()
+
+    docs_dir = repo / "docs"
+    docs_dir.mkdir()
+    (docs_dir / ".placeholder").write_text("hidden\n")
+
+    assert _has_docs_directory(repo) is False
+
+
+def test_has_docs_directory_handles_os_error(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    repo = tmp_path / "docs-error"
+    repo.mkdir()
+
+    docs_dir = repo / "docs"
+    docs_dir.mkdir()
+
+    original_rglob = Path.rglob
+
+    def raising_rglob(self: Path, pattern: str):
+        if self == docs_dir:
+            raise OSError("permission denied")
+        return original_rglob(self, pattern)
+
+    monkeypatch.setattr(Path, "rglob", raising_rglob)
+
+    assert _has_docs_directory(repo) is False
+
+
+def test_spin_reports_missing_lockfile(tmp_path: Path) -> None:
+    repo = tmp_path / "pkg"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+
+    result = run_spin_dry_run(repo)
+
+    dep = result["stats"]["dependency_health"]
+    assert dep["status"] == "lockfile-missing"
+    assert dep["manifests"] == ["package.json"]
+    assert dep["missing_lockfiles"] == ["package.json"]
+
+    suggestion_ids = {entry["id"] for entry in result["suggestions"]}
+    assert "commit-lockfiles" in suggestion_ids
+    for entry in result["suggestions"]:
+        if entry["id"] == "commit-lockfiles":
+            lock_suggestion = entry
+            break
+    else:  # pragma: no cover - defensive fallback
+        raise AssertionError("commit-lockfiles suggestion missing")
+    assert "package.json" in lock_suggestion["files"]
+
+
+def test_spin_ignores_present_lockfile(tmp_path: Path) -> None:
+    repo = tmp_path / "pkg"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+    (repo / "package-lock.json").write_text("{}\n")
+
+    result = run_spin_dry_run(repo)
+
+    dep = result["stats"]["dependency_health"]
+    assert dep["status"] == "ok"
+    assert dep["missing_lockfiles"] == []
+    suggestion_ids = {entry["id"] for entry in result["suggestions"]}
+    assert "commit-lockfiles" not in suggestion_ids
+
+
+def test_spin_reports_language_mix(tmp_path: Path) -> None:
+    repo = tmp_path / "polyglot"
+    repo.mkdir()
+
+    scripts = repo / "scripts"
+    scripts.mkdir()
+    (scripts / "build.py").write_text("print('hi')\n")
+
+    services = repo / "services"
+    services.mkdir()
+    (services / "worker.py").write_text("print('hello')\n")
+
+    frontend = repo / "frontend"
+    frontend.mkdir()
+    (frontend / "main.ts").write_text("export const foo = 1;\n")
+
+    ui = repo / "ui"
+    ui.mkdir()
+    (ui / "App.jsx").write_text("export default () => null;\n")
+
+    result = run_spin_dry_run(repo)
+
+    mix = result["stats"]["language_mix"]
+    assert mix == [
+        {"language": "Python", "count": 2},
+        {"language": "JavaScript", "count": 1},
+        {"language": "TypeScript", "count": 1},
+    ]
+
+
+def test_dependency_health_tracks_manifests_and_lockfiles(
+    tmp_path: Path,
+) -> None:
+    repo = tmp_path / "deps"
+    repo.mkdir()
+
+    node_dir = repo / "web"
+    node_dir.mkdir()
+    (node_dir / "package.json").write_text("{}\n")
+    (node_dir / "pnpm-lock.yaml").write_text("lock\n")
+
+    python_dir = repo / "api"
+    python_dir.mkdir()
+    (python_dir / "Pipfile").write_text("[packages]\n")
+
+    files = [
+        node_dir / "package.json",
+        node_dir / "pnpm-lock.yaml",
+        python_dir / "Pipfile",
+        Path("outside/package.json"),
+    ]
+
+    health = main_module._analyze_dependency_health(repo, files)
+
+    assert health["manifests"] == [
+        "api/Pipfile",
+        "outside/package.json",
+        "web/package.json",
+    ]
+    assert health["lockfiles"] == ["web/pnpm-lock.yaml"]
+    assert health["missing_lockfiles"] == [
+        "api/Pipfile",
+        "outside/package.json",
+    ]
+    assert health["status"] == "lockfile-missing"
+
+
+def test_dependency_health_handles_pipfile_lock(
+    tmp_path: Path,
+) -> None:
+    repo = tmp_path / "pipenv"
+    repo.mkdir()
+
+    (repo / "Pipfile").write_text("[packages]\n")
+    (repo / "Pipfile.lock").write_text("{}\n")
+
+    files = [repo / "Pipfile", repo / "Pipfile.lock"]
+
+    health = main_module._analyze_dependency_health(repo, files)
+
+    assert health["manifests"] == ["Pipfile"]
+    assert health["lockfiles"] == ["Pipfile.lock"]
+    assert health["missing_lockfiles"] == []
+    assert health["status"] == "ok"
+
+
+def test_analyze_repository_emits_lockfile_suggestion(tmp_path: Path) -> None:
+    repo = tmp_path / "service"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+
+    stats, suggestions = main_module._analyze_repository(repo)
+
+    dependency_health = stats["dependency_health"]
+    assert dependency_health["missing_lockfiles"] == ["package.json"]
+    assert any(entry["id"] == "commit-lockfiles" for entry in suggestions)
 
 
 def test_spin_requires_existing_directory(tmp_path: Path) -> None:
@@ -263,6 +452,10 @@ def test_analyze_repository_returns_sorted_extensions(tmp_path: Path) -> None:
     workflows.mkdir(parents=True)
     (workflows / "ci.yml").write_text("name: CI\n")
 
+    docs_dir = repo / "docs"
+    docs_dir.mkdir()
+    (docs_dir / "overview.md").write_text("# Docs\n")
+
     src = repo / "src"
     src.mkdir()
     (src / "main.py").write_text("print('hi')\n")
@@ -279,6 +472,7 @@ def test_analyze_repository_returns_sorted_extensions(tmp_path: Path) -> None:
 
     assert stats["total_files"] >= 4
     assert stats["has_readme"] is True
+    assert stats["has_docs"] is True
     assert stats["has_tests"] is True
     assert stats["has_ci_workflows"] is True
 
@@ -299,14 +493,25 @@ def test_analyze_repository_reports_missing_assets(tmp_path: Path) -> None:
     stats, suggestions = _analyze_repository(repo)
 
     assert stats["has_readme"] is False
+    assert stats["has_docs"] is False
     assert stats["has_ci_workflows"] is False
     assert stats["has_tests"] is False
 
     assert [entry["id"] for entry in suggestions] == [
+        "add-docs",
         "add-readme",
         "add-tests",
         "configure-ci",
     ]
+    category_map: dict[str, str] = {}
+    for entry in suggestions:
+        category_map[entry["id"]] = entry["category"]
+    assert category_map == {
+        "add-docs": "docs",
+        "add-readme": "docs",
+        "add-tests": "fix",
+        "configure-ci": "chore",
+    }
 
 
 def test_spin_dry_run_outputs_json_inline(
@@ -325,3 +530,14 @@ def test_spin_dry_run_outputs_json_inline(
     assert payload["mode"] == "dry-run"
     assert payload["target"] == str(repo.resolve())
     assert payload["stats"]["has_readme"] is False
+    assert payload["stats"]["has_docs"] is False
+
+    snapshot_categories: dict[str, str] = {}
+    for item in payload["suggestions"]:
+        snapshot_categories[item["id"]] = item["category"]
+    assert snapshot_categories == {
+        "add-docs": "docs",
+        "add-readme": "docs",
+        "add-tests": "fix",
+        "configure-ci": "chore",
+    }

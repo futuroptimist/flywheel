@@ -9,7 +9,9 @@ def test_update_cli(tmp_path):
     subprocess.run(cmd, check=True)
     subprocess.run(cmd, check=True)
     wf = repo / ".github" / "workflows" / "01-lint-format.yml"
+    eslint_config = repo / "eslint.config.mjs"
     assert wf.exists()
+    assert eslint_config.exists()
 
 
 def test_update_cli_no_save_dev(tmp_path):
@@ -26,4 +28,6 @@ def test_update_cli_no_save_dev(tmp_path):
     ]
     subprocess.run(cmd, check=True)
     wf = repo / ".github" / "workflows" / "01-lint-format.yml"
+    eslint_config = repo / "eslint.config.mjs"
     assert not wf.exists()
+    assert not eslint_config.exists()

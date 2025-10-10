@@ -53,9 +53,11 @@ def test_init_copies_dev_tooling(tmp_path):
     subprocess.run(cmd, check=True)
 
     precommit = target / ".pre-commit-config.yaml"
+    eslint_config = target / "eslint.config.mjs"
     checks = target / "scripts" / "checks.sh"
 
     assert precommit.exists()
+    assert eslint_config.exists()
     assert checks.exists()
     assert os.access(checks, os.X_OK)
 

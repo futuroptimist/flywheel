@@ -28,6 +28,14 @@ test('no failed JS resource requests', async ({ page }) => {
   let failedJs = await getFailedJsRequests(page, '/');
   // Ignore failures when loading external dependencies from unpkg since network
   // access may be restricted in CI environments.
-  failedJs = failedJs.filter(url => !url.startsWith('https://unpkg.com'));
+  failedJs = failedJs.filter((url) => {
+    try {
+      const hostname = new URL(url).hostname;
+      return hostname !== 'unpkg.com';
+    } catch {
+      // Preserve entries with unparsable URLs so they surface as real failures.
+      return true;
+    }
+  });
   expect(failedJs, `Failed JS resources: ${failedJs.join(', ')}`).toEqual([]);
 });
