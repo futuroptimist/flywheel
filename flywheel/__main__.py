@@ -12,6 +12,59 @@ from .repocrawler import RepoCrawler
 
 ROOT = Path(__file__).resolve().parent.parent
 
+CONFIG_ENV_VAR = "FLYWHEEL_CONFIG_DIR"
+CONFIG_FILENAME = "config.json"
+DEFAULT_CONFIG_DIR = Path.home() / ".config" / "flywheel"
+
+
+def _config_dir() -> Path:
+    override = os.environ.get(CONFIG_ENV_VAR)
+    if override:
+        return Path(override).expanduser()
+    return DEFAULT_CONFIG_DIR
+
+
+def _config_path() -> Path:
+    return _config_dir() / CONFIG_FILENAME
+
+
+def load_config() -> dict[str, object]:
+    path = _config_path()
+    if not path.exists():
+        return {}
+    try:
+        text = path.read_text()
+    except OSError:
+        return {}
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        return {}
+    if isinstance(data, dict):
+        return data
+    return {}
+
+
+def save_config(data: dict[str, object]) -> Path:
+    path = _config_path()
+    directory = path.parent
+    directory.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n")
+    return path
+
+
+def telemetry_config(args: argparse.Namespace) -> None:
+    config = load_config()
+    mode = args.set
+    if mode:
+        config["telemetry"] = mode
+        save_config(config)
+        print(f"Telemetry preference set to {mode}.")
+        return
+    current = str(config.get("telemetry", "ask"))
+    print(f"Telemetry preference: {current}")
+
+
 WORKFLOW_FILES = [
     ".github/workflows/01-lint-format.yml",
     ".github/workflows/02-tests.yml",
@@ -285,8 +338,11 @@ def init_repo(args: argparse.Namespace) -> None:
             copy_file(ROOT / rel, target / Path(rel).name)  # pragma: no cover
 
     save_dev = args.save_dev
-    if not args.yes and not save_dev:
-        save_dev = prompt_bool("Inject dev tooling?", False)
+    if save_dev is None:
+        if args.yes:
+            save_dev = False
+        else:
+            save_dev = prompt_bool("Inject dev tooling?", False)
 
     if save_dev:
         inject_dev(target)
@@ -843,14 +899,21 @@ def build_parser() -> argparse.ArgumentParser:
     p_init.add_argument(
         "--save-dev",
         action="store_true",
+        dest="save_dev",
         help="inject dev tooling",
+    )
+    p_init.add_argument(
+        "--no-save-dev",
+        action="store_false",
+        dest="save_dev",
+        help="skip dev tooling",
     )
     p_init.add_argument(
         "--yes",
         action="store_true",
         help="run non-interactively",
     )
-    p_init.set_defaults(func=init_repo)
+    p_init.set_defaults(func=init_repo, save_dev=None)
 
     p_update = sub.add_parser("update", help="update dev tooling")
     p_update.add_argument("path", help="target repository path")
@@ -949,6 +1012,20 @@ def build_parser() -> argparse.ArgumentParser:
         help="prompt doc paths relative to the repository root",
     )
     p_sync.set_defaults(func=sync_prompts_cli, files=None)
+
+    p_config = sub.add_parser("config", help="manage CLI configuration")
+    config_sub = p_config.add_subparsers(dest="config_command", required=True)
+
+    p_config_telemetry = config_sub.add_parser(
+        "telemetry",
+        help="manage telemetry preferences",
+    )
+    p_config_telemetry.add_argument(
+        "--set",
+        choices=["off", "on", "full"],
+        help="set telemetry preference (default shows current value)",
+    )
+    p_config_telemetry.set_defaults(func=telemetry_config)
 
     return parser
 

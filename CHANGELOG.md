@@ -1,5 +1,7 @@
-# Changelog
 ## 2025-10-13
+- feat: add `flywheel config telemetry` to persist opt-in preferences under
+  `~/.config/flywheel/`.
+- feat: add `--no-save-dev` support to `flywheel init` to match CLI docs.
 - feat: sort `flywheel spin --dry-run` suggestions by category and impact to
   match prompt doc guidance.
 ## 2025-10-12

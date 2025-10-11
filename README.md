@@ -135,6 +135,8 @@ pipx run flywheel init . --language python --save-dev --yes
 The `--save-dev` flag copies standard workflows, linting configs,
 `.pre-commit-config.yaml`, and `scripts/checks.sh` so new projects inherit the
 full dev tooling out of the box.
+Pass `--no-save-dev` to skip copying those helpers when you only want the
+language templates.
 
 ### Updating dev tooling
 
@@ -160,6 +162,19 @@ flywheel prompt
 README content containing `{` or `}` characters is handled safely. The command
 also prints a repo snapshot that lists non-hidden files at the repository root
 so prompt runners immediately see the project's structure.
+
+### Configuring telemetry
+
+Manage the CLI's analytics opt-in without editing config files manually:
+
+```bash
+flywheel config telemetry --set off
+```
+
+Telemetry preferences are stored in `~/.config/flywheel/config.json` by default.
+Pass `--set on` or `--set full` to opt back in, or run without `--set` to display
+the current mode (`ask` when unset). Set `FLYWHEEL_CONFIG_DIR` to override the
+config location for testing or sandboxed runs.
 
 ### Generating repo feature summary
 
