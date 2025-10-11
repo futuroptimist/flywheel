@@ -358,7 +358,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
   See `docs/dspace-integration.md` for quest ideas.
 - ✅ [flywheel](https://github.com/futuroptimist/flywheel) –  \
   boilerplate for reproducible CI and releases.
-- ✅ [Gabriel](https://github.com/futuroptimist/gabriel) –  \
+- ❌ [Gabriel](https://github.com/futuroptimist/gabriel) –  \
   "guardian angel" LLM focused on security.  \
   Its `docs/FLYWHEEL_RISK_MODEL.md` discusses how automation changes your threat model.  \
   See `docs/gabriel-integration.md` for ways these repositories will share tooling.
@@ -368,7 +368,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [Axel](https://github.com/futuroptimist/axel) –  \
   personal LLM accelerator for repository quests.  \
   See `docs/axel-integration.md` for pairings.
-- ✅ [Sigma](https://github.com/futuroptimist/sigma) –  \
+- ❌ [Sigma](https://github.com/futuroptimist/sigma) –  \
   ESP32 "AI pin" hardware.  \
   See `docs/sigma-integration.md`.
 - ✅ [gitshelves](https://github.com/futuroptimist/gitshelves) –  \
