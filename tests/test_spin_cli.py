@@ -165,6 +165,27 @@ def test_spin_reports_missing_lockfile(tmp_path: Path) -> None:
     assert "package.json" in lock_suggestion["files"]
 
 
+def test_suggestions_sorted_by_category_and_impact(tmp_path: Path) -> None:
+    repo = tmp_path / "prioritized"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+
+    stats, suggestions = main_module._analyze_repository(repo)
+
+    assert stats["has_readme"] is False
+    assert stats["has_docs"] is False
+    assert stats["has_ci_workflows"] is False
+    assert stats["has_tests"] is False
+
+    assert [entry["id"] for entry in suggestions] == [
+        "add-tests",
+        "configure-ci",
+        "commit-lockfiles",
+        "add-docs",
+        "add-readme",
+    ]
+
+
 def test_spin_ignores_present_lockfile(tmp_path: Path) -> None:
     repo = tmp_path / "pkg"
     repo.mkdir()
@@ -576,10 +597,10 @@ def test_analyze_repository_reports_missing_assets(tmp_path: Path) -> None:
     assert stats["has_tests"] is False
 
     assert [entry["id"] for entry in suggestions] == [
-        "add-docs",
-        "add-readme",
         "add-tests",
         "configure-ci",
+        "add-docs",
+        "add-readme",
     ]
     category_map: dict[str, str] = {}
     for entry in suggestions:
