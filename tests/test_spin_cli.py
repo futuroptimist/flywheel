@@ -641,3 +641,136 @@ def test_spin_reports_lockfile_category(
         item for item in suggestions if item["id"] == "commit-lockfiles"
     )
     assert lockfile_entry["category"] == "chore"
+
+
+def test_summarize_stats_entries_handles_languages_and_str_dependency() -> None:
+    stats = {
+        "total_files": 7,
+        "has_readme": True,
+        "has_docs": False,
+        "has_tests": True,
+        "has_ci_workflows": False,
+        "language_mix": [
+            {"language": "Python", "count": 3},
+            {"language": "TypeScript"},
+        ],
+        # Provide a non-dict dependency value to exercise the fallback branch.
+        "dependency_health": "unknown",
+    }
+
+    items, missing_lockfiles = main_module._summarize_stats_entries(stats)
+
+    assert ("Top languages", "Python (3), TypeScript") in items
+    assert missing_lockfiles == []
+
+
+def test_render_spin_table_includes_missing_lockfiles_and_invalid_suggestion() -> None:
+    result = {
+        "target": "demo",
+        "mode": "dry-run",
+        "stats": {
+            "total_files": 2,
+            "has_readme": False,
+            "has_docs": False,
+            "has_tests": False,
+            "has_ci_workflows": False,
+            "language_mix": [{"language": "Python", "count": 1}],
+            "dependency_health": {
+                "status": "lockfile-missing",
+                "missing_lockfiles": ["package-lock.json"],
+            },
+        },
+        # Include a non-dict suggestion to exercise the defensive branch.
+        "suggestions": ["not-a-dict"],
+    }
+
+    output = main_module._render_spin_table(result)
+
+    assert "Missing lockfiles:" in output
+    # The table should render even when suggestions are malformed.
+    assert "ID | Category" in output
+
+
+def test_render_spin_table_without_suggestions_lists_none() -> None:
+    result = {
+        "target": "demo",
+        "mode": "dry-run",
+        "stats": {
+            "total_files": 1,
+            "has_readme": False,
+            "has_docs": False,
+            "has_tests": False,
+            "has_ci_workflows": False,
+        },
+        "suggestions": [],
+    }
+
+    output = main_module._render_spin_table(result)
+
+    assert "Suggestions:" in output
+    assert "(none)" in output
+
+
+def test_render_spin_markdown_includes_missing_lockfiles_and_invalid_suggestion() -> None:
+    result = {
+        "target": "demo",
+        "mode": "dry-run",
+        "stats": {
+            "total_files": 2,
+            "has_readme": False,
+            "has_docs": False,
+            "has_tests": False,
+            "has_ci_workflows": False,
+            "language_mix": [{"language": "Python"}],
+            "dependency_health": {
+                "status": "lockfile-missing",
+                "missing_lockfiles": ["package-lock.json"],
+            },
+        },
+        "suggestions": ["not-a-dict"],
+    }
+
+    output = main_module._render_spin_markdown(result)
+
+    assert "- Missing lockfiles:" in output
+    assert "| ID | Category | Impact | Title |" in output
+
+
+def test_render_spin_markdown_without_suggestions_mentions_none() -> None:
+    result = {
+        "target": "demo",
+        "mode": "dry-run",
+        "stats": {
+            "total_files": 0,
+            "has_readme": False,
+            "has_docs": False,
+            "has_tests": False,
+            "has_ci_workflows": False,
+        },
+        "suggestions": [],
+    }
+
+    output = main_module._render_spin_markdown(result)
+
+    assert output.strip().endswith("No suggestions.")
+
+
+def test_render_spin_output_rejects_unknown_format() -> None:
+    with pytest.raises(ValueError):
+        main_module._render_spin_output({}, "xml")
+
+
+def test_spin_rejects_unknown_format(tmp_path: Path) -> None:
+    repo = tmp_path / "unknown-format"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        format="xml",
+    )
+
+    with pytest.raises(SystemExit) as excinfo:
+        spin(args)
+
+    assert "Unsupported format" in str(excinfo.value)
