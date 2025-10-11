@@ -1,4 +1,5 @@
 import hashlib
+import json
 import os
 import subprocess
 import sys
@@ -60,6 +61,29 @@ def test_init_copies_dev_tooling(tmp_path):
     assert eslint_config.exists()
     assert checks.exists()
     assert os.access(checks, os.X_OK)
+
+
+def test_init_skip_dev_tooling_with_flag(tmp_path):
+    target = tmp_path / "repo"
+    cmd = [
+        sys.executable,
+        "-m",
+        "flywheel",
+        "init",
+        str(target),
+        "--language",
+        "python",
+        "--no-save-dev",
+        "--yes",
+    ]
+    subprocess.run(cmd, check=True)
+
+    # Core templates are still copied.
+    assert (target / "pyproject.toml").exists()
+    # Dev tooling files should be absent.
+    assert not (target / ".pre-commit-config.yaml").exists()
+    workflows = target / ".github" / "workflows"
+    assert not workflows.exists()
 
 
 def test_prompt(tmp_path):
@@ -152,3 +176,69 @@ def test_runbook_cli():
     assert "Stage: bootstrap" in result.stdout
     expected = "- clone: Use the GitHub template and run ./scripts/setup.sh"
     assert expected in result.stdout
+
+
+def test_config_telemetry_defaults(tmp_path: Path) -> None:
+    config_dir = tmp_path / "cfg"
+    env = os.environ.copy()
+    env["FLYWHEEL_CONFIG_DIR"] = str(config_dir)
+    cmd = [
+        sys.executable,
+        "-m",
+        "flywheel",
+        "config",
+        "telemetry",
+    ]
+    completed = subprocess.run(
+        cmd,
+        check=True,
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+    assert "Telemetry preference: ask" in completed.stdout
+    assert not (config_dir / "config.json").exists()
+
+
+def test_config_telemetry_set_and_show(tmp_path: Path) -> None:
+    config_dir = tmp_path / "config"
+    env = os.environ.copy()
+    env["FLYWHEEL_CONFIG_DIR"] = str(config_dir)
+
+    set_cmd = [
+        sys.executable,
+        "-m",
+        "flywheel",
+        "config",
+        "telemetry",
+        "--set",
+        "off",
+    ]
+    subprocess.run(
+        set_cmd,
+        check=True,
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+
+    config_path = config_dir / "config.json"
+    assert config_path.exists()
+    data = json.loads(config_path.read_text())
+    assert data["telemetry"] == "off"
+
+    show_cmd = [
+        sys.executable,
+        "-m",
+        "flywheel",
+        "config",
+        "telemetry",
+    ]
+    shown = subprocess.run(
+        show_cmd,
+        check=True,
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+    assert "Telemetry preference: off" in shown.stdout

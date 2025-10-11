@@ -41,7 +41,7 @@ def test_init_repo_interactive(monkeypatch, tmp_path):
     monkeypatch.setattr(builtins, "input", lambda _: next(inputs))
 
     args = argparse.Namespace(
-        path=str(repo), language="python", save_dev=False, yes=False
+        path=str(repo), language="python", save_dev=None, yes=False
     )
     fm.init_repo(args)
 

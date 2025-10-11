@@ -59,6 +59,9 @@ release management, and operational readiness.
   including a stats block and suggestion table for copy/paste workflows.
 - **2025-10-12:** Matched the dry-run CI detection to RepoCrawler's keyword
   heuristic so deploy-only workflows no longer mask missing CI.
+- **2025-10-13:** Added `flywheel config telemetry` to manage opt-in
+  preferences stored under `~/.config/flywheel/config.json` with a
+  `FLYWHEEL_CONFIG_DIR` override for sandboxed runs.
 
 ## Architecture Overview
 ```mermaid
@@ -186,7 +189,8 @@ interface Suggestion {
 
 ### Telemetry and Privacy
 - Default telemetry is opt-in via interactive prompt on first run. Store preference in
-  `~/.config/flywheel/config.json`.
+  `~/.config/flywheel/config.json`, configurable via `flywheel config telemetry`
+  or the `FLYWHEEL_CONFIG_DIR` environment variable.
 - Data collected: anonymized command metadata, error codes, LLM cost. No code content unless user
   opts-in (`--telemetry=full`).
 - Use `posthog-node` (self-hosted endpoint) or local logging integration.
@@ -317,7 +321,7 @@ gantt
 | `flywheel spin --dry-run` | Output suggestions without LLM or patch application (mock data). | Draft |
 | `flywheel spin --apply` | Interactive apply mode. | Planned |
 | `flywheel spin --apply-all` | Apply all suggestions with zero prompts (requires `--force`). | Planned |
-| `flywheel config telemetry` | Manage telemetry preferences. | Planned |
+| `flywheel config telemetry` | Manage telemetry preferences. | Draft |
 
 ### Appendix B: Sample Prompt Skeleton
 ```
