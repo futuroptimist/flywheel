@@ -55,7 +55,8 @@ release management, and operational readiness.
 - **2025-10-11:** Tagged heuristic suggestions with `category` values so the
   dry-run output matches the prompt schema (`docs`, `fix`, `chore`).
 - **2025-10-11:** Added `--format table` and `--format markdown` output modes to
-  the Python dry-run CLI so it matches the format matrix described below.
+  the Python dry-run CLI so it matches the format matrix described below,
+  including a stats block and suggestion table for copy/paste workflows.
 - **2025-10-12:** Matched the dry-run CI detection to RepoCrawler's keyword
   heuristic so deploy-only workflows no longer mask missing CI.
 

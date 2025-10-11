@@ -12,11 +12,16 @@ import flywheel.__main__ as main_module
 from flywheel.__main__ import (
     _analyze_repository,
     _detect_tests,
+    _format_stats_lines,
     _has_ci_workflows,
     _has_docs_directory,
     _iter_project_files,
+    _render_spin_markdown,
+    _render_spin_table,
     spin,
 )
+
+CaptureFixtureStr = pytest.CaptureFixture[str]
 
 
 def run_spin_dry_run(path: Path) -> dict:
@@ -30,6 +35,20 @@ def run_spin_dry_run(path: Path) -> dict:
     ]
     completed = subprocess.run(cmd, check=True, capture_output=True, text=True)
     return json.loads(completed.stdout)
+
+
+def run_spin_dry_run_text(path: Path, *extra: str) -> str:
+    cmd = [
+        sys.executable,
+        "-m",
+        "flywheel",
+        "spin",
+        str(path),
+        "--dry-run",
+        *extra,
+    ]
+    completed = subprocess.run(cmd, check=True, capture_output=True, text=True)
+    return completed.stdout
 
 
 def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
@@ -560,7 +579,7 @@ def test_spin_dry_run_outputs_json_inline(
     repo = tmp_path / "inline"
     repo.mkdir()
 
-    args = argparse.Namespace(path=str(repo), dry_run=True)
+    args = argparse.Namespace(path=str(repo), dry_run=True, format="json")
 
     spin(args)
 
@@ -590,7 +609,7 @@ def test_spin_reports_lockfile_category(
     repo.mkdir()
     (repo / "package.json").write_text("{}\n")
 
-    args = argparse.Namespace(path=str(repo), dry_run=True)
+    args = argparse.Namespace(path=str(repo), dry_run=True, format="json")
 
     spin(args)
 
@@ -600,3 +619,136 @@ def test_spin_reports_lockfile_category(
         item for item in suggestions if item["id"] == "commit-lockfiles"
     )
     assert lockfile_entry["category"] == "chore"
+
+
+def test_spin_table_format(
+    tmp_path: Path,
+    capsys: CaptureFixtureStr,
+) -> None:
+    repo = tmp_path / "table"
+    repo.mkdir()
+
+    args = argparse.Namespace(path=str(repo), dry_run=True, format="table")
+
+    spin(args)
+
+    output = capsys.readouterr().out
+    assert "Target:" in output
+    assert "Stats:" in output
+    assert "Index" in output
+    assert "add-docs" in output
+
+
+def test_spin_markdown_format(
+    tmp_path: Path,
+    capsys: CaptureFixtureStr,
+) -> None:
+    repo = tmp_path / "markdown"
+    repo.mkdir()
+
+    args = argparse.Namespace(path=str(repo), dry_run=True, format="markdown")
+
+    spin(args)
+
+    output = capsys.readouterr().out
+    assert "# flywheel spin dry-run" in output
+    assert "| Category |" in output
+    assert "add-docs" in output
+
+
+def test_spin_markdown_without_suggestions() -> None:
+    stats = {
+        "total_files": 4,
+        "has_readme": True,
+        "has_docs": False,
+        "has_ci_workflows": True,
+        "has_tests": False,
+        "dependency_health": {"status": "ok"},
+        "language_mix": [
+            {"language": "Python", "count": 3},
+            {"language": "TypeScript", "count": 1},
+        ],
+    }
+    result = {
+        "target": "demo",
+        "mode": "dry-run",
+        "stats": stats,
+        "suggestions": [],
+    }
+
+    markdown = _render_spin_markdown(result)
+
+    assert "language_mix: Python (3), TypeScript (1)" in markdown
+    assert "_No suggestions found._" in markdown
+
+
+def test_spin_table_without_suggestions() -> None:
+    stats = {
+        "total_files": 2,
+        "has_readme": False,
+        "has_docs": True,
+        "has_ci_workflows": False,
+        "has_tests": True,
+        "dependency_health": {"status": "warn"},
+        "language_mix": [
+            {"language": "Python", "count": 1},
+            {"language": "JavaScript", "count": 1},
+        ],
+    }
+    result = {
+        "target": "demo",
+        "mode": "dry-run",
+        "stats": stats,
+        "suggestions": [],
+    }
+
+    table_text = _render_spin_table(result)
+
+    stats_lines = _format_stats_lines(stats)
+    for line in stats_lines:
+        assert line in table_text
+    assert "Suggestions: none found." in table_text
+
+
+def test_spin_cli_accepts_table_format(tmp_path: Path) -> None:
+    repo = tmp_path / "cli-table"
+    repo.mkdir()
+
+    output = run_spin_dry_run_text(
+        repo,
+        "--format",
+        "table",
+    )
+
+    assert "Index" in output
+    assert "add-docs" in output
+
+
+def test_spin_cli_accepts_markdown_format(tmp_path: Path) -> None:
+    repo = tmp_path / "cli-md"
+    repo.mkdir()
+
+    output = run_spin_dry_run_text(
+        repo,
+        "--format",
+        "markdown",
+    )
+
+    assert "# flywheel spin dry-run" in output
+    assert "| Category |" in output
+
+
+def test_spin_rejects_unknown_format(tmp_path: Path) -> None:
+    repo = tmp_path / "cli-invalid"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        format="markdownish",
+    )
+
+    with pytest.raises(SystemExit) as excinfo:
+        spin(args)
+
+    assert "Unsupported format" in str(excinfo.value)
