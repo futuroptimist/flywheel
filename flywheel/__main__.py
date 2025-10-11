@@ -37,6 +37,7 @@ PY_FILES = [
 JS_FILES = ["templates/javascript/package.json"]
 
 PROMPT_DOCS = [Path("docs/prompts/codex/automation.md")]
+SPIN_OUTPUT_FORMATS = ("json", "table", "markdown")
 
 SPIN_SKIP_DIRECTORIES = {
     ".git",
@@ -544,6 +545,158 @@ def _analyze_repository(
     return stats, suggestions
 
 
+def _summarize_stats_entries(
+    stats: dict[str, object],
+) -> tuple[list[tuple[str, str]], list[str]]:
+    items: list[tuple[str, str]] = []
+    items.append(("Total files", str(stats.get("total_files", 0))))
+    items.append(("Has README", "yes" if stats.get("has_readme") else "no"))
+    items.append(("Has docs", "yes" if stats.get("has_docs") else "no"))
+    items.append(("Has tests", "yes" if stats.get("has_tests") else "no"))
+    has_ci = "yes" if stats.get("has_ci_workflows") else "no"
+    items.append(("Has CI workflows", has_ci))
+
+    languages = stats.get("language_mix") or []
+    language_chunks: list[str] = []
+    for entry in languages:
+        language = entry.get("language") if isinstance(entry, dict) else None
+        count = entry.get("count") if isinstance(entry, dict) else None
+        if language:
+            if count is not None:
+                language_chunks.append(f"{language} ({count})")
+            else:
+                language_chunks.append(str(language))
+    if language_chunks:
+        items.append(("Top languages", ", ".join(language_chunks)))
+
+    dependency = stats.get("dependency_health") or {}
+    status = dependency.get("status") if isinstance(dependency, dict) else None
+    if status:
+        items.append(("Dependency status", str(status)))
+    missing_lockfiles: list[str]
+    if isinstance(dependency, dict):
+        missing_lockfiles = [
+            str(path)
+            for path in dependency.get("missing_lockfiles") or []
+            if path is not None
+        ]
+    else:
+        missing_lockfiles = []
+
+    return items, missing_lockfiles
+
+
+def _render_spin_table(result: dict[str, object]) -> str:
+    stats = result.get("stats", {})
+    items, missing_lockfiles = _summarize_stats_entries(stats)
+    target_line = f"Target: {result.get('target', '')}"
+    mode_line = f"Mode: {result.get('mode', '')}"
+    lines = [target_line, mode_line]
+    lines.append("")
+    lines.append("Stats:")
+    for label, value in items:
+        lines.append(f"  {label}: {value}")
+    if missing_lockfiles:
+        lines.append("  Missing lockfiles:")
+        for path in missing_lockfiles:
+            lines.append(f"    - {path}")
+
+    suggestions = result.get("suggestions") or []
+    lines.append("")
+    lines.append("Suggestions:")
+    if not suggestions:
+        lines.append("  (none)")
+        return "\n".join(lines)
+
+    columns = [
+        ("ID", "id"),
+        ("Category", "category"),
+        ("Impact", "impact"),
+        ("Title", "title"),
+    ]
+    rows: list[list[str]] = []
+    for suggestion in suggestions:
+        row: list[str] = []
+        for _, key in columns:
+            if isinstance(suggestion, dict):
+                value = suggestion.get(key, "")
+            else:
+                value = ""
+            row.append(str(value))
+        rows.append(row)
+
+    widths = [len(header) for header, _ in columns]
+    for row in rows:
+        for index, cell in enumerate(row):
+            widths[index] = max(widths[index], len(cell))
+
+    header_parts = []
+    for index, (header, _) in enumerate(columns):
+        header_parts.append(header.ljust(widths[index]))
+    header_line = " | ".join(header_parts)
+    separator = "-+-".join("-" * width for width in widths)
+    body_lines = []
+    for row in rows:
+        row_parts = []
+        for index, cell in enumerate(row):
+            row_parts.append(cell.ljust(widths[index]))
+        body_lines.append(" | ".join(row_parts))
+
+    lines.append(header_line)
+    lines.append(separator)
+    lines.extend(body_lines)
+    return "\n".join(lines)
+
+
+def _render_spin_markdown(result: dict[str, object]) -> str:
+    stats = result.get("stats", {})
+    items, missing_lockfiles = _summarize_stats_entries(stats)
+    lines = ["### Spin Dry-Run Summary"]
+    lines.append(f"- Target: {result.get('target', '')}")
+    lines.append(f"- Mode: {result.get('mode', '')}")
+    lines.append("")
+    lines.append("#### Stats")
+    for label, value in items:
+        lines.append(f"- {label}: {value}")
+    if missing_lockfiles:
+        lines.append("- Missing lockfiles:")
+        for path in missing_lockfiles:
+            lines.append(f"  - {path}")
+
+    suggestions = result.get("suggestions") or []
+    lines.append("")
+    lines.append("#### Suggestions")
+    if not suggestions:
+        lines.append("No suggestions.")
+        return "\n".join(lines)
+
+    headers = ["ID", "Category", "Impact", "Title"]
+    lines.append("| " + " | ".join(headers) + " |")
+    lines.append("| " + " | ".join(["---"] * len(headers)) + " |")
+    for suggestion in suggestions:
+        if isinstance(suggestion, dict):
+            values = [
+                str(suggestion.get("id", "")),
+                str(suggestion.get("category", "")),
+                str(suggestion.get("impact", "")),
+                str(suggestion.get("title", "")),
+            ]
+        else:
+            values = ["", "", "", ""]
+        lines.append("| " + " | ".join(values) + " |")
+    return "\n".join(lines)
+
+
+def _render_spin_output(result: dict[str, object], fmt: str) -> str:
+    if fmt == "json":
+        return json.dumps(result, indent=2, sort_keys=True)
+    if fmt == "table":
+        return _render_spin_table(result)
+    if fmt == "markdown":
+        return _render_spin_markdown(result)
+    raise ValueError(f"Unsupported format: {fmt}")
+
+
 def spin(args: argparse.Namespace) -> None:
     target = Path(args.path or ".").resolve()
     if not target.exists():
@@ -560,7 +713,10 @@ def spin(args: argparse.Namespace) -> None:
         "stats": stats,
         "suggestions": suggestions,
     }
-    print(json.dumps(result, indent=2, sort_keys=True))
+    fmt = getattr(args, "format", "json")
+    if fmt not in SPIN_OUTPUT_FORMATS:
+        raise SystemExit(f"Unsupported format: {fmt}")
+    print(_render_spin_output(result, fmt))
 
 
 def crawl(args: argparse.Namespace) -> None:
@@ -697,6 +853,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--dry-run",
         action="store_true",
         help="generate heuristic suggestions without applying changes",
+    )
+    p_spin.add_argument(
+        "--format",
+        choices=SPIN_OUTPUT_FORMATS,
+        default="json",
+        help="output format for dry-run results",
     )
     p_spin.set_defaults(func=spin)
 

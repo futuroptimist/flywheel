@@ -59,6 +59,14 @@ release management, and operational readiness.
 - **2025-10-12:** Matched the dry-run CI detection to RepoCrawler's keyword
   heuristic so deploy-only workflows no longer mask missing CI.
 
+### Dry-run output formats
+
+| Format   | Description                                           | Ideal for |
+|----------|-------------------------------------------------------|-----------|
+| `json`   | Structured payload with stats and suggestions.        | Scripts   |
+| `table`  | Aligned text table plus inline stats summary.         | Terminals |
+| `markdown` | Markdown headings with a table of suggestions.      | Docs/PRs  |
+
 ## Architecture Overview
 ```mermaid
 graph TD

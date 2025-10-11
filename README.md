@@ -222,6 +222,10 @@ repository. Lockfile gaps surface as a `chore` suggestion named
 `fix`, or `chore`) so the output matches the
 [`flywheel spin` design](docs/flywheel-npx-spin-design.md) schema.
 
+Pass `--format table` to render an aligned text table or `--format markdown`
+for a Markdown-ready summary. Formats other than JSON include the same stats
+and suggestion metadata to streamline CLI overviews, docs, and status updates.
+
 ### Scanning other repositories
 
 Clone a set of repos and generate Markdown reports:

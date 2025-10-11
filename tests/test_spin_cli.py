@@ -583,6 +583,47 @@ def test_spin_dry_run_outputs_json_inline(
     }
 
 
+def test_spin_dry_run_table_format(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    repo = tmp_path / "table"
+    repo.mkdir()
+
+    args = argparse.Namespace(path=str(repo), dry_run=True, format="table")
+
+    spin(args)
+
+    output = capsys.readouterr().out.strip().splitlines()
+
+    assert output[0].startswith("Target: ")
+    assert any(line.startswith("Suggestions:") for line in output)
+    header_index = next(
+        i
+        for i, line in enumerate(output)
+        if "ID" in line and "Category" in line and "Impact" in line
+    )
+    header_line = output[header_index]
+    assert "ID" in header_line and "Category" in header_line
+    assert any("add-docs" in line for line in output)
+
+
+def test_spin_dry_run_markdown_format(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    repo = tmp_path / "markdown"
+    repo.mkdir()
+
+    args = argparse.Namespace(path=str(repo), dry_run=True, format="markdown")
+
+    spin(args)
+
+    output = capsys.readouterr().out
+
+    assert "### Spin Dry-Run Summary" in output
+    assert "| ID | Category | Impact | Title |" in output
+    assert "add-readme" in output
+
+
 def test_spin_reports_lockfile_category(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:

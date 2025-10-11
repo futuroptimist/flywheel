@@ -1,4 +1,7 @@
 # Changelog
+## 2025-10-13
+- feat: add table and markdown formats to `flywheel spin --dry-run` so CLI docs
+  match the design roadmap.
 ## 2025-10-12
 - fix: tag lockfile suggestions in `flywheel spin --dry-run` with a `chore`
   category to match README guidance.
