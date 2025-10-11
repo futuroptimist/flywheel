@@ -165,6 +165,27 @@ def test_spin_reports_missing_lockfile(tmp_path: Path) -> None:
     assert "package.json" in lock_suggestion["files"]
 
 
+def test_suggestions_sorted_by_category_and_impact(tmp_path: Path) -> None:
+    repo = tmp_path / "prioritized"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+
+    stats, suggestions = main_module._analyze_repository(repo)
+
+    assert stats["has_readme"] is False
+    assert stats["has_docs"] is False
+    assert stats["has_ci_workflows"] is False
+    assert stats["has_tests"] is False
+
+    assert [entry["id"] for entry in suggestions] == [
+        "add-tests",
+        "configure-ci",
+        "commit-lockfiles",
+        "add-docs",
+        "add-readme",
+    ]
+
+
 def test_spin_ignores_present_lockfile(tmp_path: Path) -> None:
     repo = tmp_path / "pkg"
     repo.mkdir()
@@ -208,6 +229,25 @@ def test_spin_reports_language_mix(tmp_path: Path) -> None:
         {"language": "JavaScript", "count": 1},
         {"language": "TypeScript", "count": 1},
     ]
+
+
+def test_language_mix_recognizes_more_languages(tmp_path: Path) -> None:
+    repo = tmp_path / "polyglot2"
+    repo.mkdir()
+
+    (repo / "backend").mkdir()
+    (repo / "backend" / "main.rs").write_text("fn main() {}\n")
+    (repo / "service").mkdir()
+    (repo / "service" / "handler.go").write_text("package main\n")
+    (repo / "app").mkdir()
+    (repo / "app" / "Main.java").write_text("class Main {}\n")
+    (repo / "scripts").mkdir()
+    (repo / "scripts" / "deploy.sh").write_text("#!/bin/bash\n")
+
+    stats, _ = main_module._analyze_repository(repo)
+    mix = stats["language_mix"]
+    languages = {entry["language"] for entry in mix}
+    assert {"Rust", "Go", "Java", "Shell"}.issubset(languages)
 
 
 def test_dependency_health_tracks_manifests_and_lockfiles(
@@ -557,10 +597,10 @@ def test_analyze_repository_reports_missing_assets(tmp_path: Path) -> None:
     assert stats["has_tests"] is False
 
     assert [entry["id"] for entry in suggestions] == [
-        "add-docs",
-        "add-readme",
         "add-tests",
         "configure-ci",
+        "add-docs",
+        "add-readme",
     ]
     category_map: dict[str, str] = {}
     for entry in suggestions:

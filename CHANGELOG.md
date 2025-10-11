@@ -1,13 +1,16 @@
-# Changelog
 ## 2025-10-13
 - feat: add `flywheel config telemetry` to persist opt-in preferences under
   `~/.config/flywheel/`.
 - feat: add `--no-save-dev` support to `flywheel init` to match CLI docs.
+- feat: sort `flywheel spin --dry-run` suggestions by category and impact to
+  match prompt doc guidance.
 ## 2025-10-12
 - feat: add table and markdown formats to `flywheel spin --dry-run` output for
   human-readable reviews.
 - fix: tag lockfile suggestions in `flywheel spin --dry-run` with a `chore`
   category to match README guidance.
+- feat: expand `language_mix` detection in `flywheel spin --dry-run` to cover
+  Go, Rust, Java, shell scripts, and other common stacks.
 ## 2025-10-11
 - feat: flag missing dependency lockfiles in `flywheel spin --dry-run` output and
   include lockfile metadata in the stats payload.
