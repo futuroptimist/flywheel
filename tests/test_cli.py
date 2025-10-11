@@ -5,6 +5,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 
 def hash_dir(path: Path) -> dict:
@@ -249,6 +250,60 @@ def test_config_telemetry_set_and_show(tmp_path: Path) -> None:
         env=env,
     )
     assert "Telemetry preference: off" in shown.stdout
+
+
+def test_config_dir_defaults_without_override(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    monkeypatch.delenv("FLYWHEEL_CONFIG_DIR", raising=False)
+    expected = tmp_path / "default"
+    monkeypatch.setattr(cli, "DEFAULT_CONFIG_DIR", expected)
+    assert cli._config_dir() == expected
+
+
+def test_load_config_returns_saved_mapping(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    payload = {"telemetry": "on"}
+    cli.save_config(payload)
+    assert cli.load_config() == payload
+
+
+def test_telemetry_config_prints_current_choice(
+    monkeypatch, tmp_path: Path, capsys
+) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    args = SimpleNamespace(set=None)
+    cli.telemetry_config(args)
+    captured = capsys.readouterr().out
+    assert "Telemetry preference: ask" in captured
+
+
+def test_telemetry_config_sets_choice(monkeypatch, tmp_path: Path, capsys) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    args = SimpleNamespace(set="on")
+    cli.telemetry_config(args)
+    captured = capsys.readouterr().out
+    assert "Telemetry preference set to on." in captured
+    assert cli.load_config()["telemetry"] == "on"
+
+
+def test_init_repo_skips_dev_tooling_when_yes(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    monkeypatch.setattr(cli, "PY_FILES", [])
+    recorded = []
+
+    def fake_inject_dev(path: Path) -> None:  # pragma: no cover - guard
+        recorded.append(path)
+
+    monkeypatch.setattr(cli, "inject_dev", fake_inject_dev)
+
+    target = tmp_path / "project"
+    args = SimpleNamespace(
+        path=str(target), language="python", yes=True, save_dev=None
+    )
+
+    cli.init_repo(args)
+    assert target.exists()
+    assert recorded == []
 
 
 def test_load_config_returns_empty_for_missing_file(monkeypatch, tmp_path: Path) -> None:
