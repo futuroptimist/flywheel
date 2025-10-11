@@ -253,7 +253,8 @@ def test_config_telemetry_set_and_show(tmp_path: Path) -> None:
 
 
 def test_config_dir_defaults_without_override(
-    monkeypatch, tmp_path: Path
+    monkeypatch,
+    tmp_path: Path,
 ) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
     monkeypatch.delenv("FLYWHEEL_CONFIG_DIR", raising=False)
@@ -263,7 +264,8 @@ def test_config_dir_defaults_without_override(
 
 
 def test_load_config_returns_saved_mapping(
-    monkeypatch, tmp_path: Path
+    monkeypatch,
+    tmp_path: Path,
 ) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
     payload = {"telemetry": "on"}
@@ -282,7 +284,9 @@ def test_telemetry_config_prints_current_choice(
 
 
 def test_telemetry_config_sets_choice(
-    monkeypatch, tmp_path: Path, capsys
+    monkeypatch,
+    tmp_path: Path,
+    capsys,
 ) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
     args = SimpleNamespace(set="on")
@@ -293,7 +297,8 @@ def test_telemetry_config_sets_choice(
 
 
 def test_init_repo_skips_dev_tooling_when_yes(
-    monkeypatch, tmp_path: Path
+    monkeypatch,
+    tmp_path: Path,
 ) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
     monkeypatch.setattr(cli, "PY_FILES", [])
@@ -306,7 +311,10 @@ def test_init_repo_skips_dev_tooling_when_yes(
 
     target = tmp_path / "project"
     args = SimpleNamespace(
-        path=str(target), language="python", yes=True, save_dev=None
+        path=str(target),
+        language="python",
+        yes=True,
+        save_dev=None,
     )
 
     cli.init_repo(args)
@@ -321,9 +329,7 @@ def test_load_config_returns_empty_for_missing_file(
     assert cli.load_config() == {}
 
 
-def test_load_config_handles_read_error(
-    monkeypatch, tmp_path: Path
-) -> None:
+def test_load_config_handles_read_error(monkeypatch, tmp_path: Path) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
     config_path = tmp_path / "config.json"
     config_path.write_text("{}")
@@ -339,27 +345,21 @@ def test_load_config_handles_read_error(
     assert cli.load_config() == {}
 
 
-def test_load_config_ignores_invalid_json(
-    monkeypatch, tmp_path: Path
-) -> None:
+def test_load_config_ignores_invalid_json(monkeypatch, tmp_path: Path) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
     config_path = tmp_path / "config.json"
     config_path.write_text("{not valid")
     assert cli.load_config() == {}
 
 
-def test_load_config_rejects_non_mapping(
-    monkeypatch, tmp_path: Path
-) -> None:
+def test_load_config_rejects_non_mapping(monkeypatch, tmp_path: Path) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
     config_path = tmp_path / "config.json"
     config_path.write_text(json.dumps(["bad"]))
     assert cli.load_config() == {}
 
 
-def test_save_config_round_trip(
-    monkeypatch, tmp_path: Path
-) -> None:
+def test_save_config_round_trip(monkeypatch, tmp_path: Path) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
     saved_path = cli.save_config({"telemetry": "on"})
     assert saved_path.exists()
