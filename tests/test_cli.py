@@ -1,4 +1,5 @@
 import hashlib
+import importlib
 import json
 import os
 import subprocess
@@ -13,6 +14,12 @@ def hash_dir(path: Path) -> dict:
             data = file.read_bytes()
             result[file.relative_to(path)] = hashlib.md5(data).hexdigest()
     return result
+
+
+def reload_cli(monkeypatch, tmp_path: Path):
+    monkeypatch.setenv("FLYWHEEL_CONFIG_DIR", str(tmp_path))
+    module = importlib.import_module("flywheel.__main__")
+    return importlib.reload(module)
 
 
 def test_init_idempotent(tmp_path):
@@ -242,3 +249,47 @@ def test_config_telemetry_set_and_show(tmp_path: Path) -> None:
         env=env,
     )
     assert "Telemetry preference: off" in shown.stdout
+
+
+def test_load_config_returns_empty_for_missing_file(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    assert cli.load_config() == {}
+
+
+def test_load_config_handles_read_error(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    config_path = tmp_path / "config.json"
+    config_path.write_text("{}")
+
+    original_read_text = Path.read_text
+
+    def fake_read_text(self, *args, **kwargs):
+        if self == config_path:
+            raise OSError("cannot read")
+        return original_read_text(self, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", fake_read_text)
+    assert cli.load_config() == {}
+
+
+def test_load_config_ignores_invalid_json(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    config_path = tmp_path / "config.json"
+    config_path.write_text("{not valid")
+    assert cli.load_config() == {}
+
+
+def test_load_config_rejects_non_mapping(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    config_path = tmp_path / "config.json"
+    config_path.write_text(json.dumps(["bad"]))
+    assert cli.load_config() == {}
+
+
+def test_save_config_round_trip(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    saved_path = cli.save_config({"telemetry": "on"})
+    assert saved_path.exists()
+    assert saved_path.parent == tmp_path
+    stored = json.loads(saved_path.read_text())
+    assert stored["telemetry"] == "on"
