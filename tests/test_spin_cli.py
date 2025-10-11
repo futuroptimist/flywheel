@@ -18,6 +18,8 @@ from flywheel.__main__ import (
     spin,
 )
 
+CaptureFixtureStr = pytest.CaptureFixture[str]
+
 
 def run_spin_dry_run(path: Path) -> dict:
     cmd = [
@@ -30,6 +32,20 @@ def run_spin_dry_run(path: Path) -> dict:
     ]
     completed = subprocess.run(cmd, check=True, capture_output=True, text=True)
     return json.loads(completed.stdout)
+
+
+def run_spin_dry_run_text(path: Path, *extra: str) -> str:
+    cmd = [
+        sys.executable,
+        "-m",
+        "flywheel",
+        "spin",
+        str(path),
+        "--dry-run",
+        *extra,
+    ]
+    completed = subprocess.run(cmd, check=True, capture_output=True, text=True)
+    return completed.stdout
 
 
 def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
@@ -560,7 +576,7 @@ def test_spin_dry_run_outputs_json_inline(
     repo = tmp_path / "inline"
     repo.mkdir()
 
-    args = argparse.Namespace(path=str(repo), dry_run=True)
+    args = argparse.Namespace(path=str(repo), dry_run=True, format="json")
 
     spin(args)
 
@@ -590,7 +606,7 @@ def test_spin_reports_lockfile_category(
     repo.mkdir()
     (repo / "package.json").write_text("{}\n")
 
-    args = argparse.Namespace(path=str(repo), dry_run=True)
+    args = argparse.Namespace(path=str(repo), dry_run=True, format="json")
 
     spin(args)
 
@@ -600,3 +616,66 @@ def test_spin_reports_lockfile_category(
         item for item in suggestions if item["id"] == "commit-lockfiles"
     )
     assert lockfile_entry["category"] == "chore"
+
+
+def test_spin_table_format(
+    tmp_path: Path,
+    capsys: CaptureFixtureStr,
+) -> None:
+    repo = tmp_path / "table"
+    repo.mkdir()
+
+    args = argparse.Namespace(path=str(repo), dry_run=True, format="table")
+
+    spin(args)
+
+    output = capsys.readouterr().out
+    assert "Target:" in output
+    assert "Stats:" in output
+    assert "Index" in output
+    assert "add-docs" in output
+
+
+def test_spin_markdown_format(
+    tmp_path: Path,
+    capsys: CaptureFixtureStr,
+) -> None:
+    repo = tmp_path / "markdown"
+    repo.mkdir()
+
+    args = argparse.Namespace(path=str(repo), dry_run=True, format="markdown")
+
+    spin(args)
+
+    output = capsys.readouterr().out
+    assert "# flywheel spin dry-run" in output
+    assert "| Category |" in output
+    assert "add-docs" in output
+
+
+def test_spin_cli_accepts_table_format(tmp_path: Path) -> None:
+    repo = tmp_path / "cli-table"
+    repo.mkdir()
+
+    output = run_spin_dry_run_text(
+        repo,
+        "--format",
+        "table",
+    )
+
+    assert "Index" in output
+    assert "add-docs" in output
+
+
+def test_spin_cli_accepts_markdown_format(tmp_path: Path) -> None:
+    repo = tmp_path / "cli-md"
+    repo.mkdir()
+
+    output = run_spin_dry_run_text(
+        repo,
+        "--format",
+        "markdown",
+    )
+
+    assert "# flywheel spin dry-run" in output
+    assert "| Category |" in output

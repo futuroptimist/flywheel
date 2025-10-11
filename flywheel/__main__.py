@@ -544,6 +544,136 @@ def _analyze_repository(
     return stats, suggestions
 
 
+def _format_bool(value: bool) -> str:
+    return "yes" if value else "no"
+
+
+def _format_language_mix(entries: Sequence[dict[str, object]]) -> str:
+    if not entries:
+        return "none detected"
+    parts: list[str] = []
+    for entry in entries:
+        language = str(entry.get("language", ""))
+        count = entry.get("count")
+        parts.append(f"{language} ({count})")
+    return ", ".join(parts)
+
+
+def _format_stats_lines(stats: dict[str, object]) -> list[str]:
+    dependency = stats.get("dependency_health", {})
+    language_mix = stats.get("language_mix", [])
+    lines = [f"  - total_files: {stats.get('total_files', 0)}"]
+    readme_flag = _format_bool(bool(stats.get("has_readme")))
+    docs_flag = _format_bool(bool(stats.get("has_docs")))
+    ci_flag = _format_bool(bool(stats.get("has_ci_workflows")))
+    tests_flag = _format_bool(bool(stats.get("has_tests")))
+    lines.append(f"  - has_readme: {readme_flag}")
+    lines.append(f"  - has_docs: {docs_flag}")
+    lines.append(f"  - has_ci_workflows: {ci_flag}")
+    lines.append(f"  - has_tests: {tests_flag}")
+    dep_status = dependency.get("status", "unknown")
+    lines.append(f"  - dependency_health: {dep_status}")
+    mix_text = _format_language_mix(language_mix)
+    lines.append(f"  - language_mix: {mix_text}")
+    return lines
+
+
+def _render_spin_table(result: dict[str, object]) -> str:
+    stats_lines = _format_stats_lines(result.get("stats", {}))
+    suggestions = result.get("suggestions", [])
+    lines = [
+        f"Target: {result.get('target', '')}",
+        f"Mode: {result.get('mode', '')}",
+        "",
+        "Stats:",
+        *stats_lines,
+        "",
+    ]
+    if suggestions:
+        headers = ["Index", "Id", "Category", "Impact", "Title", "Files"]
+        rows: list[dict[str, str]] = []
+        for idx, suggestion in enumerate(suggestions, start=1):
+            files = ", ".join(suggestion.get("files", [])) or "-"
+            rows.append(
+                {
+                    "Index": str(idx),
+                    "Id": str(suggestion.get("id", "")),
+                    "Category": str(suggestion.get("category", "")),
+                    "Impact": str(suggestion.get("impact", "")),
+                    "Title": str(suggestion.get("title", "")),
+                    "Files": files,
+                }
+            )
+        widths: dict[str, int] = {}
+        for header in headers:
+            max_cell = max((len(row[header]) for row in rows), default=0)
+            widths[header] = max(len(header), max_cell)
+        header_cells: list[str] = []
+        for header in headers:
+            header_cells.append(header.ljust(widths[header]))
+        header_line = " | ".join(header_cells)
+        sep_cells = ["-" * widths[header] for header in headers]
+        separator = "-+-".join(sep_cells)
+        lines.append("Suggestions:")
+        lines.append(header_line)
+        lines.append(separator)
+        for row in rows:
+            row_cells: list[str] = []
+            for header in headers:
+                row_cells.append(row[header].ljust(widths[header]))
+            line = " | ".join(row_cells)
+            lines.append(line)
+    else:
+        lines.append("Suggestions: none found.")
+    return "\n".join(lines)
+
+
+def _escape_markdown(text: str) -> str:
+    escaped = text.replace("|", "\\|")
+    return escaped.replace("\n", " ")
+
+
+def _render_spin_markdown(result: dict[str, object]) -> str:
+    stats = result.get("stats", {})
+    stats_lines = _format_stats_lines(stats)
+    summary = [
+        "# flywheel spin dry-run",
+        "",
+        f"- Target: `{result.get('target', '')}`",
+        f"- Mode: `{result.get('mode', '')}`",
+    ]
+    # Convert leading bullet prefix in stats lines to markdown list items.
+    converted_stats: list[str] = []
+    for line in stats_lines:
+        converted_stats.append(line.replace("  -", "-", 1))
+    summary.extend(converted_stats)
+    summary.append("")
+    suggestions = result.get("suggestions", [])
+    if suggestions:
+        summary.append("| # | Id | Category | Impact | Title | Files |")
+        summary.append("| --- | --- | --- | --- | --- | --- |")
+        for idx, suggestion in enumerate(suggestions, start=1):
+            files = ", ".join(suggestion.get("files", [])) or "-"
+            suggestion_id = _escape_markdown(str(suggestion.get("id", "")))
+            category = _escape_markdown(str(suggestion.get("category", "")))
+            impact = _escape_markdown(str(suggestion.get("impact", "")))
+            title = _escape_markdown(str(suggestion.get("title", "")))
+            files_cell = _escape_markdown(files)
+            summary.append(
+                "| {} | {} | {} | {} | {} | {} |".format(
+                    idx,
+                    suggestion_id or "-",
+                    category or "-",
+                    impact or "-",
+                    title or "-",
+                    files_cell or "-",
+                )
+            )
+    else:
+        summary.append("_No suggestions found._")
+    return "\n".join(summary)
+
+
 def spin(args: argparse.Namespace) -> None:
     target = Path(args.path or ".").resolve()
     if not target.exists():
@@ -560,7 +690,16 @@ def spin(args: argparse.Namespace) -> None:
         "stats": stats,
         "suggestions": suggestions,
     }
-    print(json.dumps(result, indent=2, sort_keys=True))
+    fmt = getattr(args, "format", "json") or "json"
+    if fmt == "json":
+        output = json.dumps(result, indent=2, sort_keys=True)
+    elif fmt == "table":
+        output = _render_spin_table(result)
+    elif fmt == "markdown":
+        output = _render_spin_markdown(result)
+    else:
+        raise SystemExit(f"Unsupported format: {fmt}")
+    print(output)
 
 
 def crawl(args: argparse.Namespace) -> None:
@@ -697,6 +836,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--dry-run",
         action="store_true",
         help="generate heuristic suggestions without applying changes",
+    )
+    p_spin.add_argument(
+        "--format",
+        choices=["json", "table", "markdown"],
+        default="json",
+        help="output format for dry-run results",
     )
     p_spin.set_defaults(func=spin)
 

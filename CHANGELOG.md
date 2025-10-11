@@ -1,5 +1,7 @@
 # Changelog
 ## 2025-10-12
+- feat: add table and markdown formats to `flywheel spin --dry-run` output for
+  human-readable reviews.
 - fix: tag lockfile suggestions in `flywheel spin --dry-run` with a `chore`
   category to match README guidance.
 ## 2025-10-11
