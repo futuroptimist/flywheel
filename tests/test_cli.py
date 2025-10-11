@@ -1,3 +1,4 @@
+import argparse
 import hashlib
 import importlib
 import json
@@ -256,6 +257,22 @@ def test_load_config_returns_empty_for_missing_file(monkeypatch, tmp_path: Path)
     assert cli.load_config() == {}
 
 
+def test_config_dir_defaults_without_override(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    monkeypatch.delenv("FLYWHEEL_CONFIG_DIR", raising=False)
+    default = tmp_path / "default"
+    monkeypatch.setattr(cli, "DEFAULT_CONFIG_DIR", default)
+    assert cli._config_dir() == default
+
+
+def test_load_config_returns_saved_mapping(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    config_path = tmp_path / "config.json"
+    payload = {"telemetry": "on"}
+    config_path.write_text(json.dumps(payload))
+    assert cli.load_config() == payload
+
+
 def test_load_config_handles_read_error(monkeypatch, tmp_path: Path) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
     config_path = tmp_path / "config.json"
@@ -293,3 +310,35 @@ def test_save_config_round_trip(monkeypatch, tmp_path: Path) -> None:
     assert saved_path.parent == tmp_path
     stored = json.loads(saved_path.read_text())
     assert stored["telemetry"] == "on"
+
+
+def test_telemetry_config_set_updates_store(monkeypatch, tmp_path: Path, capsys) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    args = argparse.Namespace(set="off")
+    cli.telemetry_config(args)
+    saved = json.loads((tmp_path / "config.json").read_text())
+    assert saved["telemetry"] == "off"
+    out = capsys.readouterr().out
+    assert "Telemetry preference set to off." in out
+
+
+def test_telemetry_config_show_reads_existing_choice(monkeypatch, tmp_path: Path, capsys) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    cli.save_config({"telemetry": "ask"})
+    args = argparse.Namespace(set=None)
+    cli.telemetry_config(args)
+    out = capsys.readouterr().out
+    assert "Telemetry preference: ask" in out
+
+
+def test_init_repo_yes_defaults_to_no_dev_tooling(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    monkeypatch.setattr(cli, "PY_FILES", [])
+    monkeypatch.setattr(cli, "JS_FILES", [])
+    injected: list[Path] = []
+    monkeypatch.setattr(cli, "inject_dev", lambda path: injected.append(path))
+    target = tmp_path / "project"
+    args = argparse.Namespace(path=str(target), language="python", yes=True, save_dev=None)
+    cli.init_repo(args)
+    assert target.exists()
+    assert injected == []
