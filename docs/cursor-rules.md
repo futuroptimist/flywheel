@@ -1,5 +1,5 @@
 ---
-description: Flywheel global Cursor rule (2025-09-xx)
+description: Global Cursor rule (2025-09-xx)
 alwaysApply: true
 globs:
   - "**/*"
@@ -8,8 +8,8 @@ globs:
 ### Codex Custom Instructions v4 – Cursor Rule Edition
 
 # Repository scope
-- Primary: flywheel/**
-- Secondary: any repo listed in docs/repo-feature-summary.md
+- Primary: current repository (`**/*`)
+- Secondary: affiliated repositories documented in `docs/repo-feature-summary.md`
 
 # Philosophy
 - Move fast, fix-forward, keep trunk green.
@@ -44,9 +44,9 @@ Refs: #issue-id
 
 # Security & privacy checks
 - Strip or mask credential-like strings before writing to disk.
-- Run `git diff --cached | ./scripts/scan-secrets.py` before commit. The scanner flags
-  GitHub, AWS, Stripe, and Slack tokens as well as private key blocks and exits non-zero
-  when it spots suspicious additions.
+- Run the repository's secret scanner (e.g., `git diff --cached | ./scripts/scan-secrets.py`) before
+  committing. The scanner should flag GitHub, AWS, Stripe, and Slack tokens as well as private key
+  blocks and exit non-zero when it spots suspicious additions.
 - Tools allowed: ripsecrets, detect-secrets, git-secrets.
 
 # Quick-reference
