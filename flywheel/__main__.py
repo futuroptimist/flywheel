@@ -540,8 +540,33 @@ def _analyze_repository(
                 "files": dependency_health["missing_lockfiles"],
             }
         )
-    suggestions.sort(key=lambda item: item["id"])
+    suggestions = _sort_suggestions(suggestions)
     return stats, suggestions
+
+
+def _sort_suggestions(
+    items: Sequence[dict[str, object]],
+) -> list[dict[str, object]]:
+    """Return suggestions sorted by category priority and impact severity."""
+
+    category_order = {
+        "fix": 0,
+        "chore": 1,
+        "docs": 2,
+        "feature": 3,
+        "refactor": 4,
+    }
+    impact_order = {"high": 0, "medium": 1, "low": 2}
+
+    def sort_key(item: dict[str, object]) -> tuple[int, int, str]:
+        category = str(item.get("category", ""))
+        impact = str(item.get("impact", ""))
+        cat_rank = category_order.get(category, len(category_order))
+        impact_rank = impact_order.get(impact, len(impact_order))
+        identifier = str(item.get("id", ""))
+        return (cat_rank, impact_rank, identifier)
+
+    return sorted(items, key=sort_key)
 
 
 def _format_bool(value: bool) -> str:

@@ -1,4 +1,7 @@
 # Changelog
+## 2025-10-13
+- feat: sort `flywheel spin --dry-run` suggestions by category and impact to
+  match prompt doc guidance.
 ## 2025-10-12
 - feat: add table and markdown formats to `flywheel spin --dry-run` output for
   human-readable reviews.
