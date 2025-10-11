@@ -742,7 +742,11 @@ def test_spin_rejects_unknown_format(tmp_path: Path) -> None:
     repo = tmp_path / "cli-invalid"
     repo.mkdir()
 
-    args = argparse.Namespace(path=str(repo), dry_run=True, format="markdownish")
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        format="markdownish",
+    )
 
     with pytest.raises(SystemExit) as excinfo:
         spin(args)
