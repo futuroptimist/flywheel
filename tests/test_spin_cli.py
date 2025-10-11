@@ -643,7 +643,7 @@ def test_spin_reports_lockfile_category(
     assert lockfile_entry["category"] == "chore"
 
 
-def test_summarize_stats_entries_handles_languages_and_str_dependency() -> None:
+def test_summarize_stats_handles_language_mix_and_string_dependency() -> None:
     stats = {
         "total_files": 7,
         "has_readme": True,
@@ -664,7 +664,7 @@ def test_summarize_stats_entries_handles_languages_and_str_dependency() -> None:
     assert missing_lockfiles == []
 
 
-def test_render_spin_table_includes_missing_lockfiles_and_invalid_suggestion() -> None:
+def test_render_spin_table_with_missing_lockfiles_and_bad_suggestion() -> None:
     result = {
         "target": "demo",
         "mode": "dry-run",
@@ -711,7 +711,7 @@ def test_render_spin_table_without_suggestions_lists_none() -> None:
     assert "(none)" in output
 
 
-def test_render_spin_markdown_includes_missing_lockfiles_and_invalid_suggestion() -> None:
+def test_spin_markdown_with_missing_lockfiles_and_bad_suggestion() -> None:
     result = {
         "target": "demo",
         "mode": "dry-run",
