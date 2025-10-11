@@ -4,6 +4,8 @@
   human-readable reviews.
 - fix: tag lockfile suggestions in `flywheel spin --dry-run` with a `chore`
   category to match README guidance.
+- feat: expand `language_mix` detection in `flywheel spin --dry-run` to cover
+  Go, Rust, Java, shell scripts, and other common stacks.
 ## 2025-10-11
 - feat: flag missing dependency lockfiles in `flywheel spin --dry-run` output and
   include lockfile metadata in the stats payload.
