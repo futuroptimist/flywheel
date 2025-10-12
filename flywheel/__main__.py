@@ -115,6 +115,16 @@ CODE_FILE_SUFFIXES = {
     ".ts",
     ".tsx",
 }
+SPIN_ANALYZERS = {
+    "ci",
+    "dependencies",
+    "docs",
+    "readme",
+    "tests",
+}
+SPIN_ANALYZER_HELP = (
+    "comma-separated analyzers to enable/disable (use -name to disable)"
+)
 LANGUAGE_BY_SUFFIX = {
     ".bash": "Shell",
     ".c": "C",
@@ -540,9 +550,59 @@ def _analyze_dependency_health(
     }
 
 
+def _parse_analyzers(value: str | None) -> set[str]:
+    """Return enabled analyzers parsed from ``value``.
+
+    ``value`` accepts a comma-separated list of analyzer names.
+    Entries starting with ``-`` disable an analyzer, ``all`` resets to the
+    ``none`` clears the list entirely. Analyzer names are case-insensitive.
+    """
+
+    enabled = set(SPIN_ANALYZERS)
+    explicit_selection = False
+    if not value:
+        return enabled
+
+    tokens = [token.strip() for token in value.split(",") if token.strip()]
+    if not tokens:
+        return enabled
+
+    for token in tokens:
+        lowered = token.lower()
+        if lowered == "all":
+            enabled = set(SPIN_ANALYZERS)
+            explicit_selection = True
+            continue
+        if lowered == "none":
+            enabled = set()
+            explicit_selection = True
+            continue
+        negate = lowered.startswith("-")
+        name = lowered[1:] if negate else lowered
+        if name not in SPIN_ANALYZERS:
+            valid = ", ".join(sorted(SPIN_ANALYZERS))
+            message = f"Unknown analyzer '{name}'. " f"Valid options: {valid}."
+            raise SystemExit(message)
+        if negate:
+            enabled.discard(name)
+        else:
+            if not explicit_selection:
+                enabled = set()
+                explicit_selection = True
+            enabled.add(name)
+    return enabled
+
+
 def _analyze_repository(
     root: Path,
+    analyzers: set[str] | None = None,
 ) -> tuple[dict[str, object], list[dict[str, object]]]:
+    enabled = analyzers if analyzers is not None else set(SPIN_ANALYZERS)
+    include_docs = "docs" in enabled
+    include_readme = "readme" in enabled
+    include_ci = "ci" in enabled
+    include_tests = "tests" in enabled
+    include_dependencies = "dependencies" in enabled
     files = _iter_project_files(root)
     ext_counts = Counter((path.suffix.lower() or "<none>") for path in files)
     top_extensions = [
@@ -551,12 +611,15 @@ def _analyze_repository(
             ext_counts.items(), key=lambda item: (-item[1], item[0])
         )[:5]
     ]
-    has_readme = (root / "README.md").exists()
-    has_ci = _has_ci_workflows(root)
-    has_docs = _has_docs_directory(root)
-    has_tests = _detect_tests(root, files)
+    has_readme = (root / "README.md").exists() if include_readme else None
+    has_ci = _has_ci_workflows(root) if include_ci else None
+    has_docs = _has_docs_directory(root) if include_docs else None
+    has_tests = _detect_tests(root, files) if include_tests else None
     language_mix = _summarize_language_mix(files)
-    dependency_health = _analyze_dependency_health(root, files)
+    if include_dependencies:
+        dependency_health = _analyze_dependency_health(root, files)
+    else:
+        dependency_health = None
     stats: dict[str, object] = {
         "total_files": len(files),
         "top_extensions": top_extensions,
@@ -568,7 +631,7 @@ def _analyze_repository(
         "dependency_health": dependency_health,
     }
     suggestions: list[dict[str, object]] = []
-    if not has_docs:
+    if include_docs and not has_docs:
         suggestions.append(
             {
                 "id": "add-docs",
@@ -584,7 +647,7 @@ def _analyze_repository(
                 "files": ["docs/"],
             }
         )
-    if not has_readme:
+    if include_readme and not has_readme:
         suggestions.append(
             {
                 "id": "add-readme",
@@ -599,7 +662,7 @@ def _analyze_repository(
                 "files": ["README.md"],
             }
         )
-    if not has_ci:
+    if include_ci and not has_ci:
         suggestions.append(
             {
                 "id": "configure-ci",
@@ -615,7 +678,7 @@ def _analyze_repository(
                 "files": [".github/workflows/"],
             }
         )
-    if not has_tests:
+    if include_tests and not has_tests:
         suggestions.append(
             {
                 "id": "add-tests",
@@ -630,7 +693,11 @@ def _analyze_repository(
                 "files": ["tests/"],
             }
         )
-    if dependency_health["missing_lockfiles"]:
+    if (
+        include_dependencies
+        and dependency_health
+        and dependency_health["missing_lockfiles"]
+    ):
         suggestions.append(
             {
                 "id": "commit-lockfiles",
@@ -675,8 +742,12 @@ def _sort_suggestions(
     return sorted(items, key=sort_key)
 
 
-def _format_bool(value: bool) -> str:
-    return "yes" if value else "no"
+def _format_bool(value: bool | None) -> str:
+    if value is True:
+        return "yes"
+    if value is False:
+        return "no"
+    return "skipped"
 
 
 def _format_language_mix(entries: Sequence[dict[str, object]]) -> str:
@@ -691,18 +762,23 @@ def _format_language_mix(entries: Sequence[dict[str, object]]) -> str:
 
 
 def _format_stats_lines(stats: dict[str, object]) -> list[str]:
-    dependency = stats.get("dependency_health", {})
+    dependency = stats.get("dependency_health")
     language_mix = stats.get("language_mix", [])
     lines = [f"  - total_files: {stats.get('total_files', 0)}"]
-    readme_flag = _format_bool(bool(stats.get("has_readme")))
-    docs_flag = _format_bool(bool(stats.get("has_docs")))
-    ci_flag = _format_bool(bool(stats.get("has_ci_workflows")))
-    tests_flag = _format_bool(bool(stats.get("has_tests")))
+    readme_flag = _format_bool(stats.get("has_readme"))
+    docs_flag = _format_bool(stats.get("has_docs"))
+    ci_flag = _format_bool(stats.get("has_ci_workflows"))
+    tests_flag = _format_bool(stats.get("has_tests"))
     lines.append(f"  - has_readme: {readme_flag}")
     lines.append(f"  - has_docs: {docs_flag}")
     lines.append(f"  - has_ci_workflows: {ci_flag}")
     lines.append(f"  - has_tests: {tests_flag}")
-    dep_status = dependency.get("status", "unknown")
+    if isinstance(dependency, dict):
+        dep_status = dependency.get("status", "unknown")
+    elif dependency is None:
+        dep_status = "skipped"
+    else:
+        dep_status = str(dependency)
     lines.append(f"  - dependency_health: {dep_status}")
     mix_text = _format_language_mix(language_mix)
     lines.append(f"  - language_mix: {mix_text}")
@@ -814,7 +890,8 @@ def spin(args: argparse.Namespace) -> None:
     if not args.dry_run:
         msg = "Only --dry-run mode is supported; re-run with --dry-run."
         raise SystemExit(msg)
-    stats, suggestions = _analyze_repository(target)
+    analyzers = _parse_analyzers(getattr(args, "analyzers", None))
+    stats, suggestions = _analyze_repository(target, analyzers=analyzers)
     result = {
         "target": str(target),
         "mode": "dry-run",
@@ -981,6 +1058,7 @@ def build_parser() -> argparse.ArgumentParser:
         default="json",
         help="output format for dry-run results",
     )
+    p_spin.add_argument("--analyzers", help=SPIN_ANALYZER_HELP)
     p_spin.set_defaults(func=spin)
 
     p_crawl = sub.add_parser("crawl", help="generate repo feature summary")

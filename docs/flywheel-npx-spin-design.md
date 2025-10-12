@@ -62,6 +62,8 @@ release management, and operational readiness.
 - **2025-10-13:** Added `flywheel config telemetry` to manage opt-in
   preferences stored under `~/.config/flywheel/config.json` with a
   `FLYWHEEL_CONFIG_DIR` override for sandboxed runs.
+- **2025-10-14:** Added `--analyzers` toggles to the Python dry-run CLI so teams
+  can focus on specific heuristics while the npm implementation matures.
 
 ## Architecture Overview
 ```mermaid
