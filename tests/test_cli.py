@@ -7,6 +7,8 @@ import sys
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
+
 
 def hash_dir(path: Path) -> dict:
     result = {}
@@ -357,6 +359,51 @@ def test_load_config_rejects_non_mapping(monkeypatch, tmp_path: Path) -> None:
     config_path = tmp_path / "config.json"
     config_path.write_text(json.dumps(["bad"]))
     assert cli.load_config() == {}
+
+
+def test_status_cli_invokes_repo_status(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    recorded: dict[str, tuple[Path, str | None, int]] = {}
+
+    def fake_update(readme: Path, *, token: str | None, attempts: int) -> None:
+        recorded["call"] = (readme, token, attempts)
+
+    monkeypatch.setattr(cli.repo_status, "update_readme", fake_update)
+
+    args = SimpleNamespace(
+        readme=Path("README.md"),
+        token="abc123",
+        attempts=3,
+    )
+
+    cli.update_related_status(args)
+
+    assert recorded["call"] == (Path("README.md"), "abc123", 3)
+
+
+def test_status_cli_uses_env_token(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    monkeypatch.setenv("GITHUB_TOKEN", "env-token")
+
+    tokens: list[str | None] = []
+
+    def fake_update(readme: Path, *, token: str | None, attempts: int) -> None:
+        tokens.append(token)
+
+    monkeypatch.setattr(cli.repo_status, "update_readme", fake_update)
+
+    args = SimpleNamespace(readme=Path("README.md"), token=None, attempts=2)
+    cli.update_related_status(args)
+
+    assert tokens == ["env-token"]
+
+
+def test_status_cli_validates_attempts(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    args = SimpleNamespace(readme=Path("README.md"), token=None, attempts=0)
+
+    with pytest.raises(SystemExit):
+        cli.update_related_status(args)
 
 
 def test_save_config_round_trip(monkeypatch, tmp_path: Path) -> None:

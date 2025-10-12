@@ -1,8 +1,10 @@
 import re
+import sys
 
 import pytest
 
 import src.repo_status as rs
+from flywheel import status_helper
 
 
 def test_status_to_emoji():
@@ -63,6 +65,30 @@ def test_fetch_repo_status_attempts_zero():
         rs.fetch_repo_status("owner/repo", attempts=0)
 
 
+def test_fetch_repo_status_with_token_and_branch(monkeypatch):
+    captured = {}
+
+    class Resp:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"workflow_runs": []}
+
+    def fake_get(url, headers, timeout):
+        captured["url"] = url
+        captured["headers"] = headers
+        return Resp()
+
+    monkeypatch.setattr(rs.requests, "get", fake_get)
+
+    emoji = rs.fetch_repo_status("owner/repo", token="abc123", branch="main")
+
+    assert emoji == "❓"
+    assert captured["headers"]["Authorization"] == "Bearer abc123"
+    assert "&branch=main" in captured["url"]
+
+
 def test_update_readme(tmp_path, monkeypatch):
     readme = tmp_path / "README.md"
     readme.write_text("## Related Projects\n- https://github.com/a/b\n")
@@ -120,3 +146,40 @@ def test_cli_attempt_validation(tmp_path):
 
     with pytest.raises(SystemExit):
         rs.main(["--readme", str(readme), "--attempts", "0"])
+
+
+def test_get_fetch_repo_status_without_shim(monkeypatch):
+    monkeypatch.delitem(sys.modules, "src.repo_status", raising=False)
+
+    fetch = status_helper._get_fetch_repo_status()
+
+    assert fetch is status_helper.fetch_repo_status
+
+
+def test_update_readme_stops_at_next_section(tmp_path, monkeypatch):
+    readme = tmp_path / "README.md"
+    readme.write_text(
+        "\n".join(
+            [
+                "## Related Projects",
+                "- https://github.com/example/repo",
+                "## Another Section",
+                "- untouched",
+            ]
+        )
+    )
+
+    calls = []
+
+    def fake_fetch(repo, token=None, branch=None, attempts=2):
+        calls.append(repo)
+        return "✅"
+
+    monkeypatch.setattr(rs, "fetch_repo_status", fake_fetch)
+
+    rs.update_readme(readme)
+
+    lines = readme.read_text().splitlines()
+    assert lines[1] == "- ✅ https://github.com/example/repo"
+    assert lines[2] == "## Another Section"
+    assert calls == ["example/repo"]

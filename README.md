@@ -51,7 +51,7 @@ surface broken links without flooding CI logs with informational warnings.
 - Dark pattern guidance in `docs/dark-patterns.md`
 - Bright pattern catalog in `docs/bright-patterns.md`
 - Secret scanning helper `scripts/scan-secrets.py` that blocks common tokens in staged diffs
-- README status helper (`python -m src.repo_status`) that handles mixed-case workflow conclusions and validates attempt counts
+- README status helper (`flywheel status`) that handles mixed-case workflow conclusions and validates attempt counts
 - Fast Python installs powered by [uv](https://github.com/astral-sh/uv)
 - Example code and templates, including `examples/basic.py` for calling the CLI
   programmatically
@@ -268,7 +268,7 @@ Missing parent directories are created automatically when cloning.
 Update the `## Related Projects` list with workflow emojis:
 
 ```bash
-python -m src.repo_status --readme README.md --attempts 3
+flywheel status --readme README.md --attempts 3
 ```
 
 Provide `--token` or set `GITHUB_TOKEN` to authenticate requests. The `--attempts` flag controls
