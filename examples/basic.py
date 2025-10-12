@@ -1,6 +1,6 @@
-from __future__ import annotations
-
 """Minimal example showing how to call the flywheel CLI from Python."""
+
+from __future__ import annotations
 
 import io
 import sys
