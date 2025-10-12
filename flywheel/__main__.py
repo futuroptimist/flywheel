@@ -131,6 +131,11 @@ def maybe_prompt_for_telemetry(args: argparse.Namespace) -> None:
     command = getattr(args, "command", None)
     if command == "config":
         return
+    if getattr(args, "yes", False):
+        # Commands executed with ``--yes`` are explicitly non-interactive, so
+        # skip the telemetry prompt to avoid blocking automation (for example
+        # during CI test runs).
+        return
     _prompt_for_telemetry()
 
 
