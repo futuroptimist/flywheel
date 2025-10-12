@@ -10,12 +10,14 @@ import pytest
 
 import flywheel.__main__ as main_module
 from flywheel.__main__ import (
+    SPIN_ANALYZERS,
     _analyze_repository,
     _detect_tests,
     _format_stats_lines,
     _has_ci_workflows,
     _has_docs_directory,
     _iter_project_files,
+    _parse_analyzers,
     _render_spin_markdown,
     _render_spin_table,
     spin,
@@ -24,7 +26,7 @@ from flywheel.__main__ import (
 CaptureFixtureStr = pytest.CaptureFixture[str]
 
 
-def run_spin_dry_run(path: Path) -> dict:
+def run_spin_dry_run(path: Path, *extra: str) -> dict:
     cmd = [
         sys.executable,
         "-m",
@@ -32,6 +34,7 @@ def run_spin_dry_run(path: Path) -> dict:
         "spin",
         str(path),
         "--dry-run",
+        *extra,
     ]
     completed = subprocess.run(cmd, check=True, capture_output=True, text=True)
     return json.loads(completed.stdout)
@@ -49,6 +52,23 @@ def run_spin_dry_run_text(path: Path, *extra: str) -> str:
     ]
     completed = subprocess.run(cmd, check=True, capture_output=True, text=True)
     return completed.stdout
+
+
+def test_parse_analyzers_defaults_when_blank() -> None:
+    assert _parse_analyzers(",") == set(SPIN_ANALYZERS)
+
+
+def test_parse_analyzers_allows_explicit_subset() -> None:
+    assert _parse_analyzers("docs") == {"docs"}
+
+
+def test_parse_analyzers_allows_none_then_add() -> None:
+    assert _parse_analyzers("none,docs") == {"docs"}
+
+
+def test_parse_analyzers_allows_all_then_disable() -> None:
+    expected = set(SPIN_ANALYZERS) - {"tests"}
+    assert _parse_analyzers("all,-tests") == expected
 
 
 def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
@@ -75,6 +95,7 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     categories: dict[str, str] = {}
     for entry in result["suggestions"]:
         categories[entry["id"]] = entry["category"]
+        assert 0.0 <= entry["confidence"] <= 1.0
     assert categories == {
         "add-docs": "docs",
         "add-readme": "docs",
@@ -108,6 +129,62 @@ def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
     assert stats["has_tests"] is True
 
     assert result["suggestions"] == []
+
+
+def test_spin_analyzers_subset(tmp_path: Path) -> None:
+    repo = tmp_path / "subset"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+
+    result = run_spin_dry_run(
+        repo,
+        "--analyzers",
+        "docs,dependencies",
+    )
+
+    stats = result["stats"]
+    assert stats["has_docs"] is False
+    assert stats["has_readme"] is None
+    assert stats["has_ci_workflows"] is None
+    assert stats["has_tests"] is None
+    dependency = stats["dependency_health"]
+    assert dependency["status"] == "lockfile-missing"
+
+    suggestion_ids = {entry["id"] for entry in result["suggestions"]}
+    assert suggestion_ids == {"add-docs", "commit-lockfiles"}
+
+
+def test_spin_analyzers_disable_with_minus(tmp_path: Path) -> None:
+    repo = tmp_path / "minus"
+    repo.mkdir()
+
+    result = run_spin_dry_run(
+        repo,
+        "--analyzers",
+        "all,-tests",
+    )
+
+    stats = result["stats"]
+    assert stats["has_tests"] is None
+
+    suggestion_ids = {entry["id"] for entry in result["suggestions"]}
+    assert "add-tests" not in suggestion_ids
+    assert {"add-docs", "add-readme", "configure-ci"}.issubset(suggestion_ids)
+
+
+def test_spin_invalid_analyzer_errors(tmp_path: Path) -> None:
+    repo = tmp_path / "invalid"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        format="json",
+        analyzers="bogus",
+    )
+
+    with pytest.raises(SystemExit):
+        spin(args)
 
 
 def test_has_docs_directory_ignores_hidden_files(tmp_path: Path) -> None:
@@ -163,6 +240,7 @@ def test_spin_reports_missing_lockfile(tmp_path: Path) -> None:
     else:  # pragma: no cover - defensive fallback
         raise AssertionError("commit-lockfiles suggestion missing")
     assert "package.json" in lock_suggestion["files"]
+    assert 0.0 <= lock_suggestion["confidence"] <= 1.0
 
 
 def test_suggestions_sorted_by_category_and_impact(tmp_path: Path) -> None:
@@ -184,6 +262,8 @@ def test_suggestions_sorted_by_category_and_impact(tmp_path: Path) -> None:
         "add-docs",
         "add-readme",
     ]
+    for entry in suggestions:
+        assert 0.0 <= entry["confidence"] <= 1.0
 
 
 def test_spin_ignores_present_lockfile(tmp_path: Path) -> None:
@@ -319,6 +399,7 @@ def test_analyze_repository_emits_lockfile_suggestion(tmp_path: Path) -> None:
         entry for entry in suggestions if entry["id"] == "commit-lockfiles"
     )
     assert lockfile_suggestion["category"] == "chore"
+    assert 0.0 <= lockfile_suggestion["confidence"] <= 1.0
 
 
 def test_spin_requires_existing_directory(tmp_path: Path) -> None:
@@ -677,6 +758,40 @@ def test_spin_table_format(
     assert "Stats:" in output
     assert "Index" in output
     assert "add-docs" in output
+
+
+def test_spin_table_marks_skipped_analyzers(
+    tmp_path: Path,
+    capsys: CaptureFixtureStr,
+) -> None:
+    repo = tmp_path / "skipped"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo), dry_run=True, format="table", analyzers="none"
+    )
+
+    spin(args)
+
+    output = capsys.readouterr().out
+    assert "has_readme: skipped" in output
+    assert "has_tests: skipped" in output
+
+
+def test_format_stats_lines_handles_literal_dependency() -> None:
+    stats = {
+        "total_files": 1,
+        "has_readme": True,
+        "has_docs": True,
+        "has_ci_workflows": True,
+        "has_tests": True,
+        "dependency_health": "warn",
+        "language_mix": [],
+    }
+
+    lines = _format_stats_lines(stats)
+
+    assert "dependency_health: warn" in lines[-2]
 
 
 def test_spin_markdown_format(

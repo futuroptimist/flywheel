@@ -1,6 +1,6 @@
 ## 2025-10-14
-- fix: wire the documented README status helper into the `flywheel status`
-  subcommand so automation no longer requires invoking `python -m src.repo_status`.
+- feat: add analyzer toggles to `flywheel spin --dry-run` so operators can scope
+  heuristic checks.
 
 ## 2025-10-13
 - feat: add `flywheel config telemetry` to persist opt-in preferences under
@@ -8,6 +8,8 @@
 - feat: add `--no-save-dev` support to `flywheel init` to match CLI docs.
 - feat: sort `flywheel spin --dry-run` suggestions by category and impact to
   match prompt doc guidance.
+- feat: add heuristic `confidence` scores to `flywheel spin --dry-run`
+  suggestions so the output matches the prompt schema.
 ## 2025-10-12
 - feat: add table and markdown formats to `flywheel spin --dry-run` output for
   human-readable reviews.
