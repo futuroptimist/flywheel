@@ -552,6 +552,24 @@ def test_automation_context_ignores_false_env(monkeypatch, tmp_path: Path) -> No
     assert cli._automation_context() is False
 
 
+def test_is_interactive_reflects_tty_state(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+
+    class DummyStream:
+        def __init__(self, value: bool) -> None:
+            self._value = value
+
+        def isatty(self) -> bool:
+            return self._value
+
+    monkeypatch.setattr(cli.sys, "stdin", DummyStream(True))
+    monkeypatch.setattr(cli.sys, "stdout", DummyStream(True))
+    assert cli._is_interactive() is True
+
+    monkeypatch.setattr(cli.sys, "stdout", DummyStream(False))
+    assert cli._is_interactive() is False
+
+
 def test_maybe_prompt_skips_for_config_command(monkeypatch, tmp_path: Path) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
     invoked = False
