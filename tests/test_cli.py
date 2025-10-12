@@ -543,7 +543,10 @@ def test_telemetry_prompt_skips_in_ci_environment(
     assert cli.TELEMETRY_REMINDER in captured.err
 
 
-def test_automation_context_ignores_false_env(monkeypatch, tmp_path: Path) -> None:
+def test_automation_context_ignores_false_env(
+    monkeypatch,
+    tmp_path: Path,
+) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
 
     monkeypatch.setenv("CI", "false")
@@ -552,7 +555,10 @@ def test_automation_context_ignores_false_env(monkeypatch, tmp_path: Path) -> No
     assert cli._automation_context() is False
 
 
-def test_is_interactive_reflects_tty_state(monkeypatch, tmp_path: Path) -> None:
+def test_is_interactive_reflects_tty_state(
+    monkeypatch,
+    tmp_path: Path,
+) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
 
     class DummyStream:
@@ -570,7 +576,10 @@ def test_is_interactive_reflects_tty_state(monkeypatch, tmp_path: Path) -> None:
     assert cli._is_interactive() is False
 
 
-def test_maybe_prompt_skips_for_config_command(monkeypatch, tmp_path: Path) -> None:
+def test_maybe_prompt_skips_for_config_command(
+    monkeypatch,
+    tmp_path: Path,
+) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
     invoked = False
 
