@@ -8,8 +8,6 @@ from typing import Sequence
 
 import yaml
 
-from src import repo_status
-
 from .repocrawler import RepoCrawler
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -56,6 +54,15 @@ def save_config(data: dict[str, object]) -> Path:
 
 
 def update_related_status(args: argparse.Namespace) -> None:
+    try:
+        from src import repo_status
+    except ModuleNotFoundError as error:
+        if error.name != "src":
+            raise
+        raise SystemExit(
+            "The repo status helper is unavailable. Run this command from the repository root "
+            "or install the optional 'src' helpers."
+        ) from error
     attempts = getattr(args, "attempts", 2)
     if attempts < 1:
         raise SystemExit("--attempts must be >= 1")
