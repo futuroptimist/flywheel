@@ -8,6 +8,8 @@ from typing import Sequence
 
 import yaml
 
+from src import repo_status
+
 from .repocrawler import RepoCrawler
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -51,6 +53,15 @@ def save_config(data: dict[str, object]) -> Path:
     directory.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n")
     return path
+
+
+def update_related_status(args: argparse.Namespace) -> None:
+    attempts = getattr(args, "attempts", 2)
+    if attempts < 1:
+        raise SystemExit("--attempts must be >= 1")
+    readme = Path(args.readme)
+    token = args.token or os.environ.get("GITHUB_TOKEN")
+    repo_status.update_readme(readme, token=token, attempts=attempts)
 
 
 def telemetry_config(args: argparse.Namespace) -> None:
@@ -1012,6 +1023,28 @@ def build_parser() -> argparse.ArgumentParser:
         help="prompt doc paths relative to the repository root",
     )
     p_sync.set_defaults(func=sync_prompts_cli, files=None)
+
+    p_status = sub.add_parser(
+        "status",
+        help="update README related project statuses",
+    )
+    p_status.add_argument(
+        "--readme",
+        type=Path,
+        default=Path("README.md"),
+        help="path to README file",
+    )
+    p_status.add_argument(
+        "--token",
+        help="GitHub token (defaults to GITHUB_TOKEN env variable)",
+    )
+    p_status.add_argument(
+        "--attempts",
+        type=int,
+        default=2,
+        help="number of API reads to confirm workflow conclusions",
+    )
+    p_status.set_defaults(func=update_related_status)
 
     p_config = sub.add_parser("config", help="manage CLI configuration")
     config_sub = p_config.add_subparsers(dest="config_command", required=True)

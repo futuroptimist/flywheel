@@ -1,3 +1,7 @@
+## 2025-10-14
+- fix: wire the documented README status helper into the `flywheel status`
+  subcommand so automation no longer requires invoking `python -m src.repo_status`.
+
 ## 2025-10-13
 - feat: add `flywheel config telemetry` to persist opt-in preferences under
   `~/.config/flywheel/`.
