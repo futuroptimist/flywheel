@@ -189,6 +189,12 @@ NODE_LOCKFILES = {
 }
 PIPFILE_LOCK = "Pipfile.lock"
 
+IMPACT_CONFIDENCE = {
+    "high": 0.9,
+    "medium": 0.8,
+    "low": 0.7,
+}
+
 
 def _merge_repo_specs(specs: Sequence[str]) -> list[str]:
     """Return deduplicated repo specs preserving latest branch overrides."""
@@ -574,6 +580,7 @@ def _analyze_repository(
                     "up quickly."
                 ),
                 "impact": "medium",
+                "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": ["docs/"],
             }
         )
@@ -588,6 +595,7 @@ def _analyze_repository(
                     " test commands so new contributors ramp up quickly."
                 ),
                 "impact": "medium",
+                "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": ["README.md"],
             }
         )
@@ -603,6 +611,7 @@ def _analyze_repository(
                     "so lint, test, and docs jobs run on every push."
                 ),
                 "impact": "high",
+                "confidence": IMPACT_CONFIDENCE["high"],
                 "files": [".github/workflows/"],
             }
         )
@@ -617,6 +626,7 @@ def _analyze_repository(
                     " test files to prevent regressions."
                 ),
                 "impact": "high",
+                "confidence": IMPACT_CONFIDENCE["high"],
                 "files": ["tests/"],
             }
         )
@@ -632,6 +642,7 @@ def _analyze_repository(
                     "reproducible across environments."
                 ),
                 "impact": "medium",
+                "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": dependency_health["missing_lockfiles"],
             }
         )

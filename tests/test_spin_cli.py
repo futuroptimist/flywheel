@@ -75,6 +75,7 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     categories: dict[str, str] = {}
     for entry in result["suggestions"]:
         categories[entry["id"]] = entry["category"]
+        assert 0.0 <= entry["confidence"] <= 1.0
     assert categories == {
         "add-docs": "docs",
         "add-readme": "docs",
@@ -163,6 +164,7 @@ def test_spin_reports_missing_lockfile(tmp_path: Path) -> None:
     else:  # pragma: no cover - defensive fallback
         raise AssertionError("commit-lockfiles suggestion missing")
     assert "package.json" in lock_suggestion["files"]
+    assert 0.0 <= lock_suggestion["confidence"] <= 1.0
 
 
 def test_suggestions_sorted_by_category_and_impact(tmp_path: Path) -> None:
@@ -184,6 +186,8 @@ def test_suggestions_sorted_by_category_and_impact(tmp_path: Path) -> None:
         "add-docs",
         "add-readme",
     ]
+    for entry in suggestions:
+        assert 0.0 <= entry["confidence"] <= 1.0
 
 
 def test_spin_ignores_present_lockfile(tmp_path: Path) -> None:
@@ -319,6 +323,7 @@ def test_analyze_repository_emits_lockfile_suggestion(tmp_path: Path) -> None:
         entry for entry in suggestions if entry["id"] == "commit-lockfiles"
     )
     assert lockfile_suggestion["category"] == "chore"
+    assert 0.0 <= lockfile_suggestion["confidence"] <= 1.0
 
 
 def test_spin_requires_existing_directory(tmp_path: Path) -> None:
