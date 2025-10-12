@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import shutil
+import sys
 from collections import Counter
 from collections.abc import Sequence
 from pathlib import Path
@@ -16,6 +17,10 @@ ROOT = Path(__file__).resolve().parent.parent
 CONFIG_ENV_VAR = "FLYWHEEL_CONFIG_DIR"
 CONFIG_FILENAME = "config.json"
 DEFAULT_CONFIG_DIR = Path.home() / ".config" / "flywheel"
+TELEMETRY_REMINDER = (
+    "Telemetry preference not set; run `flywheel config telemetry "
+    "--set off|on|full` to choose."
+)
 
 
 def _config_dir() -> Path:
@@ -73,6 +78,88 @@ def telemetry_config(args: argparse.Namespace) -> None:
         return
     current = str(config.get("telemetry", "ask"))
     print(f"Telemetry preference: {current}")
+
+
+def _automation_context() -> bool:
+    """Return ``True`` when running in a known non-interactive environment."""
+
+    for name in ("CI", "GITHUB_ACTIONS"):
+        raw = os.environ.get(name)
+        if not raw:
+            continue
+        if raw.lower() in {"0", "false", "no"}:
+            continue
+        return True
+    return False
+
+
+def _is_interactive() -> bool:
+    """Return ``True`` when stdin/stdout are attached to a TTY."""
+
+    try:
+        stdin_tty = sys.stdin.isatty()
+        stdout_tty = sys.stdout.isatty()
+    except Exception:  # pragma: no cover - extremely unlikely
+        return False
+    return bool(stdin_tty and stdout_tty)
+
+
+def _prompt_for_telemetry() -> None:
+    """Prompt once for telemetry opt-in and persist the choice."""
+
+    config = load_config()
+    if "telemetry" in config:
+        return
+    if _automation_context() or not _is_interactive():
+        print(TELEMETRY_REMINDER, file=sys.stderr)
+        return
+
+    prompt = (
+        "Share anonymized telemetry (command usage and exit codes) to help "
+        "improve flywheel? [y/N]: "
+    )
+    while True:
+        try:
+            response = input(prompt)
+        except EOFError:
+            print(TELEMETRY_REMINDER, file=sys.stderr)
+            return
+        response = response.strip().lower()
+        if response in {"y", "yes"}:
+            choice = "on"
+            break
+        if response in {"n", "no", ""}:
+            choice = "off"
+            break
+        print("Please respond with 'y' or 'n'.")
+
+    config["telemetry"] = choice
+    save_config(config)
+    if choice == "on":
+        confirmation = (
+            "Telemetry enabled. Run `flywheel config telemetry "
+            "--set off|full` to update the preference."
+        )
+    else:
+        confirmation = (
+            "Telemetry disabled. Run `flywheel config telemetry "
+            "--set on|full` to enable it later."
+        )
+    print(confirmation)
+
+
+def maybe_prompt_for_telemetry(args: argparse.Namespace) -> None:
+    """Prompt for telemetry opt-in on the first CLI run."""
+
+    command = getattr(args, "command", None)
+    if command == "config":
+        return
+    if getattr(args, "yes", False):
+        # Commands executed with ``--yes`` are explicitly non-interactive, so
+        # skip the telemetry prompt to avoid blocking automation (for example
+        # during CI test runs).
+        return
+    _prompt_for_telemetry()
 
 
 WORKFLOW_FILES = [
@@ -1154,6 +1241,7 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv=None) -> None:
     parser = build_parser()
     args = parser.parse_args(argv)
+    maybe_prompt_for_telemetry(args)
     args.func(args)
 
 
