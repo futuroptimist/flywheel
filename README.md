@@ -243,6 +243,13 @@ human-friendly summary. The table view keeps stats at the top and lists
 suggestions with their categories, impact, and affected files, while the
 Markdown variant is ready to paste into issues or chat threads.
 
+Fine-tune the heuristics with `--analyzers`. Pass a comma-separated list such as
+`--analyzers docs,dependencies` to focus on specific checks, use
+`--analyzers all,-tests` to start from the defaults and disable a module, or
+`--analyzers none` to skip all optional analyzers. Analyzer names align with the
+[`npx flywheel spin` design](docs/flywheel-npx-spin-design.md) and currently
+include `docs`, `readme`, `ci`, `tests`, and `dependencies`.
+
 ### Scanning other repositories
 
 Clone a set of repos and generate Markdown reports:

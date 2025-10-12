@@ -24,7 +24,7 @@ from flywheel.__main__ import (
 CaptureFixtureStr = pytest.CaptureFixture[str]
 
 
-def run_spin_dry_run(path: Path) -> dict:
+def run_spin_dry_run(path: Path, *extra: str) -> dict:
     cmd = [
         sys.executable,
         "-m",
@@ -32,6 +32,7 @@ def run_spin_dry_run(path: Path) -> dict:
         "spin",
         str(path),
         "--dry-run",
+        *extra,
     ]
     completed = subprocess.run(cmd, check=True, capture_output=True, text=True)
     return json.loads(completed.stdout)
@@ -108,6 +109,62 @@ def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
     assert stats["has_tests"] is True
 
     assert result["suggestions"] == []
+
+
+def test_spin_analyzers_subset(tmp_path: Path) -> None:
+    repo = tmp_path / "subset"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+
+    result = run_spin_dry_run(
+        repo,
+        "--analyzers",
+        "docs,dependencies",
+    )
+
+    stats = result["stats"]
+    assert stats["has_docs"] is False
+    assert stats["has_readme"] is None
+    assert stats["has_ci_workflows"] is None
+    assert stats["has_tests"] is None
+    dependency = stats["dependency_health"]
+    assert dependency["status"] == "lockfile-missing"
+
+    suggestion_ids = {entry["id"] for entry in result["suggestions"]}
+    assert suggestion_ids == {"add-docs", "commit-lockfiles"}
+
+
+def test_spin_analyzers_disable_with_minus(tmp_path: Path) -> None:
+    repo = tmp_path / "minus"
+    repo.mkdir()
+
+    result = run_spin_dry_run(
+        repo,
+        "--analyzers",
+        "all,-tests",
+    )
+
+    stats = result["stats"]
+    assert stats["has_tests"] is None
+
+    suggestion_ids = {entry["id"] for entry in result["suggestions"]}
+    assert "add-tests" not in suggestion_ids
+    assert {"add-docs", "add-readme", "configure-ci"}.issubset(suggestion_ids)
+
+
+def test_spin_invalid_analyzer_errors(tmp_path: Path) -> None:
+    repo = tmp_path / "invalid"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        format="json",
+        analyzers="bogus",
+    )
+
+    with pytest.raises(SystemExit):
+        spin(args)
 
 
 def test_has_docs_directory_ignores_hidden_files(tmp_path: Path) -> None:
@@ -677,6 +734,24 @@ def test_spin_table_format(
     assert "Stats:" in output
     assert "Index" in output
     assert "add-docs" in output
+
+
+def test_spin_table_marks_skipped_analyzers(
+    tmp_path: Path,
+    capsys: CaptureFixtureStr,
+) -> None:
+    repo = tmp_path / "skipped"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo), dry_run=True, format="table", analyzers="none"
+    )
+
+    spin(args)
+
+    output = capsys.readouterr().out
+    assert "has_readme: skipped" in output
+    assert "has_tests: skipped" in output
 
 
 def test_spin_markdown_format(
