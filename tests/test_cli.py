@@ -404,6 +404,29 @@ def test_telemetry_prompt_decline(monkeypatch, tmp_path: Path, capsys) -> None:
     assert cli.load_config()["telemetry"] == "off"
 
 
+def test_telemetry_prompt_rejects_invalid_answer(
+    monkeypatch, tmp_path: Path, capsys
+) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    (repo / "README.md").write_text("hello")
+
+    monkeypatch.delenv("CI", raising=False)
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
+    monkeypatch.setattr(cli, "_is_interactive", lambda: True)
+
+    responses = iter(["maybe", "y"])
+
+    monkeypatch.setattr("builtins.input", lambda _: next(responses))
+
+    cli.main(["prompt", str(repo)])
+
+    captured = capsys.readouterr()
+    assert "Please respond with 'y' or 'n'." in captured.out
+    assert cli.load_config()["telemetry"] == "on"
+
+
 def test_telemetry_prompt_skips_noninteractive(
     monkeypatch, tmp_path: Path, capsys
 ) -> None:
@@ -518,4 +541,28 @@ def test_telemetry_prompt_skips_in_ci_environment(
 
     captured = capsys.readouterr()
     assert cli.TELEMETRY_REMINDER in captured.err
+
+
+def test_automation_context_ignores_false_env(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+
+    monkeypatch.setenv("CI", "false")
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
+
+    assert cli._automation_context() is False
+
+
+def test_maybe_prompt_skips_for_config_command(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    invoked = False
+
+    def fake_prompt() -> None:
+        nonlocal invoked
+        invoked = True
+
+    monkeypatch.setattr(cli, "_prompt_for_telemetry", fake_prompt)
+
+    cli.maybe_prompt_for_telemetry(SimpleNamespace(command="config"))
+
+    assert invoked is False
     assert "telemetry" not in cli.load_config()
