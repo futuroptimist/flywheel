@@ -6,13 +6,13 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `fcb5d5d` | n/a | 1 | 5 | 2025-10-12 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `d0cf03f` | ✅ | 0 | 2 | 2025-10-12 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `aba69e4` | ✅ | 1 | 6 | 2025-10-12 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `6a05fc3` | ✅ | 0 | 2 | 2025-10-12 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `5ec0c89` | ✅ | 3 | 37 | 2025-10-11 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `bcd02d1` | ✅ | 6 | 11 | 2025-10-10 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `cc0179c` | ✅ | 0 | 2 | 2025-10-11 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `b9ee9b3` | ✅ | 1 | 0 | 2025-10-07 |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `f72be0f` | ✅ | 0 | 2 | 2025-10-12 |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `4e14fd7` | ✅ | 0 | 1 | 2025-10-12 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `bbd666f` | ✅ | 0 | 0 | 2025-10-11 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `924148d` | ✅ | 0 | 0 | 2025-10-11 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `ecec636` | ✅ | 0 | 0 | 2025-10-11 |
