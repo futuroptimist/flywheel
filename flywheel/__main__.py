@@ -16,6 +16,10 @@ ROOT = Path(__file__).resolve().parent.parent
 CONFIG_ENV_VAR = "FLYWHEEL_CONFIG_DIR"
 CONFIG_FILENAME = "config.json"
 DEFAULT_CONFIG_DIR = Path.home() / ".config" / "flywheel"
+TELEMETRY_REMINDER = (
+    "Telemetry preference not set; run `flywheel config telemetry "
+    "--set off|on|full` to choose."
+)
 
 
 def _config_dir() -> Path:
@@ -84,11 +88,7 @@ def _prompt_for_telemetry() -> None:
     if "telemetry" in config:
         return
     if not _is_interactive():
-        reminder = (
-            "Telemetry preference not set; run `flywheel config telemetry "
-            "--set off|on|full` to choose."
-        )
-        print(reminder, file=sys.stderr)
+        print(TELEMETRY_REMINDER, file=sys.stderr)
         return
 
     prompt = (
@@ -96,7 +96,12 @@ def _prompt_for_telemetry() -> None:
         "improve flywheel? [y/N]: "
     )
     while True:
-        response = input(prompt).strip().lower()
+        try:
+            response = input(prompt)
+        except EOFError:
+            print(TELEMETRY_REMINDER, file=sys.stderr)
+            return
+        response = response.strip().lower()
         if response in {"y", "yes"}:
             choice = "on"
             break

@@ -417,6 +417,28 @@ def test_telemetry_prompt_skips_noninteractive(
     assert "telemetry" not in cli.load_config()
 
 
+def test_telemetry_prompt_handles_eof(
+    monkeypatch, tmp_path: Path, capsys
+) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    (repo / "README.md").write_text("hello")
+
+    monkeypatch.setattr(cli, "_is_interactive", lambda: True)
+
+    def raise_eof(_: str) -> str:
+        raise EOFError
+
+    monkeypatch.setattr("builtins.input", raise_eof)
+
+    cli.main(["prompt", str(repo)])
+
+    captured = capsys.readouterr()
+    assert cli.TELEMETRY_REMINDER in captured.err
+    assert "telemetry" not in cli.load_config()
+
+
 def test_telemetry_prompt_skips_when_set(monkeypatch, tmp_path: Path) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
     cli.save_config({"telemetry": "off"})
