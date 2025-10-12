@@ -70,6 +70,19 @@ def telemetry_config(args: argparse.Namespace) -> None:
     print(f"Telemetry preference: {current}")
 
 
+def _automation_context() -> bool:
+    """Return ``True`` when running in a known non-interactive environment."""
+
+    for name in ("CI", "GITHUB_ACTIONS"):
+        raw = os.environ.get(name)
+        if not raw:
+            continue
+        if raw.lower() in {"0", "false", "no"}:
+            continue
+        return True
+    return False
+
+
 def _is_interactive() -> bool:
     """Return ``True`` when stdin/stdout are attached to a TTY."""
 
@@ -87,7 +100,7 @@ def _prompt_for_telemetry() -> None:
     config = load_config()
     if "telemetry" in config:
         return
-    if not _is_interactive():
+    if _automation_context() or not _is_interactive():
         print(TELEMETRY_REMINDER, file=sys.stderr)
         return
 

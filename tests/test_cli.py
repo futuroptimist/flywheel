@@ -374,6 +374,7 @@ def test_telemetry_prompt_opt_in(monkeypatch, tmp_path: Path, capsys) -> None:
     repo.mkdir()
     (repo / "README.md").write_text("hello")
 
+    monkeypatch.delenv("CI", raising=False)
     monkeypatch.setattr(cli, "_is_interactive", lambda: True)
     monkeypatch.setattr("builtins.input", lambda _: "y")
 
@@ -390,6 +391,7 @@ def test_telemetry_prompt_decline(monkeypatch, tmp_path: Path, capsys) -> None:
     repo.mkdir()
     (repo / "README.md").write_text("hello")
 
+    monkeypatch.delenv("CI", raising=False)
     monkeypatch.setattr(cli, "_is_interactive", lambda: True)
     monkeypatch.setattr("builtins.input", lambda _: "")
 
@@ -427,6 +429,7 @@ def test_telemetry_prompt_handles_eof(
     repo.mkdir()
     (repo / "README.md").write_text("hello")
 
+    monkeypatch.delenv("CI", raising=False)
     monkeypatch.setattr(cli, "_is_interactive", lambda: True)
 
     def raise_eof(_: str) -> str:
@@ -455,6 +458,7 @@ def test_telemetry_prompt_skips_when_set(monkeypatch, tmp_path: Path) -> None:
         invoked = True
         return "y"
 
+    monkeypatch.delenv("CI", raising=False)
     monkeypatch.setattr(cli, "_is_interactive", lambda: True)
     monkeypatch.setattr("builtins.input", fake_input)
 
@@ -486,8 +490,27 @@ def test_maybe_prompt_runs_without_yes(monkeypatch, tmp_path: Path) -> None:
         nonlocal invoked
         invoked = True
 
+    monkeypatch.delenv("CI", raising=False)
     monkeypatch.setattr(cli, "_prompt_for_telemetry", fake_prompt)
 
     cli.maybe_prompt_for_telemetry(SimpleNamespace(command="prompt"))
 
     assert invoked is True
+
+
+def test_telemetry_prompt_skips_in_ci_environment(
+    monkeypatch, tmp_path: Path, capsys
+) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    (repo / "README.md").write_text("hello")
+
+    monkeypatch.setenv("CI", "true")
+    monkeypatch.setattr(cli, "_is_interactive", lambda: True)
+
+    cli.main(["prompt", str(repo)])
+
+    captured = capsys.readouterr()
+    assert cli.TELEMETRY_REMINDER in captured.err
+    assert "telemetry" not in cli.load_config()
