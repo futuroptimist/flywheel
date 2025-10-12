@@ -5,6 +5,7 @@ import shutil
 from collections import Counter
 from pathlib import Path
 from typing import Sequence
+from types import SimpleNamespace
 
 import yaml
 
@@ -15,6 +16,29 @@ ROOT = Path(__file__).resolve().parent.parent
 CONFIG_ENV_VAR = "FLYWHEEL_CONFIG_DIR"
 CONFIG_FILENAME = "config.json"
 DEFAULT_CONFIG_DIR = Path.home() / ".config" / "flywheel"
+
+
+# ``repo_status`` is lazily loaded so that the CLI can run in environments where
+# the optional ``src`` helpers are not installed. Tests (and downstream
+# extensions) monkeypatch ``repo_status.update_readme`` directly, so provide a
+# placeholder namespace with a sentinel attribute that allows monkeypatching
+# before the helper is imported.
+repo_status: object = SimpleNamespace(update_readme=None)
+
+
+def _load_repo_status_module() -> object:
+    """Import the optional ``src.repo_status`` helper module."""
+
+    try:
+        from src import repo_status as module  # type: ignore[import-not-found]
+    except ModuleNotFoundError as error:  # pragma: no cover - defensive
+        if error.name != "src":
+            raise
+        raise SystemExit(
+            "The repo status helper is unavailable. Run this command from the repository root "
+            "or install the optional 'src' helpers."
+        ) from error
+    return module
 
 
 def _config_dir() -> Path:
@@ -54,21 +78,23 @@ def save_config(data: dict[str, object]) -> Path:
 
 
 def update_related_status(args: argparse.Namespace) -> None:
+    global repo_status
+
     try:
-        from src import repo_status
-    except ModuleNotFoundError as error:
-        if error.name != "src":
-            raise
-        raise SystemExit(
-            "The repo status helper is unavailable. Run this command from the repository root "
-            "or install the optional 'src' helpers."
-        ) from error
+        update_readme = repo_status.update_readme  # type: ignore[union-attr]
+    except AttributeError:
+        repo_status = _load_repo_status_module()
+        update_readme = repo_status.update_readme  # type: ignore[attr-defined]
+    else:
+        if not callable(update_readme):
+            repo_status = _load_repo_status_module()
+            update_readme = repo_status.update_readme  # type: ignore[attr-defined]
     attempts = getattr(args, "attempts", 2)
     if attempts < 1:
         raise SystemExit("--attempts must be >= 1")
     readme = Path(args.readme)
     token = args.token or os.environ.get("GITHUB_TOKEN")
-    repo_status.update_readme(readme, token=token, attempts=attempts)
+    update_readme(readme, token=token, attempts=attempts)
 
 
 def telemetry_config(args: argparse.Namespace) -> None:
