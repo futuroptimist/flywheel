@@ -6,11 +6,11 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `8bb9c78` | ✅ | 1 | 5 | 2025-10-12 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `8e1e943` | n/a | 0 | 1 | 2025-10-12 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `b2608a2` | n/a | 1 | 4 | 2025-10-12 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `7bed94a` | n/a | 0 | 1 | 2025-10-12 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `5ec0c89` | ✅ | 3 | 37 | 2025-10-11 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `bcd02d1` | ✅ | 6 | 11 | 2025-10-10 |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `cc0179c` | ✅ | 0 | 2 | 2025-10-11 |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `4004185` | ✅ | 0 | 1 | 2025-10-12 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `b9ee9b3` | ✅ | 1 | 0 | 2025-10-07 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `49c5f2e` | ✅ | 0 | 2 | 2025-10-12 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `bbd666f` | ✅ | 0 | 0 | 2025-10-11 |
@@ -28,7 +28,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ❌ | — | ✅ | 🚀 uv | 2025-10-12 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ❌ | — | ✅ | ⚪ none | 2025-10-11 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ❌ | — | ✅ | pip | 2025-10-10 |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ❌ | — | ✅ | 🔶 partial | 2025-10-11 |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ❌ | — | ✅ | 🔶 partial | 2025-10-12 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | — | ✅ | 🚀 uv | 2025-10-07 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | ❌ | — | ✅ | 🔶 partial | 2025-10-12 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ❌ | — | ✅ | 🔶 partial | 2025-10-11 |
@@ -46,7 +46,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-10-12 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✅ | ✅ | 8 | ✅ | ✅ | ✅ | ✅ | 2025-10-11 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2025-10-10 |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ | ✅ | 7 | ✅ | ✅ | ✅ | ✅ | 2025-10-11 |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ | ✅ | 7 | ✅ | ✅ | ✅ | ✅ | 2025-10-12 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-10-07 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | 2025-10-12 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-10-11 |
@@ -64,7 +64,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | 0 | 1 | 2025-10-12 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | 0 | 0 | 2025-10-11 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | 0 | 1 | 2025-10-10 |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | 0 | 8 | 2025-10-11 |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | 0 | 8 | 2025-10-12 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | 0 | 0 | 2025-10-07 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | 0 | 2 | 2025-10-12 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | 1 | 2 | 2025-10-11 |
