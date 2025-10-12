@@ -1,4 +1,6 @@
 ## 2025-10-13
+- feat: prompt for telemetry opt-in on first CLI run to match telemetry design
+  guidance.
 - feat: add `flywheel config telemetry` to persist opt-in preferences under
   `~/.config/flywheel/`.
 - feat: add `--no-save-dev` support to `flywheel init` to match CLI docs.

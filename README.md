@@ -174,7 +174,10 @@ flywheel config telemetry --set off
 Telemetry preferences are stored in `~/.config/flywheel/config.json` by default.
 Pass `--set on` or `--set full` to opt back in, or run without `--set` to display
 the current mode (`ask` when unset). Set `FLYWHEEL_CONFIG_DIR` to override the
-config location for testing or sandboxed runs.
+config location for testing or sandboxed runs. On the first CLI run, flywheel
+asks whether to share anonymized telemetry (command usage and exit codes) and
+saves the response so it never prompts again. Press Enter to keep telemetry off
+or answer `y` to enable it immediately.
 
 ### Generating repo feature summary
 

@@ -188,7 +188,8 @@ interface Suggestion {
 - After applying suggestions, run `npm run lint` and/or `npm run test:ci` when project scripts exist.
 
 ### Telemetry and Privacy
-- Default telemetry is opt-in via interactive prompt on first run. Store preference in
+- Default telemetry is opt-in via interactive prompt on first run (shipped in the Python CLI).
+  Store preference in
   `~/.config/flywheel/config.json`, configurable via `flywheel config telemetry`
   or the `FLYWHEEL_CONFIG_DIR` environment variable.
 - Data collected: anonymized command metadata, error codes, LLM cost. No code content unless user
@@ -321,7 +322,7 @@ gantt
 | `flywheel spin --dry-run` | Output suggestions without LLM or patch application (mock data). | Draft |
 | `flywheel spin --apply` | Interactive apply mode. | Planned |
 | `flywheel spin --apply-all` | Apply all suggestions with zero prompts (requires `--force`). | Planned |
-| `flywheel config telemetry` | Manage telemetry preferences. | Draft |
+| `flywheel config telemetry` | Manage telemetry preferences. | Shipped |
 
 ### Appendix B: Sample Prompt Skeleton
 ```

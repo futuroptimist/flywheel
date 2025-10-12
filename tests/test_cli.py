@@ -366,3 +366,74 @@ def test_save_config_round_trip(monkeypatch, tmp_path: Path) -> None:
     assert saved_path.parent == tmp_path
     stored = json.loads(saved_path.read_text())
     assert stored["telemetry"] == "on"
+
+
+def test_telemetry_prompt_opt_in(monkeypatch, tmp_path: Path, capsys) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    (repo / "README.md").write_text("hello")
+
+    monkeypatch.setattr(cli, "_is_interactive", lambda: True)
+    monkeypatch.setattr("builtins.input", lambda _: "y")
+
+    cli.main(["prompt", str(repo)])
+
+    captured = capsys.readouterr()
+    assert "Telemetry enabled" in captured.out
+    assert cli.load_config()["telemetry"] == "on"
+
+
+def test_telemetry_prompt_decline(monkeypatch, tmp_path: Path, capsys) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    (repo / "README.md").write_text("hello")
+
+    monkeypatch.setattr(cli, "_is_interactive", lambda: True)
+    monkeypatch.setattr("builtins.input", lambda _: "")
+
+    cli.main(["prompt", str(repo)])
+
+    captured = capsys.readouterr()
+    assert "Telemetry disabled" in captured.out
+    assert cli.load_config()["telemetry"] == "off"
+
+
+def test_telemetry_prompt_skips_noninteractive(
+    monkeypatch, tmp_path: Path, capsys
+) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    (repo / "README.md").write_text("hello")
+
+    monkeypatch.setattr(cli, "_is_interactive", lambda: False)
+
+    cli.main(["prompt", str(repo)])
+
+    captured = capsys.readouterr()
+    assert "Telemetry preference not set" in captured.err
+    assert "telemetry" not in cli.load_config()
+
+
+def test_telemetry_prompt_skips_when_set(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    cli.save_config({"telemetry": "off"})
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    (repo / "README.md").write_text("hello")
+
+    invoked = False
+
+    def fake_input(_):  # pragma: no cover - guard
+        nonlocal invoked
+        invoked = True
+        return "y"
+
+    monkeypatch.setattr(cli, "_is_interactive", lambda: True)
+    monkeypatch.setattr("builtins.input", fake_input)
+
+    cli.main(["prompt", str(repo)])
+
+    assert invoked is False
