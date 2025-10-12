@@ -1,139 +1,21 @@
-"""Update README with repo status emojis.
-
-Fetches the latest GitHub Actions run for each repo listed in the README's
-"Related Projects" section and prepends a green check, red cross, or question
-mark depending on whether the most recent workflow run on the default branch
-completed successfully, failed, or hasn't completed.
-"""
+"""Compatibility shim that exposes status helpers under ``src.repo_status``."""
 
 from __future__ import annotations
 
-import argparse
-import os
-import re
-from pathlib import Path
-from typing import Sequence
+from flywheel import status_helper as _status_helper
 
-import requests
+build_parser = _status_helper.build_parser
+fetch_repo_status = _status_helper.fetch_repo_status
+main = _status_helper.main
+requests = _status_helper.requests
+status_to_emoji = _status_helper.status_to_emoji
+update_readme = _status_helper.update_readme
 
-GITHUB_RE = re.compile(
-    r"https://github.com/([\w-]+)/([\w.-]+)" r"(?:/tree/([\w./-]+))?"
-)
-
-
-def status_to_emoji(conclusion: str | None) -> str:
-    """Return an emoji representing the workflow conclusion.
-
-    GitHub may mark runs as ``neutral`` or ``skipped`` when no jobs execute.
-    Treat those as successful for status reporting purposes. The ``conclusion``
-    string is handled case-insensitively.
-    """
-    if conclusion is not None:
-        conclusion = str(conclusion).lower()
-    if conclusion in {"success", "neutral", "skipped"}:
-        return "✅"
-    if conclusion is None:
-        return "❓"
-    return "❌"
-
-
-def fetch_repo_status(
-    repo: str,
-    token: str | None = None,
-    branch: str | None = None,
-    attempts: int = 2,
-) -> str:
-    """Return an emoji for the latest workflow run conclusion for ``repo``.
-
-    The GitHub API occasionally returns inconsistent data if a workflow is
-    updating while we query it. To catch this non-determinism we fetch the
-    status multiple times and ensure all results match. If they differ we raise
-    ``RuntimeError`` so the calling workflow fails loudly. ``attempts`` must be
-    at least ``1`` to ensure we have a conclusion to report.
-    """
-    if attempts < 1:
-        raise ValueError("attempts must be >= 1")
-    headers = {"Accept": "application/vnd.github+json"}
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-
-    url = (
-        "https://api.github.com/repos/{repo}/actions/runs"
-        "?per_page=1&status=completed".format(repo=repo)
-    )
-    if branch:
-        url += f"&branch={branch}"
-
-    def _fetch() -> str | None:
-        resp = requests.get(url, headers=headers, timeout=10)
-        resp.raise_for_status()
-        runs = resp.json().get("workflow_runs", [])
-        return runs[0].get("conclusion") if runs else None
-
-    conclusions = [_fetch() for _ in range(attempts)]
-    if len(set(conclusions)) > 1:
-        raise RuntimeError(
-            f"Non-deterministic workflow conclusion for {repo}: {conclusions}"
-        )
-    return status_to_emoji(conclusions[0])
-
-
-def update_readme(
-    readme_path: Path,
-    token: str | None = None,
-    attempts: int = 2,
-) -> None:
-    """Update README with status emojis for related project repos."""
-    lines = readme_path.read_text().splitlines()
-    in_section = False
-    for i, line in enumerate(lines):
-        if line.strip() == "## Related Projects":
-            in_section = True
-            continue
-        if in_section and line.startswith("## "):
-            break
-        if in_section and line.startswith("- "):
-            match = GITHUB_RE.search(line)
-            if match:
-                repo = f"{match.group(1)}/{match.group(2)}"
-                branch = match.group(3)
-                emoji = fetch_repo_status(repo, token, branch, attempts)
-                lines[i] = re.sub(r"^(\-\s*)(?:[✅❌❓]\s*)*", r"\1", line)
-                lines[i] = f"- {emoji} {lines[i][2:].lstrip()}"
-    readme_path.write_text("\n".join(lines) + "\n")
-
-
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description="Update README Related Projects status badges."
-    )
-    parser.add_argument(
-        "--readme",
-        type=Path,
-        default=Path("README.md"),
-        help="Path to README file to update.",
-    )
-    parser.add_argument(
-        "--token",
-        help="GitHub token. Defaults to GITHUB_TOKEN environment variable.",
-    )
-    parser.add_argument(
-        "--attempts",
-        type=int,
-        default=2,
-        help="Number of API reads used to confirm workflow conclusions.",
-    )
-    return parser
-
-
-def main(argv: Sequence[str] | None = None) -> None:
-    parser = build_parser()
-    args = parser.parse_args(argv)
-    if args.attempts < 1:
-        parser.error("--attempts must be >= 1")
-    token = args.token or os.environ.get("GITHUB_TOKEN")
-    update_readme(args.readme, token=token, attempts=args.attempts)
-
-
-if __name__ == "__main__":  # pragma: no cover
-    main()
+__all__ = [
+    "build_parser",
+    "fetch_repo_status",
+    "main",
+    "requests",
+    "status_to_emoji",
+    "update_readme",
+]
