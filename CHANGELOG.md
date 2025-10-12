@@ -4,6 +4,8 @@
 - feat: add `--no-save-dev` support to `flywheel init` to match CLI docs.
 - feat: sort `flywheel spin --dry-run` suggestions by category and impact to
   match prompt doc guidance.
+- feat: add heuristic `confidence` scores to `flywheel spin --dry-run`
+  suggestions so the output matches the prompt schema.
 ## 2025-10-12
 - feat: add table and markdown formats to `flywheel spin --dry-run` output for
   human-readable reviews.

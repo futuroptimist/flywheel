@@ -234,8 +234,8 @@ report suggests generating and committing one so installs stay reproducible—an
 surfaces a `language_mix` summary showing the top languages detected in the
 repository, including Python, JavaScript/TypeScript, Go, Rust, Java, and shell
 scripts. Lockfile gaps surface as a `chore` suggestion named
-`commit-lockfiles`, and every suggestion includes a `category` field (`docs`,
-`fix`, or `chore`) so the output matches the
+`commit-lockfiles`, and every suggestion includes both a `category` field (`docs`,
+`fix`, or `chore`) and a heuristic `confidence` score between 0 and 1 so the output matches the
 [`flywheel spin` design](docs/flywheel-npx-spin-design.md) schema.
 
 For quick reviews, append `--format table` or `--format markdown` to render a
