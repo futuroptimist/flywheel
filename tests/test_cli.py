@@ -418,7 +418,9 @@ def test_telemetry_prompt_skips_noninteractive(
 
 
 def test_telemetry_prompt_handles_eof(
-    monkeypatch, tmp_path: Path, capsys
+    monkeypatch,
+    tmp_path: Path,
+    capsys,
 ) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
     repo = tmp_path / "repo"
