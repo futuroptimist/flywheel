@@ -375,6 +375,7 @@ def test_telemetry_prompt_opt_in(monkeypatch, tmp_path: Path, capsys) -> None:
     (repo / "README.md").write_text("hello")
 
     monkeypatch.delenv("CI", raising=False)
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
     monkeypatch.setattr(cli, "_is_interactive", lambda: True)
     monkeypatch.setattr("builtins.input", lambda _: "y")
 
@@ -392,6 +393,7 @@ def test_telemetry_prompt_decline(monkeypatch, tmp_path: Path, capsys) -> None:
     (repo / "README.md").write_text("hello")
 
     monkeypatch.delenv("CI", raising=False)
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
     monkeypatch.setattr(cli, "_is_interactive", lambda: True)
     monkeypatch.setattr("builtins.input", lambda _: "")
 
@@ -430,6 +432,7 @@ def test_telemetry_prompt_handles_eof(
     (repo / "README.md").write_text("hello")
 
     monkeypatch.delenv("CI", raising=False)
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
     monkeypatch.setattr(cli, "_is_interactive", lambda: True)
 
     def raise_eof(_: str) -> str:
@@ -459,6 +462,7 @@ def test_telemetry_prompt_skips_when_set(monkeypatch, tmp_path: Path) -> None:
         return "y"
 
     monkeypatch.delenv("CI", raising=False)
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
     monkeypatch.setattr(cli, "_is_interactive", lambda: True)
     monkeypatch.setattr("builtins.input", fake_input)
 
@@ -491,6 +495,7 @@ def test_maybe_prompt_runs_without_yes(monkeypatch, tmp_path: Path) -> None:
         invoked = True
 
     monkeypatch.delenv("CI", raising=False)
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
     monkeypatch.setattr(cli, "_prompt_for_telemetry", fake_prompt)
 
     cli.maybe_prompt_for_telemetry(SimpleNamespace(command="prompt"))
