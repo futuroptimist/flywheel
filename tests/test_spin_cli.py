@@ -526,7 +526,9 @@ def test_apply_add_readme_handles_existing_file(tmp_path: Path) -> None:
     repo.mkdir()
     (repo / "README.md").write_text("existing\n")
 
-    success, message = main_module._apply_add_readme(repo, {"id": "add-readme"})
+    success, message = main_module._apply_add_readme(
+        repo, {"id": "add-readme"}
+    )
 
     assert success is False
     assert message == "README.md already exists"
@@ -539,7 +541,9 @@ def test_apply_add_readme_appends_missing_newline(
     repo.mkdir()
     monkeypatch.setattr(main_module, "README_PLACEHOLDER", "# Title")
 
-    success, message = main_module._apply_add_readme(repo, {"id": "add-readme"})
+    success, message = main_module._apply_add_readme(
+        repo, {"id": "add-readme"}
+    )
 
     assert success is True
     assert message == "Created README.md"
@@ -578,7 +582,10 @@ def test_apply_suggestions_respects_user_decline(
     repo = tmp_path / "decline"
     repo.mkdir()
     monkeypatch.setattr(main_module, "prompt_bool", lambda *_: False)
-    suggestion = {"id": "add-readme", "title": "Add README"}
+    suggestion = {
+        "id": "add-readme",
+        "title": "Add README",
+    }
 
     applied, skipped = main_module._apply_suggestions(
         repo, [suggestion], assume_yes=False
@@ -616,7 +623,11 @@ def test_apply_suggestions_reports_no_work(
     repo = tmp_path / "no-work"
     repo.mkdir()
 
-    applied, skipped = main_module._apply_suggestions(repo, [], assume_yes=True)
+    applied, skipped = main_module._apply_suggestions(
+        repo,
+        [],
+        assume_yes=True,
+    )
 
     assert applied == []
     assert skipped == []
@@ -639,7 +650,8 @@ def test_spin_apply_no_suggestions_reports_message(
     tests_dir = repo / "tests"
     tests_dir.mkdir()
     (tests_dir / "test_placeholder.py").write_text(
-        "def test_placeholder():\n    assert True\n"
+        "def test_placeholder():\n"
+        "    assert True\n"
     )
 
     args = argparse.Namespace(
@@ -654,6 +666,7 @@ def test_spin_apply_no_suggestions_reports_message(
 
     out = capsys.readouterr().out
     assert out.strip() == "No suggestions to apply."
+
 
 def test_iter_project_files_skips_unwanted_entries(tmp_path: Path) -> None:
     repo = tmp_path / "project"
