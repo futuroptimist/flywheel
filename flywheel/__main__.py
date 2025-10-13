@@ -69,6 +69,14 @@ def save_config(data: dict[str, object]) -> Path:
     return path
 
 
+def set_telemetry_mode(mode: str) -> Path:
+    """Persist the telemetry ``mode`` to the flywheel config file."""
+
+    config = load_config()
+    config["telemetry"] = mode
+    return save_config(config)
+
+
 def update_related_status(args: argparse.Namespace) -> None:
     attempts = getattr(args, "attempts", 2)
     if attempts < 1:
@@ -1377,6 +1385,11 @@ def build_parser() -> argparse.ArgumentParser:
         default="json",
         help="output format for dry-run results",
     )
+    p_spin.add_argument(
+        "--telemetry",
+        choices=["off", "on", "full"],
+        help="override telemetry preference before running",
+    )
     p_spin.add_argument("--analyzers", help=SPIN_ANALYZER_HELP)
     p_spin.set_defaults(func=spin)
 
@@ -1463,6 +1476,9 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv=None) -> None:
     parser = build_parser()
     args = parser.parse_args(argv)
+    telemetry_override = getattr(args, "telemetry", None)
+    if telemetry_override:
+        set_telemetry_mode(telemetry_override)
     maybe_prompt_for_telemetry(args)
     args.func(args)
 

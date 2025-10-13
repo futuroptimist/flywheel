@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -31,7 +32,9 @@ from flywheel.__main__ import (
 CaptureFixtureStr = pytest.CaptureFixture[str]
 
 
-def run_spin_dry_run(path: Path, *extra: str) -> dict:
+def run_spin_dry_run(
+    path: Path, *extra: str, env: dict[str, str] | None = None
+) -> dict:
     cmd = [
         sys.executable,
         "-m",
@@ -41,11 +44,22 @@ def run_spin_dry_run(path: Path, *extra: str) -> dict:
         "--dry-run",
         *extra,
     ]
-    completed = subprocess.run(cmd, check=True, capture_output=True, text=True)
+    run_env = os.environ.copy()
+    if env:
+        run_env.update(env)
+    completed = subprocess.run(
+        cmd,
+        check=True,
+        capture_output=True,
+        text=True,
+        env=run_env,
+    )
     return json.loads(completed.stdout)
 
 
-def run_spin_dry_run_text(path: Path, *extra: str) -> str:
+def run_spin_dry_run_text(
+    path: Path, *extra: str, env: dict[str, str] | None = None
+) -> str:
     cmd = [
         sys.executable,
         "-m",
@@ -55,7 +69,16 @@ def run_spin_dry_run_text(path: Path, *extra: str) -> str:
         "--dry-run",
         *extra,
     ]
-    completed = subprocess.run(cmd, check=True, capture_output=True, text=True)
+    run_env = os.environ.copy()
+    if env:
+        run_env.update(env)
+    completed = subprocess.run(
+        cmd,
+        check=True,
+        capture_output=True,
+        text=True,
+        env=run_env,
+    )
     return completed.stdout
 
 
@@ -533,6 +556,24 @@ def test_spin_requires_dry_run_flag(tmp_path: Path) -> None:
         spin(args)
 
     assert "Only --dry-run mode is supported" in str(exc.value)
+
+
+def test_spin_telemetry_override_updates_config(tmp_path: Path) -> None:
+    repo = tmp_path / "telemetry"
+    repo.mkdir()
+    config_dir = tmp_path / "cfg"
+    env = {"FLYWHEEL_CONFIG_DIR": str(config_dir)}
+
+    run_spin_dry_run(repo, "--telemetry", "off", env=env)
+
+    config_path = config_dir / "config.json"
+    assert config_path.exists()
+    data = json.loads(config_path.read_text())
+    assert data["telemetry"] == "off"
+
+    run_spin_dry_run(repo, "--telemetry", "full", env=env)
+    updated = json.loads(config_path.read_text())
+    assert updated["telemetry"] == "full"
 
 
 def test_iter_project_files_skips_unwanted_entries(tmp_path: Path) -> None:

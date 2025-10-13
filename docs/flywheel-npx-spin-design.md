@@ -1,4 +1,8 @@
 ## Implementation Progress
+- **2025-10-16:** Added a `--telemetry on|off|full` override to the Python
+  `flywheel spin --dry-run` CLI so automation scripts can persist telemetry
+  preferences without hitting the interactive prompt, aligning the current
+  implementation with the CLI experience described below.
 - **2025-10-10:** Added a Python `flywheel spin --dry-run` subcommand that emits
   heuristic suggestions in JSON. This provides a lightweight preview while the
   npm packaging and LLM integration remain under development.
@@ -109,7 +113,7 @@ flywheel/
   - `--apply` (interactive prompt or `--apply-all`, `--apply none`)
   - `--dry-run` to output patches without applying.
   - `--cache-dir` for embeddings/vector store.
-  - `--telemetry on|off`
+  - `--telemetry on|off|full`
 
 ### Prompting Strategy
 - Maintain dedicated prompt docs under `docs/prompts/codex/flywheel-spin.md` referencing context windows,
