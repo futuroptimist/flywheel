@@ -527,7 +527,8 @@ def test_apply_add_readme_handles_existing_file(tmp_path: Path) -> None:
     (repo / "README.md").write_text("existing\n")
 
     success, message = main_module._apply_add_readme(
-        repo, {"id": "add-readme"}
+        repo,
+        {"id": "add-readme"},
     )
 
     assert success is False
@@ -542,7 +543,8 @@ def test_apply_add_readme_appends_missing_newline(
     monkeypatch.setattr(main_module, "README_PLACEHOLDER", "# Title")
 
     success, message = main_module._apply_add_readme(
-        repo, {"id": "add-readme"}
+        repo,
+        {"id": "add-readme"},
     )
 
     assert success is True
@@ -556,7 +558,10 @@ def test_apply_add_tests_handles_existing_file(tmp_path: Path) -> None:
     placeholder.parent.mkdir(parents=True, exist_ok=True)
     placeholder.write_text("existing\n")
 
-    success, message = main_module._apply_add_tests(repo, {"id": "add-tests"})
+    success, message = main_module._apply_add_tests(
+        repo,
+        {"id": "add-tests"},
+    )
 
     assert success is False
     assert message == "tests/test_placeholder.py already exists"
@@ -569,7 +574,8 @@ def test_apply_configure_ci_handles_existing_workflow(tmp_path: Path) -> None:
     workflow.write_text("name: CI\n")
 
     success, message = main_module._apply_configure_ci(
-        repo, {"id": "configure-ci"}
+        repo,
+        {"id": "configure-ci"},
     )
 
     assert success is False
@@ -650,8 +656,7 @@ def test_spin_apply_no_suggestions_reports_message(
     tests_dir = repo / "tests"
     tests_dir.mkdir()
     (tests_dir / "test_placeholder.py").write_text(
-        "def test_placeholder():\n"
-        "    assert True\n"
+        "def test_placeholder():\n" "    assert True\n"
     )
 
     args = argparse.Namespace(
