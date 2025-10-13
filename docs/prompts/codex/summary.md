@@ -6,6 +6,11 @@ This index is auto-generated with
 (../../../scripts/update_prompt_docs_summary.py)
 using RepoCrawler to discover prompt documents across repositories.
 
+Canonical codex prompts for quick reference:
+
+- [Automation](automation.md)
+- [Polish](polish.md)
+
 RepoCrawler powers other reports like repo-feature summaries; use it as a model for deep dives.
 
 Think of each listed repository as a small flywheel belted to this codebase. The list in dict/prompt-doc-repos.txt mirrors docs/repo_list.txt; if a repo drops from the output, fix that integration rather than deleting it.
