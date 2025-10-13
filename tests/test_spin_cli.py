@@ -100,9 +100,11 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     }
 
     categories: dict[str, str] = {}
+    validations: dict[str, list[str]] = {}
     for entry in result["suggestions"]:
         categories[entry["id"]] = entry["category"]
         assert 0.0 <= entry["confidence"] <= 1.0
+        validations[entry["id"]] = entry["validation"]
     assert categories == {
         "add-docs": "docs",
         "add-readme": "docs",
@@ -110,6 +112,12 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
         "add-linting": "chore",
         "configure-ci": "chore",
     }
+    assert validations["add-docs"] == ["test -d docs"]
+    assert validations["add-readme"] == ["test -f README.md"]
+    assert validations["configure-ci"] == ["test -d .github/workflows"]
+    assert validations["add-tests"] == [
+        "npm run test:ci || npm test || pytest -q",
+    ]
 
 
 def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
@@ -163,6 +171,8 @@ def test_spin_analyzers_subset(tmp_path: Path) -> None:
 
     suggestion_ids = {entry["id"] for entry in result["suggestions"]}
     assert suggestion_ids == {"add-docs", "commit-lockfiles"}
+    for entry in result["suggestions"]:
+        assert entry["validation"], entry["id"]
 
 
 def test_spin_analyzers_disable_with_minus(tmp_path: Path) -> None:
@@ -187,6 +197,8 @@ def test_spin_analyzers_disable_with_minus(tmp_path: Path) -> None:
         "add-linting",
         "configure-ci",
     }.issubset(suggestion_ids)
+    for entry in result["suggestions"]:
+        assert entry["validation"], entry["id"]
 
 
 def test_spin_invalid_analyzer_errors(tmp_path: Path) -> None:
@@ -258,6 +270,31 @@ def test_spin_reports_missing_lockfile(tmp_path: Path) -> None:
         raise AssertionError("commit-lockfiles suggestion missing")
     assert "package.json" in lock_suggestion["files"]
     assert 0.0 <= lock_suggestion["confidence"] <= 1.0
+    lock_commands = [
+        command
+        for command in lock_suggestion["validation"]
+        if "package-lock.json" in command
+    ]
+    assert lock_commands
+
+
+def test_spin_lockfile_validation_handles_pipfile(tmp_path: Path) -> None:
+    repo = tmp_path / "pip"
+    repo.mkdir()
+    (repo / "Pipfile").write_text("[packages]\n")
+
+    result = run_spin_dry_run(repo)
+
+    for entry in result["suggestions"]:
+        if entry["id"] == "commit-lockfiles":
+            lock = entry
+            break
+    else:  # pragma: no cover - defensive fallback
+        raise AssertionError("commit-lockfiles suggestion missing")
+    pip_commands = [
+        command for command in lock["validation"] if "Pipfile.lock" in command
+    ]
+    assert pip_commands
 
 
 def test_suggestions_sorted_by_category_and_impact(tmp_path: Path) -> None:
@@ -282,6 +319,7 @@ def test_suggestions_sorted_by_category_and_impact(tmp_path: Path) -> None:
     ]
     for entry in suggestions:
         assert 0.0 <= entry["confidence"] <= 1.0
+        assert entry["validation"], entry["id"]
 
 
 def test_spin_ignores_present_lockfile(tmp_path: Path) -> None:
@@ -418,6 +456,43 @@ def test_analyze_repository_emits_lockfile_suggestion(tmp_path: Path) -> None:
     )
     assert lockfile_suggestion["category"] == "chore"
     assert 0.0 <= lockfile_suggestion["confidence"] <= 1.0
+
+
+def test_lockfile_validation_commands_cover_known_manifests() -> None:
+    missing = [
+        "package.json",
+        "app/package.json",
+        "api/Pipfile",
+    ]
+
+    commands = main_module._lockfile_validation_commands(missing)
+
+    assert "package-lock.json" in commands[0]
+    assert "app/package-lock.json" in commands[1]
+    assert "app/pnpm-lock.yaml" in commands[1]
+    assert commands[2] == "test -f api/Pipfile.lock"
+
+
+def test_lockfile_suggestion_falls_back_to_git_status(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "service"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+
+    monkeypatch.setattr(
+        main_module,
+        "_lockfile_validation_commands",
+        lambda missing: [],
+    )
+
+    _, suggestions = main_module._analyze_repository(repo)
+
+    lockfile_suggestion = next(
+        entry for entry in suggestions if entry["id"] == "commit-lockfiles"
+    )
+
+    assert lockfile_suggestion["validation"] == ["git status --short"]
 
 
 def test_spin_requires_existing_directory(tmp_path: Path) -> None:
@@ -896,8 +971,10 @@ def test_spin_dry_run_outputs_json_inline(
     assert payload["stats"]["has_lint_config"] is False
 
     snapshot_categories: dict[str, str] = {}
+    snapshot_validations: dict[str, list[str]] = {}
     for item in payload["suggestions"]:
         snapshot_categories[item["id"]] = item["category"]
+        snapshot_validations[item["id"]] = item["validation"]
     assert snapshot_categories == {
         "add-docs": "docs",
         "add-readme": "docs",
@@ -905,6 +982,8 @@ def test_spin_dry_run_outputs_json_inline(
         "add-linting": "chore",
         "configure-ci": "chore",
     }
+    for commands in snapshot_validations.values():
+        assert commands
 
 
 def test_spin_reports_lockfile_category(
@@ -992,8 +1071,18 @@ def test_spin_markdown_format(
 
     output = capsys.readouterr().out
     assert "# flywheel spin dry-run" in output
-    assert "| Category |" in output
+    assert "| Confidence |" in output
     assert "add-docs" in output
+
+
+@pytest.mark.parametrize("value", [None, "unknown", object()])
+def test_format_confidence_handles_non_numeric(value: object) -> None:
+    assert main_module._format_confidence(value) == "-"
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), float("-inf")])
+def test_format_confidence_handles_non_finite(value: float) -> None:
+    assert main_module._format_confidence(value) == "-"
 
 
 def test_spin_markdown_without_suggestions() -> None:
@@ -1063,7 +1152,9 @@ def test_spin_cli_accepts_table_format(tmp_path: Path) -> None:
     )
 
     assert "Index" in output
+    assert "Confidence" in output
     assert "add-docs" in output
+    assert "0.80" in output or "0.8" in output
 
 
 def test_spin_cli_accepts_markdown_format(tmp_path: Path) -> None:
@@ -1077,7 +1168,7 @@ def test_spin_cli_accepts_markdown_format(tmp_path: Path) -> None:
     )
 
     assert "# flywheel spin dry-run" in output
-    assert "| Category |" in output
+    assert "| Confidence |" in output
 
 
 def test_spin_rejects_unknown_format(tmp_path: Path) -> None:

@@ -1,5 +1,6 @@
 import argparse
 import json
+import math
 import os
 import shutil
 import sys
@@ -750,6 +751,32 @@ def _analyze_dependency_health(
     }
 
 
+def _lockfile_validation_commands(missing: Sequence[str]) -> list[str]:
+    """Return shell commands that confirm expected lockfiles exist."""
+
+    commands: list[str] = []
+    for manifest in missing:
+        manifest_path = Path(manifest)
+        parent = manifest_path.parent
+        prefix = parent.as_posix()
+        if prefix in {"", "."}:
+            prefix = ""
+        else:
+            prefix = f"{prefix}/"
+        name = manifest_path.name.lower()
+        if name == "package.json":
+            checks: list[str] = []
+            for candidate in NODE_LOCKFILES:
+                candidate_path = f"{prefix}{candidate}"
+                checks.append(f"test -f {candidate_path}")
+            if checks:
+                commands.append(" || ".join(checks))
+        elif name == "pipfile":
+            lock_path = f"{prefix}{PIPFILE_LOCK}"
+            commands.append(f"test -f {lock_path}")
+    return commands
+
+
 def _parse_analyzers(value: str | None) -> set[str]:
     """Return enabled analyzers parsed from ``value``.
 
@@ -848,6 +875,7 @@ def _analyze_repository(
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": ["docs/"],
+                "validation": ["test -d docs"],
             }
         )
     if include_readme and not has_readme:
@@ -863,6 +891,7 @@ def _analyze_repository(
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": ["README.md"],
+                "validation": ["test -f README.md"],
             }
         )
     if include_ci and not has_ci:
@@ -879,6 +908,7 @@ def _analyze_repository(
                 "impact": "high",
                 "confidence": IMPACT_CONFIDENCE["high"],
                 "files": [".github/workflows/"],
+                "validation": ["test -d .github/workflows"],
             }
         )
     if include_lint and not has_lint:
@@ -910,6 +940,9 @@ def _analyze_repository(
                 "impact": "high",
                 "confidence": IMPACT_CONFIDENCE["high"],
                 "files": ["tests/"],
+                "validation": [
+                    "npm run test:ci || npm test || pytest -q",
+                ],
             }
         )
     if (
@@ -917,6 +950,11 @@ def _analyze_repository(
         and dependency_health
         and dependency_health["missing_lockfiles"]
     ):
+        validations = _lockfile_validation_commands(
+            dependency_health["missing_lockfiles"]
+        )
+        if not validations:
+            validations = ["git status --short"]
         suggestions.append(
             {
                 "id": "commit-lockfiles",
@@ -930,6 +968,7 @@ def _analyze_repository(
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": dependency_health["missing_lockfiles"],
+                "validation": validations,
             }
         )
     suggestions = _sort_suggestions(suggestions)
@@ -980,6 +1019,16 @@ def _format_language_mix(entries: Sequence[dict[str, object]]) -> str:
     return ", ".join(parts)
 
 
+def _format_confidence(value: object) -> str:
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return "-"
+    if math.isnan(number) or math.isinf(number):
+        return "-"
+    return f"{number:.2f}"
+
+
 def _format_stats_lines(stats: dict[str, object]) -> list[str]:
     dependency = stats.get("dependency_health")
     language_mix = stats.get("language_mix", [])
@@ -1018,16 +1067,26 @@ def _render_spin_table(result: dict[str, object]) -> str:
         "",
     ]
     if suggestions:
-        headers = ["Index", "Id", "Category", "Impact", "Title", "Files"]
+        headers = [
+            "Index",
+            "Id",
+            "Category",
+            "Impact",
+            "Confidence",
+            "Title",
+            "Files",
+        ]
         rows: list[dict[str, str]] = []
         for idx, suggestion in enumerate(suggestions, start=1):
             files = ", ".join(suggestion.get("files", [])) or "-"
+            confidence_value = _format_confidence(suggestion.get("confidence"))
             rows.append(
                 {
                     "Index": str(idx),
                     "Id": str(suggestion.get("id", "")),
                     "Category": str(suggestion.get("category", "")),
                     "Impact": str(suggestion.get("impact", "")),
+                    "Confidence": confidence_value,
                     "Title": str(suggestion.get("title", "")),
                     "Files": files,
                 }
@@ -1078,8 +1137,17 @@ def _render_spin_markdown(result: dict[str, object]) -> str:
     summary.append("")
     suggestions = result.get("suggestions", [])
     if suggestions:
-        summary.append("| # | Id | Category | Impact | Title | Files |")
-        summary.append("| --- | --- | --- | --- | --- | --- |")
+        headers = [
+            "#",
+            "Id",
+            "Category",
+            "Impact",
+            "Confidence",
+            "Title",
+            "Files",
+        ]
+        summary.append("| " + " | ".join(headers) + " |")
+        summary.append("| " + " | ".join("---" for _ in headers) + " |")
         for idx, suggestion in enumerate(suggestions, start=1):
             files = ", ".join(suggestion.get("files", [])) or "-"
             suggestion_id = _escape_markdown(str(suggestion.get("id", "")))
@@ -1087,16 +1155,17 @@ def _render_spin_markdown(result: dict[str, object]) -> str:
             impact = _escape_markdown(str(suggestion.get("impact", "")))
             title = _escape_markdown(str(suggestion.get("title", "")))
             files_cell = _escape_markdown(files)
-            summary.append(
-                "| {} | {} | {} | {} | {} | {} |".format(
-                    idx,
-                    suggestion_id or "-",
-                    category or "-",
-                    impact or "-",
-                    title or "-",
-                    files_cell or "-",
-                )
-            )
+            confidence = _format_confidence(suggestion.get("confidence"))
+            cells = [
+                str(idx),
+                suggestion_id or "-",
+                category or "-",
+                impact or "-",
+                confidence,
+                title or "-",
+                files_cell or "-",
+            ]
+            summary.append("| " + " | ".join(cells) + " |")
     else:
         summary.append("_No suggestions found._")
     return "\n".join(summary)

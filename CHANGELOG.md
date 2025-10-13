@@ -1,3 +1,7 @@
+## 2025-10-15
+- feat: attach validation commands to `flywheel spin --dry-run` suggestions so
+  operators can run follow-up checks after applying fixes.
+
 ## 2025-10-14
 - feat: flag missing lint tooling in `flywheel spin --dry-run` with a new
   `add-linting` suggestion and analyzer toggle.

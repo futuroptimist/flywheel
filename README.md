@@ -1,6 +1,7 @@
 # 🎡 flywheel
 
 [![Lint & Format](https://img.shields.io/github/actions/workflow/status/futuroptimist/flywheel/.github/workflows/01-lint-format.yml?label=lint%20%26%20format)](https://github.com/futuroptimist/flywheel/actions/workflows/01-lint-format.yml)
+[![Link Check](https://github.com/futuroptimist/flywheel/actions/workflows/link-check.yml/badge.svg)](https://github.com/futuroptimist/flywheel/actions/workflows/link-check.yml)
 [![Tests](https://img.shields.io/github/actions/workflow/status/futuroptimist/flywheel/.github/workflows/02-tests.yml?label=tests)](https://github.com/futuroptimist/flywheel/actions/workflows/02-tests.yml)
 [![Coverage](https://codecov.io/gh/futuroptimist/flywheel/branch/main/graph/badge.svg)](https://codecov.io/gh/futuroptimist/flywheel)
 [![Docs](https://img.shields.io/github/actions/workflow/status/futuroptimist/flywheel/.github/workflows/03-docs.yml?label=docs)](https://github.com/futuroptimist/flywheel/actions/workflows/03-docs.yml)
@@ -163,6 +164,19 @@ README content containing `{` or `}` characters is handled safely. The command
 also prints a repo snapshot that lists non-hidden files at the repository root
 so prompt runners immediately see the project's structure.
 
+### Previewing suggested improvements
+
+Run the dry-run analyzer to surface heuristic suggestions without applying any
+changes:
+
+```bash
+python -m flywheel spin . --dry-run --format json
+```
+
+The JSON payload includes validation commands for each suggestion—typically
+shell checks or test invocations—so you can confirm the fix after applying it.
+Use `--format table` or `--format markdown` for console-friendly reports.
+
 ### Configuring telemetry
 
 Manage the CLI's analytics opt-in without editing config files manually:
@@ -245,8 +259,8 @@ and 1 so the output matches the
 
 For quick reviews, append `--format table` or `--format markdown` to render a
 human-friendly summary. The table view keeps stats at the top and lists
-suggestions with their categories, impact, and affected files, while the
-Markdown variant is ready to paste into issues or chat threads.
+suggestions with their categories, impact, confidence, and affected files,
+while the Markdown variant is ready to paste into issues or chat threads.
 
 Fine-tune the heuristics with `--analyzers`. Pass a comma-separated list such as
 `--analyzers docs,dependencies` to focus on specific checks, use
