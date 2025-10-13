@@ -628,6 +628,15 @@ PACKAGE_JSON_LINT_TOKENS = (
 )
 
 
+LINT_VALIDATION_COMMANDS = (
+    "pre-commit run --all-files"
+    " || npm run lint -- --max-warnings=0"
+    " || npm run lint"
+    " || ruff check ."
+    " || flake8 .",
+)
+
+
 def _pyproject_configures_lint(pyproject: Path) -> bool:
     if not pyproject.exists():
         return False
@@ -925,6 +934,7 @@ def _analyze_repository(
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": [".pre-commit-config.yaml"],
+                "validation": list(LINT_VALIDATION_COMMANDS),
             }
         )
     if include_tests and not has_tests:

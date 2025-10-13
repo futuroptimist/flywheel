@@ -11,6 +11,7 @@ import pytest
 import flywheel.__main__ as main_module
 from flywheel.__main__ import (
     SPIN_ANALYZERS,
+    LINT_VALIDATION_COMMANDS,
     _analyze_repository,
     _detect_lint_config,
     _detect_tests,
@@ -118,6 +119,9 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     assert validations["add-tests"] == [
         "npm run test:ci || npm test || pytest -q",
     ]
+    assert validations["add-linting"] == list(
+        LINT_VALIDATION_COMMANDS
+    )
 
 
 def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
@@ -984,6 +988,9 @@ def test_spin_dry_run_outputs_json_inline(
     }
     for commands in snapshot_validations.values():
         assert commands
+    assert snapshot_validations["add-linting"] == list(
+        LINT_VALIDATION_COMMANDS
+    )
 
 
 def test_spin_reports_lockfile_category(
