@@ -585,90 +585,105 @@ def _detect_tests(root: Path, files: Sequence[Path]) -> bool:
     return False
 
 
+LINT_CONFIG_PATHS = [
+    ".pre-commit-config.yaml",
+    ".pre-commit-config.yml",
+    ".flake8",
+    "pylintrc",
+    "eslint.config.js",
+    "eslint.config.mjs",
+    "eslint.config.cjs",
+    ".eslintrc",
+    ".eslintrc.json",
+    ".eslintrc.js",
+    ".eslintrc.cjs",
+    ".eslintrc.yaml",
+    ".eslintrc.yml",
+    ".stylelintrc",
+    ".stylelintrc.json",
+    ".stylelintrc.yaml",
+    ".stylelintrc.yml",
+]
+
+PYPROJECT_LINT_MARKERS = (
+    "[tool.black]",
+    "[tool.ruff]",
+    "[tool.flake8]",
+    "[tool.isort]",
+)
+
+SETUP_CFG_LINT_MARKERS = (
+    "[flake8]",
+    "[pylint]",
+    "[isort]",
+)
+
+PACKAGE_JSON_LINT_TOKENS = (
+    "eslint",
+    "prettier",
+    "flake8",
+    "ruff",
+    "pylint",
+)
+
+
+def _pyproject_configures_lint(pyproject: Path) -> bool:
+    if not pyproject.exists():
+        return False
+    try:
+        text = pyproject.read_text()
+    except OSError:
+        return False
+    lowered = text.lower()
+    return any(marker in lowered for marker in PYPROJECT_LINT_MARKERS)
+
+
+def _setup_cfg_configures_lint(setup_cfg: Path) -> bool:
+    if not setup_cfg.exists():
+        return False
+    try:
+        text = setup_cfg.read_text()
+    except OSError:
+        return False
+    lowered = text.lower()
+    return any(marker in lowered for marker in SETUP_CFG_LINT_MARKERS)
+
+
+def _package_json_configures_lint(package_json: Path) -> bool:
+    if not package_json.exists():
+        return False
+    try:
+        payload: object = json.loads(package_json.read_text())
+    except (OSError, json.JSONDecodeError):
+        return False
+    if not isinstance(payload, dict):
+        return False
+    scripts = payload.get("scripts")
+    if not isinstance(scripts, dict):
+        return False
+    for key, command in scripts.items():
+        if not isinstance(key, str) or not isinstance(command, str):
+            continue
+        lower_key = key.lower()
+        lower_cmd = command.lower()
+        if "lint" in lower_key:
+            return True
+        if any(token in lower_cmd for token in PACKAGE_JSON_LINT_TOKENS):
+            return True
+    return False
+
+
 def _detect_lint_config(root: Path, files: Sequence[Path]) -> bool:
     """Return True when lint tooling is configured for the project."""
 
-    config_paths = [
-        ".pre-commit-config.yaml",
-        ".pre-commit-config.yml",
-        ".flake8",
-        "pylintrc",
-        "eslint.config.js",
-        "eslint.config.mjs",
-        "eslint.config.cjs",
-        ".eslintrc",
-        ".eslintrc.json",
-        ".eslintrc.js",
-        ".eslintrc.cjs",
-        ".eslintrc.yaml",
-        ".eslintrc.yml",
-        ".stylelintrc",
-        ".stylelintrc.json",
-        ".stylelintrc.yaml",
-        ".stylelintrc.yml",
-    ]
-    for name in config_paths:
-        if (root / name).exists():
-            return True
-
-    pyproject = root / "pyproject.toml"
-    if pyproject.exists():
-        try:
-            text = pyproject.read_text().lower()
-        except OSError:
-            text = ""
-        pyproject_markers = (
-            "[tool.black]",
-            "[tool.ruff]",
-            "[tool.flake8]",
-            "[tool.isort]",
-        )
-        if any(marker in text for marker in pyproject_markers):
-            return True
-
-    setup_cfg = root / "setup.cfg"
-    if setup_cfg.exists():
-        try:
-            text = setup_cfg.read_text().lower()
-        except OSError:
-            text = ""
-        setup_markers = (
-            "[flake8]",
-            "[pylint]",
-            "[isort]",
-        )
-        if any(marker in text for marker in setup_markers):
-            return True
-
-    package_json = root / "package.json"
-    if package_json.exists():
-        try:
-            data = json.loads(package_json.read_text())
-        except (OSError, json.JSONDecodeError):
-            data = None
-        if isinstance(data, dict):
-            scripts = data.get("scripts", {})
-            if isinstance(scripts, dict):
-                for key, command in scripts.items():
-                    if not isinstance(key, str):
-                        continue
-                    if not isinstance(command, str):
-                        continue
-                    lower_key = key.lower()
-                    lower_cmd = command.lower()
-                    if "lint" in lower_key:
-                        return True
-                    lint_tokens = (
-                        "eslint",
-                        "prettier",
-                        "flake8",
-                        "ruff",
-                        "pylint",
-                    )
-                    for token in lint_tokens:
-                        if token in lower_cmd:
-                            return True
-
+    if any((root / name).exists() for name in LINT_CONFIG_PATHS):
+        return True
+    if _pyproject_configures_lint(root / "pyproject.toml"):
+        return True
+    if _setup_cfg_configures_lint(root / "setup.cfg"):
+        return True
+    if _package_json_configures_lint(root / "package.json"):
+        return True
     return False
 
 

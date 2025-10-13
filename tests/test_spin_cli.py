@@ -18,9 +18,12 @@ from flywheel.__main__ import (
     _has_ci_workflows,
     _has_docs_directory,
     _iter_project_files,
+    _package_json_configures_lint,
     _parse_analyzers,
+    _pyproject_configures_lint,
     _render_spin_markdown,
     _render_spin_table,
+    _setup_cfg_configures_lint,
     spin,
 )
 
@@ -673,6 +676,100 @@ def test_detect_lint_config_returns_false_without_signals(
     repo.mkdir()
 
     assert _detect_lint_config(repo, []) is False
+
+
+def test_detect_lint_config_detects_setup_cfg(tmp_path: Path) -> None:
+    repo = tmp_path / "setup"
+    repo.mkdir()
+    (repo / "setup.cfg").write_text("[isort]\nprofile = black\n")
+
+    assert _detect_lint_config(repo, []) is True
+
+
+def test_pyproject_configures_lint_detects_markers(tmp_path: Path) -> None:
+    pyproject = tmp_path / "pyproject.toml"
+    pyproject.write_text("[tool.isort]\nprofile = 'black'\n")
+
+    assert _pyproject_configures_lint(pyproject) is True
+
+
+def test_pyproject_configures_lint_handles_read_error(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    pyproject = tmp_path / "pyproject.toml"
+    pyproject.write_text("[tool.ruff]\n")
+
+    def boom(_: Path) -> str:
+        raise OSError("unreadable")
+
+    monkeypatch.setattr(Path, "read_text", boom)
+
+    assert _pyproject_configures_lint(pyproject) is False
+
+
+def test_setup_cfg_configures_lint_detects_markers(tmp_path: Path) -> None:
+    setup_cfg = tmp_path / "setup.cfg"
+    setup_cfg.write_text("[flake8]\nmax-line-length = 100\n")
+
+    assert _setup_cfg_configures_lint(setup_cfg) is True
+
+
+def test_setup_cfg_configures_lint_handles_read_error(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    setup_cfg = tmp_path / "setup.cfg"
+    setup_cfg.write_text("[pylint]\ndisable = missing-docstring\n")
+
+    def boom(_: Path) -> str:
+        raise OSError("unreadable")
+
+    monkeypatch.setattr(Path, "read_text", boom)
+
+    assert _setup_cfg_configures_lint(setup_cfg) is False
+
+
+def test_package_json_configures_lint_detects_tokens(tmp_path: Path) -> None:
+    package_json = tmp_path / "package.json"
+    package_json.write_text(json.dumps({"scripts": {"check": "prettier --check src"}}))
+
+    assert _package_json_configures_lint(package_json) is True
+
+
+def test_package_json_configures_lint_skips_non_string_entries(tmp_path: Path) -> None:
+    package_json = tmp_path / "package.json"
+    package_json.write_text(json.dumps({"scripts": {"lint": ["eslint"]}}))
+
+    assert _package_json_configures_lint(package_json) is False
+
+
+def test_package_json_configures_lint_handles_invalid_json(tmp_path: Path) -> None:
+    package_json = tmp_path / "package.json"
+    package_json.write_text("{invalid")
+
+    assert _package_json_configures_lint(package_json) is False
+
+
+def test_package_json_configures_lint_handles_read_error(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    package_json = tmp_path / "package.json"
+    package_json.write_text(json.dumps({"scripts": {"lint": "eslint src"}}))
+
+    def boom(_: Path) -> str:
+        raise OSError("unreadable")
+
+    monkeypatch.setattr(Path, "read_text", boom)
+
+    assert _package_json_configures_lint(package_json) is False
+
+
+def test_package_json_configures_lint_handles_non_mapping_payload(
+    tmp_path: Path,
+) -> None:
+    package_json = tmp_path / "package.json"
+    package_json.write_text(json.dumps(["lint"]))
+
+    assert _package_json_configures_lint(package_json) is False
 
 
 def test_analyze_repository_returns_sorted_extensions(tmp_path: Path) -> None:
