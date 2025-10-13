@@ -4,6 +4,7 @@ import math
 import os
 import shutil
 import sys
+import textwrap
 from collections import Counter
 from collections.abc import Sequence
 from pathlib import Path
@@ -21,6 +22,14 @@ DEFAULT_CONFIG_DIR = Path.home() / ".config" / "flywheel"
 TELEMETRY_REMINDER = (
     "Telemetry preference not set; run `flywheel config telemetry "
     "--set off|on|full` to choose."
+)
+
+HELP_EPILOG = textwrap.dedent(
+    """\
+    Examples:
+      flywheel init ./project --language python --save-dev --yes
+      flywheel spin --dry-run path/to/repo --format table
+    """
 )
 
 
@@ -1276,7 +1285,11 @@ def sync_prompts_cli(args: argparse.Namespace) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="flywheel")
+    parser = argparse.ArgumentParser(
+        prog="flywheel",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=HELP_EPILOG,
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
     p_init = sub.add_parser("init", help="initialize a repository")
