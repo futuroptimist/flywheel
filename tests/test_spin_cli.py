@@ -455,6 +455,28 @@ def test_lockfile_validation_commands_cover_known_manifests() -> None:
     assert commands[2] == "test -f api/Pipfile.lock"
 
 
+def test_lockfile_suggestion_falls_back_to_git_status(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "service"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+
+    monkeypatch.setattr(
+        main_module,
+        "_lockfile_validation_commands",
+        lambda missing: [],
+    )
+
+    _, suggestions = main_module._analyze_repository(repo)
+
+    lockfile_suggestion = next(
+        entry for entry in suggestions if entry["id"] == "commit-lockfiles"
+    )
+
+    assert lockfile_suggestion["validation"] == ["git status --short"]
+
+
 def test_spin_requires_existing_directory(tmp_path: Path) -> None:
     missing = tmp_path / "does-not-exist"
     args = argparse.Namespace(path=str(missing), dry_run=True)
