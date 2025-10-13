@@ -64,6 +64,9 @@ release management, and operational readiness.
   `FLYWHEEL_CONFIG_DIR` override for sandboxed runs.
 - **2025-10-14:** Added `--analyzers` toggles to the Python dry-run CLI so teams
   can focus on specific heuristics while the npm implementation matures.
+- **2025-10-15:** Surfaced suggestion confidence in table/markdown dry-run
+  outputs so human-readable formats mirror the prompt schema documented in the
+  README.
 
 ## Architecture Overview
 ```mermaid

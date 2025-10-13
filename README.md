@@ -243,8 +243,8 @@ scripts. Lockfile gaps surface as a `chore` suggestion named
 
 For quick reviews, append `--format table` or `--format markdown` to render a
 human-friendly summary. The table view keeps stats at the top and lists
-suggestions with their categories, impact, and affected files, while the
-Markdown variant is ready to paste into issues or chat threads.
+suggestions with their categories, impact, confidence, and affected files,
+while the Markdown variant is ready to paste into issues or chat threads.
 
 Fine-tune the heuristics with `--analyzers`. Pass a comma-separated list such as
 `--analyzers docs,dependencies` to focus on specific checks, use

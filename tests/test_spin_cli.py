@@ -807,7 +807,7 @@ def test_spin_markdown_format(
 
     output = capsys.readouterr().out
     assert "# flywheel spin dry-run" in output
-    assert "| Category |" in output
+    assert "| Confidence |" in output
     assert "add-docs" in output
 
 
@@ -876,7 +876,9 @@ def test_spin_cli_accepts_table_format(tmp_path: Path) -> None:
     )
 
     assert "Index" in output
+    assert "Confidence" in output
     assert "add-docs" in output
+    assert "0.80" in output or "0.8" in output
 
 
 def test_spin_cli_accepts_markdown_format(tmp_path: Path) -> None:
@@ -890,7 +892,7 @@ def test_spin_cli_accepts_markdown_format(tmp_path: Path) -> None:
     )
 
     assert "# flywheel spin dry-run" in output
-    assert "| Category |" in output
+    assert "| Confidence |" in output
 
 
 def test_spin_rejects_unknown_format(tmp_path: Path) -> None:
