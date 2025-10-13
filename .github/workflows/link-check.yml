@@ -51,7 +51,7 @@ jobs:
 
       - name: Upload Lychee Report
         if: always()
-        uses: actions/upload-artifact@b4b15b8c7c6f1f10b1a4d2d6e88b4e0b4b61c6d8  # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
         with:
           name: lychee-report
           path: lychee-report.txt
