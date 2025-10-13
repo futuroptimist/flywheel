@@ -12,6 +12,7 @@ import flywheel.__main__ as main_module
 from flywheel.__main__ import (
     SPIN_ANALYZERS,
     _analyze_repository,
+    _detect_lint_config,
     _detect_tests,
     _format_stats_lines,
     _has_ci_workflows,
@@ -83,12 +84,15 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     assert stats["has_docs"] is False
     assert stats["has_ci_workflows"] is False
     assert stats["has_tests"] is False
+    assert stats["has_lint_config"] is False
+    assert stats["has_lint_config"] is False
 
     suggestion_ids = {entry["id"] for entry in result["suggestions"]}
     assert suggestion_ids == {
         "add-docs",
         "add-readme",
         "add-tests",
+        "add-linting",
         "configure-ci",
     }
 
@@ -100,6 +104,7 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
         "add-docs": "docs",
         "add-readme": "docs",
         "add-tests": "fix",
+        "add-linting": "chore",
         "configure-ci": "chore",
     }
 
@@ -119,6 +124,7 @@ def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
     test_code = "def test_sample():\n    assert True\n"
     (tests_dir / "test_sample.py").write_text(test_code)
     (workflows / "ci.yml").write_text("name: CI\n")
+    (repo / ".pre-commit-config.yaml").write_text("repos: []\n")
 
     result = run_spin_dry_run(repo)
 
@@ -127,6 +133,7 @@ def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
     assert stats["has_docs"] is True
     assert stats["has_ci_workflows"] is True
     assert stats["has_tests"] is True
+    assert stats["has_lint_config"] is True
 
     assert result["suggestions"] == []
 
@@ -147,6 +154,7 @@ def test_spin_analyzers_subset(tmp_path: Path) -> None:
     assert stats["has_readme"] is None
     assert stats["has_ci_workflows"] is None
     assert stats["has_tests"] is None
+    assert stats["has_lint_config"] is None
     dependency = stats["dependency_health"]
     assert dependency["status"] == "lockfile-missing"
 
@@ -166,10 +174,16 @@ def test_spin_analyzers_disable_with_minus(tmp_path: Path) -> None:
 
     stats = result["stats"]
     assert stats["has_tests"] is None
+    assert stats["has_lint_config"] is False
 
     suggestion_ids = {entry["id"] for entry in result["suggestions"]}
     assert "add-tests" not in suggestion_ids
-    assert {"add-docs", "add-readme", "configure-ci"}.issubset(suggestion_ids)
+    assert {
+        "add-docs",
+        "add-readme",
+        "add-linting",
+        "configure-ci",
+    }.issubset(suggestion_ids)
 
 
 def test_spin_invalid_analyzer_errors(tmp_path: Path) -> None:
@@ -258,6 +272,7 @@ def test_suggestions_sorted_by_category_and_impact(tmp_path: Path) -> None:
     assert [entry["id"] for entry in suggestions] == [
         "add-tests",
         "configure-ci",
+        "add-linting",
         "commit-lockfiles",
         "add-docs",
         "add-readme",
@@ -623,6 +638,43 @@ def test_detect_tests_checks_parent_directories(tmp_path: Path) -> None:
     assert _detect_tests(repo, [helper]) is True
 
 
+def test_detect_lint_config_detects_pre_commit(tmp_path: Path) -> None:
+    repo = tmp_path / "lint"
+    repo.mkdir()
+    (repo / ".pre-commit-config.yaml").write_text("repos: []\n")
+
+    assert _detect_lint_config(repo, []) is True
+
+
+def test_detect_lint_config_detects_package_json_script(
+    tmp_path: Path,
+) -> None:
+    repo = tmp_path / "package"
+    repo.mkdir()
+    package_json = repo / "package.json"
+    payload = {"scripts": {"lint": "eslint src"}}
+    package_json.write_text(json.dumps(payload) + "\n")
+
+    assert _detect_lint_config(repo, []) is True
+
+
+def test_detect_lint_config_detects_pyproject(tmp_path: Path) -> None:
+    repo = tmp_path / "pyproject"
+    repo.mkdir()
+    (repo / "pyproject.toml").write_text("[tool.ruff]\nline-length = 100\n")
+
+    assert _detect_lint_config(repo, []) is True
+
+
+def test_detect_lint_config_returns_false_without_signals(
+    tmp_path: Path,
+) -> None:
+    repo = tmp_path / "nolint"
+    repo.mkdir()
+
+    assert _detect_lint_config(repo, []) is False
+
+
 def test_analyze_repository_returns_sorted_extensions(tmp_path: Path) -> None:
     repo = tmp_path / "analysis"
     repo.mkdir()
@@ -647,6 +699,7 @@ def test_analyze_repository_returns_sorted_extensions(tmp_path: Path) -> None:
     (tests_dir / "test_widget.py").write_text(
         "def test_widget():\n" "    assert True\n"
     )
+    (repo / ".pre-commit-config.yaml").write_text("repos: []\n")
 
     stats, suggestions = _analyze_repository(repo)
 
@@ -655,6 +708,7 @@ def test_analyze_repository_returns_sorted_extensions(tmp_path: Path) -> None:
     assert stats["has_docs"] is True
     assert stats["has_tests"] is True
     assert stats["has_ci_workflows"] is True
+    assert stats["has_lint_config"] is True
 
     extensions = stats["top_extensions"]
     counts = [entry["count"] for entry in extensions]
@@ -676,10 +730,12 @@ def test_analyze_repository_reports_missing_assets(tmp_path: Path) -> None:
     assert stats["has_docs"] is False
     assert stats["has_ci_workflows"] is False
     assert stats["has_tests"] is False
+    assert stats["has_lint_config"] is False
 
     assert [entry["id"] for entry in suggestions] == [
         "add-tests",
         "configure-ci",
+        "add-linting",
         "add-docs",
         "add-readme",
     ]
@@ -690,6 +746,7 @@ def test_analyze_repository_reports_missing_assets(tmp_path: Path) -> None:
         "add-docs": "docs",
         "add-readme": "docs",
         "add-tests": "fix",
+        "add-linting": "chore",
         "configure-ci": "chore",
     }
 
@@ -711,6 +768,7 @@ def test_spin_dry_run_outputs_json_inline(
     assert payload["target"] == str(repo.resolve())
     assert payload["stats"]["has_readme"] is False
     assert payload["stats"]["has_docs"] is False
+    assert payload["stats"]["has_lint_config"] is False
 
     snapshot_categories: dict[str, str] = {}
     for item in payload["suggestions"]:
@@ -719,6 +777,7 @@ def test_spin_dry_run_outputs_json_inline(
         "add-docs": "docs",
         "add-readme": "docs",
         "add-tests": "fix",
+        "add-linting": "chore",
         "configure-ci": "chore",
     }
 
@@ -776,6 +835,7 @@ def test_spin_table_marks_skipped_analyzers(
     output = capsys.readouterr().out
     assert "has_readme: skipped" in output
     assert "has_tests: skipped" in output
+    assert "has_lint_config: skipped" in output
 
 
 def test_format_stats_lines_handles_literal_dependency() -> None:
@@ -818,6 +878,7 @@ def test_spin_markdown_without_suggestions() -> None:
         "has_docs": False,
         "has_ci_workflows": True,
         "has_tests": False,
+        "has_lint_config": True,
         "dependency_health": {"status": "ok"},
         "language_mix": [
             {"language": "Python", "count": 3},
@@ -844,6 +905,7 @@ def test_spin_table_without_suggestions() -> None:
         "has_docs": True,
         "has_ci_workflows": False,
         "has_tests": True,
+        "has_lint_config": False,
         "dependency_health": {"status": "warn"},
         "language_mix": [
             {"language": "Python", "count": 1},

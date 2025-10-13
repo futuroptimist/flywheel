@@ -63,7 +63,9 @@ release management, and operational readiness.
   preferences stored under `~/.config/flywheel/config.json` with a
   `FLYWHEEL_CONFIG_DIR` override for sandboxed runs.
 - **2025-10-14:** Added `--analyzers` toggles to the Python dry-run CLI so teams
-  can focus on specific heuristics while the npm implementation matures.
+  can focus on specific heuristics while the npm implementation matures. The
+  lint analyzer now surfaces an `add-linting` suggestion when projects lack
+  pre-commit, ESLint, Ruff, or similar tooling.
 
 ## Architecture Overview
 ```mermaid

@@ -1,4 +1,6 @@
 ## 2025-10-14
+- feat: flag missing lint tooling in `flywheel spin --dry-run` with a new
+  `add-linting` suggestion and analyzer toggle.
 - feat: add analyzer toggles to `flywheel spin --dry-run` so operators can scope
   heuristic checks.
 

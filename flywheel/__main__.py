@@ -216,6 +216,7 @@ SPIN_ANALYZERS = {
     "ci",
     "dependencies",
     "docs",
+    "lint",
     "readme",
     "tests",
 }
@@ -584,6 +585,93 @@ def _detect_tests(root: Path, files: Sequence[Path]) -> bool:
     return False
 
 
+def _detect_lint_config(root: Path, files: Sequence[Path]) -> bool:
+    """Return True when lint tooling is configured for the project."""
+
+    config_paths = [
+        ".pre-commit-config.yaml",
+        ".pre-commit-config.yml",
+        ".flake8",
+        "pylintrc",
+        "eslint.config.js",
+        "eslint.config.mjs",
+        "eslint.config.cjs",
+        ".eslintrc",
+        ".eslintrc.json",
+        ".eslintrc.js",
+        ".eslintrc.cjs",
+        ".eslintrc.yaml",
+        ".eslintrc.yml",
+        ".stylelintrc",
+        ".stylelintrc.json",
+        ".stylelintrc.yaml",
+        ".stylelintrc.yml",
+    ]
+    for name in config_paths:
+        if (root / name).exists():
+            return True
+
+    pyproject = root / "pyproject.toml"
+    if pyproject.exists():
+        try:
+            text = pyproject.read_text().lower()
+        except OSError:
+            text = ""
+        pyproject_markers = (
+            "[tool.black]",
+            "[tool.ruff]",
+            "[tool.flake8]",
+            "[tool.isort]",
+        )
+        if any(marker in text for marker in pyproject_markers):
+            return True
+
+    setup_cfg = root / "setup.cfg"
+    if setup_cfg.exists():
+        try:
+            text = setup_cfg.read_text().lower()
+        except OSError:
+            text = ""
+        setup_markers = (
+            "[flake8]",
+            "[pylint]",
+            "[isort]",
+        )
+        if any(marker in text for marker in setup_markers):
+            return True
+
+    package_json = root / "package.json"
+    if package_json.exists():
+        try:
+            data = json.loads(package_json.read_text())
+        except (OSError, json.JSONDecodeError):
+            data = None
+        if isinstance(data, dict):
+            scripts = data.get("scripts", {})
+            if isinstance(scripts, dict):
+                for key, command in scripts.items():
+                    if not isinstance(key, str):
+                        continue
+                    if not isinstance(command, str):
+                        continue
+                    lower_key = key.lower()
+                    lower_cmd = command.lower()
+                    if "lint" in lower_key:
+                        return True
+                    lint_tokens = (
+                        "eslint",
+                        "prettier",
+                        "flake8",
+                        "ruff",
+                        "pylint",
+                    )
+                    for token in lint_tokens:
+                        if token in lower_cmd:
+                            return True
+
+    return False
+
+
 def _summarize_language_mix(files: Sequence[Path]) -> list[dict[str, object]]:
     counts: Counter[str] = Counter()
     for path in files:
@@ -698,6 +786,7 @@ def _analyze_repository(
     include_docs = "docs" in enabled
     include_readme = "readme" in enabled
     include_ci = "ci" in enabled
+    include_lint = "lint" in enabled
     include_tests = "tests" in enabled
     include_dependencies = "dependencies" in enabled
     files = _iter_project_files(root)
@@ -712,6 +801,7 @@ def _analyze_repository(
     has_ci = _has_ci_workflows(root) if include_ci else None
     has_docs = _has_docs_directory(root) if include_docs else None
     has_tests = _detect_tests(root, files) if include_tests else None
+    has_lint = _detect_lint_config(root, files) if include_lint else None
     language_mix = _summarize_language_mix(files)
     if include_dependencies:
         dependency_health = _analyze_dependency_health(root, files)
@@ -722,6 +812,7 @@ def _analyze_repository(
         "top_extensions": top_extensions,
         "has_readme": has_readme,
         "has_docs": has_docs,
+        "has_lint_config": has_lint,
         "has_tests": has_tests,
         "has_ci_workflows": has_ci,
         "language_mix": language_mix,
@@ -773,6 +864,22 @@ def _analyze_repository(
                 "impact": "high",
                 "confidence": IMPACT_CONFIDENCE["high"],
                 "files": [".github/workflows/"],
+            }
+        )
+    if include_lint and not has_lint:
+        suggestions.append(
+            {
+                "id": "add-linting",
+                "category": "chore",
+                "title": "Add lint configuration",
+                "description": (
+                    "Set up lint tooling (for example pre-commit, "
+                    "ESLint, or Ruff) so contributors catch style "
+                    "issues before they reach CI."
+                ),
+                "impact": "medium",
+                "confidence": IMPACT_CONFIDENCE["medium"],
+                "files": [".pre-commit-config.yaml"],
             }
         )
     if include_tests and not has_tests:
@@ -866,10 +973,12 @@ def _format_stats_lines(stats: dict[str, object]) -> list[str]:
     docs_flag = _format_bool(stats.get("has_docs"))
     ci_flag = _format_bool(stats.get("has_ci_workflows"))
     tests_flag = _format_bool(stats.get("has_tests"))
+    lint_flag = _format_bool(stats.get("has_lint_config"))
     lines.append(f"  - has_readme: {readme_flag}")
     lines.append(f"  - has_docs: {docs_flag}")
     lines.append(f"  - has_ci_workflows: {ci_flag}")
     lines.append(f"  - has_tests: {tests_flag}")
+    lines.append(f"  - has_lint_config: {lint_flag}")
     if isinstance(dependency, dict):
         dep_status = dependency.get("status", "unknown")
     elif dependency is None:
