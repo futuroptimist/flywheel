@@ -811,6 +811,16 @@ def test_spin_markdown_format(
     assert "add-docs" in output
 
 
+@pytest.mark.parametrize("value", [None, "unknown", object()])
+def test_format_confidence_handles_non_numeric(value: object) -> None:
+    assert main_module._format_confidence(value) == "-"
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), float("-inf")])
+def test_format_confidence_handles_non_finite(value: float) -> None:
+    assert main_module._format_confidence(value) == "-"
+
+
 def test_spin_markdown_without_suggestions() -> None:
     stats = {
         "total_files": 4,
