@@ -591,7 +591,10 @@ def test_telemetry_prompt_skips_in_ci_environment(
     assert cli.TELEMETRY_REMINDER in captured.err
 
 
-def test_main_applies_telemetry_override_before_prompt(monkeypatch, tmp_path: Path) -> None:
+def test_main_applies_telemetry_override_before_prompt(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
 
     calls: list[tuple[str, str | None]] = []
@@ -615,6 +618,24 @@ def test_main_applies_telemetry_override_before_prompt(monkeypatch, tmp_path: Pa
     assert calls[0] == ("set", "full")
     assert calls[1][0] == "prompt"
     assert calls[2] == ("spin", "full")
+
+
+def test_set_telemetry_mode_persists_choice(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+
+    config_path = tmp_path / "config.json"
+    config_path.write_text(json.dumps({"existing": "value"}))
+
+    path = cli.set_telemetry_mode("off")
+
+    assert path == config_path
+    assert json.loads(config_path.read_text()) == {
+        "existing": "value",
+        "telemetry": "off",
+    }
 
 
 def test_automation_context_ignores_false_env(
