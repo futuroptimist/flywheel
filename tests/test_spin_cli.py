@@ -423,15 +423,75 @@ def test_spin_rejects_file_targets(tmp_path: Path) -> None:
     assert "Target path is not a directory" in str(exc.value)
 
 
-def test_spin_requires_dry_run_flag(tmp_path: Path) -> None:
+def test_spin_requires_mode_flag(tmp_path: Path) -> None:
     repo = tmp_path / "repo"
     repo.mkdir()
-    args = argparse.Namespace(path=str(repo), dry_run=False)
+    args = argparse.Namespace(path=str(repo), dry_run=False, apply=False)
 
     with pytest.raises(SystemExit) as exc:
         spin(args)
 
-    assert "Only --dry-run mode is supported" in str(exc.value)
+    assert "Either --dry-run or --apply must be specified." in str(exc.value)
+
+
+def test_spin_rejects_conflicting_modes(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    args = argparse.Namespace(path=str(repo), dry_run=True, apply=True)
+
+    with pytest.raises(SystemExit) as exc:
+        spin(args)
+
+    assert "Cannot combine --apply with --dry-run." in str(exc.value)
+
+
+def test_spin_apply_scaffolds_missing_assets(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: CaptureFixtureStr
+) -> None:
+    repo = tmp_path / "apply"
+    repo.mkdir()
+
+    responses = iter(["y", "y", "y", "y"])
+    monkeypatch.setattr("builtins.input", lambda _: next(responses))
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply=True,
+        analyzers=None,
+        yes=False,
+    )
+
+    spin(args)
+
+    out = capsys.readouterr().out
+    assert "Applied suggestions:" in out
+    assert (repo / "README.md").exists()
+    assert (repo / "docs" / "README.md").exists()
+    assert (repo / "tests" / "test_placeholder.py").exists()
+    assert (repo / ".github" / "workflows" / "ci.yml").exists()
+
+
+def test_spin_apply_skips_unhandled_suggestion(
+    tmp_path: Path, capsys: CaptureFixtureStr
+) -> None:
+    repo = tmp_path / "locks"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply=True,
+        analyzers=None,
+        yes=True,
+    )
+
+    spin(args)
+
+    out = capsys.readouterr().out
+    assert "Skipped suggestions:" in out
+    assert "commit-lockfiles" in out
 
 
 def test_iter_project_files_skips_unwanted_entries(tmp_path: Path) -> None:

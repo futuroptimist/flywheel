@@ -241,6 +241,18 @@ scripts. Lockfile gaps surface as a `chore` suggestion named
 `fix`, or `chore`) and a heuristic `confidence` score between 0 and 1 so the output matches the
 [`flywheel spin` design](docs/flywheel-npx-spin-design.md) schema.
 
+Apply supported scaffolding directly to your repository:
+
+```bash
+flywheel spin --apply path/to/repo
+```
+
+The apply mode creates starter assets for heuristics it can satisfy (for example,
+`README.md`, `docs/README.md`, `tests/test_placeholder.py`, and a
+`.github/workflows/ci.yml` placeholder). Suggestions without automated handlers
+are reported as skipped so you can follow up manually. Append `--yes` to apply
+all supported changes without interactive prompts.
+
 For quick reviews, append `--format table` or `--format markdown` to render a
 human-friendly summary. The table view keeps stats at the top and lists
 suggestions with their categories, impact, and affected files, while the

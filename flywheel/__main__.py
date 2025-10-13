@@ -3,8 +3,9 @@ import json
 import os
 import shutil
 import sys
+import textwrap
 from collections import Counter
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from pathlib import Path
 
 import yaml
@@ -219,6 +220,49 @@ SPIN_ANALYZERS = {
     "readme",
     "tests",
 }
+DOCS_PLACEHOLDER = """# Documentation
+
+Describe project setup, architecture, and how to contribute.
+"""
+
+README_PLACEHOLDER = """# {project}
+
+Describe the project's purpose, setup instructions, and key workflows.
+"""
+
+TEST_PLACEHOLDER = textwrap.dedent(
+    """\
+    \"\"\"Initial placeholder tests.\"\"\"
+
+
+    def test_placeholder() -> None:
+        \"\"\"Replace with real tests.\"\"\"
+
+        assert True
+    """
+)
+
+CI_PLACEHOLDER = textwrap.dedent(
+    """\
+    name: CI
+
+    on:
+      push:
+      pull_request:
+
+    jobs:
+      scaffold:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Configure repository
+            uses: actions/checkout@v4
+          - name: TODO
+            run: echo "Replace this workflow with project-specific checks"
+    """
+)
+
+ApplyResult = tuple[bool, str]
+Suggestion = dict[str, object]
 SPIN_ANALYZER_HELP = (
     "comma-separated analyzers to enable/disable (use -name to disable)"
 )
@@ -839,6 +883,102 @@ def _sort_suggestions(
     return sorted(items, key=sort_key)
 
 
+def _apply_add_docs(root: Path, suggestion: Suggestion) -> ApplyResult:
+    docs_dir = root / "docs"
+    docs_dir.mkdir(parents=True, exist_ok=True)
+    readme = docs_dir / "README.md"
+    if readme.exists():
+        return False, "docs/README.md already exists"
+    content = DOCS_PLACEHOLDER
+    if not content.endswith("\n"):
+        content += "\n"
+    readme.write_text(content)
+    return True, "Created docs/README.md"
+
+
+def _apply_add_readme(root: Path, suggestion: Suggestion) -> ApplyResult:
+    readme = root / "README.md"
+    if readme.exists():
+        return False, "README.md already exists"
+    project = root.name or root.resolve().name
+    content = README_PLACEHOLDER.format(project=project)
+    if not content.endswith("\n"):
+        content += "\n"
+    readme.write_text(content)
+    return True, "Created README.md"
+
+
+def _apply_add_tests(root: Path, suggestion: Suggestion) -> ApplyResult:
+    tests_dir = root / "tests"
+    tests_dir.mkdir(parents=True, exist_ok=True)
+    placeholder = tests_dir / "test_placeholder.py"
+    if placeholder.exists():
+        return False, "tests/test_placeholder.py already exists"
+    content = TEST_PLACEHOLDER.rstrip() + "\n"
+    placeholder.write_text(content)
+    return True, "Created tests/test_placeholder.py"
+
+
+def _apply_configure_ci(root: Path, suggestion: Suggestion) -> ApplyResult:
+    workflows = root / ".github" / "workflows"
+    workflows.mkdir(parents=True, exist_ok=True)
+    workflow = workflows / "ci.yml"
+    if workflow.exists():
+        return False, ".github/workflows/ci.yml already exists"
+    content = CI_PLACEHOLDER.strip() + "\n"
+    workflow.write_text(content)
+    return True, "Created .github/workflows/ci.yml"
+
+
+APPLY_HANDLERS: dict[str, Callable[[Path, Suggestion], ApplyResult]] = {
+    "add-docs": _apply_add_docs,
+    "add-readme": _apply_add_readme,
+    "add-tests": _apply_add_tests,
+    "configure-ci": _apply_configure_ci,
+}
+
+
+def _apply_suggestions(
+    root: Path,
+    suggestions: Sequence[Suggestion],
+    assume_yes: bool = False,
+) -> tuple[list[str], list[str]]:
+    applied: list[str] = []
+    skipped: list[str] = []
+    for suggestion in suggestions:
+        identifier = str(suggestion.get("id", ""))
+        handler = APPLY_HANDLERS.get(identifier)
+        if handler is None:
+            skipped.append(f"{identifier}: no automated handler")
+            continue
+        if not assume_yes:
+            title = str(suggestion.get("title", identifier))
+            if not prompt_bool(f"Apply suggestion '{title}'?", True):
+                skipped.append(f"{identifier}: skipped by user")
+                continue
+        try:
+            applied_flag, message = handler(root, suggestion)
+        except Exception as exc:  # pragma: no cover - unexpected failures
+            skipped.append(f"{identifier}: failed ({exc})")
+            continue
+        detail = f"{identifier}: {message}"
+        if applied_flag:
+            applied.append(detail)
+        else:
+            skipped.append(detail)
+    if applied:
+        print("Applied suggestions:")
+        for line in applied:
+            print(f"  - {line}")
+    if skipped:
+        print("Skipped suggestions:")
+        for line in skipped:
+            print(f"  - {line}")
+    if not applied and not skipped:
+        print("No suggestions to apply.")
+    return applied, skipped
+
+
 def _format_bool(value: bool | None) -> str:
     if value is True:
         return "yes"
@@ -984,11 +1124,27 @@ def spin(args: argparse.Namespace) -> None:
         raise SystemExit(f"Target path not found: {target}")
     if not target.is_dir():
         raise SystemExit(f"Target path is not a directory: {target}")
-    if not args.dry_run:
-        msg = "Only --dry-run mode is supported; re-run with --dry-run."
-        raise SystemExit(msg)
+    apply_mode = getattr(args, "apply", False)
+    dry_run = getattr(args, "dry_run", False)
+    if apply_mode and dry_run:
+        raise SystemExit("Cannot combine --apply with --dry-run.")
+    if not apply_mode and not dry_run:
+        raise SystemExit("Either --dry-run or --apply must be specified.")
+
     analyzers = _parse_analyzers(getattr(args, "analyzers", None))
     stats, suggestions = _analyze_repository(target, analyzers=analyzers)
+
+    if apply_mode:
+        if not suggestions:
+            print("No suggestions to apply.")
+            return
+        _apply_suggestions(
+            target,
+            suggestions,
+            assume_yes=getattr(args, "yes", False),
+        )
+        return
+
     result = {
         "target": str(target),
         "mode": "dry-run",
@@ -1150,12 +1306,22 @@ def build_parser() -> argparse.ArgumentParser:
         help="generate heuristic suggestions without applying changes",
     )
     p_spin.add_argument(
+        "--apply",
+        action="store_true",
+        help="apply scaffolding for supported suggestions",
+    )
+    p_spin.add_argument(
         "--format",
         choices=["json", "table", "markdown"],
         default="json",
         help="output format for dry-run results",
     )
     p_spin.add_argument("--analyzers", help=SPIN_ANALYZER_HELP)
+    p_spin.add_argument(
+        "--yes",
+        action="store_true",
+        help="apply supported changes without prompting",
+    )
     p_spin.set_defaults(func=spin)
 
     p_crawl = sub.add_parser("crawl", help="generate repo feature summary")

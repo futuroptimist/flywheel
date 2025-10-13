@@ -1,3 +1,7 @@
+## 2025-10-15
+- feat: add `--apply` mode to `flywheel spin` to scaffold docs, tests, and CI
+  placeholders for supported heuristics.
+
 ## 2025-10-14
 - feat: add analyzer toggles to `flywheel spin --dry-run` so operators can scope
   heuristic checks.

@@ -64,6 +64,9 @@ release management, and operational readiness.
   `FLYWHEEL_CONFIG_DIR` override for sandboxed runs.
 - **2025-10-14:** Added `--analyzers` toggles to the Python dry-run CLI so teams
   can focus on specific heuristics while the npm implementation matures.
+- **2025-10-15:** Added an interactive `flywheel spin --apply` mode that
+  scaffolds missing docs, README, tests, and CI placeholders for supported
+  heuristics while reporting unhandled suggestions for follow-up.
 
 ## Architecture Overview
 ```mermaid
@@ -149,8 +152,9 @@ flywheel/
   - `--llm-provider tokenplace|openai|anthropic`
   - `--tokenplace-api-key $TOKENPLACE_API_KEY` (environment variable fallback).
   - `--format table|json|markdown`
-  - `--apply` (interactive prompt or `--apply-all`, `--apply none`)
-  - `--dry-run` to output patches without applying.
+  - `--apply` for interactive scaffolding of supported heuristics (`--yes` to
+    skip prompts)
+  - `--dry-run` to report heuristics without applying changes.
   - `--cache-dir` for embeddings/vector store.
   - `--telemetry on|off`
 
@@ -322,7 +326,7 @@ gantt
 |---------|-------------|--------|
 | `flywheel spin` | Scan repo, generate suggestions. | Draft |
 | `flywheel spin --dry-run` | Output suggestions without LLM or patch application (mock data). | Draft |
-| `flywheel spin --apply` | Interactive apply mode. | Planned |
+| `flywheel spin --apply` | Interactive apply mode. | Alpha |
 | `flywheel spin --apply-all` | Apply all suggestions with zero prompts (requires `--force`). | Planned |
 | `flywheel config telemetry` | Manage telemetry preferences. | Shipped |
 
