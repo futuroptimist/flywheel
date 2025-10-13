@@ -494,6 +494,167 @@ def test_spin_apply_skips_unhandled_suggestion(
     assert "commit-lockfiles" in out
 
 
+def test_apply_add_docs_handles_existing_file(tmp_path: Path) -> None:
+    repo = tmp_path / "docs-exist"
+    readme = repo / "docs" / "README.md"
+    readme.parent.mkdir(parents=True, exist_ok=True)
+    readme.write_text("existing\n")
+
+    success, message = main_module._apply_add_docs(repo, {"id": "add-docs"})
+
+    assert success is False
+    assert message == "docs/README.md already exists"
+
+
+def test_apply_add_docs_appends_missing_newline(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "docs"
+    repo.mkdir()
+    monkeypatch.setattr(main_module, "DOCS_PLACEHOLDER", "# Placeholder")
+
+    success, message = main_module._apply_add_docs(repo, {"id": "add-docs"})
+
+    assert success is True
+    assert message == "Created docs/README.md"
+    content = (repo / "docs" / "README.md").read_text()
+    assert content.endswith("\n")
+
+
+def test_apply_add_readme_handles_existing_file(tmp_path: Path) -> None:
+    repo = tmp_path / "readme-exist"
+    repo.mkdir()
+    (repo / "README.md").write_text("existing\n")
+
+    success, message = main_module._apply_add_readme(repo, {"id": "add-readme"})
+
+    assert success is False
+    assert message == "README.md already exists"
+
+
+def test_apply_add_readme_appends_missing_newline(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "readme"
+    repo.mkdir()
+    monkeypatch.setattr(main_module, "README_PLACEHOLDER", "# Title")
+
+    success, message = main_module._apply_add_readme(repo, {"id": "add-readme"})
+
+    assert success is True
+    assert message == "Created README.md"
+    assert (repo / "README.md").read_text().endswith("\n")
+
+
+def test_apply_add_tests_handles_existing_file(tmp_path: Path) -> None:
+    repo = tmp_path / "tests-exist"
+    placeholder = repo / "tests" / "test_placeholder.py"
+    placeholder.parent.mkdir(parents=True, exist_ok=True)
+    placeholder.write_text("existing\n")
+
+    success, message = main_module._apply_add_tests(repo, {"id": "add-tests"})
+
+    assert success is False
+    assert message == "tests/test_placeholder.py already exists"
+
+
+def test_apply_configure_ci_handles_existing_workflow(tmp_path: Path) -> None:
+    repo = tmp_path / "ci-exist"
+    workflow = repo / ".github" / "workflows" / "ci.yml"
+    workflow.parent.mkdir(parents=True, exist_ok=True)
+    workflow.write_text("name: CI\n")
+
+    success, message = main_module._apply_configure_ci(
+        repo, {"id": "configure-ci"}
+    )
+
+    assert success is False
+    assert message == ".github/workflows/ci.yml already exists"
+
+
+def test_apply_suggestions_respects_user_decline(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: CaptureFixtureStr
+) -> None:
+    repo = tmp_path / "decline"
+    repo.mkdir()
+    monkeypatch.setattr(main_module, "prompt_bool", lambda *_: False)
+    suggestion = {"id": "add-readme", "title": "Add README"}
+
+    applied, skipped = main_module._apply_suggestions(
+        repo, [suggestion], assume_yes=False
+    )
+
+    assert applied == []
+    assert skipped == ["add-readme: skipped by user"]
+    out = capsys.readouterr().out
+    assert "Skipped suggestions:" in out
+    assert "add-readme: skipped by user" in out
+
+
+def test_apply_suggestions_collects_handler_skip(
+    tmp_path: Path, capsys: CaptureFixtureStr
+) -> None:
+    repo = tmp_path / "skip"
+    repo.mkdir()
+    (repo / "README.md").write_text("existing\n")
+    suggestion = {"id": "add-readme"}
+
+    applied, skipped = main_module._apply_suggestions(
+        repo, [suggestion], assume_yes=True
+    )
+
+    assert applied == []
+    assert skipped == ["add-readme: README.md already exists"]
+    out = capsys.readouterr().out
+    assert "Skipped suggestions:" in out
+    assert "add-readme: README.md already exists" in out
+
+
+def test_apply_suggestions_reports_no_work(
+    tmp_path: Path, capsys: CaptureFixtureStr
+) -> None:
+    repo = tmp_path / "no-work"
+    repo.mkdir()
+
+    applied, skipped = main_module._apply_suggestions(repo, [], assume_yes=True)
+
+    assert applied == []
+    assert skipped == []
+    out = capsys.readouterr().out.strip()
+    assert out == "No suggestions to apply."
+
+
+def test_spin_apply_no_suggestions_reports_message(
+    tmp_path: Path, capsys: CaptureFixtureStr
+) -> None:
+    repo = tmp_path / "ready"
+    repo.mkdir()
+    (repo / "README.md").write_text("ready\n")
+    docs_dir = repo / "docs"
+    docs_dir.mkdir()
+    (docs_dir / "README.md").write_text("docs\n")
+    workflows = repo / ".github" / "workflows"
+    workflows.mkdir(parents=True)
+    (workflows / "ci.yml").write_text("name: CI\n")
+    tests_dir = repo / "tests"
+    tests_dir.mkdir()
+    (tests_dir / "test_placeholder.py").write_text(
+        "def test_placeholder():\n    assert True\n"
+    )
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply=True,
+        analyzers=None,
+        yes=True,
+    )
+
+    spin(args)
+
+    out = capsys.readouterr().out
+    assert out.strip() == "No suggestions to apply."
+
 def test_iter_project_files_skips_unwanted_entries(tmp_path: Path) -> None:
     repo = tmp_path / "project"
     repo.mkdir()
