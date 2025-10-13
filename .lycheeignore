@@ -1,0 +1,14 @@
+# .lycheeignore
+# Ignored or unreliable URLs
+
+# Social platforms often rate-limit
+https://twitter.com/*
+https://x.com/*
+https://www.linkedin.com/*
+https://youtube.com/*
+https://www.youtube.com/*
+https://medium.com/*
+
+# Internal-only or localhost links
+http://localhost:*
+http://127.0.0.1:*

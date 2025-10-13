@@ -1,0 +1,57 @@
+# .github/workflows/link-check.yml
+name: Link Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linkcheck:
+    name: Lychee Link Checker
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11  # v4.2.2
+
+      - name: Cache Lychee
+        id: cache-lychee
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9  # v4.0.2
+        with:
+          path: ~/.cache/lychee
+          key: lychee-${{ runner.os }}-${{ hashFiles('**/*.md', '.lychee*') }}
+          restore-keys: |
+            lychee-${{ runner.os }}-
+
+      - name: Run Lychee
+        uses: lycheeverse/lychee-action@0a7f1b86f0b9f6e8f5e6d1612f72fca1f0f1f2a3  # pinned
+        with:
+          args: >-
+            --no-progress
+            --base ./
+            --max-concurrency 6
+            --max-retries 2
+            --retry-wait-time 2
+            --exclude-all-private
+            --exclude-mail
+            --exclude-loopback
+            --accept 200,206,429
+            --timeout 20
+            --cache
+            --config .lychee.toml
+            --format detailed
+            .
+
+      - name: Upload Lychee Report
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6f1f10b1a4d2d6e88b4e0b4b61c6d8  # v4.4.3
+        with:
+          name: lychee-report
+          path: lychee-report.txt
+          if-no-files-found: ignore
