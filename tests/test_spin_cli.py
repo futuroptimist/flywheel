@@ -10,8 +10,8 @@ import pytest
 
 import flywheel.__main__ as main_module
 from flywheel.__main__ import (
-    SPIN_ANALYZERS,
     LINT_VALIDATION_COMMANDS,
+    SPIN_ANALYZERS,
     _analyze_repository,
     _detect_lint_config,
     _detect_tests,
