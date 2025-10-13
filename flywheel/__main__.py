@@ -217,6 +217,7 @@ SPIN_ANALYZERS = {
     "ci",
     "dependencies",
     "docs",
+    "lint",
     "readme",
     "tests",
 }
@@ -585,6 +586,117 @@ def _detect_tests(root: Path, files: Sequence[Path]) -> bool:
     return False
 
 
+LINT_CONFIG_PATHS = [
+    ".pre-commit-config.yaml",
+    ".pre-commit-config.yml",
+    ".flake8",
+    "pylintrc",
+    "eslint.config.js",
+    "eslint.config.mjs",
+    "eslint.config.cjs",
+    ".eslintrc",
+    ".eslintrc.json",
+    ".eslintrc.js",
+    ".eslintrc.cjs",
+    ".eslintrc.yaml",
+    ".eslintrc.yml",
+    ".stylelintrc",
+    ".stylelintrc.json",
+    ".stylelintrc.yaml",
+    ".stylelintrc.yml",
+]
+
+PYPROJECT_LINT_MARKERS = (
+    "[tool.black]",
+    "[tool.ruff]",
+    "[tool.flake8]",
+    "[tool.isort]",
+)
+
+SETUP_CFG_LINT_MARKERS = (
+    "[flake8]",
+    "[pylint]",
+    "[isort]",
+)
+
+PACKAGE_JSON_LINT_TOKENS = (
+    "eslint",
+    "prettier",
+    "flake8",
+    "ruff",
+    "pylint",
+)
+
+
+LINT_VALIDATION_COMMANDS = (
+    "pre-commit run --all-files"
+    " || npm run lint -- --max-warnings=0"
+    " || npm run lint"
+    " || ruff check ."
+    " || flake8 .",
+)
+
+
+def _pyproject_configures_lint(pyproject: Path) -> bool:
+    if not pyproject.exists():
+        return False
+    try:
+        text = pyproject.read_text()
+    except OSError:
+        return False
+    lowered = text.lower()
+    return any(marker in lowered for marker in PYPROJECT_LINT_MARKERS)
+
+
+def _setup_cfg_configures_lint(setup_cfg: Path) -> bool:
+    if not setup_cfg.exists():
+        return False
+    try:
+        text = setup_cfg.read_text()
+    except OSError:
+        return False
+    lowered = text.lower()
+    return any(marker in lowered for marker in SETUP_CFG_LINT_MARKERS)
+
+
+def _package_json_configures_lint(package_json: Path) -> bool:
+    if not package_json.exists():
+        return False
+    try:
+        payload: object = json.loads(package_json.read_text())
+    except (OSError, json.JSONDecodeError):
+        return False
+    if not isinstance(payload, dict):
+        return False
+    scripts = payload.get("scripts")
+    if not isinstance(scripts, dict):
+        return False
+    for key, command in scripts.items():
+        if not isinstance(key, str) or not isinstance(command, str):
+            continue
+        lower_key = key.lower()
+        lower_cmd = command.lower()
+        if "lint" in lower_key:
+            return True
+        if any(token in lower_cmd for token in PACKAGE_JSON_LINT_TOKENS):
+            return True
+    return False
+
+
+def _detect_lint_config(root: Path, files: Sequence[Path]) -> bool:
+    """Return True when lint tooling is configured for the project."""
+
+    if any((root / name).exists() for name in LINT_CONFIG_PATHS):
+        return True
+    if _pyproject_configures_lint(root / "pyproject.toml"):
+        return True
+    if _setup_cfg_configures_lint(root / "setup.cfg"):
+        return True
+    if _package_json_configures_lint(root / "package.json"):
+        return True
+    return False
+
+
 def _summarize_language_mix(files: Sequence[Path]) -> list[dict[str, object]]:
     counts: Counter[str] = Counter()
     for path in files:
@@ -725,6 +837,7 @@ def _analyze_repository(
     include_docs = "docs" in enabled
     include_readme = "readme" in enabled
     include_ci = "ci" in enabled
+    include_lint = "lint" in enabled
     include_tests = "tests" in enabled
     include_dependencies = "dependencies" in enabled
     files = _iter_project_files(root)
@@ -739,6 +852,7 @@ def _analyze_repository(
     has_ci = _has_ci_workflows(root) if include_ci else None
     has_docs = _has_docs_directory(root) if include_docs else None
     has_tests = _detect_tests(root, files) if include_tests else None
+    has_lint = _detect_lint_config(root, files) if include_lint else None
     language_mix = _summarize_language_mix(files)
     if include_dependencies:
         dependency_health = _analyze_dependency_health(root, files)
@@ -749,6 +863,7 @@ def _analyze_repository(
         "top_extensions": top_extensions,
         "has_readme": has_readme,
         "has_docs": has_docs,
+        "has_lint_config": has_lint,
         "has_tests": has_tests,
         "has_ci_workflows": has_ci,
         "language_mix": language_mix,
@@ -803,6 +918,23 @@ def _analyze_repository(
                 "confidence": IMPACT_CONFIDENCE["high"],
                 "files": [".github/workflows/"],
                 "validation": ["test -d .github/workflows"],
+            }
+        )
+    if include_lint and not has_lint:
+        suggestions.append(
+            {
+                "id": "add-linting",
+                "category": "chore",
+                "title": "Add lint configuration",
+                "description": (
+                    "Set up lint tooling (for example pre-commit, "
+                    "ESLint, or Ruff) so contributors catch style "
+                    "issues before they reach CI."
+                ),
+                "impact": "medium",
+                "confidence": IMPACT_CONFIDENCE["medium"],
+                "files": [".pre-commit-config.yaml"],
+                "validation": list(LINT_VALIDATION_COMMANDS),
             }
         )
     if include_tests and not has_tests:
@@ -915,10 +1047,12 @@ def _format_stats_lines(stats: dict[str, object]) -> list[str]:
     docs_flag = _format_bool(stats.get("has_docs"))
     ci_flag = _format_bool(stats.get("has_ci_workflows"))
     tests_flag = _format_bool(stats.get("has_tests"))
+    lint_flag = _format_bool(stats.get("has_lint_config"))
     lines.append(f"  - has_readme: {readme_flag}")
     lines.append(f"  - has_docs: {docs_flag}")
     lines.append(f"  - has_ci_workflows: {ci_flag}")
     lines.append(f"  - has_tests: {tests_flag}")
+    lines.append(f"  - has_lint_config: {lint_flag}")
     if isinstance(dependency, dict):
         dep_status = dependency.get("status", "unknown")
     elif dependency is None:
