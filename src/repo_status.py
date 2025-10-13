@@ -2,7 +2,16 @@
 
 from __future__ import annotations
 
-from flywheel import status_helper as _status_helper
+import sys
+from pathlib import Path
+
+try:
+    from flywheel import status_helper as _status_helper
+except ImportError:  # pragma: no cover - fallback for script execution
+    _PROJECT_ROOT = Path(__file__).resolve().parent.parent
+    if str(_PROJECT_ROOT) not in sys.path:
+        sys.path.insert(0, str(_PROJECT_ROOT))
+    from flywheel import status_helper as _status_helper
 
 build_parser = _status_helper.build_parser
 fetch_repo_status = _status_helper.fetch_repo_status
