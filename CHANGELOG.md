@@ -1,3 +1,7 @@
+## 2025-10-16
+- feat: add empty `dependencies` arrays to `flywheel spin --dry-run`
+  suggestions so the output matches the prompt schema.
+
 ## 2025-10-15
 - feat: attach validation commands to `flywheel spin --dry-run` suggestions so
   operators can run follow-up checks after applying fixes.

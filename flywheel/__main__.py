@@ -884,6 +884,7 @@ def _analyze_repository(
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": ["docs/"],
+                "dependencies": [],
                 "validation": ["test -d docs"],
             }
         )
@@ -900,6 +901,7 @@ def _analyze_repository(
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": ["README.md"],
+                "dependencies": [],
                 "validation": ["test -f README.md"],
             }
         )
@@ -917,6 +919,7 @@ def _analyze_repository(
                 "impact": "high",
                 "confidence": IMPACT_CONFIDENCE["high"],
                 "files": [".github/workflows/"],
+                "dependencies": [],
                 "validation": ["test -d .github/workflows"],
             }
         )
@@ -934,6 +937,7 @@ def _analyze_repository(
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": [".pre-commit-config.yaml"],
+                "dependencies": [],
                 "validation": list(LINT_VALIDATION_COMMANDS),
             }
         )
@@ -950,6 +954,7 @@ def _analyze_repository(
                 "impact": "high",
                 "confidence": IMPACT_CONFIDENCE["high"],
                 "files": ["tests/"],
+                "dependencies": [],
                 "validation": [
                     "npm run test:ci || npm test || pytest -q",
                 ],
@@ -978,6 +983,7 @@ def _analyze_repository(
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": dependency_health["missing_lockfiles"],
+                "dependencies": [],
                 "validation": validations,
             }
         )

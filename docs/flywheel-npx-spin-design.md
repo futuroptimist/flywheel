@@ -19,6 +19,8 @@
 - **2025-10-15:** Attached validation commands to the dry-run suggestions so the
   CLI calls out shell checks or test suites operators can run after applying a
   change.
+- **2025-10-16:** Added `dependencies` arrays to dry-run suggestions so the
+  heuristics align with the prompt schema when future patches require ordering.
 
 ## Architecture Overview
 ```mermaid

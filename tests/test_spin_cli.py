@@ -106,6 +106,7 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
         categories[entry["id"]] = entry["category"]
         assert 0.0 <= entry["confidence"] <= 1.0
         validations[entry["id"]] = entry["validation"]
+        assert entry["dependencies"] == []
     assert categories == {
         "add-docs": "docs",
         "add-readme": "docs",
@@ -176,6 +177,7 @@ def test_spin_analyzers_subset(tmp_path: Path) -> None:
     assert suggestion_ids == {"add-docs", "commit-lockfiles"}
     for entry in result["suggestions"]:
         assert entry["validation"], entry["id"]
+        assert entry["dependencies"] == []
 
 
 def test_spin_analyzers_disable_with_minus(tmp_path: Path) -> None:
@@ -202,6 +204,7 @@ def test_spin_analyzers_disable_with_minus(tmp_path: Path) -> None:
     }.issubset(suggestion_ids)
     for entry in result["suggestions"]:
         assert entry["validation"], entry["id"]
+        assert entry["dependencies"] == []
 
 
 def test_spin_invalid_analyzer_errors(tmp_path: Path) -> None:
@@ -273,6 +276,7 @@ def test_spin_reports_missing_lockfile(tmp_path: Path) -> None:
         raise AssertionError("commit-lockfiles suggestion missing")
     assert "package.json" in lock_suggestion["files"]
     assert 0.0 <= lock_suggestion["confidence"] <= 1.0
+    assert lock_suggestion["dependencies"] == []
     lock_commands = [
         command
         for command in lock_suggestion["validation"]
@@ -298,6 +302,7 @@ def test_spin_lockfile_validation_handles_pipfile(tmp_path: Path) -> None:
         command for command in lock["validation"] if "Pipfile.lock" in command
     ]
     assert pip_commands
+    assert lock["dependencies"] == []
 
 
 def test_suggestions_sorted_by_category_and_impact(tmp_path: Path) -> None:
