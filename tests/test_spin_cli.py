@@ -440,6 +440,21 @@ def test_analyze_repository_emits_lockfile_suggestion(tmp_path: Path) -> None:
     assert 0.0 <= lockfile_suggestion["confidence"] <= 1.0
 
 
+def test_lockfile_validation_commands_cover_known_manifests() -> None:
+    missing = [
+        "package.json",
+        "app/package.json",
+        "api/Pipfile",
+    ]
+
+    commands = main_module._lockfile_validation_commands(missing)
+
+    assert "package-lock.json" in commands[0]
+    assert "app/package-lock.json" in commands[1]
+    assert "app/pnpm-lock.yaml" in commands[1]
+    assert commands[2] == "test -f api/Pipfile.lock"
+
+
 def test_spin_requires_existing_directory(tmp_path: Path) -> None:
     missing = tmp_path / "does-not-exist"
     args = argparse.Namespace(path=str(missing), dry_run=True)
