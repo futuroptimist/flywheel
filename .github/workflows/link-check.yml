@@ -40,7 +40,6 @@ jobs:
             --max-retries 2
             --retry-wait-time 2
             --exclude-all-private
-            --exclude-mail
             --exclude-loopback
             --accept 200,206,429
             --timeout 20
