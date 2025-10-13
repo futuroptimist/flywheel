@@ -119,9 +119,8 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     assert validations["add-tests"] == [
         "npm run test:ci || npm test || pytest -q",
     ]
-    assert validations["add-linting"] == list(
-        LINT_VALIDATION_COMMANDS
-    )
+    lint_validation_commands = list(LINT_VALIDATION_COMMANDS)
+    assert validations["add-linting"] == lint_validation_commands
 
 
 def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
@@ -988,9 +987,8 @@ def test_spin_dry_run_outputs_json_inline(
     }
     for commands in snapshot_validations.values():
         assert commands
-    assert snapshot_validations["add-linting"] == list(
-        LINT_VALIDATION_COMMANDS
-    )
+    lint_validation_commands = list(LINT_VALIDATION_COMMANDS)
+    assert snapshot_validations["add-linting"] == lint_validation_commands
 
 
 def test_spin_reports_lockfile_category(
