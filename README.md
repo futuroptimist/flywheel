@@ -175,6 +175,8 @@ python -m flywheel spin . --dry-run --format json
 
 The JSON payload includes validation commands for each suggestion—typically
 shell checks or test invocations—so you can confirm the fix after applying it.
+Each suggestion also carries a `dependencies` array (empty for the built-in
+heuristics) so future automation can express ordering between related fixes.
 Use `--format table` or `--format markdown` for console-friendly reports.
 
 ### Configuring telemetry
