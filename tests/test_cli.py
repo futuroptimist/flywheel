@@ -174,6 +174,13 @@ def test_cli_help():
     )
     assert "init" in result.stdout
     assert "crawl" in result.stdout
+    assert "Examples:" in result.stdout
+    examples = [
+        "flywheel init ./project --language python --save-dev --yes",
+        "flywheel spin --dry-run path/to/repo --format table",
+    ]
+    for example in examples:
+        assert example in result.stdout
 
 
 def test_runbook_cli():

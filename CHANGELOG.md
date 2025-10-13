@@ -1,3 +1,6 @@
+## 2025-10-16
+- feat: add CLI `--help` examples to align with the release checklist.
+
 ## 2025-10-15
 - feat: attach validation commands to `flywheel spin --dry-run` suggestions so
   operators can run follow-up checks after applying fixes.

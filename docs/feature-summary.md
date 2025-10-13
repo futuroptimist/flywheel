@@ -129,7 +129,7 @@ feature adoption across repositories.
 
 **Repo-specific extras**
 - [ ] Publish to **PyPI**; recommend `pipx install f2clipboard`
-- [ ] CLI `--help` includes 2 concrete examples
+- [x] CLI `--help` includes 2 concrete examples _(flywheel)_
 - [ ] Shell completions (bash/zsh/fish)
 
 </details>
