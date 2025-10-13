@@ -1,3 +1,7 @@
+## 2025-10-15
+- feat: attach validation commands to `flywheel spin --dry-run` suggestions so
+  operators can run follow-up checks after applying fixes.
+
 ## 2025-10-14
 - feat: add analyzer toggles to `flywheel spin --dry-run` so operators can scope
   heuristic checks.

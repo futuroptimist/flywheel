@@ -164,6 +164,19 @@ README content containing `{` or `}` characters is handled safely. The command
 also prints a repo snapshot that lists non-hidden files at the repository root
 so prompt runners immediately see the project's structure.
 
+### Previewing suggested improvements
+
+Run the dry-run analyzer to surface heuristic suggestions without applying any
+changes:
+
+```bash
+python -m flywheel spin . --dry-run --format json
+```
+
+The JSON payload includes validation commands for each suggestion—typically
+shell checks or test invocations—so you can confirm the fix after applying it.
+Use `--format table` or `--format markdown` for console-friendly reports.
+
 ### Configuring telemetry
 
 Manage the CLI's analytics opt-in without editing config files manually:

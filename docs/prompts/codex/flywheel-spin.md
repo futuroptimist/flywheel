@@ -66,6 +66,8 @@ GUARDRAILS:
    The CLI now exposes these via the `language_mix` and `dependency_health` stats
    blocks returned from `flywheel spin --dry-run`.
 2. Present 3-7 suggestions, grouped by category, sorted by impact descending.
+   Each dry-run suggestion now includes `validation` commands with concrete
+   shell checks or test runs so operators can confirm the change.
 3. Await explicit confirmation before applying patches; re-run retrieval for each accepted
    suggestion to ensure freshness.
 4. After applying, revalidate tests specified in `validation` and surface results.

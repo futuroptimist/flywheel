@@ -648,6 +648,32 @@ def _analyze_dependency_health(
     }
 
 
+def _lockfile_validation_commands(missing: Sequence[str]) -> list[str]:
+    """Return shell commands that confirm expected lockfiles exist."""
+
+    commands: list[str] = []
+    for manifest in missing:
+        manifest_path = Path(manifest)
+        parent = manifest_path.parent
+        prefix = parent.as_posix()
+        if prefix in {"", "."}:
+            prefix = ""
+        else:
+            prefix = f"{prefix}/"
+        name = manifest_path.name.lower()
+        if name == "package.json":
+            checks: list[str] = []
+            for candidate in NODE_LOCKFILES:
+                candidate_path = f"{prefix}{candidate}"
+                checks.append(f"test -f {candidate_path}")
+            if checks:
+                commands.append(" || ".join(checks))
+        elif name == "pipfile":
+            lock_path = f"{prefix}{PIPFILE_LOCK}"
+            commands.append(f"test -f {lock_path}")
+    return commands
+
+
 def _parse_analyzers(value: str | None) -> set[str]:
     """Return enabled analyzers parsed from ``value``.
 
@@ -743,6 +769,7 @@ def _analyze_repository(
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": ["docs/"],
+                "validation": ["test -d docs"],
             }
         )
     if include_readme and not has_readme:
@@ -758,6 +785,7 @@ def _analyze_repository(
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": ["README.md"],
+                "validation": ["test -f README.md"],
             }
         )
     if include_ci and not has_ci:
@@ -774,6 +802,7 @@ def _analyze_repository(
                 "impact": "high",
                 "confidence": IMPACT_CONFIDENCE["high"],
                 "files": [".github/workflows/"],
+                "validation": ["test -d .github/workflows"],
             }
         )
     if include_tests and not has_tests:
@@ -789,6 +818,9 @@ def _analyze_repository(
                 "impact": "high",
                 "confidence": IMPACT_CONFIDENCE["high"],
                 "files": ["tests/"],
+                "validation": [
+                    "npm run test:ci || npm test || pytest -q",
+                ],
             }
         )
     if (
@@ -796,6 +828,11 @@ def _analyze_repository(
         and dependency_health
         and dependency_health["missing_lockfiles"]
     ):
+        validations = _lockfile_validation_commands(
+            dependency_health["missing_lockfiles"]
+        )
+        if not validations:
+            validations = ["git status --short"]
         suggestions.append(
             {
                 "id": "commit-lockfiles",
@@ -809,6 +846,7 @@ def _analyze_repository(
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": dependency_health["missing_lockfiles"],
+                "validation": validations,
             }
         )
     suggestions = _sort_suggestions(suggestions)
