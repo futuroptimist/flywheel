@@ -730,19 +730,39 @@ def test_setup_cfg_configures_lint_handles_read_error(
 
 def test_package_json_configures_lint_detects_tokens(tmp_path: Path) -> None:
     package_json = tmp_path / "package.json"
-    package_json.write_text(json.dumps({"scripts": {"check": "prettier --check src"}}))
+    package_json.write_text(
+        json.dumps(
+            {
+                "scripts": {
+                    "check": "prettier --check src",
+                }
+            }
+        )
+    )
 
     assert _package_json_configures_lint(package_json) is True
 
 
-def test_package_json_configures_lint_skips_non_string_entries(tmp_path: Path) -> None:
+def test_package_json_configures_lint_skips_non_string_entries(
+    tmp_path: Path,
+) -> None:
     package_json = tmp_path / "package.json"
-    package_json.write_text(json.dumps({"scripts": {"lint": ["eslint"]}}))
+    package_json.write_text(
+        json.dumps(
+            {
+                "scripts": {
+                    "lint": ["eslint"],
+                }
+            }
+        )
+    )
 
     assert _package_json_configures_lint(package_json) is False
 
 
-def test_package_json_configures_lint_handles_invalid_json(tmp_path: Path) -> None:
+def test_package_json_configures_lint_handles_invalid_json(
+    tmp_path: Path,
+) -> None:
     package_json = tmp_path / "package.json"
     package_json.write_text("{invalid")
 
@@ -753,7 +773,15 @@ def test_package_json_configures_lint_handles_read_error(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     package_json = tmp_path / "package.json"
-    package_json.write_text(json.dumps({"scripts": {"lint": "eslint src"}}))
+    package_json.write_text(
+        json.dumps(
+            {
+                "scripts": {
+                    "lint": "eslint src",
+                }
+            }
+        )
+    )
 
     def boom(_: Path) -> str:
         raise OSError("unreadable")
