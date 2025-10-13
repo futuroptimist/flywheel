@@ -886,8 +886,18 @@ def test_spin_markdown_format(
 
     output = capsys.readouterr().out
     assert "# flywheel spin dry-run" in output
-    assert "| Category |" in output
+    assert "| Confidence |" in output
     assert "add-docs" in output
+
+
+@pytest.mark.parametrize("value", [None, "unknown", object()])
+def test_format_confidence_handles_non_numeric(value: object) -> None:
+    assert main_module._format_confidence(value) == "-"
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), float("-inf")])
+def test_format_confidence_handles_non_finite(value: float) -> None:
+    assert main_module._format_confidence(value) == "-"
 
 
 def test_spin_markdown_without_suggestions() -> None:
@@ -955,7 +965,9 @@ def test_spin_cli_accepts_table_format(tmp_path: Path) -> None:
     )
 
     assert "Index" in output
+    assert "Confidence" in output
     assert "add-docs" in output
+    assert "0.80" in output or "0.8" in output
 
 
 def test_spin_cli_accepts_markdown_format(tmp_path: Path) -> None:
@@ -969,7 +981,7 @@ def test_spin_cli_accepts_markdown_format(tmp_path: Path) -> None:
     )
 
     assert "# flywheel spin dry-run" in output
-    assert "| Category |" in output
+    assert "| Confidence |" in output
 
 
 def test_spin_rejects_unknown_format(tmp_path: Path) -> None:
