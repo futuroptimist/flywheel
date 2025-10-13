@@ -31,7 +31,7 @@ jobs:
             lychee-${{ runner.os }}-
 
       - name: Run Lychee
-        uses: lycheeverse/lychee-action@0a7f1b86f0b9f6e8f5e6d1612f72fca1f0f1f2a3  # pinned
+        uses: lycheeverse/lychee-action@885c65f3dc543b57c898c8099f4e08c8afd178a2  # v2.6.1
         with:
           args: >-
             --no-progress
