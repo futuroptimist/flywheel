@@ -6,17 +6,17 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `f7da39b` | n/a | 1 | 7 | 2025-10-13 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `40b315d` | n/a | 0 | 1 | 2025-10-13 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `bcbc27f` | ✅ | 1 | 6 | 2025-10-13 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `1d5d2b7` | n/a | 0 | 1 | 2025-10-13 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `c1e3715` | ❌ | 3 | 37 | 2025-10-13 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `985d9a3` | ✅ | 6 | 12 | 2025-10-13 |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `ed879f3` | ✅ | 0 | 1 | 2025-10-13 |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `ed879f3` | ✅ | 0 | 5 | 2025-10-13 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `00660b8` | ✅ | 1 | 0 | 2025-10-13 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `7da576d` | ✅ | 0 | 3 | 2025-10-13 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `dd5b97f` | ✅ | 0 | 0 | 2025-10-13 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `f379e09` | ✅ | 0 | 0 | 2025-10-13 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `4a67dbe` | ✅ | 0 | 1 | 2025-10-13 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `066d295` | ✅ | 0 | 3 | 2025-10-13 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `979aa4f` | ✅ | 0 | 2 | 2025-10-13 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `6b2f8be` | ❌ | 0 | 0 | 2025-10-13 |
 | [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `5a0fb07` | ✅ | 0 | 10 | 2025-10-13 |
 | [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `8b20eea` | n/a | 0 | 2 | 2025-10-13 |
