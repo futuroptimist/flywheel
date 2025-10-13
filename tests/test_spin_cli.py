@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-import flywheel.__main__ as main_module
+from flywheel import __main__ as main_module
 from flywheel.__main__ import (
     LINT_VALIDATION_COMMANDS,
     SPIN_ANALYZERS,
