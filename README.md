@@ -262,6 +262,11 @@ human-friendly summary. The table view keeps stats at the top and lists
 suggestions with their categories, impact, confidence, and affected files,
 while the Markdown variant is ready to paste into issues or chat threads.
 
+Persist or override telemetry preferences on the fly with
+`--telemetry on|off|full`. The flag updates `~/.config/flywheel/config.json`
+before the analysis runs, matching the `flywheel config telemetry` command and
+skipping the interactive prompt for non-interactive environments.
+
 Fine-tune the heuristics with `--analyzers`. Pass a comma-separated list such as
 `--analyzers docs,dependencies` to focus on specific checks, use
 `--analyzers all,-tests` to start from the defaults and disable a module, or
