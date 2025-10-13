@@ -27,7 +27,7 @@ feature adoption across repositories.
 | [gitshelves](https://github.com/futuroptimist/gitshelves) | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 | [sugarkube](https://github.com/futuroptimist/sugarkube) | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 | [sigma](https://github.com/futuroptimist/sigma) | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| [DSPACE](https://github.com/futuroptimist/DSPACE) | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| [DSPACE](https://github.com/democratizedspace/dspace) | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 | Other | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] |
 
 <details>
@@ -341,7 +341,7 @@ feature adoption across repositories.
 </details>
 
 <details>
-<summary><a href="https://github.com/futuroptimist/DSPACE">DSPACE</a></summary>
+<summary><a href="https://github.com/democratizedspace/dspace">DSPACE</a></summary>
 
 1) **Releases & Packaging**
 - [ ] Tag **v0.1.0** and push tag

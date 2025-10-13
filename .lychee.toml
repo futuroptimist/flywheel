@@ -1,0 +1,36 @@
+# .lychee.toml
+cache = true
+max_concurrency = 6
+max_redirects = 5
+max_retries = 2
+retry_wait_time = 2
+timeout = 20
+scheme = ["https"]
+
+# HTTP statuses that won’t break CI
+accept = [200, 206, 429]
+
+# Common transient or non-deterministic URLs to skip
+exclude = [
+  "mailto:*",
+  "http://localhost:*",
+  "http://127.0.0.1:*",
+  "https://localhost:*",
+  "https://127.0.0.1:*",
+  "https://twitter.com/*",
+  "https://x.com/*",
+  "https://linkedin.com/*",
+  "https://www.linkedin.com/*",
+  "https://youtube.com/*",
+  "https://www.youtube.com/*",
+  "https://medium.com/*",
+  "https://docs.github.com/*"
+]
+
+exclude_path = [
+  ".lycheeignore",
+  "docs/prompt-docs-summary.md",
+  "docs/prompt-docs-todos.md",
+  "docs/prompts/codex/summary.md"
+]
+output = "lychee-report.txt"
