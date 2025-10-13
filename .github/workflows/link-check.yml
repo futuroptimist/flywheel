@@ -35,7 +35,6 @@ jobs:
         with:
           args: >-
             --no-progress
-            --base ./
             --max-concurrency 6
             --max-retries 2
             --retry-wait-time 2

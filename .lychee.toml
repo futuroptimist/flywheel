@@ -27,5 +27,10 @@ exclude = [
   "https://docs.github.com/*"
 ]
 
-exclude_path = [".lycheeignore"]
+exclude_path = [
+  ".lycheeignore",
+  "docs/prompt-docs-summary.md",
+  "docs/prompt-docs-todos.md",
+  "docs/prompts/codex/summary.md"
+]
 output = "lychee-report.txt"
