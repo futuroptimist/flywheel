@@ -56,6 +56,10 @@ python -m flywheel.fit
 bash scripts/checks.sh
 ```
 
+Python tests must maintain 100% coverage (`--cov-fail-under=100`), and Jest enforces minimum
+JavaScript coverage of 80% lines/statements, 60% branches, and 50% functions when run via
+`npm run test:ci`.
+
 If browser dependencies are missing, run `npm run playwright:install`
 or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 
