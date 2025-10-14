@@ -146,6 +146,12 @@ If Playwright browser binaries are missing, install them with
 `npx playwright install chromium` or skip end-to-end tests by running
 `SKIP_E2E=1 bash scripts/checks.sh`.
 
+## Polish checklist
+
+The current automation polish checklist lives in
+[`docs/prompts/codex/polish.md`](docs/prompts/codex/polish.md). Update that doc when
+you adjust hygiene tasks so humans, agents, and automation stay in sync.
+
 ### Embedding in an existing project
 
 Install the CLI and inject dev tooling. Without `--yes`, the command prompts for language and whether to add dev tools:
