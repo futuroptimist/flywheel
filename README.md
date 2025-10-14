@@ -21,6 +21,27 @@ Other repos should copy this file to `docs/prompts/codex/automation.md`.
 3. Commit and push to start the flywheel.
 4. Review the [Codex automation prompt](docs/prompts/codex/automation.md) for baseline tasks.
 
+## Map of the repo
+
+> Update this section when adding or moving top-level folders so newcomers can reorient quickly.
+
+| Path | What lives here |
+| --- | --- |
+| `flywheel/` | Python package powering the CLI, agents, and automation helpers. |
+| `webapp/` | Next.js interface for visualizing and operating Flywheel projects. |
+| `docs/` | Reference guides, integration notes, and Codex prompt catalog. |
+| `docs-site/` | Astro-powered documentation site. |
+| `scripts/` | Shell and Node helpers, including `checks.sh` and docs linters. |
+| `tests/` | Unit and integration tests for Python and JavaScript modules. |
+| `examples/` | Minimal examples for using the CLI programmatically. |
+| `templates/` | Starter files copied into newly bootstrapped repos. |
+| `viewer/` | 3D assembly viewer assets built with Three.js. |
+| `cad/` | OpenSCAD source files for printable parts. |
+| `stl/` | Generated models kept in sync with `cad/`. |
+| `docker/`, `k8s/` | Containerization and deployment manifests. |
+| `dict/` | Custom dictionaries for spell checking and linting. |
+| `parts/` | BOM data and manufacturing specs. |
+
 ## Testing
 
 Ensure you have Node.js 20+ installed.
