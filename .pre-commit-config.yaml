@@ -29,7 +29,7 @@ repos:
     rev: v4.0.0-alpha.7
     hooks:
       - id: prettier
-        files: '\\.(cjs|mjs|js|jsx|ts|tsx|json|ya?ml|css|scss|less|html)$'
+        files: '\.(cjs|mjs|js|jsx|ts|tsx|json|ya?ml|css|scss|less|html)$'
         additional_dependencies:
           - prettier@3.2.5
   - repo: local
