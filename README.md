@@ -63,6 +63,15 @@ JavaScript coverage of 80% lines/statements, 60% branches, and 50% functions whe
 If browser dependencies are missing, run `npm run playwright:install`
 or skip end-to-end tests by prefixing commands with `SKIP_E2E=1`.
 
+### Pre-commit hooks
+
+The repo ships a `.pre-commit-config.yaml` that standardizes formatting and linting across
+languages. Install the hooks once with `pre-commit install`.
+
+They format Python files with Black and isort, lint them with Flake8, and run Prettier on
+JavaScript, TypeScript, and JSON/YAML assets before every commit. Trigger all hooks manually with
+`pre-commit run --all-files` to keep automated checks quiet.
+
 The link-checking step runs `linkchecker --no-warnings README.md docs/` to
 surface broken links without flooding CI logs with informational warnings.
 
