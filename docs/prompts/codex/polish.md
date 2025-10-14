@@ -57,7 +57,7 @@ TEMPLATE_CHECKLISTS:
 ### Automation & quality gates
 - [ ] Enable pre-commit with formatting, linting, and security hooks.
 - [ ] Define `CODEOWNERS` and ensure default reviewers cover critical paths.
-- [ ] Enforce coverage gates in CI (per language) and publish the thresholds in the README.
+- [x] Enforce coverage gates in CI (per language) and publish the thresholds in the README.
 - [ ] Wire link checking and spell checking for Markdown (e.g., `linkchecker`,
       `typos`, or Vale) so docs stay clean.
 
