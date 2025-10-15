@@ -5,12 +5,7 @@ import pytest
 
 # fmt: off
 # isort: off
-from flywheel.__main__ import (
-    PROMPT_DOCS,
-    ROOT,
-    sync_prompt_docs,
-    sync_prompts_cli,
-)
+import flywheel.__main__ as cli
 # isort: on
 # fmt: on
 
