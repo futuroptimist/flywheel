@@ -161,6 +161,17 @@ def test_merge_repo_specs_skips_blank_entries():
     assert merged == ["foo/bar@beta"]
 
 
+def test_merge_repo_specs_allows_resetting_branch_override():
+    merged = fm._merge_repo_specs(
+        [
+            "foo/bar@feature",
+            "foo/bar",
+        ]
+    )
+
+    assert merged == ["foo/bar"]
+
+
 def test_main_crawl_no_repos(tmp_path):
     repo_file = tmp_path / "repos.txt"
     repo_file.write_text("")

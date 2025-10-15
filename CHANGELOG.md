@@ -1,3 +1,7 @@
+## 2025-10-17
+- fix: let `flywheel crawl` reset branch overrides when the latest spec omits
+  an `@branch` suffix so the default branch is crawled as documented.
+
 ## 2025-10-16
 - feat: add empty `dependencies` arrays to `flywheel spin --dry-run`
   suggestions so the output matches the prompt schema.
