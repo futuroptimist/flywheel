@@ -1,5 +1,8 @@
 # Changelog
 
+## [2025-10-17] - Cache spin dry-run output
+- add `--cache-dir` option to store JSON payloads for reuse between runs
+
 ## [2025-09-26] - Speed up JavaScript tests
 - install minimal webapp dependencies for Playwright to avoid rebuilding assimp_py in CI
 

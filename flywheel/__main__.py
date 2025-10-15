@@ -1,4 +1,5 @@
 import argparse
+import hashlib
 import json
 import math
 import os
@@ -1204,6 +1205,48 @@ def _render_spin_markdown(result: dict[str, object]) -> str:
     return "\n".join(summary)
 
 
+def _spin_cache_filename(target: Path) -> str:
+    """Return a stable cache filename for ``target``."""
+
+    resolved = target.resolve()
+    digest_source = str(resolved).encode("utf-8")
+    digest = hashlib.sha256(digest_source).hexdigest()[:10]
+    stem = resolved.name
+    if not stem:
+        anchor = resolved.anchor.rstrip("/\\")
+        stem = anchor or "target"
+    allowed = "-_."
+    sanitized_parts: list[str] = []
+    for ch in stem:
+        sanitized_parts.append(ch if ch.isalnum() or ch in allowed else "_")
+    sanitized = "".join(sanitized_parts)
+    safe_stem = sanitized or "target"
+    return f"{safe_stem}-{digest}.json"
+
+
+def _write_spin_cache(
+    cache_dir: Path,
+    target: Path,
+    result: dict[str, object],
+) -> Path:
+    """Persist ``result`` to ``cache_dir`` and return the written path."""
+
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    cache_path = cache_dir / _spin_cache_filename(target)
+    payload = json.dumps(result, indent=2, sort_keys=True)
+    if not payload.endswith("\n"):
+        payload += "\n"
+    try:
+        existing = cache_path.read_text()
+    except FileNotFoundError:
+        existing = None
+    except OSError:
+        existing = None
+    if existing != payload:
+        cache_path.write_text(payload)
+    return cache_path
+
+
 def spin(args: argparse.Namespace) -> None:
     target = Path(args.path or ".").resolve()
     if not target.exists():
@@ -1221,6 +1264,12 @@ def spin(args: argparse.Namespace) -> None:
         "stats": stats,
         "suggestions": suggestions,
     }
+    cache_dir = getattr(args, "cache_dir", None)
+    if cache_dir:
+        try:
+            _write_spin_cache(Path(cache_dir), target, result)
+        except OSError as exc:  # pragma: no cover - filesystem errors are rare
+            raise SystemExit(f"Failed to write cache: {exc}") from exc
     fmt = getattr(args, "format", "json") or "json"
     if fmt == "json":
         output = json.dumps(result, indent=2, sort_keys=True)
@@ -1389,6 +1438,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--telemetry",
         choices=["off", "on", "full"],
         help="override telemetry preference before running",
+    )
+    p_spin.add_argument(
+        "--cache-dir",
+        type=Path,
+        help="directory for storing dry-run cache results",
     )
     p_spin.add_argument("--analyzers", help=SPIN_ANALYZER_HELP)
     p_spin.set_defaults(func=spin)

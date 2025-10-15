@@ -309,6 +309,12 @@ Persist or override telemetry preferences on the fly with
 before the analysis runs, matching the `flywheel config telemetry` command and
 skipping the interactive prompt for non-interactive environments.
 
+Cache dry-run results by pointing `--cache-dir` at a writable folder. The CLI
+stores the JSON payload in `<cache-dir>/<repo>-<hash>.json`, using the resolved
+repository path to generate a stable filename. Existing cache files are only
+rewritten when the dry-run output changes so repeated runs avoid touching
+timestamps.
+
 Fine-tune the heuristics with `--analyzers`. Pass a comma-separated list such as
 `--analyzers docs,dependencies` to focus on specific checks, use
 `--analyzers all,-tests` to start from the defaults and disable a module, or

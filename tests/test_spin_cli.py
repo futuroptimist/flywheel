@@ -558,6 +558,19 @@ def test_spin_requires_dry_run_flag(tmp_path: Path) -> None:
     assert "Only --dry-run mode is supported" in str(exc.value)
 
 
+def test_spin_writes_cache_file(tmp_path: Path) -> None:
+    repo = tmp_path / "cacheable"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+
+    result = run_spin_dry_run(repo, "--cache-dir", str(cache_dir))
+
+    files = list(cache_dir.glob("*.json"))
+    assert len(files) == 1
+    cached = json.loads(files[0].read_text())
+    assert cached == result
+
+
 def test_spin_telemetry_override_updates_config(tmp_path: Path) -> None:
     repo = tmp_path / "telemetry"
     repo.mkdir()

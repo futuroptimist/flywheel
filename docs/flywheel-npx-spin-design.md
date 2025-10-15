@@ -1,4 +1,7 @@
 ## Implementation Progress
+- **2025-10-17:** Added a `--cache-dir` flag to the Python `flywheel spin --dry-run`
+  CLI that writes the JSON payload to a hashed filename inside the selected
+  directory so repeated runs can reuse cached analysis artifacts.
 - **2025-10-16:** Added a `--telemetry on|off|full` override to the Python
   `flywheel spin --dry-run` CLI so automation scripts can persist telemetry
   preferences without hitting the interactive prompt, aligning the current
