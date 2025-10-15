@@ -660,11 +660,13 @@ def test_spin_invokes_cache_writer(
 
     fake_stats = {"ok": True}
     fake_suggestions = [{"id": "demo"}]
-    monkeypatch.setattr(
-        main_module,
-        "_analyze_repository",
-        lambda *args, **kwargs: (fake_stats, fake_suggestions),
-    )
+
+    def fake_analyze(
+        *_args: object, **_kwargs: object
+    ) -> tuple[dict[str, bool], list[dict[str, str]]]:
+        return fake_stats, fake_suggestions
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fake_analyze)
 
     writes: list[tuple[Path, Path, dict[str, object]]] = []
 
