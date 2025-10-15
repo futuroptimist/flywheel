@@ -1,4 +1,6 @@
 ## 2025-10-16
+- feat: filter the prompt repo snapshot to non-hidden files so the output
+  matches README guidance.
 - feat: add empty `dependencies` arrays to `flywheel spin --dry-run`
   suggestions so the output matches the prompt schema.
 

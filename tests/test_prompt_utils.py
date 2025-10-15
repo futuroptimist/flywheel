@@ -77,21 +77,30 @@ def test_summarize_repo_root_formats_entries(monkeypatch, tmp_path):
     file_target.write_text("info")
     (repo / "notes-link").symlink_to(file_target)
 
-    original_is_dir = Path.is_dir
+    original_is_file = Path.is_file
 
-    def flaky_is_dir(self: Path) -> bool:
+    def flaky_is_file(self: Path) -> bool:
         if self == target:
             raise OSError("stat failure")
-        return original_is_dir(self)
+        return original_is_file(self)
 
-    monkeypatch.setattr(Path, "is_dir", flaky_is_dir)
+    monkeypatch.setattr(Path, "is_file", flaky_is_file)
 
     snapshot = fm.summarize_repo_root(repo)
-    assert "docs/" in snapshot
+    assert "docs/" not in snapshot
     assert "README.md" in snapshot
     assert "notes-link@" in snapshot
     assert "mystery" in snapshot
     assert ".hidden" not in snapshot
+
+
+def test_summarize_repo_root_directories_only(tmp_path):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    (repo / "docs").mkdir()
+    (repo / "src").mkdir()
+
+    assert fm.summarize_repo_root(repo) == "(no non-hidden files found)"
 
 
 def test_summarize_repo_root_limits_entries(tmp_path):
