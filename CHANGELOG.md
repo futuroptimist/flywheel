@@ -1,3 +1,7 @@
+## 2025-10-17
+- fix: let `flywheel crawl` reset branch overrides when the latest spec omits
+  an `@branch` suffix so the default branch is crawled as documented.
+
 ## 2025-10-16
 - feat: filter the prompt repo snapshot to non-hidden files so the output
   matches README guidance.

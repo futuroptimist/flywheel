@@ -345,7 +345,7 @@ def _merge_repo_specs(specs: Sequence[str]) -> list[str]:
         if branch:
             branches[name] = branch
         else:
-            branches.setdefault(name, None)
+            branches[name] = None
 
     merged: list[str] = []
     for name in order:
