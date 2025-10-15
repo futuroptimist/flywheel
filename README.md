@@ -14,6 +14,14 @@ The canonical Codex automation prompt lives in [`automation.md`](docs/prompts/co
 Agents should review it before contributing automation to new repositories.
 Other repos should copy this file to `docs/prompts/codex/automation.md`.
 
+### Polish checklist
+
+The evergreen polish prompt and task checklist live in
+[`docs/prompts/codex/polish.md`](docs/prompts/codex/polish.md). Review it before
+running cleanup passes, and update the checklist whenever you reorganize
+directories or add new automation so the guidance stays accurate for the next
+contributor.
+
 ## Usage
 
 1. **Use as a template** on GitHub.
