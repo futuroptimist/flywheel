@@ -671,7 +671,9 @@ def test_spin_invokes_cache_writer(
     writes: list[tuple[Path, Path, dict[str, object]]] = []
 
     def fake_write(
-        cache_path: Path, target: Path, payload: dict[str, object]
+        cache_path: Path,
+        target: Path,
+        payload: dict[str, object],
     ) -> Path:
         writes.append((cache_path, target, payload))
         expected = cache_path / "result.json"
