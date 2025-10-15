@@ -380,14 +380,15 @@ def summarize_repo_root(repo: Path, limit: int = 10) -> str:
         if name.startswith("."):
             continue
         try:
+            if child.is_file():
+                if child.is_symlink():
+                    entries.append(f"{name}@")
+                else:
+                    entries.append(name)
+                continue
             if child.is_dir():
-                entries.append(f"{name}/")
-            elif child.is_symlink():
-                entries.append(f"{name}@")
-            elif child.is_file():
-                entries.append(name)
-            else:
-                entries.append(name)
+                continue
+            entries.append(name)
         except OSError:
             entries.append(name)
 

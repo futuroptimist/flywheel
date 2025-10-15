@@ -41,8 +41,7 @@ def test_sync_prompt_docs_missing_source(tmp_path: Path) -> None:
 def test_sync_prompts_cli_reports_updates(
     tmp_path: Path, capsys: pytest.CaptureFixture
 ) -> None:
-    target = tmp_path / "sugarkube"
-
+    target = tmp_path / "axel"
     args = Namespace(target=str(target), files=None)
     flywheel_main.sync_prompts_cli(args)
 

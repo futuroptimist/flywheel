@@ -202,7 +202,8 @@ flywheel prompt
 
 README content containing `{` or `}` characters is handled safely. The command
 also prints a repo snapshot that lists non-hidden files at the repository root
-so prompt runners immediately see the project's structure.
+(directories are skipped) so prompt runners immediately see the project's
+structure.
 
 ### Previewing suggested improvements
 
