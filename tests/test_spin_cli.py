@@ -25,6 +25,8 @@ from flywheel.__main__ import (
     _pyproject_configures_lint,
     _render_spin_markdown,
     _render_spin_table,
+    _spin_cache_filename,
+    _write_spin_cache,
     _setup_cfg_configures_lint,
     spin,
 )
@@ -569,6 +571,121 @@ def test_spin_writes_cache_file(tmp_path: Path) -> None:
     assert len(files) == 1
     cached = json.loads(files[0].read_text())
     assert cached == result
+
+
+def test_spin_cache_filename_is_stable_and_sanitized(tmp_path: Path) -> None:
+    project = tmp_path / "My Repo !"
+    project.mkdir()
+
+    filename = _spin_cache_filename(project)
+
+    assert filename.endswith(".json")
+    assert " " not in filename
+    assert "!" not in filename
+    assert filename == _spin_cache_filename(project)
+
+
+def test_spin_cache_filename_handles_root_anchor(tmp_path: Path) -> None:
+    # Passing the filesystem root exercises the fallback stem branch.
+    root_target = Path(tmp_path.anchor)
+
+    filename = _spin_cache_filename(root_target)
+
+    assert filename.startswith("target-")
+    assert filename.endswith(".json")
+
+
+def test_write_spin_cache_skips_rewrites_when_unchanged(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    cache_dir = tmp_path / "cache"
+    target = tmp_path / "project"
+    target.mkdir()
+
+    writes: list[str] = []
+    original_write_text = Path.write_text
+
+    def tracking_write(self: Path, text: str, *args, **kwargs):
+        writes.append(text)
+        return original_write_text(self, text, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "write_text", tracking_write, raising=False)
+
+    initial = {"value": 1}
+    cache_path = _write_spin_cache(cache_dir, target, initial)
+    assert cache_path.exists()
+    assert json.loads(cache_path.read_text()) == initial
+
+    _write_spin_cache(cache_dir, target, initial)
+    assert len(writes) == 1
+
+    updated = {"value": 2}
+    _write_spin_cache(cache_dir, target, updated)
+    assert len(writes) == 2
+    assert json.loads(cache_path.read_text()) == updated
+
+
+def test_write_spin_cache_handles_read_errors(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    cache_dir = tmp_path / "cache"
+    target = tmp_path / "project"
+    target.mkdir()
+
+    existing_path = cache_dir / _spin_cache_filename(target)
+    cache_dir.mkdir()
+    existing_path.write_text(json.dumps({"value": 1}) + "\n")
+
+    original_read = Path.read_text
+
+    def flaky_read(self: Path, *args, **kwargs):
+        if self == existing_path:
+            raise OSError("temporary failure")
+        return original_read(self, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", flaky_read, raising=False)
+
+    updated = {"value": 2}
+    cache_path = _write_spin_cache(cache_dir, target, updated)
+    assert cache_path == existing_path
+    assert json.loads(original_read(existing_path)) == updated
+
+
+def test_spin_invokes_cache_writer(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+
+    fake_stats = {"ok": True}
+    fake_suggestions = [{"id": "demo"}]
+    monkeypatch.setattr(
+        main_module,
+        "_analyze_repository",
+        lambda *args, **kwargs: (fake_stats, fake_suggestions),
+    )
+
+    writes: list[tuple[Path, Path, dict[str, object]]] = []
+
+    def fake_write(cache_path: Path, target: Path, payload: dict[str, object]) -> Path:
+        writes.append((cache_path, target, payload))
+        expected = cache_path / "result.json"
+        expected.parent.mkdir(parents=True, exist_ok=True)
+        expected.write_text("{}")
+        return expected
+
+    monkeypatch.setattr(main_module, "_write_spin_cache", fake_write)
+
+    args = argparse.Namespace(
+        path=str(repo), dry_run=True, cache_dir=str(cache_dir), format="json"
+    )
+
+    spin(args)
+
+    assert writes
+    cache_path, target_path, payload = writes[0]
+    assert cache_path == cache_dir
+    assert target_path == repo
+    assert payload["mode"] == "dry-run"
 
 
 def test_spin_telemetry_override_updates_config(tmp_path: Path) -> None:
