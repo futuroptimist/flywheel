@@ -130,6 +130,8 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
         assert 0.0 <= entry["confidence"] <= 1.0
         validations[entry["id"]] = entry["validation"]
         assert entry["dependencies"] == []
+        assert entry["rationale"] == entry["description"]
+        assert entry["diffPreview"] == ""
     assert categories == {
         "add-docs": "docs",
         "add-readme": "docs",
@@ -487,6 +489,10 @@ def test_analyze_repository_emits_lockfile_suggestion(tmp_path: Path) -> None:
     )
     assert lockfile_suggestion["category"] == "chore"
     assert 0.0 <= lockfile_suggestion["confidence"] <= 1.0
+    rationale = lockfile_suggestion["rationale"]
+    description = lockfile_suggestion["description"]
+    assert rationale == description
+    assert lockfile_suggestion["diffPreview"] == ""
 
 
 def test_lockfile_validation_commands_cover_known_manifests() -> None:
