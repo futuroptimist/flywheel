@@ -115,8 +115,10 @@ def test_prompt(tmp_path):
     snapshot_line = next(
         line for line in lines if line.startswith("Top-level entries:")
     )
-    for expected in ("README.md", "docs/", "pyproject.toml", "src/"):
-        assert expected in snapshot_line
+    assert "README.md" in snapshot_line
+    assert "pyproject.toml" in snapshot_line
+    assert "docs/" not in snapshot_line
+    assert "src/" not in snapshot_line
 
 
 def test_prompt_no_readme(tmp_path):
