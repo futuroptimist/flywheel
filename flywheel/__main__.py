@@ -888,16 +888,19 @@ def _analyze_repository(
     }
     suggestions: list[dict[str, object]] = []
     if include_docs and not has_docs:
+        rationale = (
+            "Set up a docs/ directory with project guides and "
+            "contributor onboarding notes so new collaborators ramp "
+            "up quickly."
+        )
         suggestions.append(
             {
                 "id": "add-docs",
                 "category": "docs",
                 "title": "Create docs/ with onboarding guides",
-                "description": (
-                    "Set up a docs/ directory with project guides and "
-                    "contributor onboarding notes so new collaborators ramp "
-                    "up quickly."
-                ),
+                "description": rationale,
+                "rationale": rationale,
+                "diffPreview": "",
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": ["docs/"],
@@ -906,15 +909,18 @@ def _analyze_repository(
             }
         )
     if include_readme and not has_readme:
+        rationale = (
+            "Document the project purpose, setup instructions, and "
+            "test commands so new contributors ramp up quickly."
+        )
         suggestions.append(
             {
                 "id": "add-readme",
                 "category": "docs",
                 "title": "Add README.md",
-                "description": (
-                    "Document the project purpose, setup instructions, and"
-                    " test commands so new contributors ramp up quickly."
-                ),
+                "description": rationale,
+                "rationale": rationale,
+                "diffPreview": "",
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": ["README.md"],
@@ -923,16 +929,18 @@ def _analyze_repository(
             }
         )
     if include_ci and not has_ci:
+        rationale = (
+            "Add GitHub Actions workflows under .github/workflows so "
+            "lint, test, and docs jobs run on every push."
+        )
         suggestions.append(
             {
                 "id": "configure-ci",
                 "category": "chore",
                 "title": "Add CI workflows",
-                "description": (
-                    "Add GitHub Actions workflows "
-                    "under .github/workflows "
-                    "so lint, test, and docs jobs run on every push."
-                ),
+                "description": rationale,
+                "rationale": rationale,
+                "diffPreview": "",
                 "impact": "high",
                 "confidence": IMPACT_CONFIDENCE["high"],
                 "files": [".github/workflows/"],
@@ -941,16 +949,19 @@ def _analyze_repository(
             }
         )
     if include_lint and not has_lint:
+        rationale = (
+            "Set up lint tooling (for example pre-commit, ESLint, or "
+            "Ruff) so contributors catch style issues before they "
+            "reach CI."
+        )
         suggestions.append(
             {
                 "id": "add-linting",
                 "category": "chore",
                 "title": "Add lint configuration",
-                "description": (
-                    "Set up lint tooling (for example pre-commit, "
-                    "ESLint, or Ruff) so contributors catch style "
-                    "issues before they reach CI."
-                ),
+                "description": rationale,
+                "rationale": rationale,
+                "diffPreview": "",
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": [".pre-commit-config.yaml"],
@@ -959,15 +970,18 @@ def _analyze_repository(
             }
         )
     if include_tests and not has_tests:
+        rationale = (
+            "Create a tests/ directory or add language-appropriate test "
+            "files to prevent regressions."
+        )
         suggestions.append(
             {
                 "id": "add-tests",
                 "category": "fix",
                 "title": "Bootstrap an automated test suite",
-                "description": (
-                    "Create a tests/ directory or add language-appropriate"
-                    " test files to prevent regressions."
-                ),
+                "description": rationale,
+                "rationale": rationale,
+                "diffPreview": "",
                 "impact": "high",
                 "confidence": IMPACT_CONFIDENCE["high"],
                 "files": ["tests/"],
@@ -987,16 +1001,19 @@ def _analyze_repository(
         )
         if not validations:
             validations = ["git status --short"]
+        rationale = (
+            "Generate and commit dependency lockfiles (for example, "
+            "package-lock.json or Pipfile.lock) so installs stay "
+            "reproducible across environments."
+        )
         suggestions.append(
             {
                 "id": "commit-lockfiles",
                 "category": "chore",
                 "title": "Commit dependency lockfiles",
-                "description": (
-                    "Generate and commit dependency lockfiles (for example, "
-                    "package-lock.json or Pipfile.lock) so installs stay "
-                    "reproducible across environments."
-                ),
+                "description": rationale,
+                "rationale": rationale,
+                "diffPreview": "",
                 "impact": "medium",
                 "confidence": IMPACT_CONFIDENCE["medium"],
                 "files": dependency_health["missing_lockfiles"],
