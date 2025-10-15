@@ -75,6 +75,19 @@ JavaScript, TypeScript, and JSON/YAML assets before every commit. Trigger all ho
 The link-checking step runs `linkchecker --no-warnings README.md docs/` to
 surface broken links without flooding CI logs with informational warnings.
 
+### Quick command palette
+
+| Goal | Command | Notes |
+| --- | --- | --- |
+| Run the full lint/test stack | `bash scripts/checks.sh` | Mirrors CI's consolidated gate. |
+| Execute Python tests locally | `pytest -q` | Fails under 100% coverage. |
+| Execute JS + E2E suites | `npm run test:ci` | Installs Playwright deps automatically. |
+| Preview the docs site | `npm --prefix docs-site run dev` | Serves Astro docs on port 4321. |
+| Build docs for deployment | `npm --prefix docs-site run build` | Generates static assets. |
+| Preview the 3D viewer | `make preview` | Opens `viewer/` in your browser. |
+
+Refresh this table whenever you add or rename project-level scripts so the shortcuts stay current.
+
 ## Contents
 
 - CI workflows for linting, tests, and docs
