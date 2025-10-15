@@ -3,7 +3,11 @@ from pathlib import Path
 
 import pytest
 
+# fmt: off
+# isort: off
 import flywheel.__main__ as cli
+# isort: on
+# fmt: on
 
 
 def test_sync_prompt_docs_copies_missing_prompts(tmp_path: Path) -> None:
