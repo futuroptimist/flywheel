@@ -38,7 +38,7 @@ Other repos should copy this file to `docs/prompts/codex/automation.md`.
 | `viewer/` | 3D assembly viewer assets built with Three.js. |
 | `cad/` | OpenSCAD source files for printable parts. |
 | `stl/` | Generated models kept in sync with `cad/`. |
-| `docker/`, `k8s/` | Containerization and deployment manifests. |
+| `infra/` | Dockerfiles, compose stacks, and Kubernetes manifests. |
 | `dict/` | Custom dictionaries for spell checking and linting. |
 | `parts/` | BOM data and manufacturing specs. |
 
