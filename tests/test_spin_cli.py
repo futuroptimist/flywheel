@@ -651,7 +651,9 @@ def test_write_spin_cache_handles_read_errors(
     assert json.loads(original_read(existing_path)) == updated
 
 
-def test_spin_invokes_cache_writer(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_spin_invokes_cache_writer(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     repo = tmp_path / "repo"
     repo.mkdir()
     cache_dir = tmp_path / "cache"
@@ -666,7 +668,9 @@ def test_spin_invokes_cache_writer(tmp_path: Path, monkeypatch: pytest.MonkeyPat
 
     writes: list[tuple[Path, Path, dict[str, object]]] = []
 
-    def fake_write(cache_path: Path, target: Path, payload: dict[str, object]) -> Path:
+    def fake_write(
+        cache_path: Path, target: Path, payload: dict[str, object]
+    ) -> Path:
         writes.append((cache_path, target, payload))
         expected = cache_path / "result.json"
         expected.parent.mkdir(parents=True, exist_ok=True)
@@ -676,7 +680,10 @@ def test_spin_invokes_cache_writer(tmp_path: Path, monkeypatch: pytest.MonkeyPat
     monkeypatch.setattr(main_module, "_write_spin_cache", fake_write)
 
     args = argparse.Namespace(
-        path=str(repo), dry_run=True, cache_dir=str(cache_dir), format="json"
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        format="json",
     )
 
     spin(args)
