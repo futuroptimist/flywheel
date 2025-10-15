@@ -25,9 +25,9 @@ from flywheel.__main__ import (
     _pyproject_configures_lint,
     _render_spin_markdown,
     _render_spin_table,
+    _setup_cfg_configures_lint,
     _spin_cache_filename,
     _write_spin_cache,
-    _setup_cfg_configures_lint,
     spin,
 )
 
