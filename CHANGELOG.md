@@ -1,3 +1,7 @@
+## 2025-10-18
+- fix: treat CI API errors as failures in the repo feature summary so trunk status
+  matches README guidance.
+
 ## 2025-10-17
 - fix: let `flywheel crawl` reset branch overrides when the latest spec omits
   an `@branch` suffix so the default branch is crawled as documented.
