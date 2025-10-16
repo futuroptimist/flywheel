@@ -1224,14 +1224,16 @@ def _render_spin_markdown(result: dict[str, object]) -> str:
 
 
 def _spin_cache_filename(
-    target: Path, analyzers: Collection[str] | None = None
+    target: Path,
+    analyzers: Collection[str] | None = None,
 ) -> str:
     """Return a stable cache filename for ``target`` and ``analyzers``."""
 
     resolved = target.resolve()
     normalized_analyzers: tuple[str, ...]
     if analyzers:
-        normalized_analyzers = tuple(sorted({name.lower() for name in analyzers}))
+        normalized = {name.lower() for name in analyzers}
+        normalized_analyzers = tuple(sorted(normalized))
         default_analyzers = tuple(sorted(SPIN_ANALYZERS))
         if normalized_analyzers == default_analyzers:
             normalized_analyzers = ()
@@ -1239,7 +1241,8 @@ def _spin_cache_filename(
         normalized_analyzers = ()
     digest_source = str(resolved)
     if normalized_analyzers:
-        digest_source = f"{digest_source}::{'/'.join(normalized_analyzers)}"
+        analyzers_key = "/".join(normalized_analyzers)
+        digest_source = f"{digest_source}::{analyzers_key}"
     digest = hashlib.sha256(digest_source.encode("utf-8")).hexdigest()[:10]
     stem = resolved.name
     if not stem:
@@ -1323,7 +1326,9 @@ def spin(args: argparse.Namespace) -> None:
                     elif isinstance(cached_analyzers, list) and all(
                         isinstance(name, str) for name in cached_analyzers
                     ):
-                        cached_analyzers_set = {name.lower() for name in cached_analyzers}
+                        cached_analyzers_set = {
+                            name.lower() for name in cached_analyzers
+                        }
                     else:
                         cached_analyzers_set = None
                     if (

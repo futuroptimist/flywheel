@@ -676,7 +676,8 @@ def test_spin_ignores_cache_with_different_analyzers(
 
     spin(args)
 
-    assert calls, "analyze should run when analyzers differ from cached payload"
+    message = "analyze should run when analyzers differ from cached payload"
+    assert calls, message
     cached_files = list(cache_dir.glob("*.json"))
     assert any(path != default_path for path in cached_files)
 
