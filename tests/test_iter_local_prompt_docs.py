@@ -1,9 +1,13 @@
 import importlib
 import sys
 
+from scripts.update_prompt_docs_summary import (
+    is_canonical_prompt_path,
+    iter_local_prompt_docs,
+)
+
 
 def test_iter_local_prompt_docs_includes_top_level(tmp_path):
-    from scripts.update_prompt_docs_summary import iter_local_prompt_docs
 
     docs_root = tmp_path / "docs"
     codex_dir = docs_root / "prompts" / "codex"
@@ -30,3 +34,11 @@ def test_import_without_tabulate(monkeypatch, tmp_path):
     files = list(module.iter_local_prompt_docs(docs_root))
     names = sorted(p.name for p in files)
     assert names == ["a.md"]
+
+
+def test_is_canonical_prompt_path_accepts_docs_prompts_root():
+    assert is_canonical_prompt_path("docs/prompts/automation.md")
+
+
+def test_is_canonical_prompt_path_rejects_external_locations():
+    assert not is_canonical_prompt_path("frontend/docs/prompts/automation.md")

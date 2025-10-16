@@ -259,10 +259,14 @@ def iter_local_prompt_docs(docs_root: Path) -> Iterable[Path]:
 
 
 def is_canonical_prompt_path(path: str) -> bool:
-    """Return True if the prompt doc lives under docs/prompts/codex/."""
+    """Return True when ``path`` matches a canonical prompt doc location."""
 
     normalized = path.replace("\\", "/")
-    return normalized.startswith("docs/prompts/codex/")
+    if normalized.startswith("./"):
+        normalized = normalized[2:]
+    if normalized.startswith("docs/prompts/codex/"):
+        return True
+    return normalized.startswith("docs/prompts/")
 
 
 def describe_noncanonical_location(path: str) -> str:
@@ -478,6 +482,13 @@ def main(argv: Sequence[str] | None = None) -> None:
         ),
         "",
         (
+            "Prompt docs stored under `docs/prompts/codex/` or "
+            "`docs/prompts/` are treated as canonical so "
+            "repositories migrating between layouts keep this summary "
+            "clean."
+        ),
+        "",
+        (
             f"**{total_prompts} one-click prompts verified across "
             f"{repo_count} repos ({counts['evergreen']} evergreen, "
             f"{counts['one-off']} one-off, {counts['unknown']} unknown).**"
@@ -558,8 +569,8 @@ def main(argv: Sequence[str] | None = None) -> None:
             locations = ", ".join(sorted(formatted_locations))
             lines.append(
                 (
-                    "_❌ Note: Prompt docs also found outside "
-                    "`docs/prompts/codex/`: "
+                    "_❌ Note: Prompt docs also found outside canonical "
+                    "locations (`docs/prompts/` or `docs/prompts/codex/`): "
                     f"{locations}._"
                 )
             )
