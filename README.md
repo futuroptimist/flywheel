@@ -337,9 +337,10 @@ skipping the interactive prompt for non-interactive environments.
 
 Cache dry-run results by pointing `--cache-dir` at a writable folder. The CLI
 stores the JSON payload in `<cache-dir>/<repo>-<hash>.json`, using the resolved
-repository path to generate a stable filename. Existing cache files are only
-rewritten when the dry-run output changes so repeated runs avoid touching
-timestamps.
+repository path to generate a stable filename. When a matching cache file
+exists, the CLI prints the cached payload without rerunning heuristics, and it
+only rewrites the file when the dry-run output changes so repeated runs avoid
+touching timestamps.
 
 Fine-tune the heuristics with `--analyzers`. Pass a comma-separated list such as
 `--analyzers docs,dependencies` to focus on specific checks, use

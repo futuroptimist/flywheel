@@ -5,6 +5,7 @@ import json
 import os
 import subprocess
 import sys
+from collections.abc import Collection
 from pathlib import Path
 
 import pytest
@@ -581,6 +582,145 @@ def test_spin_writes_cache_file(tmp_path: Path) -> None:
     assert cached == result
 
 
+def test_spin_reuses_existing_cache(
+    tmp_path: Path,
+    capsys: CaptureFixtureStr,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo = tmp_path / "cached"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+
+    cached_payload = {
+        "target": str(repo.resolve()),
+        "mode": "dry-run",
+        "stats": {"cached": True},
+        "suggestions": [
+            {
+                "id": "cached",
+                "category": "chore",
+                "impact": "low",
+                "confidence": 0.5,
+                "title": "Use cached result",
+                "files": [],
+                "dependencies": [],
+            }
+        ],
+    }
+    cache_path = cache_dir / _spin_cache_filename(repo)
+    cache_path.write_text(json.dumps(cached_payload) + "\n")
+
+    def fail_analyze(*_args: object, **_kwargs: object) -> None:
+        message = "analysis should be skipped when cache exists"
+        raise AssertionError(message)
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fail_analyze)
+
+    def fail_write(*_args: object, **_kwargs: object) -> None:
+        message = "cache writer should not be invoked for cached result"
+        raise AssertionError(message)
+
+    monkeypatch.setattr(main_module, "_write_spin_cache", fail_write)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        analyzers=None,
+        format="json",
+    )
+
+    spin(args)
+
+    output = json.loads(capsys.readouterr().out)
+    assert output["analyzers"] == sorted(SPIN_ANALYZERS)
+    for key, value in cached_payload.items():
+        assert output[key] == value
+
+
+def test_spin_ignores_cache_with_different_analyzers(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "subset"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+
+    default_payload = {
+        "target": str(repo.resolve()),
+        "mode": "dry-run",
+        "stats": {"cached": True},
+        "suggestions": [],
+    }
+    default_path = cache_dir / _spin_cache_filename(repo)
+    default_path.write_text(json.dumps(default_payload) + "\n")
+
+    calls: list[tuple[dict[str, bool], list[dict[str, object]]]] = []
+
+    def fake_analyze(
+        *_args: object, **_kwargs: object
+    ) -> tuple[dict[str, bool], list[dict[str, object]]]:
+        result_stats = {"fresh": True}
+        result_suggestions: list[dict[str, object]] = []
+        calls.append((result_stats, result_suggestions))
+        return result_stats, result_suggestions
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fake_analyze)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        analyzers="docs",
+        format="json",
+    )
+
+    spin(args)
+
+    message = "analyze should run when analyzers differ from cached payload"
+    assert calls, message
+    cached_files = list(cache_dir.glob("*.json"))
+    assert any(path != default_path for path in cached_files)
+
+
+def test_spin_hydrates_analyzers_for_legacy_cache(
+    tmp_path: Path, capsys: CaptureFixtureStr, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "legacy"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+
+    cached_payload = {
+        "target": str(repo.resolve()),
+        "mode": "dry-run",
+        "stats": {"cached": True},
+        "suggestions": [],
+    }
+    cache_path = cache_dir / _spin_cache_filename(repo)
+    cache_path.write_text(json.dumps(cached_payload) + "\n")
+
+    def fail_analyze(*_args: object, **_kwargs: object) -> None:
+        message = "legacy caches should skip repository analysis"
+        raise AssertionError(message)
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fail_analyze)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        analyzers=None,
+        format="json",
+    )
+
+    spin(args)
+
+    output = json.loads(capsys.readouterr().out)
+    assert output["analyzers"] == sorted(SPIN_ANALYZERS)
+
+
 def test_spin_cache_filename_is_stable_and_sanitized(tmp_path: Path) -> None:
     project = tmp_path / "My Repo !"
     project.mkdir()
@@ -591,6 +731,21 @@ def test_spin_cache_filename_is_stable_and_sanitized(tmp_path: Path) -> None:
     assert " " not in filename
     assert "!" not in filename
     assert filename == _spin_cache_filename(project)
+
+
+def test_spin_cache_filename_includes_analyzers_subset(tmp_path: Path) -> None:
+    project = tmp_path / "Repo"
+    project.mkdir()
+
+    default_name = _spin_cache_filename(project)
+    subset_name = _spin_cache_filename(project, ["docs"])
+    mixed_case = _spin_cache_filename(project, {"Docs", "TESTS"})
+    normalized_default = _spin_cache_filename(project, SPIN_ANALYZERS)
+
+    assert subset_name != default_name
+    assert subset_name == _spin_cache_filename(project, ["docs", "DOCS"])
+    assert mixed_case == _spin_cache_filename(project, {"tests", "docs"})
+    assert normalized_default == default_name
 
 
 def test_spin_cache_filename_handles_root_anchor(tmp_path: Path) -> None:
@@ -659,6 +814,200 @@ def test_write_spin_cache_handles_read_errors(
     assert json.loads(original_read(existing_path)) == updated
 
 
+def test_spin_skips_cache_when_reading_raises_os_error(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+    cache_path = cache_dir / _spin_cache_filename(repo)
+    cache_path.write_text(json.dumps({"target": str(repo), "mode": "dry-run"}))
+
+    original_read = Path.read_text
+
+    def flaky_read(self: Path, *args, **kwargs):
+        if self == cache_path:
+            raise OSError("temporary failure")
+        return original_read(self, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", flaky_read, raising=False)
+
+    calls: list[Path] = []
+
+    def fake_analyze(
+        *_args: object, **_kwargs: object
+    ) -> tuple[dict[str, bool], list[dict[str, object]]]:
+        calls.append(repo)
+        return {"fresh": True}, []
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fake_analyze)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        analyzers=None,
+        format="json",
+    )
+
+    spin(args)
+
+    assert calls
+
+
+def test_spin_skips_cache_when_json_is_invalid(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "invalid"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+    cache_path = cache_dir / _spin_cache_filename(repo)
+    cache_path.write_text("{not json}")
+
+    calls: list[Path] = []
+
+    def fake_analyze(
+        *_args: object, **_kwargs: object
+    ) -> tuple[dict[str, bool], list[dict[str, object]]]:
+        calls.append(repo)
+        return {"fresh": True}, []
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fake_analyze)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        analyzers=None,
+        format="json",
+    )
+
+    spin(args)
+
+    assert calls
+
+
+def test_spin_reuses_cache_when_analyzers_match(
+    tmp_path: Path,
+    capsys: CaptureFixtureStr,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo = tmp_path / "match"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+
+    cached_payload = {
+        "target": str(repo.resolve()),
+        "mode": "dry-run",
+        "stats": {"cached": True},
+        "suggestions": [],
+        "analyzers": ["docs"],
+    }
+    cache_path = cache_dir / _spin_cache_filename(repo, ["docs"])
+    cache_path.write_text(json.dumps(cached_payload) + "\n")
+
+    def fail_analyze(*_args: object, **_kwargs: object) -> None:
+        message = "analysis should be skipped when analyzers match cache"
+        raise AssertionError(message)
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fail_analyze)
+
+    def fail_write(*_args: object, **_kwargs: object) -> None:
+        message = "cache writer should not run when cache reused"
+        raise AssertionError(message)
+
+    monkeypatch.setattr(main_module, "_write_spin_cache", fail_write)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        analyzers="docs",
+        format="json",
+    )
+
+    spin(args)
+
+    output = json.loads(capsys.readouterr().out)
+    assert output == cached_payload
+
+
+def test_spin_skips_cache_when_payload_is_not_dict(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "nodict"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+    cache_path = cache_dir / _spin_cache_filename(repo)
+    cache_path.write_text(json.dumps([1, 2, 3]))
+
+    calls: list[Path] = []
+
+    def fake_analyze(
+        *_args: object, **_kwargs: object
+    ) -> tuple[dict[str, bool], list[dict[str, object]]]:
+        calls.append(repo)
+        return {"fresh": True}, []
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fake_analyze)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        analyzers=None,
+        format="json",
+    )
+
+    spin(args)
+
+    assert calls
+
+
+def test_spin_skips_cache_when_cached_analyzers_invalid(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "invalid-analyzers"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+    cache_path = cache_dir / _spin_cache_filename(repo)
+    cached_payload = {
+        "target": str(repo.resolve()),
+        "mode": "dry-run",
+        "stats": {"cached": True},
+        "suggestions": [],
+        "analyzers": ["docs", 1],
+    }
+    cache_path.write_text(json.dumps(cached_payload) + "\n")
+
+    calls: list[Path] = []
+
+    def fake_analyze(
+        *_args: object, **_kwargs: object
+    ) -> tuple[dict[str, bool], list[dict[str, object]]]:
+        calls.append(repo)
+        return {"fresh": True}, []
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fake_analyze)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        analyzers=None,
+        format="json",
+    )
+
+    spin(args)
+
+    assert calls
+
+
 def test_spin_invokes_cache_writer(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -682,8 +1031,9 @@ def test_spin_invokes_cache_writer(
         cache_path: Path,
         target: Path,
         payload: dict[str, object],
+        analyzers: Collection[str] | None = None,
     ) -> Path:
-        writes.append((cache_path, target, payload))
+        writes.append((cache_path, target, payload, analyzers))
         expected = cache_path / "result.json"
         expected.parent.mkdir(parents=True, exist_ok=True)
         expected.write_text("{}")
@@ -701,10 +1051,12 @@ def test_spin_invokes_cache_writer(
     spin(args)
 
     assert writes
-    cache_path, target_path, payload = writes[0]
+    cache_path, target_path, payload, analyzers = writes[0]
     assert cache_path == cache_dir
     assert target_path == repo
     assert payload["mode"] == "dry-run"
+    assert payload["analyzers"] == sorted(SPIN_ANALYZERS)
+    assert analyzers is None
 
 
 def test_spin_telemetry_override_updates_config(tmp_path: Path) -> None:

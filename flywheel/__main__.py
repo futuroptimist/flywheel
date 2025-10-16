@@ -7,7 +7,7 @@ import shutil
 import sys
 import textwrap
 from collections import Counter
-from collections.abc import Sequence
+from collections.abc import Collection, Sequence
 from pathlib import Path
 
 import yaml
@@ -1229,12 +1229,27 @@ def _render_spin_markdown(result: dict[str, object]) -> str:
     return "\n".join(summary)
 
 
-def _spin_cache_filename(target: Path) -> str:
-    """Return a stable cache filename for ``target``."""
+def _spin_cache_filename(
+    target: Path,
+    analyzers: Collection[str] | None = None,
+) -> str:
+    """Return a stable cache filename for ``target`` and ``analyzers``."""
 
     resolved = target.resolve()
-    digest_source = str(resolved).encode("utf-8")
-    digest = hashlib.sha256(digest_source).hexdigest()[:10]
+    normalized_analyzers: tuple[str, ...]
+    if analyzers:
+        normalized = {name.lower() for name in analyzers}
+        normalized_analyzers = tuple(sorted(normalized))
+        default_analyzers = tuple(sorted(SPIN_ANALYZERS))
+        if normalized_analyzers == default_analyzers:
+            normalized_analyzers = ()
+    else:
+        normalized_analyzers = ()
+    digest_source = str(resolved)
+    if normalized_analyzers:
+        analyzers_key = "/".join(normalized_analyzers)
+        digest_source = f"{digest_source}::{analyzers_key}"
+    digest = hashlib.sha256(digest_source.encode("utf-8")).hexdigest()[:10]
     stem = resolved.name
     if not stem:
         anchor = resolved.anchor.rstrip("/\\")
@@ -1252,11 +1267,12 @@ def _write_spin_cache(
     cache_dir: Path,
     target: Path,
     result: dict[str, object],
+    analyzers: Collection[str] | None = None,
 ) -> Path:
     """Persist ``result`` to ``cache_dir`` and return the written path."""
 
     cache_dir.mkdir(parents=True, exist_ok=True)
-    cache_path = cache_dir / _spin_cache_filename(target)
+    cache_path = cache_dir / _spin_cache_filename(target, analyzers)
     payload = json.dumps(result, indent=2, sort_keys=True)
     if not payload.endswith("\n"):
         payload += "\n"
@@ -1281,19 +1297,82 @@ def spin(args: argparse.Namespace) -> None:
         msg = "Only --dry-run mode is supported; re-run with --dry-run."
         raise SystemExit(msg)
     analyzers = _parse_analyzers(getattr(args, "analyzers", None))
-    stats, suggestions = _analyze_repository(target, analyzers=analyzers)
-    result = {
-        "target": str(target),
-        "mode": "dry-run",
-        "stats": stats,
-        "suggestions": suggestions,
-    }
-    cache_dir = getattr(args, "cache_dir", None)
-    if cache_dir:
+    normalized_analyzers = sorted(analyzers)
+    cache_analyzers: Collection[str] | None
+    if set(normalized_analyzers) == set(SPIN_ANALYZERS):
+        cache_analyzers = None
+    else:
+        cache_analyzers = normalized_analyzers
+    cache_dir_value = getattr(args, "cache_dir", None)
+    cache_dir: Path | None = None
+    cached_result: dict[str, object] | None = None
+    if cache_dir_value:
+        cache_dir = Path(cache_dir_value)
+        cache_path = cache_dir / _spin_cache_filename(target, cache_analyzers)
         try:
-            _write_spin_cache(Path(cache_dir), target, result)
-        except OSError as exc:  # pragma: no cover - filesystem errors are rare
-            raise SystemExit(f"Failed to write cache: {exc}") from exc
+            cached_text = cache_path.read_text()
+        except FileNotFoundError:
+            cached_result = None
+        except OSError:
+            cached_result = None
+        else:
+            try:
+                loaded = json.loads(cached_text)
+            except json.JSONDecodeError:
+                cached_result = None
+            else:
+                if isinstance(loaded, dict):
+                    cached_target = str(loaded.get("target", ""))
+                    cached_mode = loaded.get("mode")
+                    stats_block = loaded.get("stats")
+                    suggestions_block = loaded.get("suggestions")
+                    cached_analyzers = loaded.get("analyzers")
+                    if cached_analyzers is None:
+                        cached_analyzers_set = set(SPIN_ANALYZERS)
+                    elif isinstance(cached_analyzers, list) and all(
+                        isinstance(name, str) for name in cached_analyzers
+                    ):
+                        cached_analyzers_set = {
+                            name.lower() for name in cached_analyzers
+                        }
+                    else:
+                        cached_analyzers_set = None
+                    if (
+                        cached_target == str(target)
+                        and cached_mode == "dry-run"
+                        and isinstance(stats_block, dict)
+                        and isinstance(suggestions_block, list)
+                        and cached_analyzers_set == set(analyzers)
+                    ):
+                        if "analyzers" not in loaded:
+                            hydrated = dict(loaded)
+                            hydrated["analyzers"] = sorted(analyzers)
+                            cached_result = hydrated
+                        else:
+                            cached_result = loaded
+                    else:
+                        cached_result = None
+                else:
+                    cached_result = None
+
+    if cached_result is None:
+        stats, suggestions = _analyze_repository(target, analyzers=analyzers)
+        result = {
+            "target": str(target),
+            "mode": "dry-run",
+            "stats": stats,
+            "suggestions": suggestions,
+            "analyzers": normalized_analyzers,
+        }
+        if cache_dir is not None:
+            try:
+                _write_spin_cache(cache_dir, target, result, cache_analyzers)
+            except OSError as exc:  # pragma: no cover
+                # Filesystem errors are rare when writing cache files.
+                message = f"Failed to write cache: {exc}"
+                raise SystemExit(message) from exc
+    else:
+        result = cached_result
     fmt = getattr(args, "format", "json") or "json"
     if fmt == "json":
         output = json.dumps(result, indent=2, sort_keys=True)
