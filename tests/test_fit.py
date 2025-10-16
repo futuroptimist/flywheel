@@ -408,6 +408,18 @@ def test_ensure_obj_models_mock(monkeypatch, tmp_path):
     obj_names = [p.stem for p in models.glob("*.obj")]
     assert set(scad_names) <= set(obj_names)
 
+    mtl_names = [p.stem for p in models.glob("*.mtl")]
+    assert set(scad_names) <= set(mtl_names)
+
+    for obj_file in models.glob("*.obj"):
+        text = obj_file.read_text()
+        base = obj_file.with_suffix(".mtl").name
+        assert f"mtllib {base}" in text
+        assert f"usemtl {webapp_module.DEFAULT_MATERIAL_NAME}" in text
+        material = obj_file.with_suffix(".mtl")
+        mtl_text = material.read_text()
+        assert f"newmtl {webapp_module.DEFAULT_MATERIAL_NAME}" in mtl_text
+
 
 def test_ensure_obj_models_appends_newline(monkeypatch, tmp_path):
     import shutil

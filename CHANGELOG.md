@@ -1,6 +1,12 @@
+## 2025-10-18
+- feat: add `summary` fields to `flywheel spin --dry-run` suggestions so the
+  output matches the design doc schema.
+
 ## 2025-10-17
 - fix: let `flywheel crawl` reset branch overrides when the latest spec omits
   an `@branch` suffix so the default branch is crawled as documented.
+- feat: ensure OBJ exports include matching MTL files and references so the web
+  viewer matches the documented material workflow.
 
 ## 2025-10-16
 - feat: filter the prompt repo snapshot to non-hidden files so the output
