@@ -5,6 +5,7 @@ import json
 import os
 import subprocess
 import sys
+from collections.abc import Collection
 from pathlib import Path
 
 import pytest
@@ -634,6 +635,50 @@ def test_spin_reuses_existing_cache(
     assert json.loads(output) == cached_payload
 
 
+def test_spin_ignores_cache_with_different_analyzers(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "subset"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+
+    default_payload = {
+        "target": str(repo.resolve()),
+        "mode": "dry-run",
+        "stats": {"cached": True},
+        "suggestions": [],
+    }
+    default_path = cache_dir / _spin_cache_filename(repo)
+    default_path.write_text(json.dumps(default_payload) + "\n")
+
+    calls: list[tuple[dict[str, bool], list[dict[str, object]]]] = []
+
+    def fake_analyze(
+        *_args: object, **_kwargs: object
+    ) -> tuple[dict[str, bool], list[dict[str, object]]]:
+        result_stats = {"fresh": True}
+        result_suggestions: list[dict[str, object]] = []
+        calls.append((result_stats, result_suggestions))
+        return result_stats, result_suggestions
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fake_analyze)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        analyzers="docs",
+        format="json",
+    )
+
+    spin(args)
+
+    assert calls, "analyze should run when analyzers differ from cached payload"
+    cached_files = list(cache_dir.glob("*.json"))
+    assert any(path != default_path for path in cached_files)
+
+
 def test_spin_cache_filename_is_stable_and_sanitized(tmp_path: Path) -> None:
     project = tmp_path / "My Repo !"
     project.mkdir()
@@ -735,8 +780,9 @@ def test_spin_invokes_cache_writer(
         cache_path: Path,
         target: Path,
         payload: dict[str, object],
+        analyzers: Collection[str] | None = None,
     ) -> Path:
-        writes.append((cache_path, target, payload))
+        writes.append((cache_path, target, payload, analyzers))
         expected = cache_path / "result.json"
         expected.parent.mkdir(parents=True, exist_ok=True)
         expected.write_text("{}")
@@ -754,10 +800,12 @@ def test_spin_invokes_cache_writer(
     spin(args)
 
     assert writes
-    cache_path, target_path, payload = writes[0]
+    cache_path, target_path, payload, analyzers = writes[0]
     assert cache_path == cache_dir
     assert target_path == repo
     assert payload["mode"] == "dry-run"
+    assert payload["analyzers"] == sorted(SPIN_ANALYZERS)
+    assert analyzers is None
 
 
 def test_spin_telemetry_override_updates_config(tmp_path: Path) -> None:
