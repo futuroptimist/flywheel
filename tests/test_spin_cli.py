@@ -631,8 +631,10 @@ def test_spin_reuses_existing_cache(
 
     spin(args)
 
-    output = capsys.readouterr().out
-    assert json.loads(output) == cached_payload
+    output = json.loads(capsys.readouterr().out)
+    assert output["analyzers"] == sorted(SPIN_ANALYZERS)
+    for key, value in cached_payload.items():
+        assert output[key] == value
 
 
 def test_spin_ignores_cache_with_different_analyzers(
@@ -677,6 +679,43 @@ def test_spin_ignores_cache_with_different_analyzers(
     assert calls, "analyze should run when analyzers differ from cached payload"
     cached_files = list(cache_dir.glob("*.json"))
     assert any(path != default_path for path in cached_files)
+
+
+def test_spin_hydrates_analyzers_for_legacy_cache(
+    tmp_path: Path, capsys: CaptureFixtureStr, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "legacy"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+
+    cached_payload = {
+        "target": str(repo.resolve()),
+        "mode": "dry-run",
+        "stats": {"cached": True},
+        "suggestions": [],
+    }
+    cache_path = cache_dir / _spin_cache_filename(repo)
+    cache_path.write_text(json.dumps(cached_payload) + "\n")
+
+    def fail_analyze(*_args: object, **_kwargs: object) -> None:
+        message = "legacy caches should skip repository analysis"
+        raise AssertionError(message)
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fail_analyze)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        analyzers=None,
+        format="json",
+    )
+
+    spin(args)
+
+    output = json.loads(capsys.readouterr().out)
+    assert output["analyzers"] == sorted(SPIN_ANALYZERS)
 
 
 def test_spin_cache_filename_is_stable_and_sanitized(tmp_path: Path) -> None:

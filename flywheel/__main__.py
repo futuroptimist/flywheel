@@ -1333,7 +1333,12 @@ def spin(args: argparse.Namespace) -> None:
                         and isinstance(suggestions_block, list)
                         and cached_analyzers_set == set(analyzers)
                     ):
-                        cached_result = loaded
+                        if "analyzers" not in loaded:
+                            hydrated = dict(loaded)
+                            hydrated["analyzers"] = sorted(analyzers)
+                            cached_result = hydrated
+                        else:
+                            cached_result = loaded
                     else:
                         cached_result = None
                 else:
