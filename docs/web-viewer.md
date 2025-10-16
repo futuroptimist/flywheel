@@ -17,6 +17,10 @@ openscad -o stl/stand.stl cad/stand.scad
 assimp export stl/stand.stl webapp/static/models/stand.obj
 ```
 
+Flywheel's conversion helper also writes a neutral material definition to the
+`.mtl` file and updates the `.obj` header with `mtllib`/`usemtl` directives so
+the Three.js loader renders models with consistent shading.
+
 ## Running Locally
 
 Ensure Node.js 20 or newer is installed. Then run:
