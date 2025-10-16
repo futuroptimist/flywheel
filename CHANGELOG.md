@@ -1,3 +1,8 @@
+## 2025-10-18
+- fix: reuse cached `flywheel spin --dry-run` payloads when `--cache-dir` is
+  provided so the CLI matches the 2025-10-17 feature note about reusing cached
+  analysis artifacts.
+
 ## 2025-10-17
 - fix: let `flywheel crawl` reset branch overrides when the latest spec omits
   an `@branch` suffix so the default branch is crawled as documented.

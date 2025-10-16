@@ -579,6 +579,61 @@ def test_spin_writes_cache_file(tmp_path: Path) -> None:
     assert cached == result
 
 
+def test_spin_reuses_existing_cache(
+    tmp_path: Path,
+    capsys: CaptureFixtureStr,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo = tmp_path / "cached"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+
+    cached_payload = {
+        "target": str(repo.resolve()),
+        "mode": "dry-run",
+        "stats": {"cached": True},
+        "suggestions": [
+            {
+                "id": "cached",
+                "category": "chore",
+                "impact": "low",
+                "confidence": 0.5,
+                "title": "Use cached result",
+                "files": [],
+                "dependencies": [],
+            }
+        ],
+    }
+    cache_path = cache_dir / _spin_cache_filename(repo)
+    cache_path.write_text(json.dumps(cached_payload) + "\n")
+
+    def fail_analyze(*_args: object, **_kwargs: object) -> None:
+        message = "analysis should be skipped when cache exists"
+        raise AssertionError(message)
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fail_analyze)
+
+    def fail_write(*_args: object, **_kwargs: object) -> None:
+        message = "cache writer should not be invoked for cached result"
+        raise AssertionError(message)
+
+    monkeypatch.setattr(main_module, "_write_spin_cache", fail_write)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        analyzers=None,
+        format="json",
+    )
+
+    spin(args)
+
+    output = capsys.readouterr().out
+    assert json.loads(output) == cached_payload
+
+
 def test_spin_cache_filename_is_stable_and_sanitized(tmp_path: Path) -> None:
     project = tmp_path / "My Repo !"
     project.mkdir()

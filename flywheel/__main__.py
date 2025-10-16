@@ -1275,19 +1275,58 @@ def spin(args: argparse.Namespace) -> None:
         msg = "Only --dry-run mode is supported; re-run with --dry-run."
         raise SystemExit(msg)
     analyzers = _parse_analyzers(getattr(args, "analyzers", None))
-    stats, suggestions = _analyze_repository(target, analyzers=analyzers)
-    result = {
-        "target": str(target),
-        "mode": "dry-run",
-        "stats": stats,
-        "suggestions": suggestions,
-    }
-    cache_dir = getattr(args, "cache_dir", None)
-    if cache_dir:
+    cache_dir_value = getattr(args, "cache_dir", None)
+    cache_dir: Path | None = None
+    cached_result: dict[str, object] | None = None
+    if cache_dir_value:
+        cache_dir = Path(cache_dir_value)
+        cache_path = cache_dir / _spin_cache_filename(target)
         try:
-            _write_spin_cache(Path(cache_dir), target, result)
-        except OSError as exc:  # pragma: no cover - filesystem errors are rare
-            raise SystemExit(f"Failed to write cache: {exc}") from exc
+            cached_text = cache_path.read_text()
+        except FileNotFoundError:
+            cached_result = None
+        except OSError:
+            cached_result = None
+        else:
+            try:
+                loaded = json.loads(cached_text)
+            except json.JSONDecodeError:
+                cached_result = None
+            else:
+                if isinstance(loaded, dict):
+                    cached_target = str(loaded.get("target", ""))
+                    cached_mode = loaded.get("mode")
+                    stats_block = loaded.get("stats")
+                    suggestions_block = loaded.get("suggestions")
+                    if (
+                        cached_target == str(target)
+                        and cached_mode == "dry-run"
+                        and isinstance(stats_block, dict)
+                        and isinstance(suggestions_block, list)
+                    ):
+                        cached_result = loaded
+                    else:
+                        cached_result = None
+                else:
+                    cached_result = None
+
+    if cached_result is None:
+        stats, suggestions = _analyze_repository(target, analyzers=analyzers)
+        result = {
+            "target": str(target),
+            "mode": "dry-run",
+            "stats": stats,
+            "suggestions": suggestions,
+        }
+        if cache_dir is not None:
+            try:
+                _write_spin_cache(cache_dir, target, result)
+            except OSError as exc:  # pragma: no cover
+                # Filesystem errors are rare when writing cache files.
+                message = f"Failed to write cache: {exc}"
+                raise SystemExit(message) from exc
+    else:
+        result = cached_result
     fmt = getattr(args, "format", "json") or "json"
     if fmt == "json":
         output = json.dumps(result, indent=2, sort_keys=True)
