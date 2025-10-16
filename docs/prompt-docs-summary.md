@@ -9,6 +9,9 @@ Think of each listed repository as a small flywheel belted to this codebase. The
 
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
+Prompt docs stored under `docs/prompts/codex/` or `docs/prompts/` are treated as canonical so
+repositories migrating between layouts keep this summary clean.
+
 **369 one-click prompts verified across 14 repos (294 evergreen, 34 one-off, 25 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
