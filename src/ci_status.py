@@ -87,7 +87,10 @@ def ci_state(owner: str, repo: str, sha: str) -> str:
         state = _normalize_state(_query_rest(owner, repo, sha))
 
     if state is None:
-        return "unknown"
+        # Treat API errors as failures so the summary highlights flaky CI
+        # integrations instead of silently reporting an unknown state. This
+        # matches the README guidance for the repo feature summary.
+        return "red"
 
     if state == "SUCCESS":
         return "green"
