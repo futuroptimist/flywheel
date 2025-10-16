@@ -18,6 +18,12 @@ def test_ci_state_rest_fallback(monkeypatch):
     assert cs.ci_state("o", "r", "sha") == "red"
 
 
+def test_ci_state_api_errors_treated_as_failure(monkeypatch):
+    monkeypatch.setattr(cs, "_query_graphql", lambda o, r, s: None)
+    monkeypatch.setattr(cs, "_query_rest", lambda o, r, s: None)
+    assert cs.ci_state("o", "r", "sha") == "red"
+
+
 def test_ci_state_rest_no_ci(monkeypatch):
     monkeypatch.setattr(cs, "_query_graphql", lambda o, r, s: None)
     monkeypatch.setattr(cs, "_query_rest", lambda o, r, s: "NO_CI")
