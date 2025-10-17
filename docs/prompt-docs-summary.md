@@ -9,8 +9,7 @@ Think of each listed repository as a small flywheel belted to this codebase. The
 
 All prompts are verified with OpenAI Codex. Other coding agents like Claude Code, Gemini CLI, and Cursor should work too.
 
-Prompt docs stored under `docs/prompts/codex/` or `docs/prompts/` are treated as canonical so
-repositories migrating between layouts keep this summary clean.
+Prompt docs stored under `docs/prompts/codex/` or `docs/prompts/` are treated as canonical so repositories migrating between layouts keep this summary clean.
 
 **369 one-click prompts verified across 14 repos (294 evergreen, 34 one-off, 25 unknown).**
 
@@ -109,7 +108,7 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | [docs/prompts/codex/ci-fix.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts/codex/ci-fix.md)                         | [2 – Committing & propagating](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts/codex/ci-fix.md#2-committing-propagating)                                                                 | one-off   | yes        |
 | [docs/prompts/codex/ci-fix.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts/codex/ci-fix.md)                         | [3 – Further reading & references](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts/codex/ci-fix.md#3-further-reading-references)                                                         | one-off   | yes        |
 
-_❌ Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/`._
+_❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` or `docs/prompts/codex/`): `docs/`._
 
 ## [democratizedspace/dspace](https://github.com/democratizedspace/dspace)
 
@@ -199,7 +198,7 @@ _❌ Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/`._
 | [docs/prompts/codex/polish.md](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/polish.md)                                   | [DSPACE structural polish playbook](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/polish.md#dspace-structural-polish-playbook)                                      | unknown       | yes        |
 | [docs/prompts/codex/polish.md](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/polish.md)                                   | [Upgrade the structural polish playbook](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/polish.md#upgrade-the-structural-polish-playbook)                            | unknown       | yes        |
 
-_❌ Note: Prompt docs also found outside `docs/prompts/codex/`: `frontend/src/pages/docs/md`._
+_❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` or `docs/prompts/codex/`): `frontend/src/pages/docs/md`._
 
 ## [futuroptimist/token.place](https://github.com/futuroptimist/token.place)
 
@@ -226,7 +225,7 @@ _❌ Note: Prompt docs also found outside `docs/prompts/codex/`: `frontend/src/p
 | [docs/prompts/codex/baseline.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/baseline.md)                 | [2 Add API rate limit test](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/baseline.md#2-add-api-rate-limit-test)                                                  | one-off   | yes        |
 | [docs/STREAMING_IMPLEMENTATION_GUIDE.md](https://github.com/futuroptimist/token.place/blob/main/docs/STREAMING_IMPLEMENTATION_GUIDE.md) | [Streaming Implementation Guide for token.place](https://github.com/futuroptimist/token.place/blob/main/docs/STREAMING_IMPLEMENTATION_GUIDE.md#streaming-implementation-guide-for-tokenplace) | unknown   | yes        |
 
-_❌ Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/`._
+_❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` or `docs/prompts/codex/`): `docs/`._
 
 ## [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel)
 
@@ -292,7 +291,7 @@ _❌ Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/`._
 | [.axel/hillclimb/prompts/critique.md](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/critique.md)                           | [critique.md](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/critique.md)                                                                            | unknown       | yes        |
 | [.axel/hillclimb/prompts/plan.md](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/plan.md)                                   | [plan.md](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/plan.md)                                                                                    | unknown       | yes        |
 
-_❌ Note: Prompt docs also found outside `docs/prompts/codex/`: `.axel/hillclimb/prompts`._
+_❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` or `docs/prompts/codex/`): `.axel/hillclimb/prompts`._
 
 ## [futuroptimist/sigma](https://github.com/futuroptimist/sigma)
 
@@ -479,8 +478,6 @@ _❌ Note: Prompt docs also found outside `docs/prompts/codex/`: `.axel/hillclim
 | [docs/prompts/codex/polish.md](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/codex/polish.md)               | [Upgrade Prompt](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/codex/polish.md#upgrade-prompt)                                              | evergreen | yes        |
 | [docs/prompts/summary.md](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/summary.md)                         | [Prompt Index](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/summary.md#prompt-index)                                                       | evergreen | yes        |
 
-_❌ Note: Prompt docs also found outside `docs/prompts/codex/`: `docs/prompts`._
-
 ## TODO Prompts for Other Repos
 
 # Prompt Docs TODOs
@@ -564,4 +561,4 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/wove          | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md)                                                                         | unknown   |       |
 | futuroptimist/wove          | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md)                                                                       | unknown   |       |
 
-_Updated automatically: 2025-10-16_
+_Updated automatically: 2025-10-17_
