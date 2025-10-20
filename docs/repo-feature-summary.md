@@ -39,6 +39,25 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | ❌ | — | ❌ | ⚪ none | 2025-10-18 |
 | [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | ❌ | — | ❌ | ⚪ none | 2025-10-18 |
 
+
+## Security & Dependency Health
+| Repo | Dependabot | Secret-Scanning | CodeQL | Snyk (badge) |
+| ---- | ---------- | --------------- | ------ | ------------ |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ | ❌ | ✅ | ❌ |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ❌ | ❌ | ❌ | ❌ |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✅ | ❌ | ❌ | ❌ |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ | ❌ | ✅ | ❌ |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ | ❌ | ✅ | ❌ |
+| [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | ❌ | ❌ | ❌ |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ | ❌ | ❌ | ❌ |
+| [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ❌ | ❌ | ❌ | ❌ |
+| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | ❌ | ❌ | ❌ | ❌ |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ❌ | ❌ | ❌ |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ❌ | ❌ | ❌ | ❌ |
+| [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | ❌ | ❌ | ❌ | ❌ |
+| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | ✅ | ❌ | ✅ | ❌ |
+| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | ❌ | ❌ | ❌ | ❌ |
+
 ## Policies & Automation
 | Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Last-Updated (UTC) |
 | ---- | ------- | -- | --------- | --------- | --------------- | ------------ | ---------- | ----------------- |
