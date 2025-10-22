@@ -12,6 +12,8 @@ import pytest
 
 from flywheel import __main__ as main_module
 from flywheel.__main__ import (
+    APPLY_DOCS_CONTENT,
+    APPLY_README_CONTENT,
     LINT_VALIDATION_COMMANDS,
     SPIN_ANALYZERS,
     _analyze_repository,
@@ -153,6 +155,39 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     assert validations["add-linting"] == lint_validation_commands
 
 
+def test_spin_apply_scaffolds_supported_suggestions(
+    tmp_path: Path, capsys: CaptureFixtureStr
+) -> None:
+    repo = tmp_path / "apply"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply=True,
+        format="json",
+        analyzers=None,
+        cache_dir=None,
+        yes=True,
+    )
+
+    spin(args)
+
+    output = capsys.readouterr().out
+    assert "Applied suggestions:" in output
+    assert "add-readme" in output
+    assert "add-docs" in output
+    assert "Skipped suggestions:" in output
+    assert "configure-ci (unsupported)" in output
+    assert "add-linting (unsupported)" in output
+
+    readme = (repo / "README.md").read_text()
+    assert readme == APPLY_README_CONTENT
+    docs_readme = (repo / "docs" / "README.md").read_text()
+    assert docs_readme == APPLY_DOCS_CONTENT
+    assert (repo / "tests" / ".gitkeep").exists()
+
+
 def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
     repo = tmp_path / "project"
     workflows = repo / ".github" / "workflows"
@@ -245,6 +280,42 @@ def test_spin_invalid_analyzer_errors(tmp_path: Path) -> None:
         dry_run=True,
         format="json",
         analyzers="bogus",
+    )
+
+    with pytest.raises(SystemExit):
+        spin(args)
+
+
+def test_spin_requires_mode(tmp_path: Path) -> None:
+    repo = tmp_path / "no-mode"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply=False,
+        format="json",
+        analyzers=None,
+        cache_dir=None,
+        yes=False,
+    )
+
+    with pytest.raises(SystemExit):
+        spin(args)
+
+
+def test_spin_disallows_apply_and_dry_run(tmp_path: Path) -> None:
+    repo = tmp_path / "both"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        apply=True,
+        format="json",
+        analyzers=None,
+        cache_dir=None,
+        yes=False,
     )
 
     with pytest.raises(SystemExit):
@@ -566,7 +637,7 @@ def test_spin_requires_dry_run_flag(tmp_path: Path) -> None:
     with pytest.raises(SystemExit) as exc:
         spin(args)
 
-    assert "Only --dry-run mode is supported" in str(exc.value)
+    assert "Choose --dry-run to preview" in str(exc.value)
 
 
 def test_spin_writes_cache_file(tmp_path: Path) -> None:
