@@ -16,6 +16,7 @@ from flywheel.__main__ import (
     APPLY_README_CONTENT,
     LINT_VALIDATION_COMMANDS,
     SPIN_ANALYZERS,
+    _apply_spin_suggestions,
     _analyze_repository,
     _detect_lint_config,
     _detect_tests,
@@ -186,6 +187,80 @@ def test_spin_apply_scaffolds_supported_suggestions(
     docs_readme = (repo / "docs" / "README.md").read_text()
     assert docs_readme == APPLY_DOCS_CONTENT
     assert (repo / "tests" / ".gitkeep").exists()
+
+
+def test_apply_spin_suggestions_handles_empty_result(
+    tmp_path: Path, capsys: CaptureFixtureStr
+) -> None:
+    target = tmp_path / "empty"
+    target.mkdir()
+
+    _apply_spin_suggestions(target, {"suggestions": []}, assume_yes=True)
+
+    output = capsys.readouterr().out
+    assert output.strip() == "No suggestions to apply."
+
+
+def test_apply_spin_suggestions_prompts_and_declines(
+    tmp_path: Path, capsys: CaptureFixtureStr, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target = tmp_path / "decline"
+    target.mkdir()
+
+    monkeypatch.setattr("builtins.input", lambda prompt: "n")
+
+    _apply_spin_suggestions(
+        target,
+        {"suggestions": [{"id": "add-readme", "title": "Add README"}]},
+        assume_yes=False,
+    )
+
+    output = capsys.readouterr().out
+    assert "No suggestions were applied." in output
+    assert "Skipped suggestions:" in output
+    assert "add-readme (declined)" in output
+
+
+def test_apply_spin_suggestions_handles_eof(
+    tmp_path: Path, capsys: CaptureFixtureStr, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target = tmp_path / "eof"
+    target.mkdir()
+
+    def raise_eof(prompt: str) -> str:
+        raise EOFError
+
+    monkeypatch.setattr("builtins.input", raise_eof)
+
+    _apply_spin_suggestions(
+        target,
+        {"suggestions": [{"id": "add-readme", "title": "Add README"}]},
+        assume_yes=False,
+    )
+
+    output = capsys.readouterr().out
+    assert "No suggestions were applied." in output
+    assert "Skipped suggestions:" in output
+    assert "add-readme (declined)" in output
+
+
+def test_apply_spin_suggestions_skips_existing_files(
+    tmp_path: Path, capsys: CaptureFixtureStr
+) -> None:
+    target = tmp_path / "existing"
+    target.mkdir()
+    (target / "README.md").write_text("existing\n")
+
+    _apply_spin_suggestions(
+        target,
+        {"suggestions": [{"id": "add-readme", "title": "Add README"}]},
+        assume_yes=True,
+    )
+
+    output = capsys.readouterr().out
+    assert "No suggestions were applied." in output
+    assert "Skipped suggestions:" in output
+    assert "add-readme (already satisfied)" in output
 
 
 def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
