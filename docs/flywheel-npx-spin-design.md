@@ -1,4 +1,7 @@
 ## Implementation Progress
+- **2025-10-20:** Added a `flywheel spin --apply-all` flag that auto-applies
+  supported scaffolding suggestions without prompts, fulfilling the apply-all
+  automation noted below.
 - **2025-10-17:** Added a `--cache-dir` flag to the Python `flywheel spin --dry-run`
   CLI that writes the JSON payload to a hashed filename inside the selected
   directory so repeated runs can reuse cached analysis artifacts.
@@ -113,7 +116,8 @@ flywheel/
   - `--llm-provider tokenplace|openai|anthropic`
   - `--tokenplace-api-key $TOKENPLACE_API_KEY` (environment variable fallback).
   - `--format table|json|markdown`
-  - `--apply` (interactive prompt or `--apply-all`, `--apply none`)
+  - `--apply` (interactive prompt or `--apply-all`) – scaffolds docs, README,
+    tests, lint config, and CI workflows for missing assets before rerunning heuristics.
   - `--dry-run` to output patches without applying.
   - `--cache-dir` for embeddings/vector store.
   - `--telemetry on|off|full`
@@ -286,8 +290,8 @@ gantt
 |---------|-------------|--------|
 | `flywheel spin` | Scan repo, generate suggestions. | Draft |
 | `flywheel spin --dry-run` | Output suggestions without LLM or patch application (mock data). | Draft |
-| `flywheel spin --apply` | Interactive apply mode. | Planned |
-| `flywheel spin --apply-all` | Apply all suggestions with zero prompts (requires `--force`). | Planned |
+| `flywheel spin --apply` | Interactive apply mode. | Shipped |
+| `flywheel spin --apply-all` | Apply all suggestions with zero prompts (non-interactive). | Shipped |
 | `flywheel config telemetry` | Manage telemetry preferences. | Shipped |
 
 ### Appendix B: Sample Prompt Skeleton

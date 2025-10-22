@@ -5,7 +5,7 @@ import json
 import os
 import subprocess
 import sys
-from collections.abc import Collection
+from collections.abc import Callable, Collection
 from pathlib import Path
 
 import pytest
@@ -15,6 +15,12 @@ from flywheel.__main__ import (
     LINT_VALIDATION_COMMANDS,
     SPIN_ANALYZERS,
     _analyze_repository,
+    _apply_add_docs,
+    _apply_add_linting,
+    _apply_add_readme,
+    _apply_add_tests,
+    _apply_configure_ci,
+    _apply_suggestions,
     _detect_lint_config,
     _detect_tests,
     _format_stats_lines,
@@ -24,6 +30,7 @@ from flywheel.__main__ import (
     _package_json_configures_lint,
     _parse_analyzers,
     _pyproject_configures_lint,
+    _relativize,
     _render_spin_markdown,
     _render_spin_table,
     _setup_cfg_configures_lint,
@@ -83,6 +90,60 @@ def run_spin_dry_run_text(
         env=run_env,
     )
     return completed.stdout
+
+
+def run_spin_apply(
+    path: Path,
+    *extra: str,
+    env: dict[str, str] | None = None,
+) -> dict:
+    cmd = [
+        sys.executable,
+        "-m",
+        "flywheel",
+        "spin",
+        str(path),
+        "--apply",
+        *extra,
+    ]
+    run_env = os.environ.copy()
+    if env:
+        run_env.update(env)
+    completed = subprocess.run(
+        cmd,
+        check=True,
+        capture_output=True,
+        text=True,
+        env=run_env,
+    )
+    return json.loads(completed.stdout)
+
+
+def run_spin_apply_all(
+    path: Path,
+    *extra: str,
+    env: dict[str, str] | None = None,
+) -> dict:
+    cmd = [
+        sys.executable,
+        "-m",
+        "flywheel",
+        "spin",
+        str(path),
+        "--apply-all",
+        *extra,
+    ]
+    run_env = os.environ.copy()
+    if env:
+        run_env.update(env)
+    completed = subprocess.run(
+        cmd,
+        check=True,
+        capture_output=True,
+        text=True,
+        env=run_env,
+    )
+    return json.loads(completed.stdout)
 
 
 def test_parse_analyzers_defaults_when_blank() -> None:
@@ -566,7 +627,57 @@ def test_spin_requires_dry_run_flag(tmp_path: Path) -> None:
     with pytest.raises(SystemExit) as exc:
         spin(args)
 
-    assert "Only --dry-run mode is supported" in str(exc.value)
+    assert "Use --dry-run" in str(exc.value)
+
+
+def test_spin_conflicts_on_apply_and_dry_run(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        apply=True,
+    )
+
+    with pytest.raises(SystemExit) as exc:
+        spin(args)
+
+    expected = "Use exactly one of --dry-run, --apply, or --apply-all."
+    assert expected in str(exc.value)
+
+
+def test_spin_conflicts_on_apply_all_and_dry_run(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        apply=False,
+        apply_all=True,
+    )
+
+    with pytest.raises(SystemExit) as exc:
+        spin(args)
+
+    expected = "Use exactly one of --dry-run, --apply, or --apply-all."
+    assert expected in str(exc.value)
+
+
+def test_spin_conflicts_on_apply_and_apply_all(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply=True,
+        apply_all=True,
+    )
+
+    with pytest.raises(SystemExit) as exc:
+        spin(args)
+
+    expected = "Use exactly one of --dry-run, --apply, or --apply-all."
+    assert expected in str(exc.value)
 
 
 def test_spin_writes_cache_file(tmp_path: Path) -> None:
@@ -756,6 +867,24 @@ def test_spin_cache_filename_handles_root_anchor(tmp_path: Path) -> None:
 
     assert filename.startswith("target-")
     assert filename.endswith(".json")
+
+
+def test_relativize_handles_inside_and_outside_paths(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+
+    inside_dir = repo / "docs"
+    inside_dir.mkdir()
+    inside_path = inside_dir / "README.md"
+    inside_path.write_text("docs\n")
+
+    outside_dir = tmp_path / "elsewhere"
+    outside_dir.mkdir()
+    outside_path = outside_dir / "README.md"
+    outside_path.write_text("other\n")
+
+    assert _relativize(repo, inside_path) == "docs/README.md"
+    assert _relativize(repo, outside_path) == outside_path.as_posix()
 
 
 def test_write_spin_cache_skips_rewrites_when_unchanged(
@@ -1721,6 +1850,417 @@ def test_spin_cli_accepts_markdown_format(tmp_path: Path) -> None:
 
     assert "# flywheel spin dry-run" in output
     assert "| Confidence |" in output
+
+
+@pytest.mark.parametrize(
+    ("handler", "expected_path"),
+    [
+        (_apply_add_readme, "README.md"),
+        (_apply_add_docs, "docs/README.md"),
+        (_apply_add_tests, "tests/test_placeholder.py"),
+        (_apply_add_linting, ".pre-commit-config.yaml"),
+        (_apply_configure_ci, ".github/workflows/ci.yml"),
+    ],
+)
+def test_apply_handlers_create_then_noop(
+    tmp_path: Path,
+    handler: Callable[[Path], dict[str, object]],
+    expected_path: str,
+) -> None:
+    repo = tmp_path / handler.__name__
+    repo.mkdir()
+
+    created = handler(repo)
+
+    assert created["status"] == "applied"
+    assert created["paths"] == [expected_path]
+    assert "Created" in created["message"]
+    assert (repo / Path(expected_path)).exists()
+
+    repeat = handler(repo)
+
+    assert repeat["status"] == "noop"
+    assert repeat["paths"] == []
+    assert "already exists" in repeat["message"]
+
+
+def test_apply_suggestions_auto_confirm_handles_various_outcomes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "auto-confirm"
+    repo.mkdir()
+
+    def applied_handler(root: Path) -> dict[str, object]:
+        assert root == repo
+        return {
+            "status": "applied",
+            "paths": ["created.txt"],
+            "message": "applied",
+        }
+
+    def noop_handler(root: Path) -> dict[str, object]:
+        assert root == repo
+        return {
+            "status": "noop",
+            "paths": ["noop.txt"],
+            "message": "noop",
+        }
+
+    monkeypatch.setitem(
+        main_module.APPLY_HANDLERS,
+        "auto-applied",
+        applied_handler,
+    )
+    monkeypatch.setitem(
+        main_module.APPLY_HANDLERS,
+        "auto-noop",
+        noop_handler,
+    )
+
+    suggestions = [
+        {"id": "auto-applied"},
+        {"id": "auto-noop"},
+        {"id": "auto-unsupported"},
+        {"id": ""},
+    ]
+
+    summary = _apply_suggestions(repo, suggestions, auto_confirm=True)
+
+    assert summary["applied"] == ["auto-applied"]
+    assert summary["noop"] == ["auto-noop"]
+    assert summary["unsupported"] == ["auto-unsupported"]
+    assert summary["skipped"] == []
+    assert summary["errors"] == []
+
+    actions = {entry["id"]: entry for entry in summary["actions"]}
+    assert actions["auto-applied"]["status"] == "applied"
+    assert actions["auto-applied"]["paths"] == ["created.txt"]
+    assert actions["auto-noop"]["status"] == "noop"
+    assert actions["auto-noop"]["paths"] == ["noop.txt"]
+    assert actions["auto-unsupported"]["status"] == "unsupported"
+    assert "auto-unsupported" not in actions.get("", {})
+
+
+def test_apply_suggestions_prompt_decline(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: CaptureFixtureStr
+) -> None:
+    repo = tmp_path / "prompt-decline"
+    repo.mkdir()
+
+    def applied_handler(root: Path) -> dict[str, object]:
+        assert root == repo
+        return {
+            "status": "applied",
+            "paths": ["prompted.txt"],
+            "message": "applied",
+        }
+
+    monkeypatch.setitem(
+        main_module.APPLY_HANDLERS,
+        "prompted",
+        applied_handler,
+    )
+
+    def raising_input() -> str:
+        raise EOFError
+
+    monkeypatch.setattr("builtins.input", raising_input)
+
+    summary = _apply_suggestions(
+        repo,
+        [{"id": "prompted", "title": "Prompted"}],
+        auto_confirm=False,
+    )
+
+    captured = capsys.readouterr()
+    assert "Apply suggestion 'Prompted' (prompted)? [y/N]:" in captured.err
+    assert summary["skipped"] == ["prompted"]
+    assert summary["actions"][0]["status"] == "skipped"
+
+
+def test_apply_suggestions_reports_errors(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: CaptureFixtureStr
+) -> None:
+    repo = tmp_path / "apply-error"
+    repo.mkdir()
+
+    def boom(_: Path) -> dict[str, object]:
+        raise OSError("disk full")
+
+    monkeypatch.setitem(main_module.APPLY_HANDLERS, "boom", boom)
+
+    summary = _apply_suggestions(repo, [{"id": "boom"}], auto_confirm=True)
+
+    captured = capsys.readouterr()
+    assert "Failed to apply suggestion" in captured.err
+    assert summary["errors"] == ["boom"]
+    assert summary["actions"][0]["status"] == "error"
+    assert summary["actions"][0]["id"] == "boom"
+
+
+def test_spin_apply_produces_summary(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: CaptureFixtureStr
+) -> None:
+    repo = tmp_path / "apply-flow"
+    repo.mkdir()
+    target = repo.resolve()
+
+    stats_before = {"before": True}
+    suggestions_before = [{"id": "auto-applied"}]
+    stats_after = {"after": True}
+    suggestions_after: list[dict[str, object]] = []
+    analyze_calls: list[tuple[Path, frozenset[str]]] = []
+
+    def fake_analyze(path: Path, *, analyzers=None):
+        analyze_calls.append((path, frozenset(analyzers or [])))
+        if len(analyze_calls) == 1:
+            return stats_before, suggestions_before
+        if len(analyze_calls) == 2:
+            return stats_after, suggestions_after
+        raise AssertionError("Unexpected analyze call")
+
+    def fake_apply(
+        path: Path, suggestions: list[dict[str, object]], *, auto_confirm: bool
+    ) -> dict[str, object]:
+        assert path == target
+        assert suggestions == suggestions_before
+        assert auto_confirm is True
+        return {
+            "actions": [
+                {
+                    "id": "auto-applied",
+                    "status": "applied",
+                    "message": "ok",
+                    "paths": [],
+                }
+            ],
+            "applied": ["auto-applied"],
+            "skipped": [],
+            "unsupported": [],
+            "noop": [],
+            "errors": [],
+        }
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fake_analyze)
+    monkeypatch.setattr(main_module, "_apply_suggestions", fake_apply)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply=True,
+        apply_all=False,
+        format="json",
+        analyzers=None,
+        cache_dir=None,
+        yes=True,
+        telemetry=None,
+    )
+
+    spin(args)
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+
+    assert payload["mode"] == "apply"
+    assert payload["stats_before"] == stats_before
+    assert payload["suggestions_before"] == suggestions_before
+    assert payload["stats_after"] == stats_after
+    assert payload["suggestions_after"] == suggestions_after
+    assert payload["applied"] == ["auto-applied"]
+    assert len(analyze_calls) == 2
+    assert all(call[0] == target for call in analyze_calls)
+
+
+def test_spin_apply_all_auto_confirms(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: CaptureFixtureStr
+) -> None:
+    repo = tmp_path / "apply-all-flow"
+    repo.mkdir()
+    target = repo.resolve()
+
+    stats_before = {"before": True}
+    suggestions_before = [{"id": "auto-applied"}]
+    stats_after = {"after": True}
+    suggestions_after = [{"id": "remaining"}]
+    analyze_calls: list[tuple[Path, frozenset[str]]] = []
+
+    def fake_analyze(path: Path, *, analyzers=None):
+        analyze_calls.append((path, frozenset(analyzers or [])))
+        if len(analyze_calls) == 1:
+            return stats_before, suggestions_before
+        if len(analyze_calls) == 2:
+            return stats_after, suggestions_after
+        raise AssertionError("Unexpected analyze call")
+
+    def fake_apply(
+        path: Path, suggestions: list[dict[str, object]], *, auto_confirm: bool
+    ) -> dict[str, object]:
+        assert path == target
+        assert suggestions == suggestions_before
+        assert auto_confirm is True
+        return {
+            "actions": [
+                {
+                    "id": "auto-applied",
+                    "status": "applied",
+                    "message": "ok",
+                    "paths": [],
+                }
+            ],
+            "applied": ["auto-applied"],
+            "skipped": [],
+            "unsupported": [],
+            "noop": [],
+            "errors": [],
+        }
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fake_analyze)
+    monkeypatch.setattr(main_module, "_apply_suggestions", fake_apply)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply=False,
+        apply_all=True,
+        format="json",
+        analyzers=None,
+        cache_dir=None,
+        yes=False,
+        telemetry=None,
+    )
+
+    spin(args)
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+
+    assert payload["mode"] == "apply-all"
+    assert payload["stats_before"] == stats_before
+    assert payload["suggestions_before"] == suggestions_before
+    assert payload["stats_after"] == stats_after
+    assert payload["suggestions_after"] == suggestions_after
+    assert payload["applied"] == ["auto-applied"]
+    assert len(analyze_calls) == 2
+    assert all(call[0] == target for call in analyze_calls)
+
+
+@pytest.mark.parametrize(
+    ("apply_flag", "apply_all_flag"),
+    [(True, False), (False, True)],
+)
+def test_spin_apply_modes_reject_format_before_actions(
+    tmp_path: Path, apply_flag: bool, apply_all_flag: bool
+) -> None:
+    repo = tmp_path / (
+        "apply-invalid-format" if apply_flag else "apply-all-invalid-format"
+    )
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply=apply_flag,
+        apply_all=apply_all_flag,
+        format="table",
+        analyzers=None,
+        cache_dir=None,
+        yes=False,
+        telemetry=None,
+    )
+
+    with pytest.raises(SystemExit) as excinfo:
+        spin(args)
+
+    message = str(excinfo.value)
+    assert "--format is only supported with --dry-run." in message
+    assert list(repo.iterdir()) == []
+
+
+def test_spin_apply_bootstraps_missing_assets(tmp_path: Path) -> None:
+    repo = tmp_path / "apply"
+    repo.mkdir()
+
+    result = run_spin_apply(repo, "--yes")
+
+    assert result["mode"] == "apply"
+    assert set(result["applied"]) == {
+        "add-readme",
+        "add-docs",
+        "add-tests",
+        "add-linting",
+        "configure-ci",
+    }
+    assert result["errors"] == []
+    assert result["suggestions_after"] == []
+
+    readme = repo / "README.md"
+    docs_readme = repo / "docs" / "README.md"
+    tests_file = repo / "tests" / "test_placeholder.py"
+    lint_file = repo / ".pre-commit-config.yaml"
+    workflow = repo / ".github" / "workflows" / "ci.yml"
+
+    assert readme.exists()
+    assert docs_readme.exists()
+    assert tests_file.exists()
+    assert lint_file.exists()
+    assert workflow.exists()
+
+    assert "Documentation" in docs_readme.read_text()
+    assert repo.name in readme.read_text()
+    assert "pytest" in workflow.read_text()
+
+
+def test_spin_apply_reports_unsupported_suggestions(tmp_path: Path) -> None:
+    repo = tmp_path / "apply-unsupported"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+
+    result = run_spin_apply(repo, "--yes")
+
+    assert "commit-lockfiles" in result["unsupported"]
+    action_status: dict[str, str] = {}
+    for entry in result["actions"]:
+        action_status[entry["id"]] = entry["status"]
+    assert action_status["commit-lockfiles"] == "unsupported"
+
+    after_ids = {entry["id"] for entry in result["suggestions_after"]}
+    assert "commit-lockfiles" in after_ids
+    assert "add-readme" not in after_ids
+    assert "add-docs" not in after_ids
+
+
+def test_spin_apply_all_bootstraps_missing_assets(tmp_path: Path) -> None:
+    repo = tmp_path / "apply-all"
+    repo.mkdir()
+
+    result = run_spin_apply_all(repo)
+
+    assert result["mode"] == "apply-all"
+    assert set(result["applied"]) == {
+        "add-readme",
+        "add-docs",
+        "add-tests",
+        "add-linting",
+        "configure-ci",
+    }
+    assert result["errors"] == []
+    assert result["suggestions_after"] == []
+
+    readme = repo / "README.md"
+    docs_readme = repo / "docs" / "README.md"
+    tests_file = repo / "tests" / "test_placeholder.py"
+    lint_file = repo / ".pre-commit-config.yaml"
+    workflow = repo / ".github" / "workflows" / "ci.yml"
+
+    assert readme.exists()
+    assert docs_readme.exists()
+    assert tests_file.exists()
+    assert lint_file.exists()
+    assert workflow.exists()
+
+    assert "Documentation" in docs_readme.read_text()
+    assert repo.name in readme.read_text()
+    assert "pytest" in workflow.read_text()
 
 
 def test_spin_rejects_unknown_format(tmp_path: Path) -> None:

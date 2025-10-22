@@ -1,3 +1,13 @@
+## 2025-10-20
+- feat: add `flywheel spin --apply-all` for non-interactive scaffolding to
+  honor the automation promise outlined in
+  `docs/flywheel-npx-spin-design.md`.
+
+## 2025-10-19
+- feat: ship `flywheel spin --apply` scaffolding that bootstraps docs, README,
+  tests, lint config, and CI workflows to fulfill the apply-mode plan noted in
+  `docs/flywheel-npx-spin-design.md`.
+
 ## 2025-10-18
 - feat: add `summary` fields to `flywheel spin --dry-run` suggestions so the
   output matches the design doc schema.
