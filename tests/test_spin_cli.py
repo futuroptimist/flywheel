@@ -13,8 +13,10 @@ import pytest
 from flywheel import __main__ as main_module
 from flywheel.__main__ import (
     LINT_VALIDATION_COMMANDS,
+    NO_SUGGESTIONS_SUMMARY,
     SPIN_ANALYZERS,
     _analyze_repository,
+    _build_summary,
     _detect_lint_config,
     _detect_tests,
     _format_stats_lines,
@@ -151,6 +153,15 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     ]
     lint_validation_commands = list(LINT_VALIDATION_COMMANDS)
     assert validations["add-linting"] == lint_validation_commands
+    expected_summary = " ".join(
+        [
+            "Repository is missing a README.md,",
+            "a docs/ directory,",
+            "CI workflows, automated tests, and lint configuration.",
+            "Generated 5 suggestions from dry-run analyzers.",
+        ]
+    )
+    assert result["summary"] == expected_summary
 
 
 def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
@@ -180,6 +191,13 @@ def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
     assert stats["has_lint_config"] is True
 
     assert result["suggestions"] == []
+    expected_summary = " ".join(
+        [
+            "Baseline analyzers found no issues;",
+            "repository meets flywheel defaults.",
+        ]
+    )
+    assert result["summary"] == expected_summary
 
 
 def test_spin_analyzers_subset(tmp_path: Path) -> None:
@@ -207,6 +225,14 @@ def test_spin_analyzers_subset(tmp_path: Path) -> None:
     for entry in result["suggestions"]:
         assert entry["validation"], entry["id"]
         assert entry["dependencies"] == []
+    expected_summary = " ".join(
+        [
+            "Repository is missing a docs/ directory",
+            "and dependency lockfiles.",
+            "Generated 2 suggestions from dry-run analyzers.",
+        ]
+    )
+    assert result["summary"] == expected_summary
 
 
 def test_spin_analyzers_disable_with_minus(tmp_path: Path) -> None:
@@ -234,6 +260,15 @@ def test_spin_analyzers_disable_with_minus(tmp_path: Path) -> None:
     for entry in result["suggestions"]:
         assert entry["validation"], entry["id"]
         assert entry["dependencies"] == []
+
+
+def test_build_summary_handles_unknown_suggestions() -> None:
+    stats = {"total_files": 3}
+    suggestions = [{"id": "custom-task"}]
+
+    summary = _build_summary(stats, suggestions)
+
+    assert summary == "Generated 1 suggestion from dry-run analyzers."
 
 
 def test_spin_invalid_analyzer_errors(tmp_path: Path) -> None:
@@ -932,7 +967,9 @@ def test_spin_reuses_cache_when_analyzers_match(
     spin(args)
 
     output = json.loads(capsys.readouterr().out)
-    assert output == cached_payload
+    expected_output = dict(cached_payload)
+    expected_output["summary"] = NO_SUGGESTIONS_SUMMARY
+    assert output == expected_output
 
 
 def test_spin_skips_cache_when_payload_is_not_dict(

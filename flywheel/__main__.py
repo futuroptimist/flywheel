@@ -655,6 +655,22 @@ LINT_VALIDATION_COMMANDS = (
     " || flake8 .",
 )
 
+SUMMARY_HINTS: dict[str, tuple[int, str]] = {
+    "add-readme": (10, "a README.md"),
+    "add-docs": (20, "a docs/ directory"),
+    "configure-ci": (30, "CI workflows"),
+    "add-tests": (40, "automated tests"),
+    "add-linting": (50, "lint configuration"),
+    "commit-lockfiles": (60, "dependency lockfiles"),
+}
+
+NO_SUGGESTIONS_SUMMARY = " ".join(
+    [
+        "Baseline analyzers found no issues;",
+        "repository meets flywheel defaults.",
+    ]
+)
+
 
 def _pyproject_configures_lint(pyproject: Path) -> bool:
     if not pyproject.exists():
@@ -1087,6 +1103,48 @@ def _format_confidence(value: object) -> str:
     return f"{number:.2f}"
 
 
+def _join_natural(items: Sequence[str]) -> str:
+    if not items:
+        return ""
+    if len(items) == 1:
+        return items[0]
+    if len(items) == 2:
+        return f"{items[0]} and {items[1]}"
+    return ", ".join(items[:-1]) + f", and {items[-1]}"
+
+
+def _build_summary(
+    _stats: dict[str, object], suggestions: Sequence[dict[str, object]]
+) -> str:
+    total = len(suggestions)
+    if total == 0:
+        return NO_SUGGESTIONS_SUMMARY
+
+    missing_entries: list[tuple[int, str]] = []
+    seen_phrases: set[str] = set()
+    for suggestion in suggestions:
+        suggestion_id = str(suggestion.get("id", ""))
+        hint = SUMMARY_HINTS.get(suggestion_id)
+        if hint and hint[1] not in seen_phrases:
+            missing_entries.append(hint)
+            seen_phrases.add(hint[1])
+
+    missing_entries.sort(key=lambda item: item[0])
+    missing_items = [phrase for _, phrase in missing_entries]
+
+    pieces: list[str] = []
+    if missing_items:
+        missing_text = _join_natural(missing_items)
+        pieces.append(f"Repository is missing {missing_text}")
+    pieces.append(
+        "Generated {} suggestion{} from dry-run analyzers".format(
+            total,
+            "s" if total != 1 else "",
+        )
+    )
+    return ". ".join(pieces) + "."
+
+
 def _format_stats_lines(stats: dict[str, object]) -> list[str]:
     dependency = stats.get("dependency_health")
     language_mix = stats.get("language_mix", [])
@@ -1357,11 +1415,13 @@ def spin(args: argparse.Namespace) -> None:
 
     if cached_result is None:
         stats, suggestions = _analyze_repository(target, analyzers=analyzers)
+        summary_text = _build_summary(stats, suggestions)
         result = {
             "target": str(target),
             "mode": "dry-run",
             "stats": stats,
             "suggestions": suggestions,
+            "summary": summary_text,
             "analyzers": normalized_analyzers,
         }
         if cache_dir is not None:
@@ -1372,6 +1432,20 @@ def spin(args: argparse.Namespace) -> None:
                 message = f"Failed to write cache: {exc}"
                 raise SystemExit(message) from exc
     else:
+        summary_text = cached_result.get("summary")
+        if not isinstance(summary_text, str):
+            stats_block = cached_result.get("stats")
+            suggestions_block = cached_result.get("suggestions")
+            stats_are_dict = isinstance(stats_block, dict)
+            suggestions_are_list = isinstance(suggestions_block, list)
+            if stats_are_dict and suggestions_are_list:
+                refreshed = dict(cached_result)
+                summary_value = _build_summary(
+                    stats_block,
+                    suggestions_block,
+                )
+                refreshed["summary"] = summary_value
+                cached_result = refreshed
         result = cached_result
     fmt = getattr(args, "format", "json") or "json"
     if fmt == "json":
