@@ -9,6 +9,7 @@ import textwrap
 from collections import Counter
 from collections.abc import Collection, Sequence
 from pathlib import Path
+from typing import Callable
 
 import yaml
 
@@ -321,6 +322,18 @@ IMPACT_CONFIDENCE = {
     "medium": 0.8,
     "low": 0.7,
 }
+
+APPLY_README_CONTENT = """# Project Overview
+
+Describe the project purpose, setup instructions, and test commands.
+
+"""
+
+APPLY_DOCS_CONTENT = """# Documentation
+
+Use this directory for onboarding guides, architecture notes, and FAQ updates.
+
+"""
 
 
 def _merge_repo_specs(specs: Sequence[str]) -> list[str]:
@@ -1345,33 +1358,21 @@ def _write_spin_cache(
     return cache_path
 
 
-def spin(args: argparse.Namespace) -> None:
-    target = Path(args.path or ".").resolve()
-    if not target.exists():
-        raise SystemExit(f"Target path not found: {target}")
-    if not target.is_dir():
-        raise SystemExit(f"Target path is not a directory: {target}")
-    if not args.dry_run:
-        msg = "Only --dry-run mode is supported; re-run with --dry-run."
-        raise SystemExit(msg)
-    analyzers = _parse_analyzers(getattr(args, "analyzers", None))
-    normalized_analyzers = sorted(analyzers)
-    cache_analyzers: Collection[str] | None
-    if set(normalized_analyzers) == set(SPIN_ANALYZERS):
-        cache_analyzers = None
-    else:
-        cache_analyzers = normalized_analyzers
-    cache_dir_value = getattr(args, "cache_dir", None)
-    cache_dir: Path | None = None
+def _spin_result(
+    target: Path,
+    analyzers: set[str],
+    normalized_analyzers: Sequence[str],
+    cache_dir: Path | None,
+    cache_analyzers: Collection[str] | None,
+) -> dict[str, object]:
+    """Return analysis result for ``target`` using caching when available."""
+
     cached_result: dict[str, object] | None = None
-    if cache_dir_value:
-        cache_dir = Path(cache_dir_value)
+    if cache_dir is not None:
         cache_path = cache_dir / _spin_cache_filename(target, cache_analyzers)
         try:
             cached_text = cache_path.read_text()
-        except FileNotFoundError:
-            cached_result = None
-        except OSError:
+        except (FileNotFoundError, OSError):
             cached_result = None
         else:
             try:
@@ -1385,14 +1386,19 @@ def spin(args: argparse.Namespace) -> None:
                     stats_block = loaded.get("stats")
                     suggestions_block = loaded.get("suggestions")
                     cached_analyzers = loaded.get("analyzers")
+                    cached_analyzers_set: set[str] | None
                     if cached_analyzers is None:
                         cached_analyzers_set = set(SPIN_ANALYZERS)
-                    elif isinstance(cached_analyzers, list) and all(
-                        isinstance(name, str) for name in cached_analyzers
-                    ):
-                        cached_analyzers_set = {
-                            name.lower() for name in cached_analyzers
-                        }
+                    elif isinstance(cached_analyzers, (list, tuple, set)):
+                        all_strings = all(
+                            isinstance(name, str) for name in cached_analyzers
+                        )
+                        if all_strings:
+                            cached_analyzers_set = {
+                                str(name).lower() for name in cached_analyzers
+                            }
+                        else:
+                            cached_analyzers_set = None
                     else:
                         cached_analyzers_set = None
                     if (
@@ -1404,14 +1410,12 @@ def spin(args: argparse.Namespace) -> None:
                     ):
                         if "analyzers" not in loaded:
                             hydrated = dict(loaded)
-                            hydrated["analyzers"] = sorted(analyzers)
+                            hydrated["analyzers"] = list(normalized_analyzers)
                             cached_result = hydrated
                         else:
                             cached_result = loaded
                     else:
                         cached_result = None
-                else:
-                    cached_result = None
 
     if cached_result is None:
         stats, suggestions = _analyze_repository(target, analyzers=analyzers)
@@ -1422,31 +1426,153 @@ def spin(args: argparse.Namespace) -> None:
             "stats": stats,
             "suggestions": suggestions,
             "summary": summary_text,
-            "analyzers": normalized_analyzers,
+            "analyzers": list(normalized_analyzers),
         }
         if cache_dir is not None:
             try:
                 _write_spin_cache(cache_dir, target, result, cache_analyzers)
-            except OSError as exc:  # pragma: no cover
-                # Filesystem errors are rare when writing cache files.
+            except OSError as exc:  # pragma: no cover - filesystem guard
                 message = f"Failed to write cache: {exc}"
                 raise SystemExit(message) from exc
+        return result
+    return cached_result
+
+
+def _apply_add_readme(target: Path) -> Path:
+    readme = target / "README.md"
+    if readme.exists():
+        raise FileExistsError("README.md already exists")
+    readme.write_text(APPLY_README_CONTENT)
+    return readme
+
+
+def _apply_add_docs(target: Path) -> Path:
+    docs_dir = target / "docs"
+    docs_dir.mkdir(parents=True, exist_ok=True)
+    doc_readme = docs_dir / "README.md"
+    if doc_readme.exists():
+        raise FileExistsError("docs/README.md already exists")
+    doc_readme.write_text(APPLY_DOCS_CONTENT)
+    return doc_readme
+
+
+def _apply_add_tests(target: Path) -> Path:
+    tests_dir = target / "tests"
+    tests_dir.mkdir(parents=True, exist_ok=True)
+    marker = tests_dir / ".gitkeep"
+    if marker.exists():
+        raise FileExistsError("tests/.gitkeep already exists")
+    marker.write_text("")
+    return marker
+
+
+APPLY_HANDLERS: dict[str, Callable[[Path], Path]] = {
+    "add-readme": _apply_add_readme,
+    "add-docs": _apply_add_docs,
+    "add-tests": _apply_add_tests,
+}
+
+
+def _apply_spin_suggestions(
+    target: Path,
+    result: dict[str, object],
+    assume_yes: bool = False,
+) -> None:
+    suggestions = result.get("suggestions", [])
+    if not isinstance(suggestions, list) or not suggestions:
+        print("No suggestions to apply.")
+        return
+
+    applied: list[tuple[str, str, Path]] = []
+    skipped: list[tuple[str, str, str]] = []
+    for suggestion in suggestions:
+        if not isinstance(suggestion, dict):
+            continue
+        suggestion_id = str(suggestion.get("id", ""))
+        title = str(suggestion.get("title", suggestion_id))
+        handler = APPLY_HANDLERS.get(suggestion_id)
+        if handler is None:
+            skipped.append((suggestion_id, title, "unsupported"))
+            continue
+        if not assume_yes:
+            prompt = f"Apply '{title}'? [y/N]: "
+            try:
+                response = input(prompt)
+            except EOFError:
+                skipped.append((suggestion_id, title, "declined"))
+                continue
+            if response.strip().lower() not in {"y", "yes"}:
+                skipped.append((suggestion_id, title, "declined"))
+                continue
+        try:
+            created = handler(target)
+        except FileExistsError:
+            skipped.append((suggestion_id, title, "already satisfied"))
+        except Exception as exc:  # pragma: no cover - unexpected handler error
+            skipped.append((suggestion_id, title, f"error: {exc}"))
+        else:
+            applied.append((suggestion_id, title, created))
+
+    if applied:
+        print("Applied suggestions:")
+        for suggestion_id, title, created_path in applied:
+            try:
+                rel = created_path.relative_to(target)
+            except ValueError:
+                rel = created_path
+            print(f" - {suggestion_id} → {rel}")
     else:
-        summary_text = cached_result.get("summary")
-        if not isinstance(summary_text, str):
-            stats_block = cached_result.get("stats")
-            suggestions_block = cached_result.get("suggestions")
-            stats_are_dict = isinstance(stats_block, dict)
-            suggestions_are_list = isinstance(suggestions_block, list)
-            if stats_are_dict and suggestions_are_list:
-                refreshed = dict(cached_result)
-                summary_value = _build_summary(
-                    stats_block,
-                    suggestions_block,
-                )
-                refreshed["summary"] = summary_value
-                cached_result = refreshed
-        result = cached_result
+        print("No suggestions were applied.")
+
+    if skipped:
+        print("Skipped suggestions:")
+        for suggestion_id, title, reason in skipped:
+            label = suggestion_id or title or "(unknown)"
+            print(f" - {label} ({reason})")
+
+
+def spin(args: argparse.Namespace) -> None:
+    target = Path(args.path or ".").resolve()
+    if not target.exists():
+        raise SystemExit(f"Target path not found: {target}")
+    if not target.is_dir():
+        raise SystemExit(f"Target path is not a directory: {target}")
+
+    apply_mode = bool(getattr(args, "apply", False))
+    dry_run_mode = bool(getattr(args, "dry_run", False))
+    if apply_mode and dry_run_mode:
+        raise SystemExit("Use either --dry-run or --apply, not both.")
+    if not apply_mode and not dry_run_mode:
+        message = "Choose --dry-run to preview or --apply to scaffold fixes."
+        raise SystemExit(message)
+
+    analyzers = _parse_analyzers(getattr(args, "analyzers", None))
+    normalized_analyzers = sorted(analyzers)
+    cache_analyzers: Collection[str] | None
+    if set(normalized_analyzers) == set(SPIN_ANALYZERS):
+        cache_analyzers = None
+    else:
+        cache_analyzers = normalized_analyzers
+
+    cache_dir_value = getattr(args, "cache_dir", None)
+    cache_dir: Path | None = Path(cache_dir_value) if cache_dir_value else None
+
+    result = _spin_result(
+        target,
+        analyzers,
+        normalized_analyzers,
+        cache_dir,
+        cache_analyzers,
+    )
+
+    if apply_mode:
+        _apply_spin_suggestions(
+            target,
+            result,
+            assume_yes=bool(getattr(args, "yes", False)),
+        )
+        return
+
     fmt = getattr(args, "format", "json") or "json"
     if fmt == "json":
         output = json.dumps(result, indent=2, sort_keys=True)
@@ -1606,6 +1732,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="generate heuristic suggestions without applying changes",
     )
     p_spin.add_argument(
+        "--apply",
+        action="store_true",
+        help="apply available scaffolding for supported suggestions",
+    )
+    p_spin.add_argument(
         "--format",
         choices=["json", "table", "markdown"],
         default="json",
@@ -1622,6 +1753,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="directory for storing dry-run cache results",
     )
     p_spin.add_argument("--analyzers", help=SPIN_ANALYZER_HELP)
+    p_spin.add_argument(
+        "--yes",
+        action="store_true",
+        help="apply suggestions without prompting for confirmation",
+    )
     p_spin.set_defaults(func=spin)
 
     p_crawl = sub.add_parser("crawl", help="generate repo feature summary")

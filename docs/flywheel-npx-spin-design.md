@@ -1,4 +1,7 @@
 ## Implementation Progress
+- **2025-10-23:** Added a minimal `--apply` scaffolder to the Python
+  `flywheel spin` CLI so heuristics can bootstrap README, docs, and test
+  placeholders while the TypeScript apply engine is under active development.
 - **2025-10-17:** Added a `--cache-dir` flag to the Python `flywheel spin --dry-run`
   CLI that writes the JSON payload to a hashed filename inside the selected
   directory so repeated runs can reuse cached analysis artifacts.
@@ -286,7 +289,7 @@ gantt
 |---------|-------------|--------|
 | `flywheel spin` | Scan repo, generate suggestions. | Draft |
 | `flywheel spin --dry-run` | Output suggestions without LLM or patch application (mock data). | Draft |
-| `flywheel spin --apply` | Interactive apply mode. | Planned |
+| `flywheel spin --apply` | Interactive apply mode. | Prototype |
 | `flywheel spin --apply-all` | Apply all suggestions with zero prompts (requires `--force`). | Planned |
 | `flywheel config telemetry` | Manage telemetry preferences. | Shipped |
 
