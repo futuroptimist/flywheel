@@ -566,6 +566,23 @@ def test_maybe_prompt_skips_when_yes(monkeypatch, tmp_path: Path) -> None:
     assert invoked is False
 
 
+def test_maybe_prompt_skips_for_apply_all(monkeypatch, tmp_path: Path) -> None:
+    cli = reload_cli(monkeypatch, tmp_path)
+    invoked = False
+
+    def fake_prompt() -> None:
+        nonlocal invoked
+        invoked = True
+
+    monkeypatch.setattr(cli, "_prompt_for_telemetry", fake_prompt)
+
+    cli.maybe_prompt_for_telemetry(
+        SimpleNamespace(command="spin", apply_all=True, yes=False)
+    )
+
+    assert invoked is False
+
+
 def test_maybe_prompt_runs_without_yes(monkeypatch, tmp_path: Path) -> None:
     cli = reload_cli(monkeypatch, tmp_path)
     invoked = False
