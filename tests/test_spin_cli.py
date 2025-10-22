@@ -85,6 +85,60 @@ def run_spin_dry_run_text(
     return completed.stdout
 
 
+def run_spin_apply(
+    path: Path,
+    *extra: str,
+    env: dict[str, str] | None = None,
+) -> dict:
+    cmd = [
+        sys.executable,
+        "-m",
+        "flywheel",
+        "spin",
+        str(path),
+        "--apply",
+        *extra,
+    ]
+    run_env = os.environ.copy()
+    if env:
+        run_env.update(env)
+    completed = subprocess.run(
+        cmd,
+        check=True,
+        capture_output=True,
+        text=True,
+        env=run_env,
+    )
+    return json.loads(completed.stdout)
+
+
+def run_spin_apply_all(
+    path: Path,
+    *extra: str,
+    env: dict[str, str] | None = None,
+) -> dict:
+    cmd = [
+        sys.executable,
+        "-m",
+        "flywheel",
+        "spin",
+        str(path),
+        "--apply-all",
+        *extra,
+    ]
+    run_env = os.environ.copy()
+    if env:
+        run_env.update(env)
+    completed = subprocess.run(
+        cmd,
+        check=True,
+        capture_output=True,
+        text=True,
+        env=run_env,
+    )
+    return json.loads(completed.stdout)
+
+
 def test_parse_analyzers_defaults_when_blank() -> None:
     assert _parse_analyzers(",") == set(SPIN_ANALYZERS)
 
@@ -566,7 +620,57 @@ def test_spin_requires_dry_run_flag(tmp_path: Path) -> None:
     with pytest.raises(SystemExit) as exc:
         spin(args)
 
-    assert "Only --dry-run mode is supported" in str(exc.value)
+    assert "Use --dry-run" in str(exc.value)
+
+
+def test_spin_conflicts_on_apply_and_dry_run(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        apply=True,
+    )
+
+    with pytest.raises(SystemExit) as exc:
+        spin(args)
+
+    expected = "Use exactly one of --dry-run, --apply, or --apply-all."
+    assert expected in str(exc.value)
+
+
+def test_spin_conflicts_on_apply_all_and_dry_run(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        apply=False,
+        apply_all=True,
+    )
+
+    with pytest.raises(SystemExit) as exc:
+        spin(args)
+
+    expected = "Use exactly one of --dry-run, --apply, or --apply-all."
+    assert expected in str(exc.value)
+
+
+def test_spin_conflicts_on_apply_and_apply_all(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply=True,
+        apply_all=True,
+    )
+
+    with pytest.raises(SystemExit) as exc:
+        spin(args)
+
+    expected = "Use exactly one of --dry-run, --apply, or --apply-all."
+    assert expected in str(exc.value)
 
 
 def test_spin_writes_cache_file(tmp_path: Path) -> None:
@@ -1721,6 +1825,93 @@ def test_spin_cli_accepts_markdown_format(tmp_path: Path) -> None:
 
     assert "# flywheel spin dry-run" in output
     assert "| Confidence |" in output
+
+
+def test_spin_apply_bootstraps_missing_assets(tmp_path: Path) -> None:
+    repo = tmp_path / "apply"
+    repo.mkdir()
+
+    result = run_spin_apply(repo, "--yes")
+
+    assert result["mode"] == "apply"
+    assert set(result["applied"]) == {
+        "add-readme",
+        "add-docs",
+        "add-tests",
+        "add-linting",
+        "configure-ci",
+    }
+    assert result["errors"] == []
+    assert result["suggestions_after"] == []
+
+    readme = repo / "README.md"
+    docs_readme = repo / "docs" / "README.md"
+    tests_file = repo / "tests" / "test_placeholder.py"
+    lint_file = repo / ".pre-commit-config.yaml"
+    workflow = repo / ".github" / "workflows" / "ci.yml"
+
+    assert readme.exists()
+    assert docs_readme.exists()
+    assert tests_file.exists()
+    assert lint_file.exists()
+    assert workflow.exists()
+
+    assert "Documentation" in docs_readme.read_text()
+    assert repo.name in readme.read_text()
+    assert "pytest" in workflow.read_text()
+
+
+def test_spin_apply_reports_unsupported_suggestions(tmp_path: Path) -> None:
+    repo = tmp_path / "apply-unsupported"
+    repo.mkdir()
+    (repo / "package.json").write_text("{}\n")
+
+    result = run_spin_apply(repo, "--yes")
+
+    assert "commit-lockfiles" in result["unsupported"]
+    action_status: dict[str, str] = {}
+    for entry in result["actions"]:
+        action_status[entry["id"]] = entry["status"]
+    assert action_status["commit-lockfiles"] == "unsupported"
+
+    after_ids = {entry["id"] for entry in result["suggestions_after"]}
+    assert "commit-lockfiles" in after_ids
+    assert "add-readme" not in after_ids
+    assert "add-docs" not in after_ids
+
+
+def test_spin_apply_all_bootstraps_missing_assets(tmp_path: Path) -> None:
+    repo = tmp_path / "apply-all"
+    repo.mkdir()
+
+    result = run_spin_apply_all(repo)
+
+    assert result["mode"] == "apply-all"
+    assert set(result["applied"]) == {
+        "add-readme",
+        "add-docs",
+        "add-tests",
+        "add-linting",
+        "configure-ci",
+    }
+    assert result["errors"] == []
+    assert result["suggestions_after"] == []
+
+    readme = repo / "README.md"
+    docs_readme = repo / "docs" / "README.md"
+    tests_file = repo / "tests" / "test_placeholder.py"
+    lint_file = repo / ".pre-commit-config.yaml"
+    workflow = repo / ".github" / "workflows" / "ci.yml"
+
+    assert readme.exists()
+    assert docs_readme.exists()
+    assert tests_file.exists()
+    assert lint_file.exists()
+    assert workflow.exists()
+
+    assert "Documentation" in docs_readme.read_text()
+    assert repo.name in readme.read_text()
+    assert "pytest" in workflow.read_text()
 
 
 def test_spin_rejects_unknown_format(tmp_path: Path) -> None:

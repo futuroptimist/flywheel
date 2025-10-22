@@ -9,6 +9,7 @@ import textwrap
 from collections import Counter
 from collections.abc import Collection, Sequence
 from pathlib import Path
+from typing import Callable, Literal, TypedDict
 
 import yaml
 
@@ -30,6 +31,8 @@ HELP_EPILOG = textwrap.dedent(
     Examples:
       flywheel init ./project --language python --save-dev --yes
       flywheel spin --dry-run path/to/repo --format table
+      flywheel spin ./repo --apply --yes
+      flywheel spin ./repo --apply-all
     """
 )
 
@@ -178,6 +181,10 @@ def maybe_prompt_for_telemetry(args: argparse.Namespace) -> None:
         # skip the telemetry prompt to avoid blocking automation (for example
         # during CI test runs).
         return
+    if getattr(args, "apply_all", False):
+        # ``--apply-all`` is a non-interactive mode that should never block on
+        # prompts.
+        return
     _prompt_for_telemetry()
 
 
@@ -242,6 +249,14 @@ SPIN_ANALYZERS = {
 SPIN_ANALYZER_HELP = (
     "comma-separated analyzers to enable/disable (use -name to disable)"
 )
+# fmt: off
+SPIN_MODE_CONFLICT_MESSAGE = (
+    "Use exactly one of --dry-run, --apply, or --apply-all."
+)
+SPIN_MODE_REQUIRED_MESSAGE = (
+    "Use --dry-run to preview or --apply/--apply-all to make changes."
+)
+# fmt: on
 LANGUAGE_BY_SUFFIX = {
     ".bash": "Shell",
     ".c": "C",
@@ -1058,6 +1073,322 @@ def _sort_suggestions(
     return sorted(items, key=sort_key)
 
 
+class ApplyResult(TypedDict):
+    """Result returned by suggestion apply handlers."""
+
+    status: Literal["applied", "noop"]
+    paths: list[str]
+    message: str
+
+
+README_TEMPLATE = textwrap.dedent(
+    """\
+    # {title}
+
+    Describe your project goals, setup steps, and testing instructions.
+    """
+)
+
+
+DOCS_TEMPLATE = textwrap.dedent(
+    """\
+    # Documentation
+
+    Collect onboarding guides, architecture notes, and runbooks here.
+    """
+)
+
+
+TEST_TEMPLATE = textwrap.dedent(
+    """\
+    def test_placeholder() -> None:
+        '''Replace this smoke test with real coverage.'''
+
+        assert True
+    """
+)
+
+
+PRE_COMMIT_TEMPLATE = textwrap.dedent(
+    """\
+    repos:
+      - repo: https://github.com/pre-commit/pre-commit-hooks
+        rev: v4.6.0
+        hooks:
+          - id: check-added-large-files
+          - id: check-merge-conflict
+          - id: check-yaml
+          - id: end-of-file-fixer
+          - id: trailing-whitespace
+    """
+)
+
+
+CI_WORKFLOW_TEMPLATE = textwrap.dedent(
+    """\
+    name: CI
+
+    on:
+      push:
+        branches:
+          - main
+      pull_request:
+
+    jobs:
+      checks:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+          - name: Set up Python
+            uses: actions/setup-python@v5
+            with:
+              python-version: "3.12"
+          - name: Set up Node.js
+            uses: actions/setup-node@v4
+            with:
+              node-version: "20"
+          - name: Install dependencies
+            run: |
+              if [ -f requirements.txt ]; then
+                pip install -r requirements.txt
+              fi
+              if [ -f package.json ]; then
+                npm ci
+              fi
+          - name: Run checks
+            run: |
+              if [ -f scripts/checks.sh ]; then
+                bash scripts/checks.sh
+              else
+                if command -v pytest >/dev/null 2>&1; then
+                  pytest -q || true
+                fi
+                if [ -f package.json ]; then
+                  npm test || npm run test:ci || true
+                fi
+              fi
+    """
+)
+
+
+def _relativize(root: Path, path: Path) -> str:
+    """Return ``path`` relative to ``root`` when possible."""
+
+    try:
+        return path.relative_to(root).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def _apply_add_readme(root: Path) -> ApplyResult:
+    """Create a README scaffold if one does not exist."""
+
+    readme_path = root / "README.md"
+    if readme_path.exists():
+        return {
+            "status": "noop",
+            "paths": [],
+            "message": "README.md already exists.",
+        }
+    title = root.name.strip() or "Project"
+    content = README_TEMPLATE.format(title=title).strip() + "\n"
+    readme_path.write_text(content)
+    return {
+        "status": "applied",
+        "paths": [_relativize(root, readme_path)],
+        "message": "Created README.md",
+    }
+
+
+def _apply_add_docs(root: Path) -> ApplyResult:
+    """Create docs/ with a README scaffold."""
+
+    docs_dir = root / "docs"
+    docs_dir.mkdir(parents=True, exist_ok=True)
+    index_path = docs_dir / "README.md"
+    if index_path.exists():
+        return {
+            "status": "noop",
+            "paths": [],
+            "message": "docs/README.md already exists.",
+        }
+    content = DOCS_TEMPLATE.strip() + "\n"
+    index_path.write_text(content)
+    return {
+        "status": "applied",
+        "paths": [_relativize(root, index_path)],
+        "message": "Created docs/README.md",
+    }
+
+
+def _apply_add_tests(root: Path) -> ApplyResult:
+    """Bootstrap a tests/ directory with a placeholder test."""
+
+    tests_dir = root / "tests"
+    tests_dir.mkdir(parents=True, exist_ok=True)
+    test_file = tests_dir / "test_placeholder.py"
+    if test_file.exists():
+        return {
+            "status": "noop",
+            "paths": [],
+            "message": "tests/test_placeholder.py already exists.",
+        }
+    content = TEST_TEMPLATE.strip() + "\n"
+    test_file.write_text(content)
+    return {
+        "status": "applied",
+        "paths": [_relativize(root, test_file)],
+        "message": "Created tests/test_placeholder.py",
+    }
+
+
+def _apply_add_linting(root: Path) -> ApplyResult:
+    """Write a minimal pre-commit configuration."""
+
+    lint_path = root / ".pre-commit-config.yaml"
+    if lint_path.exists():
+        return {
+            "status": "noop",
+            "paths": [],
+            "message": ".pre-commit-config.yaml already exists.",
+        }
+    content = PRE_COMMIT_TEMPLATE.strip() + "\n"
+    lint_path.write_text(content)
+    return {
+        "status": "applied",
+        "paths": [_relativize(root, lint_path)],
+        "message": "Created .pre-commit-config.yaml",
+    }
+
+
+def _apply_configure_ci(root: Path) -> ApplyResult:
+    """Generate a baseline CI workflow."""
+
+    workflows_dir = root / ".github" / "workflows"
+    workflows_dir.mkdir(parents=True, exist_ok=True)
+    workflow_path = workflows_dir / "ci.yml"
+    if workflow_path.exists():
+        return {
+            "status": "noop",
+            "paths": [],
+            "message": ".github/workflows/ci.yml already exists.",
+        }
+    content = CI_WORKFLOW_TEMPLATE.strip() + "\n"
+    workflow_path.write_text(content)
+    return {
+        "status": "applied",
+        "paths": [_relativize(root, workflow_path)],
+        "message": "Created .github/workflows/ci.yml",
+    }
+
+
+APPLY_HANDLERS: dict[str, Callable[[Path], ApplyResult]] = {
+    "add-readme": _apply_add_readme,
+    "add-docs": _apply_add_docs,
+    "add-tests": _apply_add_tests,
+    "add-linting": _apply_add_linting,
+    "configure-ci": _apply_configure_ci,
+}
+
+
+def _apply_suggestions(
+    root: Path,
+    suggestions: Sequence[dict[str, object]],
+    *,
+    auto_confirm: bool = False,
+) -> dict[str, object]:
+    """Interactively apply supported suggestions and return a summary."""
+
+    actions: list[dict[str, object]] = []
+    applied: list[str] = []
+    skipped: list[str] = []
+    unsupported: list[str] = []
+    noop: list[str] = []
+    errors: list[str] = []
+
+    for suggestion in suggestions:
+        suggestion_id = str(suggestion.get("id", ""))
+        if not suggestion_id:
+            continue
+        handler = APPLY_HANDLERS.get(suggestion_id)
+        if handler is None:
+            message = "Automatic apply is not available for this suggestion."
+            actions.append(
+                {
+                    "id": suggestion_id,
+                    "status": "unsupported",
+                    "message": message,
+                    "paths": [],
+                }
+            )
+            unsupported.append(suggestion_id)
+            continue
+        if auto_confirm:
+            should_apply = True
+        else:
+            title = str(suggestion.get("title", suggestion_id))
+            print(
+                f"Apply suggestion '{title}' ({suggestion_id})? [y/N]: ",
+                end="",
+                file=sys.stderr,
+            )
+            try:
+                response = input()
+            except EOFError:
+                response = ""
+            should_apply = response.strip().lower() in {"y", "yes"}
+        if not should_apply:
+            actions.append(
+                {
+                    "id": suggestion_id,
+                    "status": "skipped",
+                    "message": "User declined to apply the suggestion.",
+                    "paths": [],
+                }
+            )
+            skipped.append(suggestion_id)
+            continue
+        try:
+            result = handler(root)
+        except OSError as exc:
+            message = f"Failed to apply suggestion: {exc}"
+            print(message, file=sys.stderr)
+            actions.append(
+                {
+                    "id": suggestion_id,
+                    "status": "error",
+                    "message": message,
+                    "paths": [],
+                }
+            )
+            errors.append(suggestion_id)
+            continue
+        status = result["status"]
+        message = result["message"]
+        paths = list(result["paths"])
+        actions.append(
+            {
+                "id": suggestion_id,
+                "status": status,
+                "message": message,
+                "paths": paths,
+            }
+        )
+        if status == "applied":
+            applied.append(suggestion_id)
+        else:
+            noop.append(suggestion_id)
+
+    return {
+        "actions": actions,
+        "applied": applied,
+        "skipped": skipped,
+        "unsupported": unsupported,
+        "noop": noop,
+        "errors": errors,
+    }
+
+
 def _format_bool(value: bool | None) -> str:
     if value is True:
         return "yes"
@@ -1293,9 +1624,15 @@ def spin(args: argparse.Namespace) -> None:
         raise SystemExit(f"Target path not found: {target}")
     if not target.is_dir():
         raise SystemExit(f"Target path is not a directory: {target}")
-    if not args.dry_run:
-        msg = "Only --dry-run mode is supported; re-run with --dry-run."
-        raise SystemExit(msg)
+    dry_run_mode = bool(getattr(args, "dry_run", False))
+    apply_mode = bool(getattr(args, "apply", False))
+    apply_all_mode = bool(getattr(args, "apply_all", False))
+    mode_flags = (dry_run_mode, apply_mode, apply_all_mode)
+    mode_count = sum(1 for flag in mode_flags if flag)
+    if mode_count > 1:
+        raise SystemExit(SPIN_MODE_CONFLICT_MESSAGE)
+    if mode_count == 0:
+        raise SystemExit(SPIN_MODE_REQUIRED_MESSAGE)
     analyzers = _parse_analyzers(getattr(args, "analyzers", None))
     normalized_analyzers = sorted(analyzers)
     cache_analyzers: Collection[str] | None
@@ -1303,6 +1640,36 @@ def spin(args: argparse.Namespace) -> None:
         cache_analyzers = None
     else:
         cache_analyzers = normalized_analyzers
+    if apply_mode or apply_all_mode:
+        stats_before, suggestions_before = _analyze_repository(
+            target, analyzers=analyzers
+        )
+        auto_confirm = apply_all_mode or bool(getattr(args, "yes", False))
+        summary = _apply_suggestions(
+            target,
+            suggestions_before,
+            auto_confirm=auto_confirm,
+        )
+        stats_after, suggestions_after = _analyze_repository(
+            target, analyzers=analyzers
+        )
+        result = {
+            "target": str(target),
+            "mode": "apply-all" if apply_all_mode else "apply",
+            "analyzers": normalized_analyzers,
+            "stats_before": stats_before,
+            "suggestions_before": suggestions_before,
+            "stats_after": stats_after,
+            "suggestions_after": suggestions_after,
+            **summary,
+        }
+        fmt = getattr(args, "format", "json") or "json"
+        if fmt != "json":
+            raise SystemExit("--format is only supported with --dry-run.")
+        output = json.dumps(result, indent=2, sort_keys=True)
+        print(output)
+        return
+
     cache_dir_value = getattr(args, "cache_dir", None)
     cache_dir: Path | None = None
     cached_result: dict[str, object] | None = None
@@ -1532,6 +1899,16 @@ def build_parser() -> argparse.ArgumentParser:
         help="generate heuristic suggestions without applying changes",
     )
     p_spin.add_argument(
+        "--apply",
+        action="store_true",
+        help="apply supported suggestions interactively",
+    )
+    p_spin.add_argument(
+        "--apply-all",
+        action="store_true",
+        help="apply all supported suggestions without prompts",
+    )
+    p_spin.add_argument(
         "--format",
         choices=["json", "table", "markdown"],
         default="json",
@@ -1548,6 +1925,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="directory for storing dry-run cache results",
     )
     p_spin.add_argument("--analyzers", help=SPIN_ANALYZER_HELP)
+    p_spin.add_argument(
+        "--yes",
+        action="store_true",
+        help="auto-accept prompts (for --apply in non-interactive runs)",
+    )
     p_spin.set_defaults(func=spin)
 
     p_crawl = sub.add_parser("crawl", help="generate repo feature summary")

@@ -325,6 +325,17 @@ field (`docs`, `fix`, or `chore`) and a heuristic `confidence` score between 0
 and 1 so the output matches the
 [`flywheel spin` design](docs/flywheel-npx-spin-design.md) schema.
 
+Ready to bootstrap the recommended scaffolding? Append `--apply` to create the
+missing assets automatically while confirming each suggestion, or use
+`--apply-all` to accept every supported change without prompts. The interactive
+mode walks through each suggestion, creating a README, `docs/README.md`,
+`tests/test_placeholder.py`, a baseline `.pre-commit-config.yaml`, and
+`.github/workflows/ci.yml` when they are absent. The fully automated mode applies
+the files immediately and re-runs the heuristics so the JSON response shows the
+before/after stats alongside any unsupported items (for example,
+`commit-lockfiles`). When you prefer to skip the interactive prompts but still
+use `--apply`, add `--yes` to auto-accept each supported suggestion.
+
 For quick reviews, append `--format table` or `--format markdown` to render a
 human-friendly summary. The table view keeps stats at the top and lists
 suggestions with their categories, impact, confidence, and affected files,
