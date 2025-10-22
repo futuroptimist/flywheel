@@ -1863,7 +1863,9 @@ def test_spin_cli_accepts_markdown_format(tmp_path: Path) -> None:
     ],
 )
 def test_apply_handlers_create_then_noop(
-    tmp_path: Path, handler: Callable[[Path], dict[str, object]], expected_path: str
+    tmp_path: Path,
+    handler: Callable[[Path], dict[str, object]],
+    expected_path: str,
 ) -> None:
     repo = tmp_path / handler.__name__
     repo.mkdir()
@@ -1904,8 +1906,16 @@ def test_apply_suggestions_auto_confirm_handles_various_outcomes(
             "message": "noop",
         }
 
-    monkeypatch.setitem(main_module.APPLY_HANDLERS, "auto-applied", applied_handler)
-    monkeypatch.setitem(main_module.APPLY_HANDLERS, "auto-noop", noop_handler)
+    monkeypatch.setitem(
+        main_module.APPLY_HANDLERS,
+        "auto-applied",
+        applied_handler,
+    )
+    monkeypatch.setitem(
+        main_module.APPLY_HANDLERS,
+        "auto-noop",
+        noop_handler,
+    )
 
     suggestions = [
         {"id": "auto-applied"},
@@ -1945,7 +1955,11 @@ def test_apply_suggestions_prompt_decline(
             "message": "applied",
         }
 
-    monkeypatch.setitem(main_module.APPLY_HANDLERS, "prompted", applied_handler)
+    monkeypatch.setitem(
+        main_module.APPLY_HANDLERS,
+        "prompted",
+        applied_handler,
+    )
 
     def raising_input() -> str:
         raise EOFError
@@ -2013,7 +2027,12 @@ def test_spin_apply_produces_summary(
         assert auto_confirm is True
         return {
             "actions": [
-                {"id": "auto-applied", "status": "applied", "message": "ok", "paths": []}
+                {
+                    "id": "auto-applied",
+                    "status": "applied",
+                    "message": "ok",
+                    "paths": [],
+                }
             ],
             "applied": ["auto-applied"],
             "skipped": [],
@@ -2081,7 +2100,12 @@ def test_spin_apply_all_auto_confirms(
         assert auto_confirm is True
         return {
             "actions": [
-                {"id": "auto-applied", "status": "applied", "message": "ok", "paths": []}
+                {
+                    "id": "auto-applied",
+                    "status": "applied",
+                    "message": "ok",
+                    "paths": [],
+                }
             ],
             "applied": ["auto-applied"],
             "skipped": [],
