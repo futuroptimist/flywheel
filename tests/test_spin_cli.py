@@ -17,13 +17,13 @@ from flywheel.__main__ import (
     SPIN_ANALYZERS,
     _analyze_repository,
     _build_summary,
-    _join_natural,
     _detect_lint_config,
     _detect_tests,
     _format_stats_lines,
     _has_ci_workflows,
     _has_docs_directory,
     _iter_project_files,
+    _join_natural,
     _package_json_configures_lint,
     _parse_analyzers,
     _pyproject_configures_lint,
@@ -276,9 +276,8 @@ def test_join_natural_various_lengths() -> None:
     assert _join_natural([]) == ""
     assert _join_natural(["docs"]) == "docs"
     assert _join_natural(["docs", "tests"]) == "docs and tests"
-    assert _join_natural(["docs", "tests", "linting"]) == (
-        "docs, tests, and linting"
-    )
+    expected = "docs, tests, and linting"
+    assert _join_natural(["docs", "tests", "linting"]) == expected
 
 
 def test_spin_invalid_analyzer_errors(tmp_path: Path) -> None:
