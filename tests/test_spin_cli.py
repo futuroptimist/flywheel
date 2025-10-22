@@ -1827,6 +1827,38 @@ def test_spin_cli_accepts_markdown_format(tmp_path: Path) -> None:
     assert "| Confidence |" in output
 
 
+@pytest.mark.parametrize(
+    ("apply_flag", "apply_all_flag"),
+    [(True, False), (False, True)],
+)
+def test_spin_apply_modes_reject_format_before_actions(
+    tmp_path: Path, apply_flag: bool, apply_all_flag: bool
+) -> None:
+    repo = tmp_path / (
+        "apply-invalid-format" if apply_flag else "apply-all-invalid-format"
+    )
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply=apply_flag,
+        apply_all=apply_all_flag,
+        format="table",
+        analyzers=None,
+        cache_dir=None,
+        yes=False,
+        telemetry=None,
+    )
+
+    with pytest.raises(SystemExit) as excinfo:
+        spin(args)
+
+    message = str(excinfo.value)
+    assert "--format is only supported with --dry-run." in message
+    assert list(repo.iterdir()) == []
+
+
 def test_spin_apply_bootstraps_missing_assets(tmp_path: Path) -> None:
     repo = tmp_path / "apply"
     repo.mkdir()

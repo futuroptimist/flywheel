@@ -1640,7 +1640,10 @@ def spin(args: argparse.Namespace) -> None:
         cache_analyzers = None
     else:
         cache_analyzers = normalized_analyzers
+    fmt = getattr(args, "format", "json") or "json"
     if apply_mode or apply_all_mode:
+        if fmt != "json":
+            raise SystemExit("--format is only supported with --dry-run.")
         stats_before, suggestions_before = _analyze_repository(
             target, analyzers=analyzers
         )
@@ -1663,9 +1666,6 @@ def spin(args: argparse.Namespace) -> None:
             "suggestions_after": suggestions_after,
             **summary,
         }
-        fmt = getattr(args, "format", "json") or "json"
-        if fmt != "json":
-            raise SystemExit("--format is only supported with --dry-run.")
         output = json.dumps(result, indent=2, sort_keys=True)
         print(output)
         return
@@ -1740,7 +1740,6 @@ def spin(args: argparse.Namespace) -> None:
                 raise SystemExit(message) from exc
     else:
         result = cached_result
-    fmt = getattr(args, "format", "json") or "json"
     if fmt == "json":
         output = json.dumps(result, indent=2, sort_keys=True)
     elif fmt == "table":
