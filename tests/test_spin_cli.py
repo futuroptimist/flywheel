@@ -276,7 +276,9 @@ def test_join_natural_various_lengths() -> None:
     assert _join_natural([]) == ""
     assert _join_natural(["docs"]) == "docs"
     assert _join_natural(["docs", "tests"]) == "docs and tests"
-    assert _join_natural(["docs", "tests", "linting"]) == "docs, tests, and linting"
+    assert _join_natural(["docs", "tests", "linting"]) == (
+        "docs, tests, and linting"
+    )
 
 
 def test_spin_invalid_analyzer_errors(tmp_path: Path) -> None:
