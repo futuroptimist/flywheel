@@ -17,6 +17,7 @@ from flywheel.__main__ import (
     SPIN_ANALYZERS,
     _analyze_repository,
     _build_summary,
+    _join_natural,
     _detect_lint_config,
     _detect_tests,
     _format_stats_lines,
@@ -269,6 +270,13 @@ def test_build_summary_handles_unknown_suggestions() -> None:
     summary = _build_summary(stats, suggestions)
 
     assert summary == "Generated 1 suggestion from dry-run analyzers."
+
+
+def test_join_natural_various_lengths() -> None:
+    assert _join_natural([]) == ""
+    assert _join_natural(["docs"]) == "docs"
+    assert _join_natural(["docs", "tests"]) == "docs and tests"
+    assert _join_natural(["docs", "tests", "linting"]) == "docs, tests, and linting"
 
 
 def test_spin_invalid_analyzer_errors(tmp_path: Path) -> None:
