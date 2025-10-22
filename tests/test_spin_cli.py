@@ -12,9 +12,14 @@ import pytest
 
 from flywheel import __main__ as main_module
 from flywheel.__main__ import (
+    APPLY_DOCS_CONTENT,
+    APPLY_README_CONTENT,
     LINT_VALIDATION_COMMANDS,
     SPIN_ANALYZERS,
     _analyze_repository,
+    _apply_add_docs,
+    _apply_add_tests,
+    _apply_spin_suggestions,
     _detect_lint_config,
     _detect_tests,
     _format_stats_lines,
@@ -153,6 +158,181 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     assert validations["add-linting"] == lint_validation_commands
 
 
+def test_spin_apply_scaffolds_supported_suggestions(
+    tmp_path: Path, capsys: CaptureFixtureStr
+) -> None:
+    repo = tmp_path / "apply"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply=True,
+        format="json",
+        analyzers=None,
+        cache_dir=None,
+        yes=True,
+    )
+
+    spin(args)
+
+    output = capsys.readouterr().out
+    assert "Applied suggestions:" in output
+    assert "add-readme" in output
+    assert "add-docs" in output
+    assert "Skipped suggestions:" in output
+    assert "configure-ci (unsupported)" in output
+    assert "add-linting (unsupported)" in output
+
+    readme = (repo / "README.md").read_text()
+    assert readme == APPLY_README_CONTENT
+    docs_readme = (repo / "docs" / "README.md").read_text()
+    assert docs_readme == APPLY_DOCS_CONTENT
+    assert (repo / "tests" / ".gitkeep").exists()
+
+
+def test_apply_spin_suggestions_handles_empty_result(
+    tmp_path: Path, capsys: CaptureFixtureStr
+) -> None:
+    target = tmp_path / "empty"
+    target.mkdir()
+
+    _apply_spin_suggestions(target, {"suggestions": []}, assume_yes=True)
+
+    output = capsys.readouterr().out
+    assert output.strip() == "No suggestions to apply."
+
+
+def test_apply_spin_suggestions_prompts_and_declines(
+    tmp_path: Path, capsys: CaptureFixtureStr, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target = tmp_path / "decline"
+    target.mkdir()
+
+    monkeypatch.setattr("builtins.input", lambda prompt: "n")
+
+    _apply_spin_suggestions(
+        target,
+        {"suggestions": [{"id": "add-readme", "title": "Add README"}]},
+        assume_yes=False,
+    )
+
+    output = capsys.readouterr().out
+    assert "No suggestions were applied." in output
+    assert "Skipped suggestions:" in output
+    assert "add-readme (declined)" in output
+
+
+def test_apply_spin_suggestions_handles_eof(
+    tmp_path: Path, capsys: CaptureFixtureStr, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target = tmp_path / "eof"
+    target.mkdir()
+
+    def raise_eof(prompt: str) -> str:
+        raise EOFError
+
+    monkeypatch.setattr("builtins.input", raise_eof)
+
+    _apply_spin_suggestions(
+        target,
+        {"suggestions": [{"id": "add-readme", "title": "Add README"}]},
+        assume_yes=False,
+    )
+
+    output = capsys.readouterr().out
+    assert "No suggestions were applied." in output
+    assert "Skipped suggestions:" in output
+    assert "add-readme (declined)" in output
+
+
+def test_apply_spin_suggestions_skips_existing_files(
+    tmp_path: Path, capsys: CaptureFixtureStr
+) -> None:
+    target = tmp_path / "existing"
+    target.mkdir()
+    (target / "README.md").write_text("existing\n")
+
+    _apply_spin_suggestions(
+        target,
+        {"suggestions": [{"id": "add-readme", "title": "Add README"}]},
+        assume_yes=True,
+    )
+
+    output = capsys.readouterr().out
+    assert "No suggestions were applied." in output
+    assert "Skipped suggestions:" in output
+    assert "add-readme (already satisfied)" in output
+
+
+def test_apply_add_docs_raises_when_readme_exists(tmp_path: Path) -> None:
+    target = tmp_path / "docs-exists"
+    doc_readme = target / "docs" / "README.md"
+    doc_readme.parent.mkdir(parents=True)
+    doc_readme.write_text("existing\n")
+
+    with pytest.raises(FileExistsError):
+        _apply_add_docs(target)
+
+
+def test_apply_add_tests_raises_when_gitkeep_exists(tmp_path: Path) -> None:
+    target = tmp_path / "tests-exists"
+    marker = target / "tests" / ".gitkeep"
+    marker.parent.mkdir(parents=True)
+    marker.write_text("existing\n")
+
+    with pytest.raises(FileExistsError):
+        _apply_add_tests(target)
+
+
+def test_apply_spin_suggestions_skips_non_dict_entries(
+    tmp_path: Path, capsys: CaptureFixtureStr
+) -> None:
+    target = tmp_path / "skip-non-dict"
+    target.mkdir()
+
+    _apply_spin_suggestions(
+        target,
+        {
+            "suggestions": [
+                "ignore-me",
+                {"id": "add-readme", "title": "Add README"},
+            ]
+        },
+        assume_yes=True,
+    )
+
+    output = capsys.readouterr().out
+    assert "Applied suggestions:" in output
+    assert "add-readme" in output
+    assert (target / "README.md").exists()
+
+
+def test_apply_spin_suggestions_reports_non_relative_paths(
+    tmp_path: Path, capsys: CaptureFixtureStr, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target = tmp_path / "outside"
+    target.mkdir()
+    outside_file = tmp_path / "external.txt"
+
+    def create_outside(_target: Path) -> Path:
+        outside_file.write_text("data\n")
+        return outside_file
+
+    monkeypatch.setitem(main_module.APPLY_HANDLERS, "external", create_outside)
+
+    _apply_spin_suggestions(
+        target,
+        {"suggestions": [{"id": "external", "title": "Write outside"}]},
+        assume_yes=True,
+    )
+
+    output = capsys.readouterr().out
+    assert "external" in output
+    assert "external.txt" in output
+    assert outside_file.exists()
+
+
 def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
     repo = tmp_path / "project"
     workflows = repo / ".github" / "workflows"
@@ -245,6 +425,42 @@ def test_spin_invalid_analyzer_errors(tmp_path: Path) -> None:
         dry_run=True,
         format="json",
         analyzers="bogus",
+    )
+
+    with pytest.raises(SystemExit):
+        spin(args)
+
+
+def test_spin_requires_mode(tmp_path: Path) -> None:
+    repo = tmp_path / "no-mode"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply=False,
+        format="json",
+        analyzers=None,
+        cache_dir=None,
+        yes=False,
+    )
+
+    with pytest.raises(SystemExit):
+        spin(args)
+
+
+def test_spin_disallows_apply_and_dry_run(tmp_path: Path) -> None:
+    repo = tmp_path / "both"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        apply=True,
+        format="json",
+        analyzers=None,
+        cache_dir=None,
+        yes=False,
     )
 
     with pytest.raises(SystemExit):
@@ -566,7 +782,7 @@ def test_spin_requires_dry_run_flag(tmp_path: Path) -> None:
     with pytest.raises(SystemExit) as exc:
         spin(args)
 
-    assert "Only --dry-run mode is supported" in str(exc.value)
+    assert "Choose --dry-run to preview" in str(exc.value)
 
 
 def test_spin_writes_cache_file(tmp_path: Path) -> None:
@@ -982,6 +1198,46 @@ def test_spin_skips_cache_when_cached_analyzers_invalid(
         "stats": {"cached": True},
         "suggestions": [],
         "analyzers": ["docs", 1],
+    }
+    cache_path.write_text(json.dumps(cached_payload) + "\n")
+
+    calls: list[Path] = []
+
+    def fake_analyze(
+        *_args: object, **_kwargs: object
+    ) -> tuple[dict[str, bool], list[dict[str, object]]]:
+        calls.append(repo)
+        return {"fresh": True}, []
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fake_analyze)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        analyzers=None,
+        format="json",
+    )
+
+    spin(args)
+
+    assert calls
+
+
+def test_spin_skips_cache_when_cached_analyzers_wrong_type(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "wrong-type"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+    cache_path = cache_dir / _spin_cache_filename(repo)
+    cached_payload = {
+        "target": str(repo.resolve()),
+        "mode": "dry-run",
+        "stats": {"cached": True},
+        "suggestions": [],
+        "analyzers": "docs",
     }
     cache_path.write_text(json.dumps(cached_payload) + "\n")
 

@@ -1,3 +1,8 @@
+## 2025-10-23
+- feat: add a minimal `flywheel spin --apply` scaffolder that populates README,
+  docs, and test placeholders so the CLI matches the apply mode described in
+  the `flywheel spin` design doc.
+
 ## 2025-10-18
 - feat: add `summary` fields to `flywheel spin --dry-run` suggestions so the
   output matches the design doc schema.

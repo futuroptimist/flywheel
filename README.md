@@ -335,6 +335,12 @@ Persist or override telemetry preferences on the fly with
 before the analysis runs, matching the `flywheel config telemetry` command and
 skipping the interactive prompt for non-interactive environments.
 
+Apply the scaffolding for supported suggestions with `--apply`. Passing
+`--apply --yes` creates a starter `README.md`, a `docs/README.md` placeholder,
+and a `tests/.gitkeep` marker when the corresponding heuristics are triggered.
+Suggestions that still require manual intervention remain listed in the skipped
+summary so you can address them after the automated scaffolding completes.
+
 Cache dry-run results by pointing `--cache-dir` at a writable folder. The CLI
 stores the JSON payload in `<cache-dir>/<repo>-<hash>.json`, using the resolved
 repository path to generate a stable filename. When a matching cache file
