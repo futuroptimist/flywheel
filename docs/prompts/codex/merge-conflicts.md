@@ -22,16 +22,15 @@ Resolve the merge conflict in the code snippet below.
   snippet is fenced).
 - Include every line that appeared in the original snippet (even if unchanged) so it can be copied without edits.
 - After the code, summarize the differences between the two sides and explain why you resolved them this way.
-- Immediately after the summary, append the propagation block below verbatim so
-  future turns retain the core instructions:
+- Immediately after the summary, append the propagation block below verbatim inside this same
+  fence so future turns retain the core instructions:
 
-```
-Instruction Recap:
-- Remove conflict markers.
-- Preserve existing formatting, imports, and surrounding code.
-- Do not modify lines outside the conflict.
-- Resolve ambiguity yourself and explain the rationale.
-- Output the resolved snippet once inside the original fence.
+  Instruction Recap:
+  - Remove conflict markers.
+  - Preserve existing formatting, imports, and surrounding code.
+  - Do not modify lines outside the conflict.
+  - Resolve ambiguity yourself and explain the rationale.
+  - Output the resolved snippet once inside the original fence.
 ```
 
 ```
