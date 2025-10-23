@@ -324,6 +324,8 @@ scripts. Lockfile gaps surface as a `chore` suggestion named
 field (`docs`, `fix`, or `chore`) and a heuristic `confidence` score between 0
 and 1 so the output matches the
 [`flywheel spin` design](docs/flywheel-npx-spin-design.md) schema.
+A top-level `summary` string calls out missing baseline assets so you can triage
+the suggestions at a glance.
 
 For quick reviews, append `--format table` or `--format markdown` to render a
 human-friendly summary. The table view keeps stats at the top and lists

@@ -15,17 +15,20 @@ from flywheel.__main__ import (
     APPLY_DOCS_CONTENT,
     APPLY_README_CONTENT,
     LINT_VALIDATION_COMMANDS,
+    NO_SUGGESTIONS_SUMMARY,
     SPIN_ANALYZERS,
     _analyze_repository,
     _apply_add_docs,
     _apply_add_tests,
     _apply_spin_suggestions,
+    _build_summary,
     _detect_lint_config,
     _detect_tests,
     _format_stats_lines,
     _has_ci_workflows,
     _has_docs_directory,
     _iter_project_files,
+    _join_natural,
     _package_json_configures_lint,
     _parse_analyzers,
     _pyproject_configures_lint,
@@ -156,6 +159,15 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     ]
     lint_validation_commands = list(LINT_VALIDATION_COMMANDS)
     assert validations["add-linting"] == lint_validation_commands
+    expected_summary = " ".join(
+        [
+            "Repository is missing a README.md,",
+            "a docs/ directory,",
+            "CI workflows, automated tests, and lint configuration.",
+            "Generated 5 suggestions from dry-run analyzers.",
+        ]
+    )
+    assert result["summary"] == expected_summary
 
 
 def test_spin_apply_scaffolds_supported_suggestions(
@@ -360,6 +372,13 @@ def test_spin_dry_run_detects_existing_assets(tmp_path: Path) -> None:
     assert stats["has_lint_config"] is True
 
     assert result["suggestions"] == []
+    expected_summary = " ".join(
+        [
+            "Baseline analyzers found no issues;",
+            "repository meets flywheel defaults.",
+        ]
+    )
+    assert result["summary"] == expected_summary
 
 
 def test_spin_analyzers_subset(tmp_path: Path) -> None:
@@ -387,6 +406,14 @@ def test_spin_analyzers_subset(tmp_path: Path) -> None:
     for entry in result["suggestions"]:
         assert entry["validation"], entry["id"]
         assert entry["dependencies"] == []
+    expected_summary = " ".join(
+        [
+            "Repository is missing a docs/ directory",
+            "and dependency lockfiles.",
+            "Generated 2 suggestions from dry-run analyzers.",
+        ]
+    )
+    assert result["summary"] == expected_summary
 
 
 def test_spin_analyzers_disable_with_minus(tmp_path: Path) -> None:
@@ -414,6 +441,23 @@ def test_spin_analyzers_disable_with_minus(tmp_path: Path) -> None:
     for entry in result["suggestions"]:
         assert entry["validation"], entry["id"]
         assert entry["dependencies"] == []
+
+
+def test_build_summary_handles_unknown_suggestions() -> None:
+    stats = {"total_files": 3}
+    suggestions = [{"id": "custom-task"}]
+
+    summary = _build_summary(stats, suggestions)
+
+    assert summary == "Generated 1 suggestion from dry-run analyzers."
+
+
+def test_join_natural_various_lengths() -> None:
+    assert _join_natural([]) == ""
+    assert _join_natural(["docs"]) == "docs"
+    assert _join_natural(["docs", "tests"]) == "docs and tests"
+    expected = "docs, tests, and linting"
+    assert _join_natural(["docs", "tests", "linting"]) == expected
 
 
 def test_spin_invalid_analyzer_errors(tmp_path: Path) -> None:
@@ -1148,7 +1192,54 @@ def test_spin_reuses_cache_when_analyzers_match(
     spin(args)
 
     output = json.loads(capsys.readouterr().out)
-    assert output == cached_payload
+    expected_output = dict(cached_payload)
+    expected_output["summary"] = NO_SUGGESTIONS_SUMMARY
+    assert output == expected_output
+
+
+def test_spin_refreshes_summary_for_cached_payload(
+    tmp_path: Path,
+    capsys: CaptureFixtureStr,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo = tmp_path / "stale"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+
+    cached_payload = {
+        "target": str(repo.resolve()),
+        "mode": "dry-run",
+        "stats": {"cached": True},
+        "suggestions": [],
+        "summary": "legacy summary",
+    }
+    cache_path = cache_dir / _spin_cache_filename(repo)
+    cache_path.write_text(json.dumps(cached_payload) + "\n")
+
+    def fail_analyze(*_args: object, **_kwargs: object) -> None:
+        raise AssertionError("analysis should not run for cached payloads")
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fail_analyze)
+
+    def fail_write(*_args: object, **_kwargs: object) -> None:
+        raise AssertionError("cache writer should not run when cache reused")
+
+    monkeypatch.setattr(main_module, "_write_spin_cache", fail_write)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        analyzers=None,
+        format="json",
+    )
+
+    spin(args)
+
+    output = json.loads(capsys.readouterr().out)
+    assert output["summary"] == NO_SUGGESTIONS_SUMMARY
+    assert output["analyzers"] == sorted(SPIN_ANALYZERS)
 
 
 def test_spin_skips_cache_when_payload_is_not_dict(
