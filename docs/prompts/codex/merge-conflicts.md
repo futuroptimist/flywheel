@@ -25,15 +25,12 @@ Resolve the merge conflict in the code snippet below.
 - Immediately after the summary, append the propagation block below verbatim so
   future turns retain the core instructions:
 
-```
 Instruction Recap:
 - Remove conflict markers.
 - Preserve existing formatting, imports, and surrounding code.
 - Do not modify lines outside the conflict.
 - Resolve ambiguity yourself and explain the rationale.
 - Output the resolved snippet once inside the original fence.
-```
-
 ```
 
 ## Upgrade Prompt
