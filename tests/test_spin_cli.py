@@ -1197,6 +1197,51 @@ def test_spin_reuses_cache_when_analyzers_match(
     assert output == expected_output
 
 
+def test_spin_refreshes_summary_for_cached_payload(
+    tmp_path: Path,
+    capsys: CaptureFixtureStr,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo = tmp_path / "stale"
+    repo.mkdir()
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+
+    cached_payload = {
+        "target": str(repo.resolve()),
+        "mode": "dry-run",
+        "stats": {"cached": True},
+        "suggestions": [],
+        "summary": "legacy summary",
+    }
+    cache_path = cache_dir / _spin_cache_filename(repo)
+    cache_path.write_text(json.dumps(cached_payload) + "\n")
+
+    def fail_analyze(*_args: object, **_kwargs: object) -> None:
+        raise AssertionError("analysis should not run for cached payloads")
+
+    monkeypatch.setattr(main_module, "_analyze_repository", fail_analyze)
+
+    def fail_write(*_args: object, **_kwargs: object) -> None:
+        raise AssertionError("cache writer should not run when cache reused")
+
+    monkeypatch.setattr(main_module, "_write_spin_cache", fail_write)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        cache_dir=str(cache_dir),
+        analyzers=None,
+        format="json",
+    )
+
+    spin(args)
+
+    output = json.loads(capsys.readouterr().out)
+    assert output["summary"] == NO_SUGGESTIONS_SUMMARY
+    assert output["analyzers"] == sorted(SPIN_ANALYZERS)
+
+
 def test_spin_skips_cache_when_payload_is_not_dict(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

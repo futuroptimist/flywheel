@@ -1409,15 +1409,12 @@ def _spin_result(
                         and cached_analyzers_set == set(analyzers)
                     ):
                         hydrated = dict(loaded)
-                        if "analyzers" not in hydrated:
-                            hydrated["analyzers"] = list(normalized_analyzers)
-                        summary_value = hydrated.get("summary")
-                        if not isinstance(summary_value, str) or not summary_value:
-                            summary_text = _build_summary(
-                                stats_block,
-                                suggestions_block,
-                            )
-                            hydrated["summary"] = summary_text
+                        hydrated["analyzers"] = list(normalized_analyzers)
+                        summary_text = _build_summary(
+                            stats_block,
+                            suggestions_block,
+                        )
+                        hydrated["summary"] = summary_text
                         cached_result = hydrated
                     else:
                         cached_result = None
