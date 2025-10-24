@@ -1,4 +1,6 @@
 ## Implementation Progress
+- **2025-10-25:** Added a `--apply none` skip mode to the Python `flywheel spin`
+  CLI so operators can record skipped scaffolding without generating files.
 - **2025-10-24:** Added a `--apply-all` flag to the Python `flywheel spin`
   CLI so scaffolding can run without prompts, matching the apply-all mode in the
   CLI experience below.
@@ -120,7 +122,7 @@ flywheel/
   - `--tokenplace-api-key $TOKENPLACE_API_KEY` (environment variable fallback).
   - `--format table|json|markdown`
   - `--apply` (interactive prompt), `--apply-all` (apply without prompts),
-    `--apply none` (planned skip mode)
+    `--apply none` (skip scaffolding while recording the decision)
   - `--dry-run` to output patches without applying.
   - `--cache-dir` for embeddings/vector store.
   - `--telemetry on|off|full`

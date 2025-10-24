@@ -179,11 +179,12 @@ def test_spin_apply_scaffolds_supported_suggestions(
     args = argparse.Namespace(
         path=str(repo),
         dry_run=False,
-        apply=True,
+        apply="interactive",
         format="json",
         analyzers=None,
         cache_dir=None,
         yes=True,
+        apply_all=False,
     )
 
     spin(args)
@@ -219,7 +220,7 @@ def test_spin_apply_all_skips_prompts(
     args = argparse.Namespace(
         path=str(repo),
         dry_run=False,
-        apply=False,
+        apply=None,
         apply_all=True,
         format="json",
         analyzers=None,
@@ -236,6 +237,42 @@ def test_spin_apply_all_skips_prompts(
     assert (repo / "README.md").exists()
     assert (repo / "docs" / "README.md").exists()
     assert (repo / "tests" / ".gitkeep").exists()
+
+
+def test_spin_apply_none_skips_all(
+    tmp_path: Path,
+    capsys: CaptureFixtureStr,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo = tmp_path / "apply-none"
+    repo.mkdir()
+
+    def fail_input(prompt: str) -> str:  # pragma: no cover - sanity guard
+        raise AssertionError("should not prompt when --apply none is set")
+
+    monkeypatch.setattr("builtins.input", fail_input)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply="none",
+        apply_all=False,
+        format="json",
+        analyzers=None,
+        cache_dir=None,
+        yes=False,
+    )
+
+    spin(args)
+
+    output = capsys.readouterr().out
+    assert "No suggestions were applied (--apply none)." in output
+    assert "Skipped suggestions (--apply none):" in output
+    assert "add-readme (skip requested)" in output
+    assert "add-docs (skip requested)" in output
+    assert not (repo / "README.md").exists()
+    assert not (repo / "docs" / "README.md").exists()
+    assert not (repo / "tests" / ".gitkeep").exists()
 
 
 def test_apply_spin_suggestions_handles_empty_result(
@@ -517,7 +554,8 @@ def test_spin_requires_mode(tmp_path: Path) -> None:
     args = argparse.Namespace(
         path=str(repo),
         dry_run=False,
-        apply=False,
+        apply=None,
+        apply_all=False,
         format="json",
         analyzers=None,
         cache_dir=None,
@@ -535,7 +573,8 @@ def test_spin_disallows_apply_and_dry_run(tmp_path: Path) -> None:
     args = argparse.Namespace(
         path=str(repo),
         dry_run=True,
-        apply=True,
+        apply="interactive",
+        apply_all=False,
         format="json",
         analyzers=None,
         cache_dir=None,
