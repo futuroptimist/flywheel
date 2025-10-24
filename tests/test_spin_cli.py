@@ -203,6 +203,41 @@ def test_spin_apply_scaffolds_supported_suggestions(
     assert (repo / "tests" / ".gitkeep").exists()
 
 
+def test_spin_apply_all_skips_prompts(
+    tmp_path: Path,
+    capsys: CaptureFixtureStr,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo = tmp_path / "apply-all"
+    repo.mkdir()
+
+    def fail_input(prompt: str) -> str:
+        raise AssertionError("should not prompt when --apply-all is set")
+
+    monkeypatch.setattr("builtins.input", fail_input)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply=False,
+        apply_all=True,
+        format="json",
+        analyzers=None,
+        cache_dir=None,
+        yes=False,
+    )
+
+    spin(args)
+
+    output = capsys.readouterr().out
+    assert "Applied suggestions:" in output
+    assert "add-readme" in output
+    assert "add-docs" in output
+    assert (repo / "README.md").exists()
+    assert (repo / "docs" / "README.md").exists()
+    assert (repo / "tests" / ".gitkeep").exists()
+
+
 def test_apply_spin_suggestions_handles_empty_result(
     tmp_path: Path, capsys: CaptureFixtureStr
 ) -> None:
