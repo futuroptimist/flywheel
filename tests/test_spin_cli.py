@@ -287,6 +287,23 @@ def test_apply_spin_suggestions_handles_empty_result(
     assert output.strip() == "No suggestions to apply."
 
 
+def test_apply_spin_suggestions_handles_empty_skip_mode(
+    tmp_path: Path, capsys: CaptureFixtureStr
+) -> None:
+    target = tmp_path / "empty-skip"
+    target.mkdir()
+
+    _apply_spin_suggestions(
+        target,
+        {"suggestions": []},
+        assume_yes=True,
+        skip_mode=True,
+    )
+
+    output = capsys.readouterr().out
+    assert output.strip() == "No suggestions to skip."
+
+
 def test_apply_spin_suggestions_prompts_and_declines(
     tmp_path: Path, capsys: CaptureFixtureStr, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -583,6 +600,27 @@ def test_spin_disallows_apply_and_dry_run(tmp_path: Path) -> None:
 
     with pytest.raises(SystemExit):
         spin(args)
+
+
+def test_spin_disallows_apply_none_and_apply_all(tmp_path: Path) -> None:
+    repo = tmp_path / "none-and-all"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply="none",
+        apply_all=True,
+        format="json",
+        analyzers=None,
+        cache_dir=None,
+        yes=False,
+    )
+
+    with pytest.raises(SystemExit) as excinfo:
+        spin(args)
+
+    assert "--apply none or --apply-all" in str(excinfo.value)
 
 
 def test_has_docs_directory_ignores_hidden_files(tmp_path: Path) -> None:
