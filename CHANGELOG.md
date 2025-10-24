@@ -1,3 +1,7 @@
+## 2025-10-24
+- feat: add a `--apply-all` flag to `flywheel spin` so scaffolding applies
+  without prompts, aligning with the CLI design doc.
+
 ## 2025-10-23
 - feat: add a minimal `flywheel spin --apply` scaffolder that populates README,
   docs, and test placeholders so the CLI matches the apply mode described in

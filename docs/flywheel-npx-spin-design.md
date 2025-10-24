@@ -1,4 +1,7 @@
 ## Implementation Progress
+- **2025-10-24:** Added a `--apply-all` flag to the Python `flywheel spin`
+  CLI so scaffolding can run without prompts, matching the apply-all mode in the
+  CLI experience below.
 - **2025-10-23:** Added a minimal `--apply` scaffolder to the Python
   `flywheel spin` CLI so heuristics can bootstrap README, docs, and test
   placeholders while the TypeScript apply engine is under active development.
@@ -116,7 +119,8 @@ flywheel/
   - `--llm-provider tokenplace|openai|anthropic`
   - `--tokenplace-api-key $TOKENPLACE_API_KEY` (environment variable fallback).
   - `--format table|json|markdown`
-  - `--apply` (interactive prompt or `--apply-all`, `--apply none`)
+  - `--apply` (interactive prompt), `--apply-all` (apply without prompts),
+    `--apply none` (planned skip mode)
   - `--dry-run` to output patches without applying.
   - `--cache-dir` for embeddings/vector store.
   - `--telemetry on|off|full`
@@ -290,7 +294,7 @@ gantt
 | `flywheel spin` | Scan repo, generate suggestions. | Draft |
 | `flywheel spin --dry-run` | Output suggestions without LLM or patch application (mock data). | Draft |
 | `flywheel spin --apply` | Interactive apply mode. | Prototype |
-| `flywheel spin --apply-all` | Apply all suggestions with zero prompts (requires `--force`). | Planned |
+| `flywheel spin --apply-all` | Apply all suggestions with zero prompts (Python CLI scaffolding). | Prototype |
 | `flywheel config telemetry` | Manage telemetry preferences. | Shipped |
 
 ### Appendix B: Sample Prompt Skeleton

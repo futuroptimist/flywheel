@@ -1540,7 +1540,9 @@ def spin(args: argparse.Namespace) -> None:
     if not target.is_dir():
         raise SystemExit(f"Target path is not a directory: {target}")
 
-    apply_mode = bool(getattr(args, "apply", False))
+    apply_flag = bool(getattr(args, "apply", False))
+    apply_all_flag = bool(getattr(args, "apply_all", False))
+    apply_mode = bool(apply_flag or apply_all_flag)
     dry_run_mode = bool(getattr(args, "dry_run", False))
     if apply_mode and dry_run_mode:
         raise SystemExit("Use either --dry-run or --apply, not both.")
@@ -1571,7 +1573,7 @@ def spin(args: argparse.Namespace) -> None:
         _apply_spin_suggestions(
             target,
             result,
-            assume_yes=bool(getattr(args, "yes", False)),
+            assume_yes=bool(getattr(args, "yes", False) or apply_all_flag),
         )
         return
 
@@ -1737,6 +1739,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--apply",
         action="store_true",
         help="apply available scaffolding for supported suggestions",
+    )
+    p_spin.add_argument(
+        "--apply-all",
+        action="store_true",
+        help="apply supported scaffolding without prompting",
     )
     p_spin.add_argument(
         "--format",
