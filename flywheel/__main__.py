@@ -1479,10 +1479,15 @@ def _apply_spin_suggestions(
     target: Path,
     result: dict[str, object],
     assume_yes: bool = False,
+    *,
+    skip_mode: bool = False,
 ) -> None:
     suggestions = result.get("suggestions", [])
     if not isinstance(suggestions, list) or not suggestions:
-        print("No suggestions to apply.")
+        if skip_mode:
+            print("No suggestions to skip.")
+        else:
+            print("No suggestions to apply.")
         return
 
     applied: list[tuple[str, str, Path]] = []
@@ -1492,6 +1497,9 @@ def _apply_spin_suggestions(
             continue
         suggestion_id = str(suggestion.get("id", ""))
         title = str(suggestion.get("title", suggestion_id))
+        if skip_mode:
+            skipped.append((suggestion_id, title, "skip requested"))
+            continue
         handler = APPLY_HANDLERS.get(suggestion_id)
         if handler is None:
             skipped.append((suggestion_id, title, "unsupported"))
@@ -1524,10 +1532,16 @@ def _apply_spin_suggestions(
                 rel = created_path
             print(f" - {suggestion_id} → {rel}")
     else:
-        print("No suggestions were applied.")
+        if skip_mode:
+            print("No suggestions were applied (--apply none).")
+        else:
+            print("No suggestions were applied.")
 
     if skipped:
-        print("Skipped suggestions:")
+        if skip_mode:
+            print("Skipped suggestions (--apply none):")
+        else:
+            print("Skipped suggestions:")
         for suggestion_id, title, reason in skipped:
             label = suggestion_id or title or "(unknown)"
             print(f" - {label} ({reason})")
@@ -1540,9 +1554,11 @@ def spin(args: argparse.Namespace) -> None:
     if not target.is_dir():
         raise SystemExit(f"Target path is not a directory: {target}")
 
-    apply_flag = bool(getattr(args, "apply", False))
+    apply_option = getattr(args, "apply", None)
     apply_all_flag = bool(getattr(args, "apply_all", False))
-    apply_mode = bool(apply_flag or apply_all_flag)
+    if apply_option == "none" and apply_all_flag:
+        raise SystemExit("Choose --apply none or --apply-all, not both.")
+    apply_mode = bool(apply_option or apply_all_flag)
     dry_run_mode = bool(getattr(args, "dry_run", False))
     if apply_mode and dry_run_mode:
         raise SystemExit("Use either --dry-run or --apply, not both.")
@@ -1570,6 +1586,14 @@ def spin(args: argparse.Namespace) -> None:
     )
 
     if apply_mode:
+        if apply_option == "none":
+            _apply_spin_suggestions(
+                target,
+                result,
+                assume_yes=True,
+                skip_mode=True,
+            )
+            return
         _apply_spin_suggestions(
             target,
             result,
@@ -1737,8 +1761,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_spin.add_argument(
         "--apply",
-        action="store_true",
-        help="apply available scaffolding for supported suggestions",
+        nargs="?",
+        choices=["interactive", "none"],
+        const="interactive",
+        help=(
+            "apply scaffolding interactively or skip with 'none' to avoid"
+            " writing files"
+        ),
     )
     p_spin.add_argument(
         "--apply-all",

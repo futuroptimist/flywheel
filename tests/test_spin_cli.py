@@ -179,11 +179,12 @@ def test_spin_apply_scaffolds_supported_suggestions(
     args = argparse.Namespace(
         path=str(repo),
         dry_run=False,
-        apply=True,
+        apply="interactive",
         format="json",
         analyzers=None,
         cache_dir=None,
         yes=True,
+        apply_all=False,
     )
 
     spin(args)
@@ -219,7 +220,7 @@ def test_spin_apply_all_skips_prompts(
     args = argparse.Namespace(
         path=str(repo),
         dry_run=False,
-        apply=False,
+        apply=None,
         apply_all=True,
         format="json",
         analyzers=None,
@@ -238,6 +239,42 @@ def test_spin_apply_all_skips_prompts(
     assert (repo / "tests" / ".gitkeep").exists()
 
 
+def test_spin_apply_none_skips_all(
+    tmp_path: Path,
+    capsys: CaptureFixtureStr,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo = tmp_path / "apply-none"
+    repo.mkdir()
+
+    def fail_input(prompt: str) -> str:  # pragma: no cover - sanity guard
+        raise AssertionError("should not prompt when --apply none is set")
+
+    monkeypatch.setattr("builtins.input", fail_input)
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply="none",
+        apply_all=False,
+        format="json",
+        analyzers=None,
+        cache_dir=None,
+        yes=False,
+    )
+
+    spin(args)
+
+    output = capsys.readouterr().out
+    assert "No suggestions were applied (--apply none)." in output
+    assert "Skipped suggestions (--apply none):" in output
+    assert "add-readme (skip requested)" in output
+    assert "add-docs (skip requested)" in output
+    assert not (repo / "README.md").exists()
+    assert not (repo / "docs" / "README.md").exists()
+    assert not (repo / "tests" / ".gitkeep").exists()
+
+
 def test_apply_spin_suggestions_handles_empty_result(
     tmp_path: Path, capsys: CaptureFixtureStr
 ) -> None:
@@ -248,6 +285,23 @@ def test_apply_spin_suggestions_handles_empty_result(
 
     output = capsys.readouterr().out
     assert output.strip() == "No suggestions to apply."
+
+
+def test_apply_spin_suggestions_handles_empty_skip_mode(
+    tmp_path: Path, capsys: CaptureFixtureStr
+) -> None:
+    target = tmp_path / "empty-skip"
+    target.mkdir()
+
+    _apply_spin_suggestions(
+        target,
+        {"suggestions": []},
+        assume_yes=True,
+        skip_mode=True,
+    )
+
+    output = capsys.readouterr().out
+    assert output.strip() == "No suggestions to skip."
 
 
 def test_apply_spin_suggestions_prompts_and_declines(
@@ -517,7 +571,8 @@ def test_spin_requires_mode(tmp_path: Path) -> None:
     args = argparse.Namespace(
         path=str(repo),
         dry_run=False,
-        apply=False,
+        apply=None,
+        apply_all=False,
         format="json",
         analyzers=None,
         cache_dir=None,
@@ -535,7 +590,8 @@ def test_spin_disallows_apply_and_dry_run(tmp_path: Path) -> None:
     args = argparse.Namespace(
         path=str(repo),
         dry_run=True,
-        apply=True,
+        apply="interactive",
+        apply_all=False,
         format="json",
         analyzers=None,
         cache_dir=None,
@@ -544,6 +600,27 @@ def test_spin_disallows_apply_and_dry_run(tmp_path: Path) -> None:
 
     with pytest.raises(SystemExit):
         spin(args)
+
+
+def test_spin_disallows_apply_none_and_apply_all(tmp_path: Path) -> None:
+    repo = tmp_path / "none-and-all"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=False,
+        apply="none",
+        apply_all=True,
+        format="json",
+        analyzers=None,
+        cache_dir=None,
+        yes=False,
+    )
+
+    with pytest.raises(SystemExit) as excinfo:
+        spin(args)
+
+    assert "--apply none or --apply-all" in str(excinfo.value)
 
 
 def test_has_docs_directory_ignores_hidden_files(tmp_path: Path) -> None:

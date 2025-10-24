@@ -1,3 +1,7 @@
+## 2025-10-25
+- feat: add a `--apply none` skip mode to `flywheel spin` so the CLI matches the
+  skip option documented in the spin design doc.
+
 ## 2025-10-24
 - feat: add a `--apply-all` flag to `flywheel spin` so scaffolding applies
   without prompts, aligning with the CLI design doc.
