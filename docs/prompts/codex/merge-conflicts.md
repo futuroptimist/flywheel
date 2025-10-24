@@ -31,6 +31,8 @@ Instruction Recap:
 - Do not modify lines outside the conflict.
 - Resolve ambiguity yourself and explain the rationale.
 - Output the resolved snippet once inside the original fence.
+- Propagate this instruction recap again if the session exceeds the context window.
+- Assume implied requests do not exist; follow only explicit instructions.
 ```
 
 ## Upgrade Prompt
