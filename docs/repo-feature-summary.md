@@ -6,26 +6,26 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `117d317` | n/a | 2 | 3 | 2025-10-24 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `1b37123` | ✅ | 1 | 0 | 2025-10-24 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `358dc13` | ❌ | 3 | 46 | 2025-10-24 |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `6570818` | ✅ | 6 | 20 | 2025-10-24 |
-| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `e5177ca` | ✅ | 0 | 5 | 2025-10-24 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `04f8992` | ✅ | 2 | 3 | 2025-10-25 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `efe2d57` | n/a | 1 | 0 | 2025-10-25 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `9024463` | ✅ | 3 | 48 | 2025-10-24 |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `64903e8` | ✅ | 6 | 20 | 2025-10-24 |
+| [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `f8aaa9c` | ✅ | 0 | 8 | 2025-10-24 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `7b4b36c` | ✅ | 1 | 0 | 2025-10-14 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `4d86a28` | ✅ | 0 | 2 | 2025-10-24 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `aee3512` | ✅ | 0 | 0 | 2025-10-24 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `b550795` | ✅ | 0 | 5 | 2025-10-24 |
-| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `c187477` | ✅ | 0 | 3 | 2025-10-24 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `fa8d84f` | ❌ | 0 | 61 | 2025-10-24 |
+| [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `1e021f3` | ✅ | 0 | 4 | 2025-10-24 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `1e5d044` | ❌ | 0 | 67 | 2025-10-24 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `3c6a078` | ✅ | 0 | 0 | 2025-10-18 |
-| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `9766745` | ✅ | 1 | 7 | 2025-10-24 |
-| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `8d0507e` | n/a | 0 | 6 | 2025-10-24 |
+| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `0ab1a55` | ✅ | 1 | 7 | 2025-10-24 |
+| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `d18e509` | n/a | 0 | 7 | 2025-10-24 |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |
 | ---- | -------- | ----- | ------- | --------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ❌ | — | ✅ | 🔶 partial | 2025-10-24 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ❌ | — | ✅ | 🚀 uv | 2025-10-24 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ❌ | — | ✅ | 🔶 partial | 2025-10-25 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ❌ | — | ✅ | 🚀 uv | 2025-10-25 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ❌ | — | ✅ | ⚪ none | 2025-10-24 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ❌ | — | ✅ | pip | 2025-10-24 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ❌ | — | ✅ | 🔶 partial | 2025-10-24 |
@@ -42,8 +42,8 @@ This table tracks which flywheel features each related repository has adopted.
 ## Policies & Automation
 | Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Last-Updated (UTC) |
 | ---- | ------- | -- | --------- | --------- | --------------- | ------------ | ---------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ | ✅ | 18 | ✅ | ✅ | ✅ | ✅ | 2025-10-24 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-10-24 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ | ✅ | 18 | ✅ | ✅ | ✅ | ✅ | 2025-10-25 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ | ✅ | 4 | ✅ | ✅ | ✅ | ✅ | 2025-10-25 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✅ | ✅ | 9 | ✅ | ✅ | ✅ | ✅ | 2025-10-24 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2025-10-24 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ | ✅ | 8 | ✅ | ✅ | ✅ | ✅ | 2025-10-24 |
@@ -60,8 +60,8 @@ This table tracks which flywheel features each related repository has adopted.
 ## Dark & Bright Pattern Scan
 | Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |
 | ---- | ------------- | --------------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | 0 | 0 | 2025-10-24 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | 0 | 1 | 2025-10-24 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | 0 | 0 | 2025-10-25 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | 0 | 1 | 2025-10-25 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | 0 | 0 | 2025-10-24 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | 0 | 1 | 2025-10-24 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | 0 | 8 | 2025-10-24 |
