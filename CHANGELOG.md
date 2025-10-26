@@ -1,3 +1,7 @@
+## 2025-10-26
+- fix: show a ❌ with the percentage for low total coverage in the repo summary
+  so the `docs/ci-guide.md` promise about coverage reporting is accurate.
+
 ## 2025-10-25
 - feat: add a `--apply none` skip mode to `flywheel spin` so the CLI matches the
   skip option documented in the spin design doc.

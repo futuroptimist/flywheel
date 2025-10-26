@@ -823,7 +823,7 @@ class RepoCrawler:
                 if info.coverage == "100%":
                     coverage = "✔️"
                 else:
-                    coverage = info.coverage
+                    coverage = f"❌ ({info.coverage})"
             if info.patch_percent is None:
                 patch = "—"
             else:
