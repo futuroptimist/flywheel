@@ -21,6 +21,9 @@ ROOT = Path(__file__).resolve().parent.parent
 CONFIG_ENV_VAR = "FLYWHEEL_CONFIG_DIR"
 CONFIG_FILENAME = "config.json"
 DEFAULT_CONFIG_DIR = Path.home() / ".config" / "flywheel"
+TOKENPLACE_API_KEY_ENV = "TOKENPLACE_API_KEY"
+LLM_PROVIDERS = ("tokenplace", "openai", "anthropic")
+DEFAULT_LLM_PROVIDER = LLM_PROVIDERS[0]
 TELEMETRY_REMINDER = (
     "Telemetry preference not set; run `flywheel config telemetry "
     "--set off|on|full` to choose."
@@ -77,6 +80,17 @@ def set_telemetry_mode(mode: str) -> Path:
     config = load_config()
     config["telemetry"] = mode
     return save_config(config)
+
+
+def _resolve_tokenplace_api_key(arg_value: str | None) -> str | None:
+    """Return the token.place API key from CLI flag or environment."""
+
+    if arg_value:
+        value = arg_value.strip()
+        if value:
+            return value
+    env_value = os.environ.get(TOKENPLACE_API_KEY_ENV, "").strip()
+    return env_value or None
 
 
 def update_related_status(args: argparse.Namespace) -> None:
@@ -1577,6 +1591,12 @@ def spin(args: argparse.Namespace) -> None:
     cache_dir_value = getattr(args, "cache_dir", None)
     cache_dir: Path | None = Path(cache_dir_value) if cache_dir_value else None
 
+    provider_arg = getattr(args, "llm_provider", DEFAULT_LLM_PROVIDER)
+    provider = provider_arg or DEFAULT_LLM_PROVIDER
+    tokenplace_key = _resolve_tokenplace_api_key(
+        getattr(args, "tokenplace_api_key", None)
+    )
+
     result = _spin_result(
         target,
         analyzers,
@@ -1584,6 +1604,14 @@ def spin(args: argparse.Namespace) -> None:
         cache_dir,
         cache_analyzers,
     )
+
+    llm_info = {
+        "provider": provider,
+        "tokenplace_api_key_present": bool(tokenplace_key),
+    }
+    if isinstance(result, dict):
+        result = dict(result)
+        result["llm"] = llm_info
 
     if apply_mode:
         if apply_option == "none":
@@ -1784,6 +1812,16 @@ def build_parser() -> argparse.ArgumentParser:
         "--telemetry",
         choices=["off", "on", "full"],
         help="override telemetry preference before running",
+    )
+    p_spin.add_argument(
+        "--llm-provider",
+        choices=LLM_PROVIDERS,
+        default=DEFAULT_LLM_PROVIDER,
+        help="LLM provider to use when applying suggestions",
+    )
+    p_spin.add_argument(
+        "--tokenplace-api-key",
+        help="token.place API key (defaults to TOKENPLACE_API_KEY env var)",
     )
     p_spin.add_argument(
         "--cache-dir",

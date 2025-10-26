@@ -1,4 +1,7 @@
 ## Implementation Progress
+- **2025-10-26:** Added `--llm-provider` and `--tokenplace-api-key` flags to the
+  Python `flywheel spin` CLI so the apply workflow matches the CLI experience
+  described below, including the documented token.place environment fallback.
 - **2025-10-25:** Added a `--apply none` skip mode to the Python `flywheel spin`
   CLI so operators can record skipped scaffolding without generating files.
 - **2025-10-24:** Added a `--apply-all` flag to the Python `flywheel spin`

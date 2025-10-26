@@ -951,7 +951,13 @@ def test_spin_writes_cache_file(tmp_path: Path) -> None:
     files = list(cache_dir.glob("*.json"))
     assert len(files) == 1
     cached = json.loads(files[0].read_text())
-    assert cached == result
+    assert result["llm"] == {
+        "provider": main_module.DEFAULT_LLM_PROVIDER,
+        "tokenplace_api_key_present": False,
+    }
+    cached_result = dict(result)
+    cached_result.pop("llm", None)
+    assert cached == cached_result
 
 
 def test_spin_reuses_existing_cache(
@@ -1306,6 +1312,10 @@ def test_spin_reuses_cache_when_analyzers_match(
     output = json.loads(capsys.readouterr().out)
     expected_output = dict(cached_payload)
     expected_output["summary"] = NO_SUGGESTIONS_SUMMARY
+    expected_output["llm"] = {
+        "provider": main_module.DEFAULT_LLM_PROVIDER,
+        "tokenplace_api_key_present": False,
+    }
     assert output == expected_output
 
 
@@ -2196,3 +2206,50 @@ def test_spin_rejects_unknown_format(tmp_path: Path) -> None:
         spin(args)
 
     assert "Unsupported format" in str(excinfo.value)
+
+
+def test_spin_llm_provider_uses_env_key(tmp_path: Path) -> None:
+    repo = tmp_path / "cli-llm-env"
+    repo.mkdir()
+
+    output = run_spin_dry_run_text(
+        repo,
+        env={main_module.TOKENPLACE_API_KEY_ENV: "supersecret"},
+    )
+    data = json.loads(output)
+
+    assert data["llm"] == {
+        "provider": main_module.DEFAULT_LLM_PROVIDER,
+        "tokenplace_api_key_present": True,
+    }
+    assert "supersecret" not in output
+
+
+def test_spin_llm_provider_override(tmp_path: Path) -> None:
+    repo = tmp_path / "cli-llm-provider"
+    repo.mkdir()
+
+    result = run_spin_dry_run(repo, "--llm-provider", "anthropic")
+
+    assert result["llm"] == {
+        "provider": "anthropic",
+        "tokenplace_api_key_present": False,
+    }
+
+
+def test_spin_llm_provider_cli_key(tmp_path: Path) -> None:
+    repo = tmp_path / "cli-llm-cli-key"
+    repo.mkdir()
+
+    output = run_spin_dry_run_text(
+        repo,
+        "--tokenplace-api-key",
+        "cli-secret",
+    )
+    data = json.loads(output)
+
+    assert data["llm"] == {
+        "provider": main_module.DEFAULT_LLM_PROVIDER,
+        "tokenplace_api_key_present": True,
+    }
+    assert "cli-secret" not in output

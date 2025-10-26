@@ -1,3 +1,7 @@
+## 2025-10-26
+- feat: add `--llm-provider` and `--tokenplace-api-key` flags to `flywheel spin`
+  so the CLI matches the npx spin design doc options for configuring LLM usage.
+
 ## 2025-10-25
 - feat: add a `--apply none` skip mode to `flywheel spin` so the CLI matches the
   skip option documented in the spin design doc.
