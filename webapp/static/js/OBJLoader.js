@@ -469,6 +469,27 @@ class OBJLoader extends Loader {
 		 */
 		this.materials = null;
 
+		/**
+		 * Optional handler invoked for each comment line encountered while parsing.
+		 *
+		 * @type {?Function}
+		 */
+		this.commentHandler = null;
+
+	}
+
+	/**
+	 * Registers a callback for OBJ comments. Pass ``null`` to clear the handler.
+	 *
+	 * @param {?Function} handler - Receives ``(comment, lineNumber, rawLine)``.
+	 * @return {OBJLoader} A reference to this loader.
+	 */
+	setCommentHandler( handler ) {
+
+		this.commentHandler = ( typeof handler === 'function' ) ? handler : null;
+
+		return this;
+
 	}
 
 	/**
@@ -557,14 +578,26 @@ class OBJLoader extends Loader {
 
 		for ( let i = 0, l = lines.length; i < l; i ++ ) {
 
-			const line = lines[ i ].trimStart();
+			const rawLine = lines[ i ];
+			const line = rawLine.trimStart();
 
 			if ( line.length === 0 ) continue;
 
 			const lineFirstChar = line.charAt( 0 );
 
-			// @todo invoke passed in handler if any
-			if ( lineFirstChar === '#' ) continue; // skip comments
+			if ( lineFirstChar === '#' ) {
+
+				if ( this.commentHandler ) {
+
+					const commentText = line.length > 1 ? line.substring( 1 ).trim() : '';
+					this.commentHandler( commentText, i + 1, rawLine );
+
+				}
+
+				continue; // skip comments
+
+			}
+
 
 			if ( lineFirstChar === 'v' ) {
 
