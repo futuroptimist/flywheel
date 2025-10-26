@@ -167,7 +167,7 @@ def test_generate_summary_partial_coverage(monkeypatch):
     lines = summary.splitlines()
     idx = lines.index("## Coverage & Installer")
     first_row = lines[idx + 3]
-    assert "| 57% |" in first_row
+    assert "| ❌ (57%) |" in first_row
     assert "✔️" not in first_row
 
 

@@ -1,6 +1,8 @@
 ## 2025-10-26
 - feat: add an `--llm-provider` flag to `flywheel spin` dry runs so the CLI
   records the selected backend from the spin design doc.
+- fix: show a ❌ with the percentage for low total coverage in the repo summary
+  so the `docs/ci-guide.md` promise about coverage reporting is accurate.
 
 ## 2025-10-25
 - feat: add a `--apply none` skip mode to `flywheel spin` so the CLI matches the
@@ -62,6 +64,8 @@
 - feat: expand `language_mix` detection in `flywheel spin --dry-run` to cover
   Go, Rust, Java, shell scripts, and other common stacks.
 ## 2025-10-11
+- feat: surface OBJ comment metadata via `OBJLoader.setCommentHandler()` to honor the
+  inline parsing TODO.
 - feat: flag missing dependency lockfiles in `flywheel spin --dry-run` output and
   include lockfile metadata in the stats payload.
 - feat: expose repository `language_mix` stats in `flywheel spin --dry-run` to
