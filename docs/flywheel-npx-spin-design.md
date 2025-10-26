@@ -1,4 +1,6 @@
 ## Implementation Progress
+- **2025-10-26:** Added an `--llm-provider` flag to the Python `flywheel spin`
+  CLI so dry-run payloads record the selected backend for future apply flows.
 - **2025-10-25:** Added a `--apply none` skip mode to the Python `flywheel spin`
   CLI so operators can record skipped scaffolding without generating files.
 - **2025-10-24:** Added a `--apply-all` flag to the Python `flywheel spin`

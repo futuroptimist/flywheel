@@ -117,6 +117,7 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     result = run_spin_dry_run(repo)
 
     assert result["mode"] == "dry-run"
+    assert result["llm_provider"] == "tokenplace"
     stats = result["stats"]
     assert stats["has_readme"] is False
     assert stats["has_docs"] is False
@@ -168,6 +169,15 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
         ]
     )
     assert result["summary"] == expected_summary
+
+
+def test_spin_cli_accepts_llm_provider_override(tmp_path: Path) -> None:
+    repo = tmp_path / "provider"
+    repo.mkdir()
+
+    result = run_spin_dry_run(repo, "--llm-provider", "anthropic")
+
+    assert result["llm_provider"] == "anthropic"
 
 
 def test_spin_apply_scaffolds_supported_suggestions(
@@ -979,6 +989,7 @@ def test_spin_reuses_existing_cache(
                 "dependencies": [],
             }
         ],
+        "llm_provider": "tokenplace",
     }
     cache_path = cache_dir / _spin_cache_filename(repo)
     cache_path.write_text(json.dumps(cached_payload) + "\n")
@@ -1007,6 +1018,7 @@ def test_spin_reuses_existing_cache(
 
     output = json.loads(capsys.readouterr().out)
     assert output["analyzers"] == sorted(SPIN_ANALYZERS)
+    assert output["llm_provider"] == "tokenplace"
     for key, value in cached_payload.items():
         assert output[key] == value
 
@@ -1277,6 +1289,7 @@ def test_spin_reuses_cache_when_analyzers_match(
         "stats": {"cached": True},
         "suggestions": [],
         "analyzers": ["docs"],
+        "llm_provider": "tokenplace",
     }
     cache_path = cache_dir / _spin_cache_filename(repo, ["docs"])
     cache_path.write_text(json.dumps(cached_payload) + "\n")
@@ -1325,6 +1338,7 @@ def test_spin_refreshes_summary_for_cached_payload(
         "stats": {"cached": True},
         "suggestions": [],
         "summary": "legacy summary",
+        "llm_provider": "tokenplace",
     }
     cache_path = cache_dir / _spin_cache_filename(repo)
     cache_path.write_text(json.dumps(cached_payload) + "\n")
@@ -1401,6 +1415,7 @@ def test_spin_skips_cache_when_cached_analyzers_invalid(
         "stats": {"cached": True},
         "suggestions": [],
         "analyzers": ["docs", 1],
+        "llm_provider": "tokenplace",
     }
     cache_path.write_text(json.dumps(cached_payload) + "\n")
 
@@ -1441,6 +1456,7 @@ def test_spin_skips_cache_when_cached_analyzers_wrong_type(
         "stats": {"cached": True},
         "suggestions": [],
         "analyzers": "docs",
+        "llm_provider": "tokenplace",
     }
     cache_path.write_text(json.dumps(cached_payload) + "\n")
 
@@ -1515,6 +1531,7 @@ def test_spin_invokes_cache_writer(
     assert target_path == repo
     assert payload["mode"] == "dry-run"
     assert payload["analyzers"] == sorted(SPIN_ANALYZERS)
+    assert payload["llm_provider"] == "tokenplace"
     assert analyzers is None
 
 
