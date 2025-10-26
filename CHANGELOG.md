@@ -58,6 +58,8 @@
 - feat: expand `language_mix` detection in `flywheel spin --dry-run` to cover
   Go, Rust, Java, shell scripts, and other common stacks.
 ## 2025-10-11
+- feat: surface OBJ comment metadata via `OBJLoader.setCommentHandler()` to honor the
+  inline parsing TODO.
 - feat: flag missing dependency lockfiles in `flywheel spin --dry-run` output and
   include lockfile metadata in the stats payload.
 - feat: expose repository `language_mix` stats in `flywheel spin --dry-run` to

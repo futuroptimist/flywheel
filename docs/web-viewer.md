@@ -49,3 +49,19 @@ Open `viewer/threejs.html` directly in your browser to spin the STL-based flywhe
 - **Zoom:** scroll your mouse wheel to move the camera in and out with gentle limits to
   avoid clipping through the model.
 - **Switch models:** use the dropdown above the viewer to load a different OBJ file.
+
+## Capturing OBJ comments
+
+`webapp/static/js/OBJLoader.js` exposes a `setCommentHandler` helper so you can harvest metadata from
+OBJ comment lines while the model loads. The callback receives the trimmed comment text, the 1-indexed
+line number, and the raw source line before the parser skips it:
+
+```js
+const loader = new OBJLoader();
+loader.setCommentHandler((comment, lineNumber, rawLine) => {
+  console.debug('OBJ comment', { comment, lineNumber, rawLine });
+});
+```
+
+Use this hook to forward author notes or build-time hints to the viewer without modifying the mesh data
+itself.
