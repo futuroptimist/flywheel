@@ -951,6 +951,27 @@ def test_spin_requires_dry_run_flag(tmp_path: Path) -> None:
     assert "Choose --dry-run to preview" in str(exc.value)
 
 
+def test_spin_rejects_unknown_llm_provider(tmp_path: Path) -> None:
+    repo = tmp_path / "unknown-provider"
+    repo.mkdir()
+
+    args = argparse.Namespace(
+        path=str(repo),
+        dry_run=True,
+        apply=None,
+        apply_all=False,
+        analyzers=None,
+        cache_dir=None,
+        format="json",
+        llm_provider="cohere",
+    )
+
+    with pytest.raises(SystemExit) as exc:
+        spin(args)
+
+    assert "Unsupported LLM provider" in str(exc.value)
+
+
 def test_spin_writes_cache_file(tmp_path: Path) -> None:
     repo = tmp_path / "cacheable"
     repo.mkdir()
