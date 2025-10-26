@@ -110,6 +110,44 @@ def test_parse_analyzers_allows_all_then_disable() -> None:
     assert _parse_analyzers("all,-tests") == expected
 
 
+def test_resolve_tokenplace_api_key_prefers_argument(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv(main_module.TOKENPLACE_API_KEY_ENV, "env-secret")
+
+    result = main_module._resolve_tokenplace_api_key(" cli-secret ")
+
+    assert result == "cli-secret"
+
+
+def test_resolve_tokenplace_api_key_env_fallback(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv(main_module.TOKENPLACE_API_KEY_ENV, " env-secret ")
+
+    result = main_module._resolve_tokenplace_api_key(None)
+
+    assert result == "env-secret"
+
+
+def test_resolve_tokenplace_api_key_missing_returns_none(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv(main_module.TOKENPLACE_API_KEY_ENV, raising=False)
+
+    assert main_module._resolve_tokenplace_api_key(None) is None
+
+
+def test_resolve_tokenplace_api_key_ignores_blank_argument(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv(main_module.TOKENPLACE_API_KEY_ENV, "env-secret")
+
+    result = main_module._resolve_tokenplace_api_key("   ")
+
+    assert result == "env-secret"
+
+
 def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     repo = tmp_path / "sample"
     repo.mkdir()
