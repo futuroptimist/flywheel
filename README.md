@@ -337,6 +337,10 @@ Persist or override telemetry preferences on the fly with
 before the analysis runs, matching the `flywheel config telemetry` command and
 skipping the interactive prompt for non-interactive environments.
 
+Select the intended LLM backend with `--llm-provider tokenplace|openai|anthropic`.
+The dry-run JSON records the provider so future apply workflows know which
+integration to activate.
+
 Apply the scaffolding for supported suggestions with `--apply`. Append
 `--apply none` to record that you skipped every scaffold without creating any
 files, or use `--apply-all` to apply supported changes without prompts—it's

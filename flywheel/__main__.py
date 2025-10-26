@@ -21,6 +21,8 @@ ROOT = Path(__file__).resolve().parent.parent
 CONFIG_ENV_VAR = "FLYWHEEL_CONFIG_DIR"
 CONFIG_FILENAME = "config.json"
 DEFAULT_CONFIG_DIR = Path.home() / ".config" / "flywheel"
+LLM_PROVIDERS: tuple[str, ...] = ("tokenplace", "openai", "anthropic")
+DEFAULT_LLM_PROVIDER = LLM_PROVIDERS[0]
 TELEMETRY_REMINDER = (
     "Telemetry preference not set; run `flywheel config telemetry "
     "--set off|on|full` to choose."
@@ -1364,6 +1366,7 @@ def _spin_result(
     normalized_analyzers: Sequence[str],
     cache_dir: Path | None,
     cache_analyzers: Collection[str] | None,
+    llm_provider: str,
 ) -> dict[str, object]:
     """Return analysis result for ``target`` using caching when available."""
 
@@ -1386,6 +1389,11 @@ def _spin_result(
                     stats_block = loaded.get("stats")
                     suggestions_block = loaded.get("suggestions")
                     cached_analyzers = loaded.get("analyzers")
+                    cached_provider_raw = loaded.get("llm_provider")
+                    if isinstance(cached_provider_raw, str):
+                        cached_provider = cached_provider_raw.lower()
+                    else:
+                        cached_provider = DEFAULT_LLM_PROVIDER
                     cached_analyzers_set: set[str] | None
                     if cached_analyzers is None:
                         cached_analyzers_set = set(SPIN_ANALYZERS)
@@ -1407,9 +1415,11 @@ def _spin_result(
                         and isinstance(stats_block, dict)
                         and isinstance(suggestions_block, list)
                         and cached_analyzers_set == set(analyzers)
+                        and cached_provider == llm_provider
                     ):
                         hydrated = dict(loaded)
                         hydrated["analyzers"] = list(normalized_analyzers)
+                        hydrated["llm_provider"] = llm_provider
                         summary_text = _build_summary(
                             stats_block,
                             suggestions_block,
@@ -1429,6 +1439,7 @@ def _spin_result(
             "suggestions": suggestions,
             "summary": summary_text,
             "analyzers": list(normalized_analyzers),
+            "llm_provider": llm_provider,
         }
         if cache_dir is not None:
             try:
@@ -1577,12 +1588,19 @@ def spin(args: argparse.Namespace) -> None:
     cache_dir_value = getattr(args, "cache_dir", None)
     cache_dir: Path | None = Path(cache_dir_value) if cache_dir_value else None
 
+    provider_raw = getattr(args, "llm_provider", DEFAULT_LLM_PROVIDER)
+    llm_provider = str(provider_raw or DEFAULT_LLM_PROVIDER).lower()
+    if llm_provider not in LLM_PROVIDERS:
+        message = f"Unsupported LLM provider: {llm_provider}"
+        raise SystemExit(message)
+
     result = _spin_result(
         target,
         analyzers,
         normalized_analyzers,
         cache_dir,
         cache_analyzers,
+        llm_provider,
     )
 
     if apply_mode:
@@ -1789,6 +1807,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--cache-dir",
         type=Path,
         help="directory for storing dry-run cache results",
+    )
+    p_spin.add_argument(
+        "--llm-provider",
+        choices=LLM_PROVIDERS,
+        default=DEFAULT_LLM_PROVIDER,
+        help="LLM backend to target for future apply workflows",
     )
     p_spin.add_argument("--analyzers", help=SPIN_ANALYZER_HELP)
     p_spin.add_argument(
