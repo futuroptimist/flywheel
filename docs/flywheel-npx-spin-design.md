@@ -281,7 +281,7 @@ gantt
 - [ ] Incident response playbook updated for CLI issues.
 - [ ] Support rotation on-call schedule defined.
 - [ ] Changelog automation aligned with Release Drafter.
-- [ ] `scripts/checks.sh` updated to include TypeScript CLI tests.
+- [x] `scripts/checks.sh` updated to include TypeScript CLI tests.
 
 ## Open Questions
 1. Should we ship prebuilt binaries via `pkg` to reduce cold start time, or rely on ts-node/Node

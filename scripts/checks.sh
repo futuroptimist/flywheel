@@ -33,11 +33,13 @@ if [ -f package.json ]; then
     npm run lint
     npm run format:check
     npm run test:ci
+    npm run ts-cli:test
   else
     echo "SKIP_E2E set; skipping Playwright installation and e2e tests" >&2
     npm run lint
     npm run format:check
     npm run jest -- --coverage
+    npm run ts-cli:test
   fi
 fi
 

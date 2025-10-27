@@ -1,3 +1,8 @@
+## 2025-10-27
+- chore: run the TypeScript CLI markdown formatter tests from `scripts/checks.sh` so the
+  `docs/flywheel-npx-spin-design.md` readiness checklist item about TypeScript coverage is
+  satisfied.
+
 ## 2025-10-26
 - feat: add an `--llm-provider` flag to `flywheel spin` dry runs so the CLI
   records the selected backend from the spin design doc.
