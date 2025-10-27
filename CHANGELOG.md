@@ -1,3 +1,7 @@
+## 2025-10-27
+- feat: split OBJ smoothing groups without per-face materials so the viewer matches the loader
+  TODO note from `webapp/static/js/OBJLoader.js`.
+
 ## 2025-10-26
 - feat: add an `--llm-provider` flag to `flywheel spin` dry runs so the CLI
   records the selected backend from the spin design doc.

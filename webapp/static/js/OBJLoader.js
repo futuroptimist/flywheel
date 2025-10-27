@@ -748,42 +748,58 @@ class OBJLoader extends Loader {
 
 				console.warn( 'THREE.OBJLoader: Rendering identifier "usemap" not supported. Textures must be defined in MTL files.' );
 
-			} else if ( lineFirstChar === 's' ) {
+                        } else if ( lineFirstChar === 's' ) {
 
-				result = line.split( ' ' );
+                                result = line.split( ' ' );
 
-				// smooth shading
+                                const previousSmooth = state.object.smooth;
 
-				// @todo Handle files that have varying smooth values for a set of faces inside one geometry,
-				// but does not define a usemtl for each face set.
-				// This should be detected and a dummy material created (later MultiMaterial and geometry groups).
-				// This requires some care to not create extra material on each smooth value for "normal" obj files.
-				// where explicit usemtl defines geometry groups.
-				// Example asset: examples/models/obj/cerberus/Cerberus.obj
+                                /*
+                                         * http://paulbourke.net/dataformats/obj/
+                                         *
+                                         * From chapter "Grouping" Syntax explanation "s group_number":
+                                         * "group_number is the smoothing group number. To turn off smoothing groups, use a value of 0 or off.
+                                         * Polygonal elements use group numbers to put elements in different smoothing groups. For free-form
+                                         * surfaces, smoothing groups are either turned on or off; there is no difference between values greater
+                                         * than 0."
+                                         */
+                                let nextSmooth;
+                                if ( result.length > 1 ) {
 
-				/*
-					 * http://paulbourke.net/dataformats/obj/
-					 *
-					 * From chapter "Grouping" Syntax explanation "s group_number":
-					 * "group_number is the smoothing group number. To turn off smoothing groups, use a value of 0 or off.
-					 * Polygonal elements use group numbers to put elements in different smoothing groups. For free-form
-					 * surfaces, smoothing groups are either turned on or off; there is no difference between values greater
-					 * than 0."
-					 */
-				if ( result.length > 1 ) {
+                                        const value = result[ 1 ].trim().toLowerCase();
+                                        nextSmooth = ( value !== '0' && value !== 'off' );
 
-					const value = result[ 1 ].trim().toLowerCase();
-					state.object.smooth = ( value !== '0' && value !== 'off' );
+                                } else {
 
-				} else {
+                                        // ZBrush can produce "s" lines #11707
+                                        nextSmooth = true;
 
-					// ZBrush can produce "s" lines #11707
-					state.object.smooth = true;
+                                }
 
-				}
+                                let material = state.object.currentMaterial();
 
-				const material = state.object.currentMaterial();
-				if ( material ) material.smooth = state.object.smooth;
+                                if ( material === undefined && state.object.geometry.vertices.length > 0 ) {
+
+                                        material = state.object.startMaterial( '', state.materialLibraries );
+
+                                }
+
+                                if ( material !== undefined && nextSmooth !== previousSmooth ) {
+
+                                        const vertexCount = state.object.geometry.vertices.length / 3;
+
+                                        if ( vertexCount > material.groupStart ) {
+
+                                                material = state.object.startMaterial( material.name, state.materialLibraries );
+
+                                        }
+
+                                }
+
+                                state.object.smooth = nextSmooth;
+
+                                material = state.object.currentMaterial();
+                                if ( material ) material.smooth = state.object.smooth;
 
 			} else {
 
