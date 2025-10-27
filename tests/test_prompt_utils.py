@@ -157,28 +157,29 @@ def test_summarize_repo_root_covers_missing_lines(monkeypatch, tmp_path):
     """Test to cover the missing lines in summarize_repo_root function."""
     repo = tmp_path / "repo"
     repo.mkdir()
-    
+
     # Create a hidden file (should be skipped)
     (repo / ".hidden_file").write_text("hidden")
-    
+
     # Create a regular file
     (repo / "regular.txt").write_text("regular")
-    
+
     # Create a file that will be treated as a symlink via mocking
     symlink_file = repo / "symlink.txt"
     symlink_file.write_text("symlink")
-    
+
     # Mock is_symlink to return True for our test file
     original_is_symlink = Path.is_symlink
+
     def mock_is_symlink(self: Path) -> bool:
         if self == symlink_file:
             return True
         return original_is_symlink(self)
-    
+
     monkeypatch.setattr(Path, "is_symlink", mock_is_symlink)
-    
+
     snapshot = fm.summarize_repo_root(repo)
-    
+
     # Should include regular file but not hidden file
     assert "regular.txt" in snapshot
     assert ".hidden_file" not in snapshot
@@ -190,21 +191,22 @@ def test_summarize_repo_root_oserror_handling(monkeypatch, tmp_path):
     """Test OSError handling in the try-except block."""
     repo = tmp_path / "repo"
     repo.mkdir()
-    
+
     # Create a file that will cause OSError when checking is_file
     problematic_file = repo / "problem.txt"
     problematic_file.write_text("data")
-    
+
     # Mock is_file to raise OSError for our test file
     original_is_file = Path.is_file
+
     def mock_is_file(self: Path) -> bool:
         if self == problematic_file:
             raise OSError("stat failure")
         return original_is_file(self)
-    
+
     monkeypatch.setattr(Path, "is_file", mock_is_file)
-    
+
     snapshot = fm.summarize_repo_root(repo)
-    
+
     # Should still include the file name even after OSError
     assert "problem.txt" in snapshot
