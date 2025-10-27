@@ -1329,9 +1329,15 @@ def _spin_cache_filename(
     stem = resolved.name
     if not stem:
         anchor = resolved.anchor.rstrip("/\\")
-        # On Windows, anchor might be a drive letter like "C:" which should fall back to "target"
-        # Check if it's a single letter followed by colon (Windows drive letter)
-        stem = "target" if not anchor or (len(anchor) == 2 and anchor[1] == ":" and anchor[0].isalpha()) else anchor
+        # On Windows, anchor might be a drive letter like "C:" which should
+        # fall back to "target". Check if it's a single letter followed by
+        # colon (Windows drive letter)
+        stem = (
+            "target"
+            if not anchor
+            or (len(anchor) == 2 and anchor[1] == ":" and anchor[0].isalpha())
+            else anchor
+        )
     allowed = "-_."
     sanitized_parts: list[str] = []
     for ch in stem:
