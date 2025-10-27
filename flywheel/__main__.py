@@ -23,6 +23,7 @@ CONFIG_FILENAME = "config.json"
 DEFAULT_CONFIG_DIR = Path.home() / ".config" / "flywheel"
 LLM_PROVIDERS: tuple[str, ...] = ("tokenplace", "openai", "anthropic")
 DEFAULT_LLM_PROVIDER = LLM_PROVIDERS[0]
+TOKENPLACE_API_KEY_ENV = "TOKENPLACE_API_KEY"
 TELEMETRY_REMINDER = (
     "Telemetry preference not set; run `flywheel config telemetry "
     "--set off|on|full` to choose."
@@ -1174,6 +1175,8 @@ def _format_stats_lines(stats: dict[str, object]) -> list[str]:
     lines.append(f"  - has_ci_workflows: {ci_flag}")
     lines.append(f"  - has_tests: {tests_flag}")
     lines.append(f"  - has_lint_config: {lint_flag}")
+    key_flag = _format_bool(stats.get("tokenplace_api_key"))
+    lines.append(f"  - tokenplace_api_key: {key_flag}")
     if isinstance(dependency, dict):
         dep_status = dependency.get("status", "unknown")
     elif dependency is None:
@@ -1367,6 +1370,7 @@ def _spin_result(
     cache_dir: Path | None,
     cache_analyzers: Collection[str] | None,
     llm_provider: str,
+    tokenplace_api_key_present: bool,
 ) -> dict[str, object]:
     """Return analysis result for ``target`` using caching when available."""
 
@@ -1418,10 +1422,15 @@ def _spin_result(
                         and cached_provider == llm_provider
                     ):
                         hydrated = dict(loaded)
+                        stats_dict = dict(stats_block)
+                        stats_dict.update(
+                            {"tokenplace_api_key": tokenplace_api_key_present}
+                        )
+                        hydrated["stats"] = stats_dict
                         hydrated["analyzers"] = list(normalized_analyzers)
                         hydrated["llm_provider"] = llm_provider
                         summary_text = _build_summary(
-                            stats_block,
+                            stats_dict,
                             suggestions_block,
                         )
                         hydrated["summary"] = summary_text
@@ -1431,6 +1440,7 @@ def _spin_result(
 
     if cached_result is None:
         stats, suggestions = _analyze_repository(target, analyzers=analyzers)
+        stats["tokenplace_api_key"] = tokenplace_api_key_present
         summary_text = _build_summary(stats, suggestions)
         result = {
             "target": str(target),
@@ -1594,6 +1604,19 @@ def spin(args: argparse.Namespace) -> None:
         message = f"Unsupported LLM provider: {llm_provider}"
         raise SystemExit(message)
 
+    key_argument = getattr(args, "tokenplace_api_key", None)
+    key_value: str | None = None
+    if key_argument is not None:
+        candidate = str(key_argument).strip()
+        if candidate:
+            key_value = candidate
+            os.environ[TOKENPLACE_API_KEY_ENV] = candidate
+    if key_value is None:
+        env_value = os.environ.get(TOKENPLACE_API_KEY_ENV)
+        if env_value:
+            key_value = env_value
+    tokenplace_api_key_present = bool(key_value)
+
     result = _spin_result(
         target,
         analyzers,
@@ -1601,6 +1624,7 @@ def spin(args: argparse.Namespace) -> None:
         cache_dir,
         cache_analyzers,
         llm_provider,
+        tokenplace_api_key_present,
     )
 
     if apply_mode:
@@ -1813,6 +1837,13 @@ def build_parser() -> argparse.ArgumentParser:
         choices=LLM_PROVIDERS,
         default=DEFAULT_LLM_PROVIDER,
         help="LLM backend to target for future apply workflows",
+    )
+    p_spin.add_argument(
+        "--tokenplace-api-key",
+        help=(
+            "Tokenplace API key (defaults to "
+            "TOKENPLACE_API_KEY environment variable)"
+        ),
     )
     p_spin.add_argument("--analyzers", help=SPIN_ANALYZER_HELP)
     p_spin.add_argument(

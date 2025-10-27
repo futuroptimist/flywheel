@@ -124,6 +124,7 @@ def test_spin_dry_run_flags_missing_assets(tmp_path: Path) -> None:
     assert stats["has_ci_workflows"] is False
     assert stats["has_tests"] is False
     assert stats["has_lint_config"] is False
+    assert stats["tokenplace_api_key"] is False
     assert stats["has_lint_config"] is False
 
     suggestion_ids = {entry["id"] for entry in result["suggestions"]}
@@ -178,6 +179,30 @@ def test_spin_cli_accepts_llm_provider_override(tmp_path: Path) -> None:
     result = run_spin_dry_run(repo, "--llm-provider", "anthropic")
 
     assert result["llm_provider"] == "anthropic"
+
+
+def test_spin_cli_accepts_tokenplace_api_key_flag(tmp_path: Path) -> None:
+    repo = tmp_path / "token-flag"
+    repo.mkdir()
+    key = "tok-secret-123"
+
+    result = run_spin_dry_run(repo, "--tokenplace-api-key", key)
+
+    assert result["stats"]["tokenplace_api_key"] is True
+    raw_output = run_spin_dry_run_text(repo, "--tokenplace-api-key", key)
+    assert key not in raw_output
+
+
+def test_spin_cli_uses_env_tokenplace_api_key(tmp_path: Path) -> None:
+    repo = tmp_path / "token-env"
+    repo.mkdir()
+    key = "env-secret-456"
+
+    result = run_spin_dry_run(repo, env={"TOKENPLACE_API_KEY": key})
+
+    assert result["stats"]["tokenplace_api_key"] is True
+    raw_output = run_spin_dry_run_text(repo, env={"TOKENPLACE_API_KEY": key})
+    assert key not in raw_output
 
 
 def test_spin_apply_scaffolds_supported_suggestions(
@@ -1040,8 +1065,11 @@ def test_spin_reuses_existing_cache(
     output = json.loads(capsys.readouterr().out)
     assert output["analyzers"] == sorted(SPIN_ANALYZERS)
     assert output["llm_provider"] == "tokenplace"
-    for key, value in cached_payload.items():
-        assert output[key] == value
+    assert output["target"] == cached_payload["target"]
+    assert output["mode"] == cached_payload["mode"]
+    assert output["suggestions"] == cached_payload["suggestions"]
+    assert output["stats"]["cached"] is True
+    assert output["stats"]["tokenplace_api_key"] is False
 
 
 def test_spin_ignores_cache_with_different_analyzers(
@@ -1340,6 +1368,7 @@ def test_spin_reuses_cache_when_analyzers_match(
     output = json.loads(capsys.readouterr().out)
     expected_output = dict(cached_payload)
     expected_output["summary"] = NO_SUGGESTIONS_SUMMARY
+    expected_output["stats"] = {"cached": True, "tokenplace_api_key": False}
     assert output == expected_output
 
 
@@ -2098,13 +2127,15 @@ def test_format_stats_lines_handles_literal_dependency() -> None:
         "has_docs": True,
         "has_ci_workflows": True,
         "has_tests": True,
+        "has_lint_config": True,
         "dependency_health": "warn",
         "language_mix": [],
+        "tokenplace_api_key": False,
     }
 
     lines = _format_stats_lines(stats)
 
-    assert "dependency_health: warn" in lines[-2]
+    assert any("dependency_health: warn" in line for line in lines)
 
 
 def test_spin_markdown_format(
@@ -2147,6 +2178,7 @@ def test_spin_markdown_without_suggestions() -> None:
             {"language": "Python", "count": 3},
             {"language": "TypeScript", "count": 1},
         ],
+        "tokenplace_api_key": False,
     }
     result = {
         "target": "demo",
@@ -2158,6 +2190,7 @@ def test_spin_markdown_without_suggestions() -> None:
     markdown = _render_spin_markdown(result)
 
     assert "language_mix: Python (3), TypeScript (1)" in markdown
+    assert "tokenplace_api_key: no" in markdown
     assert "_No suggestions found._" in markdown
 
 
@@ -2174,6 +2207,7 @@ def test_spin_table_without_suggestions() -> None:
             {"language": "Python", "count": 1},
             {"language": "JavaScript", "count": 1},
         ],
+        "tokenplace_api_key": False,
     }
     result = {
         "target": "demo",
@@ -2204,6 +2238,21 @@ def test_spin_cli_accepts_table_format(tmp_path: Path) -> None:
     assert "Confidence" in output
     assert "add-docs" in output
     assert "0.80" in output or "0.8" in output
+
+
+def test_spin_cli_table_includes_tokenplace_flag(tmp_path: Path) -> None:
+    repo = tmp_path / "cli-table-tokenplace"
+    repo.mkdir()
+
+    output = run_spin_dry_run_text(
+        repo,
+        "--format",
+        "table",
+        "--tokenplace-api-key",
+        "not-a-secret",
+    )
+
+    assert "tokenplace_api_key: yes" in output
 
 
 def test_spin_cli_accepts_markdown_format(tmp_path: Path) -> None:

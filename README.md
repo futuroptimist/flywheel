@@ -340,6 +340,9 @@ skipping the interactive prompt for non-interactive environments.
 Select the intended LLM backend with `--llm-provider tokenplace|openai|anthropic`.
 The dry-run JSON records the provider so future apply workflows know which
 integration to activate.
+Provide Tokenplace credentials with `--tokenplace-api-key` or the
+`TOKENPLACE_API_KEY` environment variable. The CLI notes whether an API key is
+available in the stats block without printing the secret value.
 
 Apply the scaffolding for supported suggestions with `--apply`. Append
 `--apply none` to record that you skipped every scaffold without creating any

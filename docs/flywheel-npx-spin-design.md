@@ -1,4 +1,7 @@
 ## Implementation Progress
+- **2025-10-27:** Added a `--tokenplace-api-key` flag to the Python
+  `flywheel spin` CLI so dry-run stats note when Tokenplace credentials are
+  available without echoing the secret.
 - **2025-10-26:** Added an `--llm-provider` flag to the Python `flywheel spin`
   CLI so dry-run payloads record the selected backend for future apply flows.
 - **2025-10-25:** Added a `--apply none` skip mode to the Python `flywheel spin`

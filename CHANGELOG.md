@@ -1,3 +1,8 @@
+## 2025-10-27
+- feat: add a `--tokenplace-api-key` flag to `flywheel spin` so dry-run stats
+  capture Tokenplace credential availability without exposing the key, matching
+  the spin design doc note about API key input.
+
 ## 2025-10-26
 - feat: add an `--llm-provider` flag to `flywheel spin` dry runs so the CLI
   records the selected backend from the spin design doc.

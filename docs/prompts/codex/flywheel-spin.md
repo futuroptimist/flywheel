@@ -62,9 +62,9 @@ GUARDRAILS:
 - Cache embeddings per file hash to minimize redundant token usage.
 
 ## Interaction Flow
-1. Warm start with repository summary and top-level metrics (language mix, dependency health).
-   The CLI now exposes these via the `language_mix` and `dependency_health` stats
-   blocks returned from `flywheel spin --dry-run`.
+1. Warm start with repository summary and top-level metrics (language mix, dependency health, credential availability).
+   The CLI now exposes these via the `language_mix`, `dependency_health`, and
+   `tokenplace_api_key` stats blocks returned from `flywheel spin --dry-run`.
 2. Present 3-7 suggestions, grouped by category, sorted by impact descending.
    Each dry-run suggestion now includes `validation` commands with concrete
    shell checks or test runs so operators can confirm the change.
