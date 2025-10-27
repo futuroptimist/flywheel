@@ -65,3 +65,8 @@ loader.setCommentHandler((comment, lineNumber, rawLine) => {
 
 Use this hook to forward author notes or build-time hints to the viewer without modifying the mesh data
 itself.
+
+The bundled OBJ loader also detects smoothing-group changes even when the source file does not declare
+separate materials. When an OBJ switches between `s 1` and `s off` (or other smoothing identifiers)
+without issuing a new `usemtl`, the parser now creates distinct geometry groups so Three.js can render
+the smooth and flat-shaded regions with the correct lighting.

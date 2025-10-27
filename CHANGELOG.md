@@ -2,6 +2,8 @@
 - chore: run the TypeScript CLI markdown formatter tests from `scripts/checks.sh` so the
   `docs/flywheel-npx-spin-design.md` readiness checklist item about TypeScript coverage is
   satisfied.
+- feat: split OBJ smoothing groups without per-face materials so the viewer matches the loader
+  TODO note from `webapp/static/js/OBJLoader.js`.
 
 ## 2025-10-26
 - feat: add an `--llm-provider` flag to `flywheel spin` dry runs so the CLI
