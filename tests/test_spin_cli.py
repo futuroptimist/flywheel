@@ -205,6 +205,24 @@ def test_spin_cli_uses_env_tokenplace_api_key(tmp_path: Path) -> None:
     assert key not in raw_output
 
 
+def test_spin_cli_ignores_empty_tokenplace_api_key_flag(tmp_path: Path) -> None:
+    repo = tmp_path / "token-empty"
+    repo.mkdir()
+
+    result = run_spin_dry_run(repo, "--tokenplace-api-key", "")
+
+    assert result["stats"]["tokenplace_api_key"] is False
+
+
+def test_spin_cli_ignores_whitespace_tokenplace_api_key_flag(tmp_path: Path) -> None:
+    repo = tmp_path / "token-whitespace"
+    repo.mkdir()
+
+    result = run_spin_dry_run(repo, "--tokenplace-api-key", "   ")
+
+    assert result["stats"]["tokenplace_api_key"] is False
+
+
 def test_spin_apply_scaffolds_supported_suggestions(
     tmp_path: Path, capsys: CaptureFixtureStr
 ) -> None:
