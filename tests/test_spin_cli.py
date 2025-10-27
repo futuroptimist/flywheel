@@ -2138,6 +2138,24 @@ def test_format_stats_lines_handles_literal_dependency() -> None:
     assert any("dependency_health: warn" in line for line in lines)
 
 
+def test_format_stats_lines_handles_none_dependency() -> None:
+    stats = {
+        "total_files": 1,
+        "has_readme": True,
+        "has_docs": True,
+        "has_ci_workflows": True,
+        "has_tests": True,
+        "has_lint_config": True,
+        "dependency_health": None,
+        "language_mix": [],
+        "tokenplace_api_key": False,
+    }
+
+    lines = _format_stats_lines(stats)
+
+    assert any("dependency_health: skipped" in line for line in lines)
+
+
 def test_spin_markdown_format(
     tmp_path: Path,
     capsys: CaptureFixtureStr,
