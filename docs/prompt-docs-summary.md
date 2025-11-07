@@ -11,7 +11,7 @@ All prompts are verified with OpenAI Codex. Other coding agents like Claude Code
 
 Prompt docs stored under `docs/prompts/codex/` or `docs/prompts/` are treated as canonical so repositories migrating between layouts keep this summary clean.
 
-**375 one-click prompts verified across 14 repos (296 evergreen, 35 one-off, 28 unknown).**
+**374 one-click prompts verified across 14 repos (296 evergreen, 35 one-off, 27 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
@@ -395,10 +395,7 @@ _❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` o
 | [docs/prompts/codex/templates/simplification/refresh.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts/codex/templates/simplification/refresh.md)               | [Prompt Refresh Template](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts/codex/templates/simplification/refresh.md#prompt-refresh-template)                                                                                                            | evergreen | yes        |
 | [docs/prompts/codex/tests.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts/codex/tests.md)                                                                     | [Codex Tests Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts/codex/tests.md#codex-tests-prompt)                                                                                                                                                 | evergreen | yes        |
 | [docs/prompts/codex/tests.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts/codex/tests.md)                                                                     | [Upgrade Prompt](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts/codex/tests.md#upgrade-prompt)                                                                                                                                                         | evergreen | yes        |
-| [.github/prompts/CI_Test_Fixer.md](https://github.com/futuroptimist/sugarkube/blob/main/.github/prompts/CI_Test_Fixer.md)                                                           | [Summary](https://github.com/futuroptimist/sugarkube/blob/main/.github/prompts/CI_Test_Fixer.md)                                                                                                                                                                          | unknown   | yes        |
 | [docs/prompts/codex/sugarkube-platform.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts/codex/sugarkube-platform.md)                                           | [One-click repo task: bootstrap a Pi5-backed k3s HA platform (prod/int/dev) with GitOps](https://github.com/futuroptimist/sugarkube/blob/main/docs/prompts/codex/sugarkube-platform.md#one-click-repo-task-bootstrap-a-pi5-backed-k3s-ha-platform-prodintdev-with-gitops) | unknown   | yes        |
-
-_❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` or `docs/prompts/codex/`): `.github/prompts`._
 
 ## [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper)
 
@@ -569,4 +566,4 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/wove          | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md)                                                                         | unknown   |       |
 | futuroptimist/wove          | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md)                                                                       | unknown   |       |
 
-_Updated automatically: 2025-11-06_
+_Updated automatically: 2025-11-07_
