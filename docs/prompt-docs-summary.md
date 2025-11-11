@@ -11,7 +11,7 @@ All prompts are verified with OpenAI Codex. Other coding agents like Claude Code
 
 Prompt docs stored under `docs/prompts/codex/` or `docs/prompts/` are treated as canonical so repositories migrating between layouts keep this summary clean.
 
-**374 one-click prompts verified across 14 repos (296 evergreen, 35 one-off, 27 unknown).**
+**373 one-click prompts verified across 14 repos (295 evergreen, 35 one-off, 27 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
@@ -214,7 +214,6 @@ _❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` o
 | [docs/prompts/codex/docs.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/docs.md)                         | [token.place Docs Update Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/docs.md#tokenplace-docs-update-prompt)                                             | evergreen | yes        |
 | [docs/prompts/codex/feature.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/feature.md)                   | [token.place Feature Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/feature.md#tokenplace-feature-prompt)                                                  | evergreen | yes        |
 | [docs/prompts/codex/implement.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/implement.md)               | [Codex Implement Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/implement.md#codex-implement-prompt)                                                       | evergreen | yes        |
-| [docs/prompts/codex/implement.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/implement.md)               | [Prompt block](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/implement.md#prompt-block)                                                                           | evergreen | yes        |
 | [docs/prompts/codex/polish.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/polish.md)                     | [Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/polish.md#prompt)                                                                                          | evergreen | yes        |
 | [docs/prompts/codex/polish.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/polish.md)                     | [Upgrade Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/polish.md#upgrade-prompt)                                                                          | evergreen | yes        |
 | [docs/prompts/codex/refactor.md](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/refactor.md)                 | [token.place Refactor Prompt](https://github.com/futuroptimist/token.place/blob/main/docs/prompts/codex/refactor.md#tokenplace-refactor-prompt)                                               | evergreen | yes        |
@@ -566,4 +565,4 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/wove          | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md)                                                                         | unknown   |       |
 | futuroptimist/wove          | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md)                                                                       | unknown   |       |
 
-_Updated automatically: 2025-11-10_
+_Updated automatically: 2025-11-11_
