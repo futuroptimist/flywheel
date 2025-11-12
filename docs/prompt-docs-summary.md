@@ -11,7 +11,7 @@ All prompts are verified with OpenAI Codex. Other coding agents like Claude Code
 
 Prompt docs stored under `docs/prompts/codex/` or `docs/prompts/` are treated as canonical so repositories migrating between layouts keep this summary clean.
 
-**373 one-click prompts verified across 14 repos (295 evergreen, 35 one-off, 27 unknown).**
+**379 one-click prompts verified across 14 repos (295 evergreen, 38 one-off, 30 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
@@ -275,6 +275,9 @@ _❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` o
 | [docs/prompts/codex/polish.md](https://github.com/futuroptimist/axel/blob/main/docs/prompts/codex/polish.md)                                         | [Codex Polish Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts/codex/polish.md#codex-polish-prompt)                                                       | evergreen     | yes        |
 | [docs/prompts/codex/polish.md](https://github.com/futuroptimist/axel/blob/main/docs/prompts/codex/polish.md)                                         | [Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts/codex/polish.md#prompt)                                                                                 | evergreen     | yes        |
 | [docs/prompts/codex/polish.md](https://github.com/futuroptimist/axel/blob/main/docs/prompts/codex/polish.md)                                         | [Upgrade Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts/codex/polish.md#upgrade-prompt)                                                                 | evergreen     | yes        |
+| [docs/LOCAL_AGENT_PROMPT.md](https://github.com/futuroptimist/axel/blob/main/docs/LOCAL_AGENT_PROMPT.md)                                             | [1.1 Install CUDA Toolkit](https://github.com/futuroptimist/axel/blob/main/docs/LOCAL_AGENT_PROMPT.md#11-install-cuda-toolkit)                                                | one-off       | yes        |
+| [docs/LOCAL_AGENT_PROMPT.md](https://github.com/futuroptimist/axel/blob/main/docs/LOCAL_AGENT_PROMPT.md)                                             | [1.2 Install Python](https://github.com/futuroptimist/axel/blob/main/docs/LOCAL_AGENT_PROMPT.md#12-install-python)                                                            | one-off       | yes        |
+| [docs/LOCAL_AGENT_PROMPT.md](https://github.com/futuroptimist/axel/blob/main/docs/LOCAL_AGENT_PROMPT.md)                                             | [1.3 Install Git](https://github.com/futuroptimist/axel/blob/main/docs/LOCAL_AGENT_PROMPT.md#13-install-git)                                                                  | one-off       | yes        |
 | **[docs/prompts/codex/prompts-codex-ci-fix.md](https://github.com/futuroptimist/axel/blob/main/docs/prompts/codex/prompts-codex-ci-fix.md)**         | **[OpenAI Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts/codex/prompts-codex-ci-fix.md#openai-codex-ci-failure-fix-prompt)**       | **evergreen** | **yes**    |
 | **[docs/prompts/codex/prompts-codex-spellcheck.md](https://github.com/futuroptimist/axel/blob/main/docs/prompts/codex/prompts-codex-spellcheck.md)** | **[Codex Spellcheck Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts/codex/prompts-codex-spellcheck.md#codex-spellcheck-prompt)**                         | **evergreen** | **yes**    |
 | **[docs/prompts/codex/prompts-codex.md](https://github.com/futuroptimist/axel/blob/main/docs/prompts/codex/prompts-codex.md)**                       | **[Automation Prompt](https://github.com/futuroptimist/axel/blob/main/docs/prompts/codex/prompts-codex.md#automation-prompt)**                                                | **evergreen** | **yes**    |
@@ -292,8 +295,11 @@ _❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` o
 | [.axel/hillclimb/prompts/code.md](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/code.md)                                   | [code.md](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/code.md)                                                                                    | unknown       | yes        |
 | [.axel/hillclimb/prompts/critique.md](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/critique.md)                           | [critique.md](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/critique.md)                                                                            | unknown       | yes        |
 | [.axel/hillclimb/prompts/plan.md](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/plan.md)                                   | [plan.md](https://github.com/futuroptimist/axel/blob/main/.axel/hillclimb/prompts/plan.md)                                                                                    | unknown       | yes        |
+| [docs/LOCAL_AGENT_PROMPT.md](https://github.com/futuroptimist/axel/blob/main/docs/LOCAL_AGENT_PROMPT.md)                                             | [Local LLM Setup Guide for Windows 11 + RTX 4090](https://github.com/futuroptimist/axel/blob/main/docs/LOCAL_AGENT_PROMPT.md#local-llm-setup-guide-for-windows-11-rtx-4090)   | unknown       | yes        |
+| [docs/LOCAL_AGENT_PROMPT.md](https://github.com/futuroptimist/axel/blob/main/docs/LOCAL_AGENT_PROMPT.md)                                             | [Set CUDA environment variables](https://github.com/futuroptimist/axel/blob/main/docs/LOCAL_AGENT_PROMPT.md#set-cuda-environment-variables)                                   | unknown       | yes        |
+| [docs/LOCAL_AGENT_PROMPT.md](https://github.com/futuroptimist/axel/blob/main/docs/LOCAL_AGENT_PROMPT.md)                                             | [Install nvidia-smi monitoring](https://github.com/futuroptimist/axel/blob/main/docs/LOCAL_AGENT_PROMPT.md#install-nvidia-smi-monitoring)                                     | unknown       | yes        |
 
-_❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` or `docs/prompts/codex/`): `.axel/hillclimb/prompts`._
+_❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` or `docs/prompts/codex/`): `.axel/hillclimb/prompts`, `docs/`._
 
 ## [futuroptimist/sigma](https://github.com/futuroptimist/sigma)
 
@@ -565,4 +571,4 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/wove          | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md)                                                                         | unknown   |       |
 | futuroptimist/wove          | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md)                                                                       | unknown   |       |
 
-_Updated automatically: 2025-11-11_
+_Updated automatically: 2025-11-12_
