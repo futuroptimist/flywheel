@@ -16,11 +16,11 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/flywheel | [docs/prompts/codex/ci-fix.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/ci-fix.md) | evergreen | |
 | futuroptimist/flywheel | [docs/prompts/codex/cleanup.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/cleanup.md) | evergreen | |
 | futuroptimist/flywheel | [docs/prompts/codex/fuzzing.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/fuzzing.md) | evergreen | |
-| futuroptimist/flywheel | [docs/prompts/llm/merge-conflicts.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/merge-conflicts.md) | evergreen | |
 | futuroptimist/flywheel | [docs/prompts/codex/physics.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/physics.md) | evergreen | |
 | futuroptimist/flywheel | [docs/prompts/codex/prompt-glean-repos.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/prompt-glean-repos.md) | evergreen | |
 | futuroptimist/flywheel | [docs/prompts/codex/propagate.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/propagate.md) | evergreen | |
 | futuroptimist/flywheel | [docs/prompts/codex/spellcheck.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/codex/spellcheck.md) | evergreen | |
+| futuroptimist/flywheel | [docs/prompts/llm/merge-conflicts.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/merge-conflicts.md) | evergreen | |
 | futuroptimist/futuroptimist | [docs/prompts-codex-spellcheck.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-spellcheck.md) | evergreen | |
 | futuroptimist/futuroptimist | [docs/prompts-codex-video-script-ideas.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-video-script-ideas.md) | evergreen | |
 | futuroptimist/futuroptimist | [docs/prompts-codex-video-script.md](https://github.com/futuroptimist/futuroptimist/blob/main/docs/prompts-codex-video-script.md) | evergreen | |
