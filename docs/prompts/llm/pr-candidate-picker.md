@@ -19,7 +19,7 @@ This template has two fill-in sections:
 
 ## Copy-ready prompt
 
-```text
+````text
 You are Codex reviewing pull requests.
 
 You will be given:
@@ -76,10 +76,10 @@ Now process the inputs below.
 - <PR_URL_4>
 
 ### Original prompt (paste verbatim)
-^^^text
+```text
 <PASTE_ORIGINAL_PROMPT_HERE>
-^^^
 ```
+````
 
 ---
 
@@ -97,8 +97,6 @@ Rules:
 - Keep it short, but not underspecified.
 
 Input `@codex` comment:
-^^^text
 @codex
 <PASTE_DRAFT_COMMENT_HERE>
-^^^
 ```
