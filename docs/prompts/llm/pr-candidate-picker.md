@@ -20,7 +20,7 @@ This template has two fill-in sections:
 ## Copy-ready prompt
 
 ````text
-You are Codex reviewing pull requests.
+You are an advanced LLM with reasoning reviewing pull requests.
 
 You will be given:
 - Exactly 4 candidate PR URLs (same repo, same goal).
