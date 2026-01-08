@@ -40,7 +40,7 @@ Hard requirements:
   - name specific files/paths when possible,
   - include specific search commands when you’re not sure where the last stragglers are,
   - include verification commands (tests, lint, a specific CLI invocation, etc.).
-- Start the `@codex` comment with a Scope Lock recap:
+- Start the `@codex` comment with a Scope Lock recap (use provided Scope Lock if filled; otherwise state “No scope lock provided” and proceed):
   - “Only touch X/Y/Z; do not touch A/B/C; keep diff small; run these commands.”
 - Include a diff sanity check in the `@codex` comment:
   - “If `git diff --stat` shows > <max files> or touches do-not-touch areas, stop and split.”
