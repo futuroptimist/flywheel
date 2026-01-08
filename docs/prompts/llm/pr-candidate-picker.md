@@ -40,6 +40,10 @@ Hard requirements:
   - name specific files/paths when possible,
   - include specific search commands when you’re not sure where the last stragglers are,
   - include verification commands (tests, lint, a specific CLI invocation, etc.).
+- Start the `@codex` comment with a Scope Lock recap (use provided Scope Lock if filled; otherwise state “No scope lock provided” and proceed):
+  - “Only touch X/Y/Z; do not touch A/B/C; keep diff small; run these commands.”
+- Include a diff sanity check in the `@codex` comment:
+  - “If `git diff --stat` shows > <max files> or touches do-not-touch areas, stop and split.”
 
 Optimization order:
 correctness > prompt-alignment > minimal-risk changes > maintainability > style
@@ -48,8 +52,25 @@ How to evaluate candidates:
 - Read PR description: does it match the original prompt or does it drift?
 - Scan the diff: does it touch the right files and update references comprehensively?
 - Watch for suspicious churn: big refactors, mass formatting, unrelated renames, new features.
+- If a candidate touches unrelated areas (new features, unrelated tests, refactors), treat that as suspicious churn and downgrade it unless the original prompt explicitly requires it.
+- Prefer PRs that touch fewer files and are localized to the bug surface; penalize new features, unrelated refactors, or non-required tests.
+- Prefer regression tests that assert the user-visible contract directly; avoid brittle heuristics (e.g., scanning DOM for “widest element”, visualViewport math hacks) unless explicitly requested.
+- If tests are flaky, fix the layout/cause rather than loosening tests.
 - Check durability: tests/fixtures/docs updated so the change won’t regress.
 - Prefer “complete + boring” over “clever + risky”.
+
+Scope Lock (fill in if you care; otherwise leave blank)
+- Allowed files/paths:
+  - <optional list>
+- Do NOT touch:
+  - <optional list>
+- Max files changed (default 8): <optional number>
+
+Enforcement rules:
+- Strongly prefer candidates that stay within scope.
+- If the best candidate exceeds scope, still pick the least-bad one but the @codex comment MUST:
+  (a) shrink scope back to the prompt, and
+  (b) explicitly defer unrelated changes to a follow-up PR.
 
 Output format (must be exactly this structure):
 - Winner: <URL>
@@ -62,10 +83,12 @@ Output format (must be exactly this structure):
   ...
   ```
 
-What “100%” means:
-- The repo no longer documents or encourages the legacy/incorrect workflow.
-- All references required by the prompt are updated (docs + code + tests + fixtures + scripts).
-- The PR includes reasonable verification steps (and they should plausibly pass).
+What “100%” means (prompt-scoped):
+- The original prompt’s requirements are satisfied (no more, no less).
+- No unrelated behavior changes outside the prompt’s surface area.
+- Diffs are intentionally small and localized; broad refactors must be split into a follow-up PR.
+- Tests added are minimal + deterministic and directly assert the intended contract.
+- Verification steps are included and plausibly pass.
 
 Now process the inputs below.
 
@@ -92,9 +115,12 @@ Rewrite the `@codex` comment below to be maximally actionable and likely to succ
 
 Rules:
 - Keep it as ONE `@codex` comment in ONE fenced block.
+- Do NOT broaden scope beyond the original prompt.
 - Convert vague asks into concrete steps.
 - Prefer file paths, exact strings to search for, and exact commands to run.
 - Keep it short, but not underspecified.
+- If the input comment lacks scope constraints, add a “Scope Lock” line:
+  - “Only touch: … / Do not touch: … / Keep changes localized.”
 
 Input `@codex` comment:
 @codex
