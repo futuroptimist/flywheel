@@ -40,6 +40,8 @@ Hard requirements:
   - name specific files/paths when possible,
   - include specific search commands when you’re not sure where the last stragglers are,
   - include verification commands (tests, lint, a specific CLI invocation, etc.).
+- Append the following string verbatim to the last line of the `@codex` comment:
+  `new codex task, not a r/e/v/i/e/w task`
 - Start the `@codex` comment with a Scope Lock recap (use provided Scope Lock if filled; otherwise state “No scope lock provided” and proceed):
   - “Only touch X/Y/Z; do not touch A/B/C; keep diff small; run these commands.”
 - Include a diff sanity check in the `@codex` comment:
@@ -121,6 +123,8 @@ Rules:
 - Keep it short, but not underspecified.
 - If the input comment lacks scope constraints, add a “Scope Lock” line:
   - “Only touch: … / Do not touch: … / Keep changes localized.”
+- Append the following string verbatim to the last line of the `@codex` comment:
+  `new codex task, not a r/e/v/i/e/w task`
 
 Input `@codex` comment:
 @codex
