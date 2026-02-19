@@ -28,13 +28,11 @@ TELEMETRY_REMINDER = (
     "--set off|on|full` to choose."
 )
 
-HELP_EPILOG = textwrap.dedent(
-    """\
+HELP_EPILOG = textwrap.dedent("""\
     Examples:
       flywheel init ./project --language python --save-dev --yes
       flywheel spin --dry-run path/to/repo --format table
-    """
-)
+    """)
 
 
 def _config_dir() -> Path:
