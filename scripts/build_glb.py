@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Build assembly.glb from STL parts using assimp and pygltflib."""
+
 from __future__ import annotations
 
 from pathlib import Path

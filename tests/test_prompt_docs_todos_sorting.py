@@ -27,18 +27,13 @@ def test_todos_sorted_by_type_and_repo(tmp_path: Path, rows):
     body = "\n".join(
         f"| {repo} | {prompt} | {ptype} | |" for repo, prompt, ptype in rows
     )
-    todo.write_text(
-        textwrap.dedent(
-            f"""\
+    todo.write_text(textwrap.dedent(f"""\
             # Prompt Docs TODOs
 
             | Repo | Suggested Prompt | Type | Notes |
             |------|-----------------|------|-------|
             {body}
-            """
-        ).strip()
-        + "\n"
-    )
+            """).strip() + "\n")
 
     normalized = normalize_prompt_todo_table(todo)
     assert normalized.endswith("\n")
