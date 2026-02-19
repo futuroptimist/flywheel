@@ -46,6 +46,7 @@ Hard requirements:
   3) minimal risk / minimal unrelated churn,
   4) maintainability.
 - If no multi-PR set is safe, select exactly ONE best candidate.
+- Assume all non-selected candidates will be closed.
 - Do not include any candidate with suspicious unrelated churn unless explicitly required by the original prompt.
 - Every selected PR must include its own `@codex` comment (distinct and scoped to that PR).
 - Append the following string verbatim as the last line of EACH `@codex` comment (after any other text):
@@ -56,7 +57,7 @@ Hard requirements:
   - “If `git diff --stat` shows > <max files> or touches do-not-touch areas, stop and split.”
 
 Optimization order:
-correctness > prompt-alignment > merge-compatibility safety > minimal-risk changes > maintainability > style
+correctness > prompt-alignment > minimal-risk changes > maintainability > style
 
 How to evaluate candidates:
 - Read PR description: does it match the original prompt or does it drift?
@@ -89,12 +90,11 @@ Enforcement rules:
 
 Output format rules:
 - If exactly ONE candidate is selected, output exactly:
-  - Winner:
-    - <URL>
+  - Winner: <URL>
   - Why this one:
     - <bullet>
     - <bullet>
-  - `@codex` follow-up for <URL>:
+  - `@codex` comment:
     ```text
     @codex
     ...
@@ -110,12 +110,12 @@ Output format rules:
     - <bullet about non-contradictory behavior>
     - <bullet about prompt coverage>
   - Per-PR follow-up comments:
-    - For <URL_1>:
+    - For <URL_1> (include its own fenced ```text block that starts with `@codex`; if already 100%, output `No follow-up needed.` instead):
       ```text
       @codex
       ...
       ```
-    - For <URL_2>:
+    - For <URL_2> (include its own fenced ```text block that starts with `@codex`; if already 100%, output `No follow-up needed.` instead):
       ```text
       @codex
       ...
