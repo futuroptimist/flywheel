@@ -59,7 +59,7 @@ Optimization order:
 correctness > prompt-alignment > merge-compatibility safety > minimal-risk changes > maintainability > style
 
 How to evaluate candidates:
-- Read PR description: does it match the original prompt or drift?
+- Read PR description: does it match the original prompt or does it drift?
 - Scan the diff: does it touch the right files and update references comprehensively?
 - Watch for suspicious churn: broad refactors, mass formatting, unrelated renames, new features.
 - Evaluate pairwise compatibility among selected candidates:
@@ -89,9 +89,9 @@ Enforcement rules:
 
 Output format rules:
 - If exactly ONE candidate is selected, output exactly:
-  - Winners:
+  - Winner:
     - <URL>
-  - Why selected:
+  - Why this one:
     - <bullet>
     - <bullet>
   - `@codex` follow-up for <URL>:
