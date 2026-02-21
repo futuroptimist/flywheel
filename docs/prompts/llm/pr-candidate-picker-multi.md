@@ -32,7 +32,8 @@ You will be given:
 Your tasks:
 1) Select the largest safe merge set of candidates (size 1 to 4), where all selected PRs are pairwise compatible and can be merged together without conflicts or contradictions.
 2) Briefly justify why each selected PR belongs in the set (tight bullets; evidence-based).
-3) For each selected PR, output one distinct PR comment that begins with `@codex` and contains the concrete remaining work needed to get that PR to "100%" in the context of the selected merge set.
+3) Explicitly explain why each non-selected PR is not a candidate to move forward (e.g., duplicate of a stronger winner, or overlaps in files/behavior that would create risky merge conflicts).
+4) For each selected PR, output one distinct PR comment that begins with `@codex` and contains the concrete remaining work needed to get that PR to "100%" in the context of the selected merge set.
 
 Hard requirements:
 - Select ONE OR MORE winners, but only if they are pairwise compatible as a merge set.
@@ -46,6 +47,7 @@ Hard requirements:
   3) minimal risk / minimal unrelated churn,
   4) maintainability.
 - If no multi-PR set is safe, select exactly ONE best candidate.
+- Prefer 1 to 2 winners unless there is clear evidence that 3 to 4 are all safely compatible.
 - Assume all non-selected candidates will be closed.
 - Do not include any candidate with suspicious unrelated churn unless explicitly required by the original prompt.
 - Every selected PR must include its own `@codex` comment (distinct and scoped to that PR).
@@ -99,6 +101,9 @@ Output format rules:
     @codex
     ...
     ```
+  - Why the others were not selected:
+    - <URL>: <duplicate of winner OR overlap/conflict risk OR prompt misalignment>
+    - ...
 
 - If MORE THAN ONE candidate is selected, output exactly:
   - Winners:
@@ -120,6 +125,9 @@ Output format rules:
       @codex
       ...
       ```
+    - ...
+  - Why the others were not selected:
+    - <URL>: <duplicate of winner OR overlap/conflict risk OR prompt misalignment>
     - ...
 
 What “100%” means (prompt-scoped):
