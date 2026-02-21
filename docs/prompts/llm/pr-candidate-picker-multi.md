@@ -36,12 +36,9 @@ Your tasks:
    - If multiple sets are equally safe and prompt-correct, prefer the larger set.
 2) Briefly justify why each selected PR belongs in the set (tight bullets; evidence-based).
 3) For each selected PR, output one distinct PR comment that begins with `@codex` and contains the concrete remaining work needed to get that PR to "100%" in the context of the selected merge set.
-4) For each non-selected PR, explicitly state why it is NOT a merge candidate, using one of these labels (or `Other (with evidence)` if none apply):
+4) For each non-selected PR, explicitly state why it is NOT a merge candidate, using exactly one of these labels plus one concise evidence-based reason (not vibes):
    - `Duplicate of winner`: substantially same solution/value as a selected PR.
    - `Conflict risk`: overlaps files/hunks or behavior in ways likely to cause bad merges.
-   - `Lower quality / incomplete`: prompt incorrectness, missing key requirements or tests, or clearly worse implementation than selected PRs.
-   - `Out of scope / risky`: excessive unrelated churn, major behavioral changes beyond the prompt, or maintainability/security concerns.
-   - `Other (with evidence)`: brief, concrete reason not covered above.
 
 Hard requirements:
 - Select ONE OR MORE winners, but only if they are pairwise compatible as a merge set.
