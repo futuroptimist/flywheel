@@ -31,8 +31,12 @@ You will be given:
 
 Your tasks:
 1) Select the largest safe merge set of candidates (size 1 to 4), where all selected PRs are pairwise compatible and can be merged together without conflicts or contradictions.
+   - In practice, prefer 1 to 2 winners unless there is clear evidence that 3 to 4 are all truly additive and low-risk.
 2) Briefly justify why each selected PR belongs in the set (tight bullets; evidence-based).
 3) For each selected PR, output one distinct PR comment that begins with `@codex` and contains the concrete remaining work needed to get that PR to "100%" in the context of the selected merge set.
+4) For each non-selected PR, explicitly state why it is NOT a merge candidate, using one of these labels:
+   - `Duplicate of winner`: substantially same solution/value as a selected PR.
+   - `Conflict risk`: overlaps files/hunks or behavior in ways likely to cause bad merges.
 
 Hard requirements:
 - Select ONE OR MORE winners, but only if they are pairwise compatible as a merge set.
@@ -94,6 +98,10 @@ Output format rules:
   - Why this one:
     - <bullet>
     - <bullet>
+  - Why others were not selected:
+    - <URL>: <`Duplicate of winner` or `Conflict risk`> — <one concise evidence-based reason>
+    - <URL>: <`Duplicate of winner` or `Conflict risk`> — <one concise evidence-based reason>
+    - <URL>: <`Duplicate of winner` or `Conflict risk`> — <one concise evidence-based reason>
   - `@codex` comment:
     ```text
     @codex
@@ -109,6 +117,9 @@ Output format rules:
     - <bullet about non-conflicting file/edit surfaces>
     - <bullet about non-contradictory behavior>
     - <bullet about prompt coverage>
+  - Why others were not selected:
+    - <URL>: <`Duplicate of winner` or `Conflict risk`> — <one concise evidence-based reason>
+    - ...
   - Per-PR follow-up comments:
     - For <URL_1> (include its own fenced ```text block that starts with `@codex`; if already 100%, output `No follow-up needed.` instead):
       ```text
