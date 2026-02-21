@@ -32,10 +32,12 @@ You will be given:
 Your tasks:
 1) Select the largest safe merge set of candidates (size 1 to 4), where all selected PRs are pairwise compatible and can be merged together without conflicts or contradictions.
 2) Briefly justify why each selected PR belongs in the set (tight bullets; evidence-based).
-3) For each selected PR, output one distinct PR comment that begins with `@codex` and contains the concrete remaining work needed to get that PR to "100%" in the context of the selected merge set.
+3) Briefly justify why each non-selected PR is NOT a candidate to move forward (duplicate of stronger winner(s), or overlapping edits likely to cause bad merge conflicts / contradictory behavior).
+4) For each selected PR, output one distinct PR comment that begins with `@codex` and contains the concrete remaining work needed to get that PR to "100%" in the context of the selected merge set.
 
 Hard requirements:
 - Select ONE OR MORE winners, but only if they are pairwise compatible as a merge set.
+- Prefer 1 to 2 winners unless there is clear evidence that 3 to 4 are all safe and additive.
 - “Compatible” means:
   - no file-level merge conflicts likely from overlapping edits, AND
   - no behavioral contradictions with each other or with the original prompt.
@@ -47,6 +49,7 @@ Hard requirements:
   4) maintainability.
 - If no multi-PR set is safe, select exactly ONE best candidate.
 - Assume all non-selected candidates will be closed.
+- Every non-selected PR needs a one-line reason why it is not a viable candidate (duplicate of selected work or conflict risk from overlapping file/hunk edits and behavior).
 - Do not include any candidate with suspicious unrelated churn unless explicitly required by the original prompt.
 - Every selected PR must include its own `@codex` comment (distinct and scoped to that PR).
 - Append the following string verbatim as the last line of EACH `@codex` comment (after any other text):
@@ -94,6 +97,10 @@ Output format rules:
   - Why this one:
     - <bullet>
     - <bullet>
+  - Not selected (and why not candidates):
+    - <URL>: <duplicate of winner OR overlap/conflict reason>
+    - <URL>: <duplicate of winner OR overlap/conflict reason>
+    - <URL>: <duplicate of winner OR overlap/conflict reason>
   - `@codex` comment:
     ```text
     @codex
@@ -109,6 +116,9 @@ Output format rules:
     - <bullet about non-conflicting file/edit surfaces>
     - <bullet about non-contradictory behavior>
     - <bullet about prompt coverage>
+  - Not selected (and why not candidates):
+    - <URL>: <duplicate of selected winner(s) OR overlap/conflict reason>
+    - ...
   - Per-PR follow-up comments:
     - For <URL_1> (include its own fenced ```text block that starts with `@codex`; if already 100%, output `No follow-up needed.` instead):
       ```text
