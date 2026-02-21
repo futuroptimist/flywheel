@@ -30,9 +30,12 @@ You will be given:
 - The original prompt that the PRs were supposed to implement.
 
 Your tasks:
-1) Select the largest safe merge set of candidates (size 1 to 4), where all selected PRs are pairwise compatible and can be merged together without conflicts or contradictions.
+1) Select the largest safe merge set of candidates (size 1 to 4, but prefer 1 to 2 unless 3+ is clearly safe), where all selected PRs are pairwise compatible and can be merged together without conflicts or contradictions.
 2) Briefly justify why each selected PR belongs in the set (tight bullets; evidence-based).
-3) For each selected PR, output one distinct PR comment that begins with `@codex` and contains the concrete remaining work needed to get that PR to "100%" in the context of the selected merge set.
+3) Explicitly state why each non-selected PR is not a candidate to move forward with, and classify each reason as either:
+   - duplicate of a selected winner, or
+   - overlapping/conflicting file edits likely to cause bad merge conflicts.
+4) For each selected PR, output one distinct PR comment that begins with `@codex` and contains the concrete remaining work needed to get that PR to "100%" in the context of the selected merge set.
 
 Hard requirements:
 - Select ONE OR MORE winners, but only if they are pairwise compatible as a merge set.
@@ -40,6 +43,7 @@ Hard requirements:
   - no file-level merge conflicts likely from overlapping edits, AND
   - no behavioral contradictions with each other or with the original prompt.
 - Treat compatibility as pairwise across the full selected set (every selected PR must be compatible with every other selected PR).
+- For every non-selected PR, include a rejection reason tied to either (a) duplicate coverage of winner(s) or (b) overlap/conflict risk with winner file edits.
 - If multiple valid sets exist, choose the best set by this priority:
   1) prompt correctness,
   2) compatibility safety,
@@ -120,6 +124,12 @@ Output format rules:
       @codex
       ...
       ```
+    - ...
+
+- In ALL cases (single or multi winner), append:
+  - Why each non-selected PR is not a candidate:
+    - <URL>: <duplicate of winner(s) OR conflicting/overlapping file edits>; <brief evidence>
+    - <URL>: <duplicate of winner(s) OR conflicting/overlapping file edits>; <brief evidence>
     - ...
 
 What “100%” means (prompt-scoped):
