@@ -18,6 +18,13 @@ to that repository when you need to author new quests.
 Future iterations will focus on reusable quest infrastructure inside Flywheel
 rather than shipping DSPACE-specific generators here.
 
+## Repository boundary
+
+The quest JSON paths referenced by DSPACE hardening prompts (for example,
+`frontend/src/pages/quests/json/*` and `docs/qa/v3.md`) do not exist in this
+repository. If a task requires editing those files, perform the work in a
+checked-out clone of `democratizedspace/dspace` instead of Flywheel.
+
 ## Codex Automation
 
 DSPACE keeps its own automation prompt at
