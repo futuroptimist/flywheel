@@ -31,9 +31,9 @@ You will be given:
 
 Your tasks:
 1) Select a safe merge set of candidates (size 1 to 4), where all selected PRs are pairwise compatible and can be merged together without conflicts or contradictions.
-   - Prefer 1 to 2 winners when they fully satisfy the original prompt with lower risk.
-   - Select 3 to 4 winners only when there is clear evidence they are all truly additive, mutually compatible, and similarly low-risk.
-   - If multiple sets are equally safe and prompt-correct, prefer the larger set.
+   - Prefer the LARGEST safe merge set after prompt correctness: maximize safe co-merge size unless doing so increases conflict/contradiction risk.
+   - A PR may be selected as a winner even if it is not yet “100%”, as long as it is merge-safe and prompt-aligned; use its `@codex` comment to enumerate the missing work.
+   - Do not penalize a PR for missing bookkeeping/docs/PR-summary formatting/validation-command reporting if those can be added via focused follow-up without broad refactors.
 2) Briefly justify why each selected PR belongs in the set (tight bullets; evidence-based).
 3) For each selected PR, output one distinct PR comment that begins with `@codex` and contains the concrete remaining work needed to get that PR to "100%" in the context of the selected merge set.
 4) For each non-selected PR, explicitly state why it is NOT a merge candidate, using exactly one of these labels plus one concise evidence-based reason (not vibes):
@@ -49,11 +49,13 @@ Hard requirements:
 - If multiple valid sets exist, choose the best set by this priority:
   1) prompt correctness,
   2) compatibility safety,
-  3) minimal risk / minimal unrelated churn,
-  4) maintainability.
+  3) largest safe merge set,
+  4) minimal risk / minimal unrelated churn,
+  5) maintainability.
 - If no multi-PR set is safe, select exactly ONE best candidate.
 - Assume all non-selected candidates will be closed.
 - Do not include any candidate with suspicious unrelated churn unless explicitly required by the original prompt.
+- Only exclude a PR when the risk is structural (merge conflicts or behavioral contradictions), not because it is missing finishable checklist/bookkeeping work.
 - Every selected PR must include its own `@codex` comment (distinct and scoped to that PR).
 - Append the following string verbatim as the last line of EACH `@codex` comment (after any other text):
   `new codex task, not a r/e/v/i/e/w task`
@@ -66,6 +68,16 @@ Optimization order:
 correctness > prompt-alignment > minimal-risk changes > maintainability > style
 
 How to evaluate candidates:
+Pass A — merge-blocker scan (pairwise across all candidates):
+- Identify likely merge conflicts from overlapping files/hunks.
+- Identify behavioral contradictions with the original prompt or between PRs.
+- Identify suspicious unrelated churn that would make co-merge risky.
+
+Pass B — finishable-gap scan (for candidates that passed Pass A):
+- Capture missing but fixable work in per-PR `@codex` comments instead of excluding the PR.
+- Typical fixable gaps: missing bookkeeping updates, missing PR summary formatting, missing doc sync with limited churn, missing validation-command reporting.
+- If a required bookkeeping/doc file would collide across winners, assign that shared file to exactly one PR and instruct other PRs: “do not touch shared file; handled by PR X”.
+
 - Read PR description: does it match the original prompt or does it drift?
 - Scan the diff: does it touch the right files and update references comprehensively?
 - Watch for suspicious churn: broad refactors, mass formatting, unrelated renames, new features.
@@ -75,6 +87,7 @@ How to evaluate candidates:
   - contradictory tests/fixtures/docs,
   - duplicate implementation of the same surface in incompatible ways.
 - If two candidates solve the same requirement in conflicting ways, keep only the stronger one.
+- When multiple PRs are merge-safe and collectively cover more of the prompt, select all of them, then distribute remaining work across their `@codex` comments to avoid overlapping edits.
 - Prefer localized changes on the bug surface; penalize unrelated features/refactors/non-required tests.
 - Prefer regression tests that directly assert user-visible behavior.
 - If tests are flaky, fix the root cause rather than loosening assertions.
@@ -127,11 +140,19 @@ Output format rules:
     - For <URL_1> (include its own fenced ```text block that starts with `@codex`; if already 100%, output `No follow-up needed.` instead):
       ```text
       @codex
+      Merge blockers (must fix before merge):
+      - ...
+      Post-merge acceptable follow-ups (only truly optional):
+      - ...
       ...
       ```
     - For <URL_2> (include its own fenced ```text block that starts with `@codex`; if already 100%, output `No follow-up needed.` instead):
       ```text
       @codex
+      Merge blockers (must fix before merge):
+      - ...
+      Post-merge acceptable follow-ups (only truly optional):
+      - ...
       ...
       ```
     - ...
@@ -142,6 +163,10 @@ What “100%” means (prompt-scoped):
 - Diffs are intentionally small and localized; broad refactors are split.
 - Tests added are minimal + deterministic and directly assert intended behavior.
 - Verification steps are included and plausibly pass.
+- If a PR is merge-safe but incomplete, keep it in winners and put required missing work in its `@codex` comment; default is to fix required items within the PR, not defer to post-merge.
+- Explicitly separate each follow-up comment into:
+  - `Merge blockers` (must be completed before merge), and
+  - `Post-merge acceptable follow-ups` (only for truly optional items).
 
 Now process the inputs below.
 
