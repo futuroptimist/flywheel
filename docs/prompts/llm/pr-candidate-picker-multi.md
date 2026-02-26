@@ -31,9 +31,10 @@ You will be given:
 
 Your tasks:
 1) Select a safe merge set of candidates (size 1 to 4), where all selected PRs are pairwise compatible and can be merged together without conflicts or contradictions.
-   - Prefer 1 to 2 winners when they fully satisfy the original prompt with lower risk.
-   - Select 3 to 4 winners only when there is clear evidence they are all truly additive, mutually compatible, and similarly low-risk.
-   - If multiple sets are equally safe and prompt-correct, prefer the larger set.
+   - Prefer the LARGEST safe merge set when candidates are additive and compatible.
+   - After prompt correctness, optimize for maximum safe co-merge size unless conflict/contradiction risk increases.
+   - A PR may be selected as a winner even if it is not yet “100%”, as long as it is merge-safe and prompt-aligned; use its `@codex` comment to enumerate the missing work.
+   - Only exclude a PR when the risk is structural (merge conflicts or behavioral contradictions), not because it is missing finishable checklist/bookkeeping work.
 2) Briefly justify why each selected PR belongs in the set (tight bullets; evidence-based).
 3) For each selected PR, output one distinct PR comment that begins with `@codex` and contains the concrete remaining work needed to get that PR to "100%" in the context of the selected merge set.
 4) For each non-selected PR, explicitly state why it is NOT a merge candidate, using exactly one of these labels plus one concise evidence-based reason (not vibes):
@@ -49,11 +50,15 @@ Hard requirements:
 - If multiple valid sets exist, choose the best set by this priority:
   1) prompt correctness,
   2) compatibility safety,
-  3) minimal risk / minimal unrelated churn,
-  4) maintainability.
+  3) maximize safe merge-set size,
+  4) minimal risk / minimal unrelated churn,
+  5) maintainability.
 - If no multi-PR set is safe, select exactly ONE best candidate.
 - Assume all non-selected candidates will be closed.
 - Do not include any candidate with suspicious unrelated churn unless explicitly required by the original prompt.
+- Missing pieces that are fixable in a follow-up comment are NOT disqualifying (for example: missing bookkeeping updates, missing PR summary formatting, missing doc sync with small/local edits, missing validation command reporting).
+- Do not penalize a PR for missing bookkeeping/docs if those can be added without creating conflicts and without broad refactors; include it and instruct the author via `@codex`.
+- If bookkeeping/doc edits would collide with another winner in a shared file, still prefer co-merge by assigning that shared file to exactly one PR and telling other PRs: “do not touch shared file; handled by PR X”.
 - Every selected PR must include its own `@codex` comment (distinct and scoped to that PR).
 - Append the following string verbatim as the last line of EACH `@codex` comment (after any other text):
   `new codex task, not a r/e/v/i/e/w task`
@@ -66,20 +71,22 @@ Optimization order:
 correctness > prompt-alignment > minimal-risk changes > maintainability > style
 
 How to evaluate candidates:
-- Read PR description: does it match the original prompt or does it drift?
-- Scan the diff: does it touch the right files and update references comprehensively?
-- Watch for suspicious churn: broad refactors, mass formatting, unrelated renames, new features.
-- Evaluate pairwise compatibility among selected candidates:
+- Pass A (merge blockers): identify pairwise conflict/contradiction risks first.
   - overlapping hunks in same files,
   - divergent APIs/contracts,
   - contradictory tests/fixtures/docs,
-  - duplicate implementation of the same surface in incompatible ways.
-- If two candidates solve the same requirement in conflicting ways, keep only the stronger one.
-- Prefer localized changes on the bug surface; penalize unrelated features/refactors/non-required tests.
+  - duplicate implementation of the same requirement in incompatible ways,
+  - suspicious unrelated churn that makes co-merge risky.
+- Pass B (finishable gaps): identify missing but fixable work and route it into per-PR `@codex` comments instead of excluding the PR.
+  - Examples: bookkeeping/checklist/doc sync/PR summary formatting/validation-command reporting that can be completed with small localized edits.
+- Read PR description and diff for prompt drift; keep prompt-aligned, merge-safe PRs in the winner set even when incomplete.
+- If two candidates solve the same requirement in conflicting ways, keep only the stronger one for that surface.
+- Prefer localized changes on the prompt surface; penalize broad unrelated features/refactors.
 - Prefer regression tests that directly assert user-visible behavior.
-- If tests are flaky, fix the root cause rather than loosening assertions.
+- If tests are flaky, fix root cause rather than loosening assertions.
 - Check durability: tests/fixtures/docs updated so the change won’t regress.
-- Prefer “complete + boring” over “clever + risky”.
+- Prefer “complete + boring” over “clever + risky”, but do not drop otherwise merge-safe PRs for fixable follow-up work.
+- Tie-breaker: when multiple merge-safe combinations exist and one set covers more of the prompt, select all of them and distribute remaining work across per-PR `@codex` comments to avoid overlapping edits.
 
 Scope Lock (fill in if you care; otherwise leave blank)
 - Allowed files/paths:
@@ -142,6 +149,11 @@ What “100%” means (prompt-scoped):
 - Diffs are intentionally small and localized; broad refactors are split.
 - Tests added are minimal + deterministic and directly assert intended behavior.
 - Verification steps are included and plausibly pass.
+- If a PR is merge-safe but incomplete, keep it selected and put required missing work into that PR’s `@codex` comment.
+- In each `@codex` comment, explicitly separate:
+  - `Merge blockers` (must fix before merge), and
+  - `Post-merge acceptable follow-ups` (only if truly optional; default is to fix required items within the PR).
+- For shared bookkeeping/docs files touched by multiple winners, assign ownership to exactly one PR and tell other PRs not to touch that shared file.
 
 Now process the inputs below.
 
