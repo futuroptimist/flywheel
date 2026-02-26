@@ -6,9 +6,9 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `f127a90` | ✅ | 2 | 13 | 2026-02-26 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `f4271ce` | n/a | 0 | 0 | 2026-02-26 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `c600b7c` | n/a | 3 | 599 | 2026-02-26 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `5b8796e` | n/a | 2 | 16 | 2026-02-26 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `a3a5f7e` | n/a | 0 | 0 | 2026-02-26 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | `c85f557` | ✅ | 3 | 601 | 2026-02-26 |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `ef9b5bb` | ✅ | 6 | 13 | 2025-12-29 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `56ada97` | ❌ | 0 | 6 | 2025-11-04 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `7b4b36c` | ✅ | 1 | 0 | 2025-10-14 |
