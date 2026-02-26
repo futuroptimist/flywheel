@@ -39,7 +39,7 @@ Your tasks:
 3) For each selected PR, output one distinct PR comment that begins with `@codex` and contains the concrete remaining work needed to get that PR to "100%" in the context of the selected merge set.
 4) For each non-selected PR, explicitly state why it is NOT a merge candidate, using exactly one of these labels plus one concise evidence-based reason (not vibes):
    - `Duplicate of winner`: substantially same solution/value as a selected PR.
-   - `Conflict risk`: ONLY when there is likely merge conflict, overlapping edits to the same prompt surface target, or incompatible behavior/contracts/tests that cannot safely co-exist.
+   - `Conflict risk`: ONLY when there is likely merge conflict, overlapping edits to the same prompt surface target that are not clearly complementary and non-overlapping in sub-scope, or incompatible behavior/contracts/tests that cannot safely co-exist.
 
 Hard requirements:
 - Select ONE OR MORE winners, but only if they are pairwise compatible as a merge set.
@@ -49,8 +49,8 @@ Hard requirements:
   - no behavioral contradictions with each other or with the original prompt.
 - Infer each PR's prompt surface targets before deciding compatibility (for example: specific files, named entities/IDs, endpoints/routes, CLI commands, feature flags, UI components, or checklist items).
 - Treat target overlap as a first-class compatibility check:
-  - same targets are presumptively conflicting unless complementary and hunk-disjoint,
-  - disjoint targets are presumptively co-mergeable even if a shared bookkeeping file is touched.
+  - same targets are presumptively conflicting unless changes are clearly complementary and operate on non-overlapping sub-scopes of that target,
+  - distinct targets are presumptively co-mergeable even if a shared bookkeeping file is touched.
 - Treat compatibility as pairwise across the full selected set (every selected PR must be compatible with every other selected PR).
 - If multiple valid sets exist, choose the best set by this priority:
   1) prompt correctness,
@@ -86,7 +86,7 @@ How to evaluate candidates:
   - suspicious unrelated churn that makes co-merge risky.
 - Pass B (finishable gaps): identify missing but fixable work and route it into per-PR `@codex` comments instead of excluding the PR.
   - Examples: bookkeeping/checklist/doc sync/PR summary formatting/validation-command reporting, wrong PR-number tags, placeholder tags, missing canonical tags, or fixable lint/formatting errors that can be completed with small localized edits.
-- Non-compliance with the original prompt is only a selection blocker if fixing it requires broad refactors, touches do-not-touch areas, or collides with another winner's prompt surface.
+- Non-compliance with the original prompt is only a selection blocker if fixing it requires broad refactors, touches do-not-touch areas, or collides with another winner's prompt surface target.
 - Read PR description and diff for prompt drift; keep prompt-aligned, merge-safe PRs in the winner set even when incomplete.
 - If two candidates solve the same requirement in conflicting ways, keep only the stronger one for that surface.
 - Prefer localized changes on the prompt surface; penalize broad unrelated features/refactors.
@@ -117,7 +117,7 @@ Enforcement rules:
 Output format rules:
 - `Why others were not selected` can only use:
   - `Duplicate of winner` for substantially overlapping value/work,
-  - `Conflict risk` for true merge collision, target overlap risk, or incompatible behavior/contracts/tests.
+  - `Conflict risk` for true merge collisions, same-target edits that are not clearly complementary and non-overlapping in sub-scope, or incompatible behavior/contracts/tests that cannot safely co-exist.
 - If exclusion rationale is anything else (for example bookkeeping/compliance/formatting/reporting gaps), exclusion is invalid: keep the PR if merge-safe and route required fixes to its `@codex` follow-up comment.
 - If exactly ONE candidate is selected, output exactly:
   - Winner: <URL>
