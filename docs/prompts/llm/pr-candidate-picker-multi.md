@@ -32,7 +32,7 @@ You will be given:
 Your tasks:
 1) Select a safe merge set of candidates (size 1 to 4), where all selected PRs are pairwise compatible and can be merged together without conflicts or contradictions.
    - Prefer the LARGEST safe merge set when candidates are additive and compatible.
-   - After prompt correctness, optimize for maximum safe co-merge size unless conflict/contradiction risk increases.
+   - Among sets that are prompt-correct and equally safe, optimize for maximum safe co-merge size; never trade increased conflict/contradiction risk for size.
    - A PR may be selected as a winner even if it is not yet “100%”, as long as it is merge-safe and prompt-aligned; use its `@codex` comment to enumerate the missing work.
    - Only exclude a PR when the risk is structural (merge conflicts or behavioral contradictions), not because it is missing finishable checklist/bookkeeping work.
 2) Briefly justify why each selected PR belongs in the set (tight bullets; evidence-based).
@@ -68,7 +68,7 @@ Hard requirements:
   - “If `git diff --stat` shows > <max files> or touches do-not-touch areas, stop and split.”
 
 Optimization order:
-correctness > prompt-alignment > minimal-risk changes > maintainability > style
+prompt correctness > compatibility safety > maximize safe co-merge size > minimal-risk changes > maintainability > style
 
 How to evaluate candidates:
 - Pass A (merge blockers): identify pairwise conflict/contradiction risks first.
@@ -131,12 +131,12 @@ Output format rules:
     - Otherwise, for each non-selected candidate:
       - <URL>: <<one allowed label>> — <one concise evidence-based reason>
   - Per-PR follow-up comments:
-    - For <URL_1> (include its own fenced ```text block that starts with `@codex`; if already 100%, output `No follow-up needed.` instead):
+    - For <URL_1> (include its own fenced ```text block that starts with `@codex`; if already 100%, the block should explicitly say no follow-up is needed and still include the required trailing string):
       ```text
       @codex
       ...
       ```
-    - For <URL_2> (include its own fenced ```text block that starts with `@codex`; if already 100%, output `No follow-up needed.` instead):
+    - For <URL_2> (include its own fenced ```text block that starts with `@codex`; if already 100%, the block should explicitly say no follow-up is needed and still include the required trailing string):
       ```text
       @codex
       ...
