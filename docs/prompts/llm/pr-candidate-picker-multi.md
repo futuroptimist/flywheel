@@ -61,8 +61,8 @@ Hard requirements:
 - If no multi-PR set is safe, select exactly ONE best candidate.
 - Assume all non-selected candidates will be closed.
 - Do not include any candidate with suspicious unrelated churn unless explicitly required by the original prompt.
-- Missing pieces that are fixable in a follow-up comment are NOT disqualifying (for example: missing bookkeeping updates, missing PR summary formatting, missing doc sync with small/local edits, missing validation command reporting).
-- Fixable compliance issues are not `Conflict risk` (for example: wrong PR-number references, placeholder/missing canonical tags, incomplete checklists, missing summary sections, missing verification-command reporting, style/formatting nits).
+- Missing pieces that are fixable in a follow-up comment are NOT disqualifying (for example: missing bookkeeping updates, missing PR summary formatting, missing doc sync with small/local edits, missing validation command reporting, or fixable lint/formatting errors).
+- Fixable compliance issues are not `Conflict risk` (for example: wrong PR-number references, placeholder/missing canonical tags, incomplete checklists, missing summary sections, missing verification-command reporting, and style/formatting nits).
 - Do not penalize a PR for missing bookkeeping/docs if those can be added without creating conflicts and without broad refactors; include it and instruct the author via `@codex`.
 - If bookkeeping/doc edits would collide with another winner in a shared file, still prefer co-merge by assigning that shared file to exactly one PR and telling other PRs: “do not touch shared file; handled by PR X”.
 - Every selected PR must include its own `@codex` comment (distinct and scoped to that PR).
@@ -85,7 +85,7 @@ How to evaluate candidates:
   - duplicate implementation of the same requirement in incompatible ways,
   - suspicious unrelated churn that makes co-merge risky.
 - Pass B (finishable gaps): identify missing but fixable work and route it into per-PR `@codex` comments instead of excluding the PR.
-  - Examples: bookkeeping/checklist/doc sync/PR summary formatting/validation-command reporting, wrong PR-number tags, placeholder tags, or missing canonical tags that can be completed with small localized edits.
+  - Examples: bookkeeping/checklist/doc sync/PR summary formatting/validation-command reporting, wrong PR-number tags, placeholder tags, missing canonical tags, or fixable lint/formatting errors that can be completed with small localized edits.
 - Non-compliance with the original prompt is only a selection blocker if fixing it requires broad refactors, touches do-not-touch areas, or collides with another winner's prompt surface.
 - Read PR description and diff for prompt drift; keep prompt-aligned, merge-safe PRs in the winner set even when incomplete.
 - If two candidates solve the same requirement in conflicting ways, keep only the stronger one for that surface.
