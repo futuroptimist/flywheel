@@ -39,13 +39,17 @@ Your tasks:
 3) For each selected PR, output one distinct PR comment that begins with `@codex` and contains the concrete remaining work needed to get that PR to "100%" in the context of the selected merge set.
 4) For each non-selected PR, explicitly state why it is NOT a merge candidate, using exactly one of these labels plus one concise evidence-based reason (not vibes):
    - `Duplicate of winner`: substantially same solution/value as a selected PR.
-   - `Conflict risk`: overlaps files/hunks or behavior in ways likely to cause bad merges.
+   - `Conflict risk`: ONLY for true merge-collision or incompatibility risk: likely git merge conflict from overlapping files/hunks, overlapping edits to the same prompt surface target, or incompatible behavior/contracts/tests that cannot safely co-exist.
 
 Hard requirements:
 - Select ONE OR MORE winners, but only if they are pairwise compatible as a merge set.
 - “Compatible” means:
   - no file-level merge conflicts likely from overlapping edits, AND
   - no behavioral contradictions with each other or with the original prompt.
+- Infer each PR's prompt surface targets (for example: specific files, named entities/IDs, endpoints, CLI commands, feature flags, UI components, or enumerated checklist items) and include target-overlap in compatibility checks.
+- Target overlap rule:
+  - same target(s) => presumptively conflicting unless clearly complementary AND non-overlapping at hunk level,
+  - disjoint target(s) => presumptively co-mergeable, even if a shared bookkeeping/summary/checklist file is touched.
 - Treat compatibility as pairwise across the full selected set (every selected PR must be compatible with every other selected PR).
 - If multiple valid sets exist, choose the best set by this priority:
   1) prompt correctness,
@@ -59,6 +63,7 @@ Hard requirements:
 - Missing pieces that are fixable in a follow-up comment are NOT disqualifying (for example: missing bookkeeping updates, missing PR summary formatting, missing doc sync with small/local edits, missing validation command reporting).
 - Do not penalize a PR for missing bookkeeping/docs if those can be added without creating conflicts and without broad refactors; include it and instruct the author via `@codex`.
 - If bookkeeping/doc edits would collide with another winner in a shared file, still prefer co-merge by assigning that shared file to exactly one PR and telling other PRs: “do not touch shared file; handled by PR X”.
+- `Conflict risk` is forbidden for fixable compliance issues (wrong PR-number tags, placeholder/missing canonical tags, incomplete checklist entries, missing summary sections, missing validation command reporting, style/formatting-only gaps); route these to per-PR `@codex` follow-up work.
 - Every selected PR must include its own `@codex` comment (distinct and scoped to that PR).
 - Append the following string verbatim as the last line of EACH `@codex` comment (after any other text):
   `new codex task, not a r/e/v/i/e/w task`
@@ -73,12 +78,15 @@ prompt correctness > compatibility safety > maximize safe co-merge size > minima
 How to evaluate candidates:
 - Pass A (merge blockers): identify pairwise conflict/contradiction risks first.
   - overlapping hunks in same files,
+  - overlapping edits to the same prompt surface target (same endpoint/feature/route/resource/entity ID),
   - divergent APIs/contracts,
   - contradictory tests/fixtures/docs,
   - duplicate implementation of the same requirement in incompatible ways,
   - suspicious unrelated churn that makes co-merge risky.
 - Pass B (finishable gaps): identify missing but fixable work and route it into per-PR `@codex` comments instead of excluding the PR.
-  - Examples: bookkeeping/checklist/doc sync/PR summary formatting/validation-command reporting that can be completed with small localized edits.
+  - Examples: wrong PR-number references, placeholder/missing tags, bookkeeping/checklist/doc sync, PR summary formatting, validation-command reporting that can be completed with small localized edits.
+  - These are finishable gaps, not default disqualifiers; keep merge-safe prompt-aligned PRs selected and list fixes under `Merge blockers (must fix before merge)` or `Required missing work before merge` in that PR's `@codex` comment.
+- Non-compliance with the original prompt is only a selection blocker if fixing it would require broad refactors, touch do-not-touch areas, or collide with another winner's prompt surface targets.
 - Read PR description and diff for prompt drift; keep prompt-aligned, merge-safe PRs in the winner set even when incomplete.
 - If two candidates solve the same requirement in conflicting ways, keep only the stronger one for that surface.
 - Prefer localized changes on the prompt surface; penalize broad unrelated features/refactors.
@@ -87,6 +95,11 @@ How to evaluate candidates:
 - Check durability: tests/fixtures/docs updated so the change won’t regress.
 - Prefer “complete + boring” over “clever + risky”, but do not drop otherwise merge-safe PRs for fixable follow-up work.
 - Tie-breaker: when multiple merge-safe combinations exist and one set covers more of the prompt, select all of them and distribute remaining work across per-PR `@codex` comments to avoid overlapping edits.
+
+Examples:
+- Co-mergeable additive case: PR1 edits target A, PR2 edits target B, and both touch a shared checklist file. Select both; assign checklist-file ownership to PR1 and tell PR2 "do not touch shared file; handled by PR1."
+- Finishable gap case: A PR has wrong PR-number tags and missing summary sections but is otherwise prompt-aligned on a unique target. Keep it selected and list those fixes in that PR's `@codex` comment as merge blockers/required missing work.
+- True conflict case: Two PRs both modify the same target ID/feature and overlap in the same file region or impose incompatible contracts/tests. Exclude one as `Conflict risk`.
 
 Scope Lock (fill in if you care; otherwise leave blank)
 - Allowed files/paths:
@@ -111,6 +124,7 @@ Output format rules:
     - <URL>: <<one allowed label>> — <one concise evidence-based reason>
     - <URL>: <<one allowed label>> — <one concise evidence-based reason>
     - <URL>: <<one allowed label>> — <one concise evidence-based reason>
+    - (If exclusion reason is anything other than true merge collision/target overlap/incompatible behavior, the exclusion is invalid; route it to `@codex` follow-up instead.)
   - `@codex` comment:
     ```text
     @codex
@@ -134,6 +148,7 @@ Output format rules:
     - If all 4 candidates are selected, output `None`.
     - Otherwise, for each non-selected candidate:
       - <URL>: <<one allowed label>> — <one concise evidence-based reason>
+    - (If exclusion reason is anything other than true merge collision/target overlap/incompatible behavior, the exclusion is invalid; route it to `@codex` follow-up instead.)
   - Per-PR follow-up comments:
     - For <URL_1> (include its own fenced ```text block that starts with `@codex`; if already 100%, the block should explicitly say no follow-up is needed and still include the required trailing string):
       ```text
