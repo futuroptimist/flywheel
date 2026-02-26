@@ -39,13 +39,17 @@ Your tasks:
 3) For each selected PR, output one distinct PR comment that begins with `@codex` and contains the concrete remaining work needed to get that PR to "100%" in the context of the selected merge set.
 4) For each non-selected PR, explicitly state why it is NOT a merge candidate, using exactly one of these labels plus one concise evidence-based reason (not vibes):
    - `Duplicate of winner`: substantially same solution/value as a selected PR.
-   - `Conflict risk`: overlaps files/hunks or behavior in ways likely to cause bad merges.
+   - `Conflict risk`: use ONLY for likely git merge conflicts, overlapping edits to the same prompt surface targets, or incompatible behavior/contracts/tests that cannot safely co-exist.
 
 Hard requirements:
 - Select ONE OR MORE winners, but only if they are pairwise compatible as a merge set.
 - “Compatible” means:
   - no file-level merge conflicts likely from overlapping edits, AND
+  - no overlapping edits to the same prompt surface target unless clearly complementary with non-overlapping hunks, AND
   - no behavioral contradictions with each other or with the original prompt.
+- Infer each PR’s prompt surface targets (for example: specific files, named entities/IDs, endpoints, CLI commands, feature flags, UI components, or checklist items) and check compatibility on target overlap as well as file overlap.
+  - Same targets are presumptively conflicting unless clearly complementary and hunk-safe.
+  - Disjoint targets are presumptively co-mergeable even if PRs both touch shared bookkeeping files; assign shared-file ownership to one PR and instruct others not to touch it.
 - Treat compatibility as pairwise across the full selected set (every selected PR must be compatible with every other selected PR).
 - If multiple valid sets exist, choose the best set by this priority:
   1) prompt correctness,
@@ -59,6 +63,7 @@ Hard requirements:
 - Missing pieces that are fixable in a follow-up comment are NOT disqualifying (for example: missing bookkeeping updates, missing PR summary formatting, missing doc sync with small/local edits, missing validation command reporting).
 - Do not penalize a PR for missing bookkeeping/docs if those can be added without creating conflicts and without broad refactors; include it and instruct the author via `@codex`.
 - If bookkeeping/doc edits would collide with another winner in a shared file, still prefer co-merge by assigning that shared file to exactly one PR and telling other PRs: “do not touch shared file; handled by PR X”.
+- Wrong PR-number references, placeholder tags, missing canonical tags, incomplete checklists, missing summary sections, or missing validation-command reporting are finishable gaps by default, not exclusion reasons.
 - Every selected PR must include its own `@codex` comment (distinct and scoped to that PR).
 - Append the following string verbatim as the last line of EACH `@codex` comment (after any other text):
   `new codex task, not a r/e/v/i/e/w task`
@@ -73,12 +78,14 @@ prompt correctness > compatibility safety > maximize safe co-merge size > minima
 How to evaluate candidates:
 - Pass A (merge blockers): identify pairwise conflict/contradiction risks first.
   - overlapping hunks in same files,
+  - overlapping edits to the same prompt surface target,
   - divergent APIs/contracts,
   - contradictory tests/fixtures/docs,
   - duplicate implementation of the same requirement in incompatible ways,
   - suspicious unrelated churn that makes co-merge risky.
 - Pass B (finishable gaps): identify missing but fixable work and route it into per-PR `@codex` comments instead of excluding the PR.
-  - Examples: bookkeeping/checklist/doc sync/PR summary formatting/validation-command reporting that can be completed with small localized edits.
+  - Examples: bookkeeping/checklist/doc sync/PR summary formatting/validation-command reporting/wrong PR-number tags or placeholders that can be completed with small localized edits.
+- Non-compliance with the original prompt is only a selection blocker if fixing it would require broad refactors, touch do-not-touch areas, or collide with another winner’s surface.
 - Read PR description and diff for prompt drift; keep prompt-aligned, merge-safe PRs in the winner set even when incomplete.
 - If two candidates solve the same requirement in conflicting ways, keep only the stronger one for that surface.
 - Prefer localized changes on the prompt surface; penalize broad unrelated features/refactors.
@@ -87,6 +94,11 @@ How to evaluate candidates:
 - Check durability: tests/fixtures/docs updated so the change won’t regress.
 - Prefer “complete + boring” over “clever + risky”, but do not drop otherwise merge-safe PRs for fixable follow-up work.
 - Tie-breaker: when multiple merge-safe combinations exist and one set covers more of the prompt, select all of them and distribute remaining work across per-PR `@codex` comments to avoid overlapping edits.
+
+Examples:
+- Co-mergeable: PR1 edits target A and PR2 edits target B; both touch a shared checklist file. Keep both, assign checklist ownership to PR1, and tell PR2 not to touch the shared file.
+- Finishable gap: a PR has wrong PR-number tags or missing summary sections. If its target is unique and merge-safe, still select it and list those fixes in that PR’s `@codex` merge blockers.
+- True conflict: two PRs modify the same target ID/feature and overlap in the same file(s). Exclude one as `Conflict risk`.
 
 Scope Lock (fill in if you care; otherwise leave blank)
 - Allowed files/paths:
@@ -154,6 +166,11 @@ Output format rules:
       new codex task, not a r/e/v/i/e/w task
       ```
     - ...
+
+Label guardrails for “Why others were not selected”:
+- `Duplicate of winner`: use when the PR is materially the same solution/value as an included PR.
+- `Conflict risk`: use only for true merge collision, same-target overlap, or incompatible behavior/contracts/tests.
+- If exclusion is based on fixable compliance/bookkeeping/formatting/reporting gaps, that exclusion is invalid; keep the PR and route fixes to its `@codex` follow-up comment.
 
 What “100%” means (prompt-scoped):
 - The original prompt’s requirements are satisfied (no more, no less).
