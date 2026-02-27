@@ -11,7 +11,7 @@ All prompts are verified with OpenAI Codex. Other coding agents like Claude Code
 
 Prompt docs stored under `docs/prompts/codex/` or `docs/prompts/` are treated as canonical so repositories migrating between layouts keep this summary clean.
 
-**408 one-click prompts verified across 14 repos (316 evergreen, 38 one-off, 38 unknown).**
+**407 one-click prompts verified across 14 repos (316 evergreen, 38 one-off, 37 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
@@ -224,7 +224,6 @@ _❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` o
 | [docs/prompts/codex/polish.md](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/polish.md)                                         | [Upgrade the structural polish playbook](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/polish.md#upgrade-the-structural-polish-playbook)                                                                                                                                       | unknown       | yes        |
 | [docs/prompts/codex/qa-test-coverage.md](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/qa-test-coverage.md)                     | [DSPACE QA checklist → automated test coverage](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/qa-test-coverage.md#dspace-qa-checklist-automated-test-coverage)                                                                                                                 | unknown       | yes        |
 | [docs/prompts/codex/quests-polish.md](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/quests-polish.md)                           | [DSPACE quest quality lift (bare → shippable)](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/quests-polish.md#dspace-quest-quality-lift-bare-shippable)                                                                                                                        | unknown       | yes        |
-| [docs/prompts/codex/v3-quest-quality-hardening.md](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/v3-quest-quality-hardening.md) | [DSPACE v3 quest quality hardening (unchecked QA boxes -> deterministic parity)](https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/v3-quest-quality-hardening.md#dspace-v3-quest-quality-hardening-unchecked-qa-boxes---deterministic-parity)                                      | unknown       | yes        |
 
 _❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` or `docs/prompts/codex/`): `frontend/src/pages/docs/md`._
 
@@ -600,4 +599,4 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/wove          | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md)                                                                         | unknown   |       |
 | futuroptimist/wove          | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md)                                                                       | unknown   |       |
 
-_Updated automatically: 2026-02-26_
+_Updated automatically: 2026-02-27_
