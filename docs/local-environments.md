@@ -16,3 +16,12 @@ The script creates a `.local` folder with two starter files:
 If `.gitignore` is missing the entry, the script appends `.local/` so anything you add stays out of version control. You can extend these files for other projects without affecting the shared repository.
 
 This keeps personal energy flowing into your workflow without leaking private information.
+
+## Reusable Bash helpers
+
+Flywheel also ships a versioned Bash template at `templates/dotfiles/.bashrc` for reusable shell helpers.
+
+- Copy the functions into your personal `~/.bashrc`, or
+- Source the template directly from your local clone.
+
+No automatic install/copy step exists yet; choose the approach that fits your local workflow.
