@@ -798,7 +798,7 @@ class RepoCrawler:
             )
         lines.extend(
             [
-            "<!-- spellchecker: disable -->",
+                "<!-- spellchecker: disable -->",
             ]
         )
 

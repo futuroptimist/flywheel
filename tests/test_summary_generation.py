@@ -105,4 +105,6 @@ def test_summary_generation_missing_commit(monkeypatch):
     monkeypatch.setattr(crawler, "_repo_stats", lambda *a, **kw: (0, 0))
     summary = crawler.generate_summary()
     assert "Missing commit metadata for: foo/bar" in summary
-    assert "| **[foo/bar](https://github.com/foo/bar)** | main | n/a |" in summary
+    assert (
+        "| **[foo/bar](https://github.com/foo/bar)** | main | n/a |" in summary
+    )
