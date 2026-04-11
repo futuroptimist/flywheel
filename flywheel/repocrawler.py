@@ -772,7 +772,7 @@ class RepoCrawler:
 
     def generate_summary(self) -> str:
         repos = self.crawl()
-        missing = [
+        missing = [  # noqa: E501
             r.name for r in repos if not r.latest_commit or not r.commit_date
         ]
         lines = [
