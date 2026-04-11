@@ -24,9 +24,9 @@ jobs:
       - name: Run Python Linters
         if: matrix.language == 'python'
         run: |
-          flake8 .
-          isort --check-only .
-          black --check .
+          flake8 . --exclude=.venv,node_modules
+          isort --check-only . --skip .venv --skip node_modules
+          black --check . --exclude ".venv/|node_modules/"
 
       - name: Setup Node
         if: matrix.language == 'javascript'
