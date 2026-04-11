@@ -772,15 +772,9 @@ class RepoCrawler:
 
     def generate_summary(self) -> str:
         repos = self.crawl()
-        missing = []
-        for r in repos:
-            if not r.latest_commit or not r.commit_date:
-                missing.append(r.name)
-        if missing:
-            raise RuntimeError(
-                "Missing commit data for: {}. Pass a GitHub token via "
-                "GITHUB_TOKEN to avoid rate limits.".format(", ".join(missing))
-            )
+        missing = [
+            r.name for r in repos if not r.latest_commit or not r.commit_date
+        ]
         lines = [
             "# Repo Feature Summary",
             "",
@@ -789,8 +783,24 @@ class RepoCrawler:
                 "repository has adopted."
             ),
             "",
-            "<!-- spellchecker: disable -->",
         ]
+        if missing:
+            lines.extend(
+                [
+                    (
+                        "> ⚠️ Missing commit metadata for: {}. "
+                        "Rows below use `n/a` for unavailable values. "
+                        "Set `GITHUB_TOKEN` to reduce GitHub API rate "
+                        "limit failures."
+                    ).format(", ".join(missing)),
+                    "",
+                ]
+            )
+        lines.extend(
+            [
+            "<!-- spellchecker: disable -->",
+            ]
+        )
 
         basics_header = (
             "| Repo | Branch | Commit | Trunk | Stars | "
