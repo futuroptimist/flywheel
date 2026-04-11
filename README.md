@@ -42,7 +42,7 @@ contributor.
 | `scripts/` | Shell and Node helpers, including `checks.sh` and docs linters. |
 | `tests/` | Unit and integration tests for Python and JavaScript modules. |
 | `examples/` | Minimal examples for using the CLI programmatically. |
-| `templates/` | Starter files copied into newly bootstrapped repos. |
+| `templates/` | Starter files copied into newly bootstrapped repos (including `templates/dotfiles/` shell helpers). |
 | `viewer/` | 3D assembly viewer assets built with Three.js. |
 | `cad/` | OpenSCAD source files for printable parts. |
 | `stl/` | Generated models kept in sync with `cad/`. |
