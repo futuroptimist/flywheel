@@ -1,5 +1,3 @@
-import pytest
-
 from flywheel.repocrawler import RepoCrawler
 
 
@@ -86,10 +84,27 @@ def test_summary_marks_trunk_unknown(monkeypatch):
 
 def test_summary_generation_missing_commit(monkeypatch):
     crawler = RepoCrawler(["foo/bar"])
+    monkeypatch.setattr(crawler, "_default_branch", lambda *a, **kw: "main")
     monkeypatch.setattr(
         crawler,
         "_latest_commit",
         lambda *a, **kw: (None, None),
     )
-    with pytest.raises(RuntimeError):
-        crawler.generate_summary()
+    monkeypatch.setattr(crawler, "_branch_green", lambda *a, **kw: None)
+    monkeypatch.setattr(crawler, "_fetch_file", lambda *a, **kw: "")
+    monkeypatch.setattr(crawler, "_parse_coverage", lambda *a, **kw: None)
+    monkeypatch.setattr(crawler, "_uses_codecov", lambda *a, **kw: False)
+    monkeypatch.setattr(
+        crawler,
+        "_patch_coverage_from_codecov",
+        lambda *a, **kw: None,
+    )
+    monkeypatch.setattr(crawler, "_list_workflows", lambda *a, **kw: set())
+    monkeypatch.setattr(crawler, "_detect_installer", lambda *a, **kw: "none")
+    monkeypatch.setattr(crawler, "_has_file", lambda *a, **kw: False)
+    monkeypatch.setattr(crawler, "_repo_stats", lambda *a, **kw: (0, 0))
+    summary = crawler.generate_summary()
+    assert "Missing commit metadata for: foo/bar" in summary
+    assert (
+        "| **[foo/bar](https://github.com/foo/bar)** | main | n/a |" in summary
+    )  # noqa: E501

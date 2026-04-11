@@ -13,7 +13,8 @@ class DummyArgs(argparse.Namespace):
 
 def test_runbook_renders_tasks(tmp_path, capsys):
     runbook_path = tmp_path / "custom.yml"
-    runbook_path.write_text("""
+    runbook_path.write_text(
+        """
 workflow:
   - stage: alpha
     tasks:
@@ -23,7 +24,8 @@ workflow:
       - description: lonely description
       - string task
   - beta stage
-""".strip())
+""".strip()
+    )
 
     runbook(DummyArgs(runbook_path))
 

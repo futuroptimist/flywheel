@@ -43,6 +43,7 @@ contributor.
 | `tests/` | Unit and integration tests for Python and JavaScript modules. |
 | `examples/` | Minimal examples for using the CLI programmatically. |
 | `templates/` | Starter files copied into newly bootstrapped repos. |
+| `templates/dotfiles/` | Versioned shell helper snippets you can copy into local dotfiles. |
 | `viewer/` | 3D assembly viewer assets built with Three.js. |
 | `cad/` | OpenSCAD source files for printable parts. |
 | `stl/` | Generated models kept in sync with `cad/`. |
