@@ -1,6 +1,6 @@
 # token.place Feature Overview
 
-This document summarizes key capabilities of token.place as observed from the upstream repository.
+This document summarizes key capabilities of [token.place](https://token.place) as observed from the upstream repository.
 
 ## Core Capabilities
 
