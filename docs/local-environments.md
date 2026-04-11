@@ -16,3 +16,16 @@ The script creates a `.local` folder with two starter files:
 If `.gitignore` is missing the entry, the script appends `.local/` so anything you add stays out of version control. You can extend these files for other projects without affecting the shared repository.
 
 This keeps personal energy flowing into your workflow without leaking private information.
+
+## Reusable dotfile helpers
+
+For shared shell helpers that should stay versioned, use `templates/dotfiles/.bashrc`.
+You can either copy the functions into your `~/.bashrc` (or repo-local Bash config) or
+source the template directly from your shell startup file:
+
+```bash
+source /path/to/repo/templates/dotfiles/.bashrc
+```
+
+Flywheel does not install this template automatically yet, so choose the approach
+that best fits your local setup.
