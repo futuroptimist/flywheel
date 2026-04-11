@@ -21,5 +21,6 @@ This keeps personal energy flowing into your workflow without leaking private in
 
 Flywheel also keeps reusable shell snippets in `templates/dotfiles/`.
 To use the tag helpers, copy `templates/dotfiles/.bashrc` into your local
-shell config or source it from `~/.bashrc`. The helpers accept an optional
-remote name and default to `origin` (`rmtag <tag> [remote]`, `retag <tag> [remote]`).
+shell config or source it from `~/.bashrc`. Flywheel does not install this
+template automatically yet. The helpers accept an optional remote name and
+default to `origin` (`rmtag <tag> [remote]`, `retag <tag> [remote]`).
