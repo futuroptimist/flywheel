@@ -1,6 +1,6 @@
 # token.place Integration Roadmap
 
-This document outlines a future vision for packaging **flywheel** as an npm module that leverages [token.place](https://token.place) for LLM inference. The goal is to provide a plug‑and‑play API that can be added to developer environments with minimal setup.
+This document outlines a future vision for packaging **flywheel** as an npm module that leverages token.place for LLM inference. The goal is to provide a plug‑and‑play API that can be added to developer environments with minimal setup.
 
 ## Goals
 

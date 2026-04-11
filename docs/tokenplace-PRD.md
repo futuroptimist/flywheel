@@ -1,6 +1,6 @@
 # token.place Integration PRD
 
-This document expands on the roadmap for distributing **flywheel** as a package that uses [token.place](https://token.place) for LLM inference. The goal is a frictionless developer experience with minimal configuration.
+This document expands on the roadmap for distributing **flywheel** as a package that uses token.place for LLM inference. The goal is a frictionless developer experience with minimal configuration.
 
 ## Objectives
 
