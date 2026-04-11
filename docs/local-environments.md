@@ -16,3 +16,9 @@ The script creates a `.local` folder with two starter files:
 If `.gitignore` is missing the entry, the script appends `.local/` so anything you add stays out of version control. You can extend these files for other projects without affecting the shared repository.
 
 This keeps personal energy flowing into your workflow without leaking private information.
+
+## Reusing Bash tag helpers
+
+Flywheel also keeps reusable shell snippets in `templates/dotfiles/`.
+To use the tag helpers, copy `templates/dotfiles/.bashrc` into your local
+shell config or source it from `~/.bashrc`.
