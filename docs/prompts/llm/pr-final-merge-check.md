@@ -7,7 +7,7 @@ conversational: true
 # PR Final Merge-Readiness Check Prompt
 Type: evergreen
 
-Use this prompt for a final merge-readiness decision on a specific pull request.
+## Main Prompt
 
 ```text
 Is <PR-URL> ready to merge?
@@ -74,9 +74,6 @@ Before answering, be strict: a confident yes means every substantive reviewer co
 ```
 
 ## Upgrade Prompt
-Type: evergreen
-
-Use this prompt to improve the main merge-check prompt while preserving required outputs and guardrails.
 
 ```text
 Improve the main PR final merge-check prompt above while preserving its purpose and Streamdeck-friendly shape.
