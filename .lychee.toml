@@ -24,7 +24,9 @@ exclude = [
   "https://youtube.com/*",
   "https://www.youtube.com/*",
   "https://medium.com/*",
-  "https://docs.github.com/*"
+  "https://docs.github.com/*",
+  "https://token.place/*",
+  "https://www.token.place/*"
 ]
 
 exclude_path = [
