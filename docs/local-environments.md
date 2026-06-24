@@ -17,10 +17,28 @@ If `.gitignore` is missing the entry, the script appends `.local/` so anything y
 
 This keeps personal energy flowing into your workflow without leaking private information.
 
-## Reusing Bash tag helpers
+## Reusing Git shell helpers
 
-Flywheel also keeps reusable shell snippets in `templates/dotfiles/`.
-To use the tag helpers, copy `templates/dotfiles/.bashrc` into your local
-shell config or source it from `~/.bashrc`. Flywheel does not install this
-template automatically yet. The helpers accept an optional remote name and
-default to `origin` (`rmtag <tag> [remote]`, `retag <tag> [remote]`).
+Flywheel keeps reusable, repo-versioned shell snippets in
+`templates/dotfiles/.bashrc`. This template is the canonical place for common
+Git shell helpers that can be copied into a local shell config or sourced from
+a checkout of the repository:
+
+```bash
+source /path/to/flywheel/templates/dotfiles/.bashrc
+```
+
+The helpers accept an optional remote name and default to `origin`:
+
+```bash
+rmtag <tag> [remote]
+retag <tag> [remote]
+pokeci <branch-name> [remote]
+```
+
+Use `rmtag` to remove a tag locally and remotely when it exists, and `retag` to
+replace a tag at the current `HEAD` before pushing it. Use `pokeci` to create an
+empty `poke CI` commit on a remote branch. `pokeci` fetches the selected remote
+branch into a temporary detached worktree, commits there, pushes back to the
+same remote branch, and removes the temporary worktree afterward, so it does not
+switch your current checkout or disturb local changes.
