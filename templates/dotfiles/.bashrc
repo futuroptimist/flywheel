@@ -56,15 +56,21 @@ pokeci() {
     return 1
   fi
 
-  local repo_root tmpdir exit_code
+  local repo_root tmpdir exit_code poke_commit
   repo_root="$(git rev-parse --show-toplevel)" || return 1
+
+  if ! git -C "$repo_root" ls-remote --exit-code --heads "$remote" "${branch}" >/dev/null; then
+    echo "pokeci: remote branch '$branch' not found on '$remote'"
+    return 1
+  fi
+
   tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/pokeci.XXXXXX")" || return 1
 
-  git -C "$repo_root" ls-remote --exit-code --heads "$remote" "${branch}" >/dev/null 2>&1 &&
-  git -C "$repo_root" fetch --prune "$remote" "+refs/heads/${branch}:refs/remotes/${remote}/${branch}" &&
+  git -C "$repo_root" fetch "$remote" "+refs/heads/${branch}:refs/remotes/${remote}/${branch}" &&
   git -C "$repo_root" worktree add --detach "$tmpdir" "refs/remotes/${remote}/${branch}" &&
   git -C "$tmpdir" commit --allow-empty -m "poke CI" &&
-  git -C "$tmpdir" push "$remote" "HEAD:refs/heads/${branch}"
+  poke_commit="$(git -C "$tmpdir" rev-parse HEAD)" &&
+  git -C "$repo_root" push "$remote" "${poke_commit}:refs/heads/${branch}"
 
   exit_code=$?
 
