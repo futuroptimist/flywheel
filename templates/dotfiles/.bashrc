@@ -56,12 +56,20 @@ pokeci() {
     return 1
   fi
 
-  local repo_root tmpdir exit_code poke_commit
+  local repo_root tmpdir exit_code poke_commit ls_remote_exit_code
   repo_root="$(git rev-parse --show-toplevel)" || return 1
 
-  if ! git -C "$repo_root" ls-remote --exit-code --heads "$remote" "${branch}" >/dev/null; then
+  git -C "$repo_root" ls-remote --exit-code --heads "$remote" "${branch}" >/dev/null
+  ls_remote_exit_code=$?
+
+  if [[ "$ls_remote_exit_code" -eq 2 ]]; then
     echo "pokeci: remote branch '$branch' not found on '$remote'"
     return 1
+  fi
+
+  if [[ "$ls_remote_exit_code" -ne 0 ]]; then
+    echo "pokeci: failed to query remote '$remote' for branch '$branch'"
+    return "$ls_remote_exit_code"
   fi
 
   tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/pokeci.XXXXXX")" || return 1
