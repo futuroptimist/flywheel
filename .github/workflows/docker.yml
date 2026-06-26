@@ -31,7 +31,7 @@ jobs:
           push: false
           load: true
       - name: Scan with Trivy
-        uses: aquasecurity/trivy-action@0.20.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: ghcr.io/${{ github.repository }}:${{ github.sha }}
       - name: Push image
