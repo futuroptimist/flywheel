@@ -26,7 +26,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: docker/Dockerfile
+          file: infra/docker/Dockerfile
           tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
           push: false
           load: true
@@ -34,10 +34,5 @@ jobs:
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25  # v0.36.0
         with:
           image-ref: ghcr.io/${{ github.repository }}:${{ github.sha }}
-      - name: Push image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: docker/Dockerfile
-          tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
-          push: true
+      - name: Push scanned image
+        run: docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
