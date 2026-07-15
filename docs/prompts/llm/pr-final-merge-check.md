@@ -32,10 +32,10 @@ A concern is addressed only if at least one of these is clearly true:
 - The comment is purely non-blocking praise, bookkeeping, duplication, or a low-value nit that does not affect merge readiness.
 
 Decision rule:
-Respond with exactly one of these three mutually exclusive categories. Precedence is category 2 > category 3 > category 1:
-- Highest priority, category 2: if code, tests, configuration, generated artifacts, documentation in the repository, or any other repository changes are still needed for merge readiness, return category 2. If the PR description also needs work, defer that assessment until those repository changes are complete and this merge check is rerun; do not create a hybrid response.
-- Next priority, category 3: otherwise, if the PR is technically merge-ready but its description is materially inaccurate, incomplete, stale, misleading, or missing information necessary for a responsible merge record, return category 3.
-- Final fallback, category 1: otherwise, return category 1.
+Respond with exactly one of these three mutually exclusive categories, evaluated in this order:
+- Highest priority: if code, tests, configuration, generated artifacts, documentation in the repository, or any other repository changes are still needed for merge readiness, return category 2. If the PR description also needs work, defer that assessment until those repository changes are complete and this merge check is rerun; do not create a hybrid response.
+- Next: otherwise, if the PR is technically merge-ready but its description is materially inaccurate, incomplete, stale, misleading, or missing information necessary for a responsible merge record, return category 3.
+- Otherwise: return category 1.
 
 Category 1: exact success response
 - If the PR is ready to merge and the PR description is merge-ready, respond with exactly:
@@ -44,7 +44,7 @@ Category 1: exact success response
 - Do not add caveats, summaries, bullets, or extra commentary when the answer is yes.
 
 Category 2: repository changes needed
-- If the PR is not ready to merge because repository changes are still needed, respond only with a single fenced code block containing a copy/paste-ready GitHub PR comment that begins with `@codex` and has no text before or after the fence.
+- If the PR is not ready to merge because repository changes are still needed, respond only with a single outer three-backtick `text` fenced code block containing a copy/paste-ready GitHub PR comment that begins with `@codex` and has no text before or after the fence.
 - Include only work Codex can perform in the repository.
 - Never ask Codex to edit, rewrite, or update the PR title or description.
 - Never ask Codex to click, mark, or otherwise resolve a review thread.
@@ -103,7 +103,7 @@ The category 2 `@codex` comment must:
 - Include verification commands, choosing the narrowest relevant commands first.
 - Avoid broad refactors unless they are required for correctness.
 - Preserve existing conventions and tests.
-- Use triple tildes (`~~~`) instead of triple backticks for any nested code fences inside the comment, because nested triple backticks can break formatting.
+- Use an outer three-backtick `text` fence for the category 2 response, leaving triple tildes (`~~~`) available for any nested code fences inside the comment because nested triple backticks can break formatting.
 - Append `new codex task, not a r/e/v/i/e/w task` as the final line of the generated `@codex` comment, after all other comment text.
 
 Before answering, be strict: category 1 requires repository readiness, addressed or safely non-blocking substantive reviewer concerns, and a materially accurate PR description; category 2 takes precedence over category 3 when both repository work and description work are needed.
@@ -116,18 +116,19 @@ Improve the main PR final merge-check prompt above while preserving its purpose 
 
 Goals:
 - Keep the main prompt copy/paste-ready with a `<PR-URL>` placeholder.
-- Preserve exactly three mutually exclusive output categories with deterministic precedence:
-  1. Exact ready-to-merge success output: `yes, it can be merged`
-  2. One fenced code block containing one actionable `@codex` PR comment for repository changes needed to make the PR merge-ready
-  3. A concise manual instruction followed by one fenced `markdown` block containing the complete replacement PR description
+- Preserve exactly three mutually exclusive output categories with deterministic, unnumbered precedence labels:
+  - Highest priority: repository changes needed to make the PR merge-ready return category 2, one outer three-backtick `text` fenced code block containing one actionable `@codex` PR comment
+  - Next: PR description-only corrections return category 3, a concise manual instruction followed by one fenced `markdown` block containing the complete replacement PR description
+  - Otherwise: ready-to-merge PRs return category 1, the exact success output `yes, it can be merged`
 - Preserve the rule that category 2 takes precedence when both repository changes and PR-description corrections are needed, so description-only assessment is deferred until the merge check is rerun after repository work is complete.
 - Preserve the requirement that the LLM only says yes when every substantive reviewer comment is addressed or safely non-blocking and the PR description does not require a material correction.
 - Preserve the requirement that unresolved GitHub thread UI state alone is not a blocker when the latest code, tests, comments, or discussion adequately address the underlying concern.
 - Preserve strict handling of genuinely unaddressed reviewer concerns and recurring valid AI-review findings.
 - Preserve the requirement that the `@codex` comment concretely maps each remaining substantive concern to a repository change or durable in-code justification, not thread-resolution bookkeeping.
-- Preserve the requirement that category 2 emits no text outside its single fenced `@codex` comment.
+- Preserve the requirement that category 2 emits no text outside its single outer three-backtick `text` fenced `@codex` comment.
 - Preserve the ban on asking Codex to edit the PR title or description or to click, mark, or otherwise resolve review threads.
-- Preserve the requirement to use triple tildes (`~~~`) for nested code fences inside the `@codex` comment or replacement PR description, and to wrap category 3's replacement-description block in a longer outer fence such as `~~~~markdown` so nested fences cannot close it early.
+- Preserve the requirement to use an outer three-backtick `text` fence for the category 2 `@codex` comment, leaving triple tildes (`~~~`) available for nested code fences inside that comment.
+- Preserve the requirement to use triple tildes (`~~~`) for nested code fences inside the replacement PR description, and to wrap category 3's replacement-description block in a longer outer fence such as `~~~~markdown` so nested fences cannot close it early.
 - Preserve the requirement that generated `@codex` comments end with `new codex task, not a r/e/v/i/e/w task`, while ensuring the main prompt itself does not end with that sentinel line.
 - Preserve the requirement that category 3 contains a complete replacement PR description, with no placeholders, TODOs, partial patches, suggested fragments, `@codex`, or Codex sentinel line.
 - Make the prompt better at distinguishing true merge blockers from low-value nits.
