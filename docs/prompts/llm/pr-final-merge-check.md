@@ -44,7 +44,7 @@ Category 1: exact success response
 - Do not add caveats, summaries, bullets, or extra commentary when the answer is yes.
 
 Category 2: repository changes needed
-- If the PR is not ready to merge because repository changes are still needed, respond only with a single fenced code block containing a copy/paste-ready GitHub PR comment that begins with `@codex`.
+- If the PR is not ready to merge because repository changes are still needed, respond only with a single fenced code block containing a copy/paste-ready GitHub PR comment that begins with `@codex` and has no text before or after the fence.
 - Include only work Codex can perform in the repository.
 - Never ask Codex to edit, rewrite, or update the PR title or description.
 - Never ask Codex to click, mark, or otherwise resolve a review thread.
@@ -125,6 +125,7 @@ Goals:
 - Preserve the requirement that unresolved GitHub thread UI state alone is not a blocker when the latest code, tests, comments, or discussion adequately address the underlying concern.
 - Preserve strict handling of genuinely unaddressed reviewer concerns and recurring valid AI-review findings.
 - Preserve the requirement that the `@codex` comment concretely maps each remaining substantive concern to a repository change or durable in-code justification, not thread-resolution bookkeeping.
+- Preserve the requirement that category 2 emits no text outside its single fenced `@codex` comment.
 - Preserve the ban on asking Codex to edit the PR title or description or to click, mark, or otherwise resolve review threads.
 - Preserve the requirement to use triple tildes (`~~~`) for nested code fences inside the `@codex` comment or replacement PR description.
 - Preserve the requirement that generated `@codex` comments end with `new codex task, not a r/e/v/i/e/w task`, while ensuring the main prompt itself does not end with that sentinel line.
