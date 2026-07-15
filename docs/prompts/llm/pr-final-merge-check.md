@@ -32,10 +32,10 @@ A concern is addressed only if at least one of these is clearly true:
 - The comment is purely non-blocking praise, bookkeeping, duplication, or a low-value nit that does not affect merge readiness.
 
 Decision rule:
-Respond with exactly one of these three mutually exclusive categories, using this precedence:
-1. If code, tests, configuration, generated artifacts, documentation in the repository, or any other repository changes are still needed for merge readiness, return category 2. If the PR description also needs work, defer that assessment until those repository changes are complete and this merge check is rerun; do not create a hybrid response.
-2. Otherwise, if the PR is technically merge-ready but its description is materially inaccurate, incomplete, stale, misleading, or missing information necessary for a responsible merge record, return category 3.
-3. Otherwise, return category 1.
+Respond with exactly one of these three mutually exclusive categories. Precedence is category 2 > category 3 > category 1:
+- Highest priority, category 2: if code, tests, configuration, generated artifacts, documentation in the repository, or any other repository changes are still needed for merge readiness, return category 2. If the PR description also needs work, defer that assessment until those repository changes are complete and this merge check is rerun; do not create a hybrid response.
+- Next priority, category 3: otherwise, if the PR is technically merge-ready but its description is materially inaccurate, incomplete, stale, misleading, or missing information necessary for a responsible merge record, return category 3.
+- Final fallback, category 1: otherwise, return category 1.
 
 Category 1: exact success response
 - If the PR is ready to merge and the PR description is merge-ready, respond with exactly:
@@ -56,15 +56,15 @@ Category 3: PR description-only correction needed
 
 Update the PR description manually to the following:
 
-~~~markdown
+~~~~markdown
 <complete replacement PR description>
-~~~
+~~~~
 
 - Generate the complete description from the PR title, linked issue, current description, final diff, tests, and discussion.
 - Preserve useful and accurate material from the existing description.
 - Correct stale or misleading claims and include the relevant summary, behavior, testing, compatibility, migration, or issue-linking details supported by the PR.
 - Do not emit a partial patch, suggested fragments, placeholders, TODOs, or instructions inside the replacement description.
-- Keep all replacement-description Markdown inside the fence. Use `~~~` for any nested fences required within the generated description.
+- Keep all replacement-description Markdown inside the outer fence. Use an outer fence longer than any nested fence, and use `~~~` for any nested fences required within the generated description.
 - Do not include `@codex` or the Codex sentinel line in category 3.
 
 Treat these as merge blockers that require category 2 when they need repository changes:
@@ -127,7 +127,7 @@ Goals:
 - Preserve the requirement that the `@codex` comment concretely maps each remaining substantive concern to a repository change or durable in-code justification, not thread-resolution bookkeeping.
 - Preserve the requirement that category 2 emits no text outside its single fenced `@codex` comment.
 - Preserve the ban on asking Codex to edit the PR title or description or to click, mark, or otherwise resolve review threads.
-- Preserve the requirement to use triple tildes (`~~~`) for nested code fences inside the `@codex` comment or replacement PR description.
+- Preserve the requirement to use triple tildes (`~~~`) for nested code fences inside the `@codex` comment or replacement PR description, and to wrap category 3's replacement-description block in a longer outer fence such as `~~~~markdown` so nested fences cannot close it early.
 - Preserve the requirement that generated `@codex` comments end with `new codex task, not a r/e/v/i/e/w task`, while ensuring the main prompt itself does not end with that sentinel line.
 - Preserve the requirement that category 3 contains a complete replacement PR description, with no placeholders, TODOs, partial patches, suggested fragments, `@codex`, or Codex sentinel line.
 - Make the prompt better at distinguishing true merge blockers from low-value nits.
