@@ -37,11 +37,16 @@ Respond with exactly one of these three mutually exclusive categories, evaluated
 - Next: otherwise, if the PR is technically merge-ready but its description is materially inaccurate, incomplete, stale, misleading, or missing information necessary for a responsible merge record, return category 3.
 - Otherwise: return category 1.
 
-Category 1: exact success response
-- If the PR is ready to merge and the PR description is merge-ready, respond with exactly:
+Category 1: exact conditional-success response
+- If the PR is ready to merge and the PR description is merge-ready, select exactly one of these two responses.
+- Respond with exactly:
   yes, it can be merged
-- Only say `yes, it can be merged` when CI is green, mergeability is acceptable, required approvals are satisfied or no longer needed, every substantive reviewer comment is addressed or safely non-blocking, and the PR description does not require a material correction.
-- Do not add caveats, summaries, bullets, or extra commentary when the answer is yes.
+  only when all relevant required checks on the latest head have completed successfully, mergeability is acceptable, required approvals are satisfied or no longer needed, every substantive reviewer comment is addressed or safely non-blocking, and the PR description does not require a material correction.
+- Respond with exactly:
+  yes, it can be merged assuming the pending CI checks succeed
+  only when every non-CI readiness condition is satisfied and the only remaining uncertainty is one or more expected, relevant checks on the latest head that are legitimately queued or in progress.
+- Do not use the conditional response when any relevant check failed, was cancelled, timed out, requires action, or otherwise produced an adverse conclusion; when checks are stale, missing, attached only to an older commit, or ambiguous in a way that matters; when the branch is unmergeable or materially out of date; when approvals, substantive reviewer concerns, repository changes, or a material PR-description correction remain; or when there is evidence that pending CI requires repository work rather than merely time to complete.
+- Emit only the selected category 1 sentence, with no tally, caveats, summaries, bullets, or extra commentary.
 - Do not include a merge-readiness tally in category 1.
 
 Category 2: repository changes needed
@@ -91,7 +96,7 @@ Update the PR description manually to the following:
 - Do not include a merge-readiness tally in category 3.
 
 Treat these as merge blockers that require category 2 when they need repository changes:
-- CI is failing, pending, stale, missing, or ambiguous in a way that matters.
+- CI is failing, cancelled, timed out, requires action, stale, missing, attached only to an older commit, ambiguous in a way that matters, or otherwise reveals or requires repository changes; ordinary expected latest-head checks that are merely queued or in progress do not create or continue category 2 by themselves when no repository work is needed.
 - There are active requested changes or substantive unaddressed reviewer concerns.
 - A reviewer asked a question and the code, tests, comments, or PR discussion do not yet answer it well enough.
 - A reviewer suggested a change and the PR neither implemented it nor explains convincingly why the current approach is better.
@@ -129,7 +134,7 @@ The category 2 `@codex` comment must:
 - Use an outer three-backtick `text` fence for the category 2 response, leaving triple tildes (`~~~`) available for any nested code fences inside the comment because nested triple backticks can break formatting.
 - Append `new codex task, not a r/e/v/i/e/w task` as the final line of the generated `@codex` comment, after all other comment text.
 
-Before answering, be strict: category 1 requires repository readiness, addressed or safely non-blocking substantive reviewer concerns, and a materially accurate PR description; category 2 takes precedence over category 3 when both repository work and description work are needed.
+Before answering, be strict: category 1 requires either fully green latest-head CI or conditional readiness under the narrow pending-CI rule above, repository readiness, addressed or safely non-blocking substantive reviewer concerns, and a materially accurate PR description; category 2 takes precedence over category 3 when both repository work and description work are needed.
 ```
 
 ## Upgrade Prompt
