@@ -112,7 +112,7 @@ Do not block merge for low-value nits. Only produce an `@codex` comment for issu
 When recurring AI review comments are present:
 - Determine whether the repeated comment is still valid.
 - If it is valid, ask Codex to fix the underlying issue directly when selecting that concern for the current bounded batch.
-- If the current code is intentional and the AI reviewer is repeatedly asking to revert or change it, ask Codex to add a minimal inline or multiline code comment near the relevant logic explaining the invariant, tradeoff, or rationale, so future reviewers understand why the change should remain.
+- If the current code is intentional and the AI reviewer is repeatedly asking to revert or change it, ask Codex to add a minimal inline or multiline code comment near the relevant logic explaining the invariant, tradeoff, or rationale only when selecting that concern for the current bounded batch, so future reviewers understand why the change should remain.
 - Prefer durable explanations in code only when the rationale is not already obvious from names, tests, or surrounding context.
 - Do not ask Codex to blindly placate a bot by weakening correct code.
 
