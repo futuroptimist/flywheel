@@ -140,23 +140,23 @@ Improve the main PR final merge-check prompt above while preserving its purpose 
 Goals:
 - Keep the main prompt copy/paste-ready with a `<PR-URL>` placeholder.
 - Preserve exactly three mutually exclusive output categories with deterministic, unnumbered precedence labels:
-  - Highest priority: repository changes needed to make the PR merge-ready return category 2, one outer three-backtick `text` fenced code block containing one actionable `@codex` PR comment followed by a `Merge-readiness tally:` outside the fence
+  - Highest priority: repository changes needed to make the PR merge-ready return category 2, one outer three-backtick `text` fenced code block containing one actionable `@codex` PR comment
   - Next: PR description-only corrections return category 3, a concise manual instruction followed by one fenced `markdown` block containing the complete replacement PR description
   - Otherwise: ready-to-merge PRs return category 1, the exact success output `yes, it can be merged`
-- Preserve the rule that category 2 takes precedence when both repository changes and PR-description corrections are needed: known material PR-description corrections are assessed and tracked as the permanently last tally item, but replacement-description generation is deferred until repository work is complete.
+- Preserve the rule that category 2 takes precedence when both repository changes and PR-description corrections are needed, so description-only assessment is deferred until the merge check is rerun after repository work is complete.
 - Preserve the requirement that the LLM only says yes when every substantive reviewer comment is addressed or safely non-blocking and the PR description does not require a material correction.
 - Preserve the requirement that unresolved GitHub thread UI state alone is not a blocker when the latest code, tests, comments, or discussion adequately address the underlying concern.
 - Preserve strict handling of genuinely unaddressed reviewer concerns and recurring valid AI-review findings.
 - Preserve the requirement that the `@codex` comment concretely maps each remaining substantive concern to a repository change or durable in-code justification, not thread-resolution bookkeeping.
-- Preserve the requirement that category 2 emits only a copy/paste-ready outer three-backtick `text` fenced `@codex` comment followed immediately by a clearly labeled `Merge-readiness tally:` outside the fence, with no other prose.
+- Preserve the requirement that category 2 emits no text outside its single outer three-backtick `text` fenced `@codex` comment.
 - Preserve the ban on asking Codex to edit the PR title or description or to click, mark, or otherwise resolve review threads.
-- Preserve the requirement to use an outer three-backtick `text` fence for the category 2 `@codex` comment, followed by the tally outside that fence, leaving triple tildes (`~~~`) available for nested code fences inside that comment.
+- Preserve the requirement to use an outer three-backtick `text` fence for the category 2 `@codex` comment, leaving triple tildes (`~~~`) available for nested code fences inside that comment.
 - Preserve the requirement to use triple tildes (`~~~`) for nested code fences inside the replacement PR description, and to wrap category 3's replacement-description block in a longer outer fence such as `~~~~markdown` so nested fences cannot close it early.
-- Preserve the requirement that generated `@codex` comments end with `new codex task, not a r/e/v/i/e/w task`, followed by the required tally outside the generated comment fence, while ensuring the main prompt itself does not end with that sentinel line.
+- Preserve the requirement that generated `@codex` comments end with `new codex task, not a r/e/v/i/e/w task`, while ensuring the main prompt itself does not end with that sentinel line.
 - Preserve the requirement that category 3 contains a complete replacement PR description, with no placeholders, TODOs, partial patches, suggested fragments, `@codex`, or Codex sentinel line.
 - Make the prompt better at distinguishing true merge blockers from low-value nits.
 - Make the prompt better at handling recurring AI review comments without blindly reverting correct code.
-- Make the prompt better at producing followups that let maintainers confidently address every remaining substantive concern, including persistent tally reconciliation across repeated invocations, verified completion/regression handling, duplicate consolidation without history loss, and permanently-last tracking for any known PR-description correction while repository work remains.
+- Make the prompt better at producing followups that let maintainers confidently address every remaining substantive concern.
 - Keep the wording compact enough to use as a Streamdeck action.
 
 Return:
