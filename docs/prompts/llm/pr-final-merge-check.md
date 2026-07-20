@@ -33,7 +33,7 @@ A concern is addressed only if at least one of these is clearly true:
 
 Decision rule:
 Respond with exactly one of these three mutually exclusive categories, evaluated in this order:
-- Highest priority: if code, tests, configuration, generated artifacts, documentation in the repository, or any other repository changes are still needed for merge readiness, return category 2. If the PR description also needs work, defer that assessment until those repository changes are complete and this merge check is rerun; do not create a hybrid response.
+- Highest priority: if code, tests, configuration, generated artifacts, documentation in the repository, or any other repository changes are still needed for merge readiness, return category 2. If a material PR-description correction is also already known, track it in the category 2 tally as described below, but do not ask Codex to perform PR metadata work.
 - Next: otherwise, if the PR is technically merge-ready but its description is materially inaccurate, incomplete, stale, misleading, or missing information necessary for a responsible merge record, return category 3.
 - Otherwise: return category 1.
 
@@ -42,13 +42,35 @@ Category 1: exact success response
   yes, it can be merged
 - Only say `yes, it can be merged` when CI is green, mergeability is acceptable, required approvals are satisfied or no longer needed, every substantive reviewer comment is addressed or safely non-blocking, and the PR description does not require a material correction.
 - Do not add caveats, summaries, bullets, or extra commentary when the answer is yes.
+- Do not include a merge-readiness tally in category 1.
 
 Category 2: repository changes needed
-- If the PR is not ready to merge because repository changes are still needed, respond only with a single outer three-backtick `text` fenced code block containing a copy/paste-ready GitHub PR comment that begins with `@codex` and has no text before or after the fence.
-- Include only work Codex can perform in the repository.
+- If the PR is not ready to merge because repository changes are still needed, respond with only these two elements, in this order, with no other prose before, between, or after them:
+  1. One copy/paste-ready outer three-backtick `text` fenced code block containing a GitHub PR comment that begins with `@codex`.
+  2. A clearly labeled `Merge-readiness tally:` outside the fence.
+- Include only work Codex can perform in the repository in the `@codex` comment.
+- The `@codex` comment should target one or a small, coherent, reliably executable group of currently unchecked repository-work items. Group multiple tightly related items when safe to reduce unnecessary commits, but do not overload one Codex task with unrelated work.
+- The `@codex` comment must map and handle each concern selected for the current bounded batch. The tally remains the authoritative record of all known blockers, including blockers not selected for that task.
 - Never ask Codex to edit, rewrite, or update the PR title or description.
 - Never ask Codex to click, mark, or otherwise resolve a review thread.
 - Never include thread-resolution bookkeeping as work in an `@codex` comment.
+- The generated `@codex` comment must be fully self-contained. It must not mention the tally, checkbox states, item numbers, or phrases such as “the item above.”
+
+Category 2 merge-readiness tally lifecycle:
+- Every tally item must begin directly with `⬜️` when it remains unresolved or `✅` when the latest PR state verifies it is complete, obsolete, or safely non-blocking under these merge-readiness rules.
+- On the first category 2 response when no earlier tally exists in the conversation, construct a comprehensive tally of all current merge blockers with every item initially marked `⬜️`. Do not seed already-resolved historical concerns as completed items.
+- On later invocations, locate and reconcile the most recent tally from this conversation against the latest PR head, diff, tests, checks, reviews, and discussion.
+- Retain completed and unresolved items so the history remains in context. Never silently remove an earlier item. If it becomes obsolete or proves non-blocking, mark it `✅` with a concise explanation.
+- Preserve item wording and ordering when practical.
+- Mark an item `✅` only after independently verifying the result in the PR; issuing an `@codex` task or seeing a claimed fix is insufficient.
+- Change a completed item back to `⬜️` if later changes regress it.
+- Add newly discovered blockers as `⬜️`. Consolidate duplicate findings by underlying root cause and exclude optional polish or low-value nits.
+- Identify every item selected for the current Codex task directly in the tally with the suffix `— targeted by the @codex comment above`. Selected items must remain `⬜️` until a later invocation verifies their implementation.
+- Treat a fully checked tally as supporting evidence, not a substitute for a fresh merge-readiness review of the current PR state.
+- If a material PR-description correction is already known while repository work remains, track it as one distinct `⬜️` item at the end of the tally. Keep it permanently last; insert newly discovered repository blockers before it. Do not include it in the `@codex` task. Defer generating the replacement PR description, not assessing or tracking the known description problem.
+- Emit category 3 only when every repository-work tally item has been verified complete and the PR-description correction is the sole remaining blocker. This should be the final remediation response before category 1 when the user applies the replacement and no new blocker appears.
+- If the PR description is the only blocker on the first invocation, return category 3 immediately without creating a tally.
+- If the PR is ready immediately, return category 1 immediately without creating a tally.
 
 Category 3: PR description-only correction needed
 - Use this category only when no repository changes remain and the description update is a real merge-readiness requirement rather than optional polish.
@@ -66,6 +88,7 @@ Update the PR description manually to the following:
 - Do not emit a partial patch, suggested fragments, placeholders, TODOs, or instructions inside the replacement description.
 - Keep all replacement-description Markdown inside the outer fence. Use an outer fence longer than any nested fence, and use `~~~` for any nested fences required within the generated description.
 - Do not include `@codex` or the Codex sentinel line in category 3.
+- Do not include a merge-readiness tally in category 3.
 
 Treat these as merge blockers that require category 2 when they need repository changes:
 - CI is failing, pending, stale, missing, or ambiguous in a way that matters.
@@ -81,14 +104,14 @@ Review thread handling:
 - Judge the underlying concern against the latest diff, tests, code comments, and discussion.
 - An unresolved GitHub thread is not a blocker merely because its UI state remains unresolved.
 - If the latest code adequately addresses the concern, treat it as addressed and do not mention or dwell on the unresolved thread.
-- If the underlying concern remains valid and requires repository changes, include that work in category 2.
+- If the underlying concern remains valid and requires repository changes, include that work in the category 2 tally and select it for the `@codex` comment only if it belongs in the current bounded batch.
 - Preserve strict handling of genuinely unaddressed reviewer concerns and recurring valid AI-review findings.
 
 Do not block merge for low-value nits. Only produce an `@codex` comment for issues that should be fixed or justified before merge.
 
 When recurring AI review comments are present:
 - Determine whether the repeated comment is still valid.
-- If it is valid, ask Codex to fix the underlying issue directly.
+- If it is valid, ask Codex to fix the underlying issue directly when selecting that concern for the current bounded batch.
 - If the current code is intentional and the AI reviewer is repeatedly asking to revert or change it, ask Codex to add a minimal inline or multiline code comment near the relevant logic explaining the invariant, tradeoff, or rationale, so future reviewers understand why the change should remain.
 - Prefer durable explanations in code only when the rationale is not already obvious from names, tests, or surrounding context.
 - Do not ask Codex to blindly placate a bot by weakening correct code.
@@ -96,8 +119,8 @@ When recurring AI review comments are present:
 The category 2 `@codex` comment must:
 - Be concise but complete enough for a fresh Codex task.
 - Start with a brief Scope Lock stating allowed files/areas, do-not-touch areas if known, and that the diff should stay minimal.
-- Include a "Reviewer comment resolution" section that maps each remaining substantive concern to the concrete repository change or durable in-code justification needed.
-- For each remaining concern, ask Codex to either implement the reviewer’s suggested change or add enough durable justification in the repository to address the concern and proceed without further changes.
+- Include a "Reviewer comment resolution" section that maps each selected substantive concern to the concrete repository change or durable in-code justification needed.
+- For each selected concern, ask Codex to either implement the reviewer’s suggested change or add enough durable justification in the repository to address the concern and proceed without further changes.
 - Name specific reviewers, files, symbols, comments, threads, checks, or quoted snippets when possible.
 - Include concrete implementation steps.
 - Include verification commands, choosing the narrowest relevant commands first.
