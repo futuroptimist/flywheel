@@ -41,11 +41,11 @@ Category 1: exact conditional-success response
 - If the PR is ready to merge and the PR description is merge-ready, select exactly one of these two responses.
 - Respond with exactly:
   yes, it can be merged
-  only when all relevant required checks on the latest head have completed successfully, mergeability is acceptable, required approvals are satisfied or no longer needed, every substantive reviewer comment is addressed or safely non-blocking, and the PR description does not require a material correction.
+  only when all relevant required checks on the latest head have completed successfully or every completed adverse check is verified as unrelated under the exception below, mergeability is acceptable, required approvals are satisfied or no longer needed, every substantive reviewer comment is addressed or safely non-blocking, and the PR description does not require a material correction.
 - Respond with exactly:
   yes, it can be merged assuming the pending CI checks succeed
   only when every non-CI readiness condition is satisfied and the only remaining uncertainty is one or more expected, relevant checks on the latest head that are legitimately queued or in progress.
-- Do not use the conditional response when any relevant check failed, was cancelled, timed out, requires action, or otherwise produced an adverse conclusion; when checks are stale, missing, attached only to an older commit, or ambiguous in a way that matters; when the branch is unmergeable or materially out of date; when approvals, substantive reviewer concerns, repository changes, or a material PR-description correction remain; or when there is evidence that pending CI requires repository work rather than merely time to complete.
+- Do not use the conditional response when any relevant check failed, was cancelled, timed out, requires action, or otherwise produced an adverse conclusion; when checks are stale, missing, attached only to an older commit, or ambiguous in a way that matters; when the branch is unmergeable or materially out of date; when approvals, substantive reviewer concerns, repository changes, or a material PR-description correction remain; when there is evidence that pending CI requires repository work rather than merely time to complete; or when a completed adverse check is verified as unrelated under the exception below and no relevant latest-head checks are pending.
 - Emit only the selected category 1 sentence, with no tally, caveats, summaries, bullets, or extra commentary.
 - Do not include a merge-readiness tally in category 1.
 
@@ -81,7 +81,7 @@ Category 2 merge-readiness tally lifecycle:
 - On later invocations, locate and reconcile the most recent tally from this conversation, including inside the single outer `text` fenced block of the most recent category 2 response, against the latest PR head, diff, tests, checks, reviews, and discussion.
 - Retain every prior tally entry so the history remains in context. Never silently remove an earlier item. If it becomes obsolete or proves non-blocking, mark it `✅` with a concise explanation.
 - Preserve item wording and ordering when practical.
-- Mark an item `✅` only after independently verifying the result in the PR; issuing an `@codex` task or seeing a claimed fix is insufficient.
+- Mark an item `✅` only after independently verifying the result in the PR; issuing an `@codex` task or seeing a claimed fix is insufficient. If a prior category 2 tally recorded a CI failure that later qualifies for the demonstrably unrelated CI exception below, retain the item and mark it `✅` with a concise explanation identifying the specific owning GitHub issue or separate pull request.
 - Change a completed item back to `⬜️` if later changes regress it.
 - Add newly discovered blockers as `⬜️`. Consolidate duplicate findings by underlying root cause and exclude optional polish or low-value nits; when an earlier tally item is a duplicate of a retained consolidated item, keep the earlier item in place and mark it `✅` with a concise duplicate-of explanation rather than deleting it.
 - Identify every item selected for the current Codex task directly in the tally with the suffix `— targeted by this Codex task`. Selected items must remain `⬜️` until a later invocation independently verifies their implementation.
@@ -117,13 +117,19 @@ Update the PR description manually to the following:
 - Do not include a merge-readiness tally in category 3.
 
 Treat these as merge blockers that require category 2 when they need repository changes:
-- CI is failing, cancelled, timed out, requires action, stale, missing, attached only to an older commit, ambiguous in a way that matters, or otherwise reveals or requires repository changes; ordinary expected latest-head checks that are merely queued or in progress do not create or continue category 2 by themselves when no repository work is needed.
+- CI is failing, cancelled, timed out, requires action, stale, missing, attached only to an older commit, ambiguous in a way that matters, or otherwise reveals or requires repository changes, except for completed adverse checks that qualify for the demonstrably unrelated CI exception below; ordinary expected latest-head checks that are merely queued or in progress do not create or continue category 2 by themselves when no repository work is needed.
 - There are active requested changes or substantive unaddressed reviewer concerns.
 - A reviewer asked a question and the code, tests, comments, or PR discussion do not yet answer it well enough.
 - A reviewer suggested a change and the PR neither implemented it nor explains convincingly why the current approach is better.
 - The diff has likely correctness, regression, security, data-loss, migration, compatibility, or maintainability risks.
 - The PR appears to include unrelated scope creep, broad churn, accidental formatting, generated artifacts, secrets, debug code, or temporary scaffolding.
 - The branch is not mergeable or appears out of date in a way that could invalidate tests or approvals.
+
+Demonstrably unrelated CI exception:
+- A completed adverse check may be treated as non-blocking only after independently comparing its failure output, affected files, affected code paths, and timing with the PR title, description, final diff, and current base branch, and verifying that the current PR could not reasonably have caused the failure and no change in this PR is needed to correct it.
+- Require a specific relevant GitHub issue or separate pull request that documents or addresses the same underlying root cause. An author assertion, unsupported flakiness claim, different filenames alone, or the mere existence of an unrelated issue or pull request is not sufficient.
+- Keep the check blocking when attribution is ambiguous, the changed code could affect the failure, the tracking issue or pull request does not cover the same root cause, the failure invalidates testing relevant to this PR, mergeability or branch protection still mechanically prevents merging, or the branch is materially out of date in a way that could invalidate checks.
+- When all other readiness conditions are satisfied and every completed adverse check is verified under this exception, category 1 may use the unconditional `yes, it can be merged` response. Do not use the pending-CI response for an already-completed unrelated failure.
 
 Review thread handling:
 - Continue inspecting every substantive human, bot, and AI reviewer comment.
@@ -156,7 +162,7 @@ The category 2 `@codex` comment must:
 - Use an outer three-backtick `text` fence for the category 2 response, leaving triple tildes (`~~~`) available for any nested code fences inside the comment because nested triple backticks can break formatting.
 - Append `new codex task, not a r/e/v/i/e/w task` as the final line of the generated `@codex` comment, after all other comment text.
 
-Before answering, be strict: category 1 requires either fully green latest-head CI or conditional readiness under the narrow pending-CI rule above, repository readiness, addressed or safely non-blocking substantive reviewer concerns, and a materially accurate PR description; category 2 takes precedence over category 3 when both repository work and description work are needed.
+Before answering, be strict: category 1 requires fully green latest-head CI, completed adverse checks verified under the demonstrably unrelated CI exception, or conditional readiness under the narrow pending-CI rule above; acceptable mergeability and branch protection; repository readiness; addressed or safely non-blocking substantive reviewer concerns; and a materially accurate PR description. Category 2 takes precedence over category 3 when both repository work and description work are needed.
 ```
 
 ## Upgrade Prompt
@@ -169,12 +175,14 @@ Goals:
 - Preserve exactly three mutually exclusive output categories with deterministic, unnumbered precedence labels:
   - Highest priority: repository changes needed to make the PR merge-ready return category 2, one outer three-backtick `text` fenced code block containing the complete generated `@codex` PR comment, including the self-contained merge-readiness tally
   - Next: PR description-only corrections return category 3, a concise manual instruction followed by one fenced `markdown` block containing the complete replacement PR description
-  - Otherwise: ready-to-merge PRs return category 1, the exact success output `yes, it can be merged`
+  - Otherwise: ready-to-merge PRs return category 1, the exact success output `yes, it can be merged`, including when all other readiness conditions are satisfied and every completed adverse check is verified under the demonstrably unrelated CI exception rather than still pending
 - Preserve the rule that category 2 takes precedence when both repository changes and PR-description corrections are needed, so description-only assessment is tracked as non-targeted maintainer context in the category 2 tally and replacement-description generation is deferred until repository work is complete.
 - Preserve the requirement that the LLM only says yes when every substantive reviewer comment is addressed or safely non-blocking and the PR description does not require a material correction.
+- Preserve the demonstrably unrelated CI exception: adverse completed checks are non-blocking only when the LLM independently compares the failure with the PR description, final diff, and base branch; verifies the PR could not reasonably have caused it and needs no corrective change; identifies a specific relevant GitHub issue or separate pull request owning the same root cause; and confirms mergeability or branch protection does not still prevent merging.
+- Preserve strict CI evidence requirements: do not waive failures based only on author assertions, generic flakiness claims, different filenames, or unrelated tracking records; keep failures blocking when attribution is ambiguous, changed code could affect them, the tracker does not cover the same root cause, or relevant testing is invalidated.
 - Preserve the requirement that unresolved GitHub thread UI state alone is not a blocker when the latest code, tests, comments, or discussion adequately address the underlying concern.
 - Preserve strict handling of genuinely unaddressed reviewer concerns and recurring valid AI-review findings.
-- Preserve the requirement that the category 2 comment includes a self-contained `Merge-readiness tally:` with current-target versus context-only labeling, full tally lifecycle/history retention, and no tally text outside the fence.
+- Preserve the requirement that the category 2 comment includes a self-contained `Merge-readiness tally:` with current-target versus context-only labeling, full tally lifecycle/history retention, completed entries for prior CI blockers later verified under the unrelated-failure exception with the owning issue or pull request named, and no tally text outside the fence.
 - Preserve the requirement that the `@codex` comment concretely maps only currently targeted substantive concerns to repository changes or durable in-code justification, not thread-resolution bookkeeping.
 - Preserve root-cause-oriented reviewer-resolution instructions: inspect current code, identify evidence and the underlying contract/risk/user-visible failure, require the outcome, suggest implementations only when evidence supports them, and verify the outcome directly.
 - Preserve bounded task scope: only one small coherent batch is targeted, context-only and completed tally entries are not work requests, and PR-description corrections are manual maintainer actions.
