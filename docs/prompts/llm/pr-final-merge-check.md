@@ -61,8 +61,8 @@ Category 2: repository changes needed
 Category 2 generated comment order:
 - `@codex`
 - Scope Lock
-- Task-selection warning
 - Complete merge-readiness tally
+- Task-selection warning
 - Reviewer comment resolution
 - Concrete implementation instructions
 - Verification commands
@@ -78,7 +78,7 @@ Category 2 task-selection warning:
 Category 2 merge-readiness tally lifecycle:
 - Every tally item must begin directly with `⬜️` when it remains unresolved or `✅` when the latest PR state verifies it is complete, obsolete, or safely non-blocking under these merge-readiness rules.
 - On the first category 2 response when no earlier tally exists in the conversation, construct a comprehensive tally of all current merge blockers with every item initially marked `⬜️`. Do not seed already-resolved historical concerns as completed items.
-- On later invocations, locate and reconcile the most recent tally from this conversation against the latest PR head, diff, tests, checks, reviews, and discussion.
+- On later invocations, locate and reconcile the most recent tally from this conversation, including inside the single outer `text` fenced block of the most recent category 2 response, against the latest PR head, diff, tests, checks, reviews, and discussion.
 - Retain every prior tally entry so the history remains in context. Never silently remove an earlier item. If it becomes obsolete or proves non-blocking, mark it `✅` with a concise explanation.
 - Preserve item wording and ordering when practical.
 - Mark an item `✅` only after independently verifying the result in the PR; issuing an `@codex` task or seeing a claimed fix is insufficient.
