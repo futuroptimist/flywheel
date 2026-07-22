@@ -8,12 +8,13 @@ on:
   pull_request_review:
     types: [submitted]
   issues:
-    types: [opened, assigned, labeled]
+    types: [opened]
 
 permissions:
   contents: read
   id-token: write
   actions: read
+  pull-requests: read
 
 jobs:
   claude:
@@ -36,7 +37,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
         run: |
-          python - <<'PY'
+          python3 - <<'PY'
           import json
           import os
           import sys
@@ -65,9 +66,11 @@ jobs:
                   print(f"Failed closed: could not inspect pull request fork status: {error}", file=sys.stderr)
                   sys.exit(1)
 
-          if pr and pr.get("head", {}).get("repo", {}).get("fork"):
-              print("Refusing to run Claude on fork pull request input.", file=sys.stderr)
-              sys.exit(1)
+          if pr is not None:
+              head_repo = pr.get("head", {}).get("repo")
+              if head_repo is None or head_repo.get("fork"):
+                  print("Refusing to run Claude on fork pull request input.", file=sys.stderr)
+                  sys.exit(1)
           PY
 
       - name: Checkout repository
@@ -84,9 +87,15 @@ jobs:
             actions: read
           include_comments_by_actor: "futuroptimist"
           use_commit_signing: true
+          # The default Claude GitHub App path exchanges the OIDC token for an
+          # app installation token with write permissions, so the workflow keeps
+          # GITHUB_TOKEN contents read-only and does not pass github_token here.
           # allowedTools is additive and not a sandbox. The action's implicit
           # native GitHub/session tools remain available; do not invent or
           # list native commit/push tool names here.
+          # The pinned action parses claude_args with shell-quote before passing
+          # them to the Claude CLI, so the quoted append-system-prompt remains a
+          # single argument even though YAML folds this block into one line.
           claude_args: >-
             --setting-sources user
             --strict-mcp-config
@@ -108,7 +117,7 @@ jobs:
                     ]
                   },
                   {
-                    "matcher": "Read|Edit|Write|Glob|Grep",
+                    "matcher": "Read|Edit|Write|Glob|Grep|LS",
                     "hooks": [
                       {
                         "type": "command",
