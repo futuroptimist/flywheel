@@ -1,0 +1,101 @@
+name: Claude Assistant
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+  issues:
+    types: [opened, assigned, labeled]
+
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+
+jobs:
+  claude:
+    if: >-
+      github.actor == 'futuroptimist' &&
+      !contains(github.event.comment.body || github.event.review.body || github.event.issue.body || '', '@claude-exec') &&
+      (
+        contains(github.event.comment.body || github.event.review.body || github.event.issue.body || '', '@claude') ||
+        github.event.action == 'assigned' ||
+        github.event.action == 'labeled'
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Reject fork pull requests
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const {owner, repo} = context.repo;
+            let pull = context.payload.pull_request;
+
+            if (!pull && context.payload.issue?.pull_request) {
+              const response = await github.rest.pulls.get({
+                owner,
+                repo,
+                pull_number: context.payload.issue.number,
+              });
+              pull = response.data;
+            }
+
+            if (pull && pull.head.repo.full_name !== `${owner}/${repo}`) {
+              core.setFailed(`Claude ordinary workflow is disabled for fork PRs: ${pull.head.repo.full_name}`);
+            }
+
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Run Claude
+        uses: anthropics/claude-code-action@fa7e2f0a29a126f0b81cdcf360561b36e44cf608 # v1 reviewed 2026-07-22
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          include_comments_by_actor: "futuroptimist"
+          use_commit_signing: true
+          additional_permissions: |
+            actions: read
+          settings: |
+            {
+              "hooks": {
+                "PreToolUse": [
+                  {
+                    "matcher": "Bash",
+                    "hooks": [
+                      {
+                        "type": "command",
+                        "command": "python3 -c 'import sys; print(\"Bash is disabled in this ordinary Claude workflow. Use only repository read/search/edit tools and the action native signed commit/push mechanism.\", file=sys.stderr); sys.exit(2)'",
+                        "timeout": 5
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": "Read|Edit|Write|Glob|Grep",
+                    "hooks": [
+                      {
+                        "type": "command",
+                        "command": "python3 -c 'import json, os, pathlib, sys; data=json.load(sys.stdin); ti=data.get(\"tool_input\") or {}; keys=(\"file_path\",\"path\",\"notebook_path\"); values=[ti[k] for k in keys if isinstance(ti.get(k), str) and ti.get(k)]; workspace=pathlib.Path(os.environ.get(\"GITHUB_WORKSPACE\", os.getcwd())).resolve(); bad=[];\nfor raw in values:\n    p=pathlib.Path(raw); target=(p if p.is_absolute() else workspace / p).resolve(strict=False);\n    ok=os.path.commonpath([str(workspace), str(target)]) == str(workspace);\n    bad.append(raw) if not ok else None;\nif bad:\n    print(\"Blocked path outside workspace: \" + \", \".join(bad), file=sys.stderr); sys.exit(2)'",
+                        "timeout": 5
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          # allowedTools is additive and is not a sandbox; the PreToolUse hooks above enforce ordinary-path no-Bash and workspace path policy.
+          # Do not list invented GitHub commit tool names here: preserve any native signed commit/push tools implicitly provided by the pinned action.
+          claude_args: |
+            --setting-sources user
+            --strict-mcp-config
+            --max-turns 120
+            --allowedTools Read,Edit,Write,Glob,Grep
+            --disallowedTools Bash,WebFetch,WebSearch
+            --append-system-prompt "For requests that ask for repository changes, a remote commit is a required deliverable unless a concrete correctness or security blocker prevents it. Make and push the first coherent, reviewable checkpoint commit early, before lengthy investigation or the final third of the session. Use the action's native signed commit/push mechanism; direct Bash git commands are prohibited. Because the ordinary path intentionally cannot execute repository code, do not withhold a coherent requested change merely because shell-based tests cannot run. Commit it, clearly report which checks were not run, and rely on CI before merge. Perform available non-shell inspection and consistency checks before committing. Reserve the final ten turns for reviewing the diff, checking status, committing/pushing, and reporting results. Before ending, inspect the working tree and either commit/push the requested safe changes or state the exact blocker. Do not create commits for analysis-only requests, empty work, secrets, temporary debugging, generated junk, or code known to be broken. A checkpoint commit is not evidence that CI is green or that the PR is merge-ready."
