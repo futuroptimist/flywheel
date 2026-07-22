@@ -22,20 +22,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     if: >-
+      github.repository_owner == 'futuroptimist' &&
       github.actor == 'futuroptimist' &&
       (
         (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude') && !contains(github.event.comment.body, '@claude-exec')) ||
         (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude') && !contains(github.event.comment.body, '@claude-exec')) ||
         (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude') && !contains(github.event.review.body, '@claude-exec')) ||
-        (github.event_name == 'issues' && contains(github.event.issue.body, '@claude') && !contains(github.event.issue.body, '@claude-exec'))
+        (github.event_name == 'issues' && (contains(github.event.issue.title, '@claude') || contains(github.event.issue.body, '@claude')) && !contains(github.event.issue.title, '@claude-exec') && !contains(github.event.issue.body, '@claude-exec'))
       )
     steps:
       - name: Fail closed for fork pull requests
         env:
           EVENT_NAME: ${{ github.event_name }}
           EVENT_PATH: ${{ github.event_path }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_TOKEN: ${{ github.token }}
-          REPOSITORY: ${{ github.repository }}
         run: |
           python3 - <<'PY'
           import json
@@ -44,13 +45,20 @@ jobs:
           import urllib.error
           import urllib.request
 
-          with open(os.environ["EVENT_PATH"], encoding="utf-8") as event_file:
-              event = json.load(event_file)
+          try:
+              with open(os.environ["EVENT_PATH"], encoding="utf-8") as event_file:
+                  event = json.load(event_file)
+          except Exception as error:
+              print(f"Failed closed: could not parse event payload: {error}", file=sys.stderr)
+              sys.exit(1)
 
           pr = event.get("pull_request")
           if pr is None and event.get("issue", {}).get("pull_request"):
-              issue_number = event["issue"]["number"]
-              url = f"https://api.github.com/repos/{os.environ['REPOSITORY']}/pulls/{issue_number}"
+              issue_number = event["issue"].get("number")
+              if not issue_number:
+                  print("Failed closed: missing pull request issue number.", file=sys.stderr)
+                  sys.exit(1)
+              url = f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/pulls/{issue_number}"
               request = urllib.request.Request(
                   url,
                   headers={
@@ -62,19 +70,104 @@ jobs:
               try:
                   with urllib.request.urlopen(request, timeout=20) as response:
                       pr = json.load(response)
-              except urllib.error.HTTPError as error:
+              except (OSError, urllib.error.URLError, urllib.error.HTTPError, TimeoutError, json.JSONDecodeError) as error:
                   print(f"Failed closed: could not inspect pull request fork status: {error}", file=sys.stderr)
                   sys.exit(1)
 
           if pr is not None:
               head_repo = pr.get("head", {}).get("repo")
-              if head_repo is None or head_repo.get("fork"):
-                  print("Refusing to run Claude on fork pull request input.", file=sys.stderr)
+              head_full_name = head_repo.get("full_name") if isinstance(head_repo, dict) else None
+              if head_full_name != os.environ["GITHUB_REPOSITORY"]:
+                  print("Refusing to run Claude on fork or malformed pull request input.", file=sys.stderr)
                   sys.exit(1)
           PY
 
+      - name: Install Claude workspace hook validator
+        run: |
+          cat >"$RUNNER_TEMP/claude_workspace_guard.py" <<'PY'
+          import json
+          import os
+          import pathlib
+          import sys
+
+          GLOB_CHARS = "*?["
+
+          def deny(message):
+              print(message, file=sys.stderr)
+              sys.exit(2)
+
+          try:
+              data = json.load(sys.stdin)
+          except Exception as error:
+              deny(f"Malformed hook JSON: {error}")
+
+          workspace_env = os.environ.get("GITHUB_WORKSPACE")
+          if not workspace_env:
+              deny("Missing GITHUB_WORKSPACE.")
+          workspace = pathlib.Path(workspace_env).resolve(strict=False)
+
+          tool_name = data.get("tool_name") or data.get("tool") or data.get("name")
+          tool_input = data.get("tool_input")
+          if not isinstance(tool_input, dict):
+              deny("Malformed tool input.")
+
+          def require_string(key):
+              value = tool_input.get(key)
+              if not isinstance(value, str) or not value:
+                  deny(f"Missing required {key}.")
+              return value
+
+          def optional_string(key):
+              value = tool_input.get(key)
+              if value is None or value == "":
+                  return None
+              if not isinstance(value, str):
+                  deny(f"Malformed {key}.")
+              return value
+
+          def validate_path(raw_path):
+              candidate = pathlib.Path(raw_path)
+              if not candidate.is_absolute():
+                  candidate = workspace / candidate
+              try:
+                  resolved = candidate.resolve(strict=False)
+                  resolved.relative_to(workspace)
+              except Exception:
+                  deny(f"Path escapes GITHUB_WORKSPACE: {raw_path}")
+
+          def concrete_prefix(glob_pattern):
+              if pathlib.PurePosixPath(glob_pattern).is_absolute() or pathlib.PureWindowsPath(glob_pattern).is_absolute():
+                  deny(f"Absolute glob pattern denied: {glob_pattern}")
+              parts = pathlib.PurePosixPath(glob_pattern.replace("\\", "/")).parts
+              if ".." in parts:
+                  deny(f"Parent traversal in glob pattern denied: {glob_pattern}")
+              first_glob = min((glob_pattern.find(char) for char in GLOB_CHARS if char in glob_pattern), default=len(glob_pattern))
+              prefix = glob_pattern[:first_glob]
+              slash = max(prefix.rfind("/"), prefix.rfind("\\"))
+              return "." if slash < 0 else (prefix[:slash] or ".")
+
+          if tool_name in {"Read", "Edit", "Write"}:
+              validate_path(require_string("file_path"))
+          elif tool_name == "LS":
+              validate_path(require_string("path"))
+          elif tool_name == "Glob":
+              validate_path(concrete_prefix(require_string("pattern")))
+              path = optional_string("path")
+              if path is not None:
+                  validate_path(path)
+          elif tool_name == "Grep":
+              path = optional_string("path")
+              if path is not None:
+                  validate_path(path)
+              glob = optional_string("glob")
+              if glob is not None:
+                  validate_path(concrete_prefix(glob))
+          else:
+              deny(f"Unexpected guarded tool: {tool_name}")
+          PY
+
       - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -121,7 +214,7 @@ jobs:
                     "hooks": [
                       {
                         "type": "command",
-                        "command": "python3 -c 'import json, os, pathlib, sys; data=json.load(sys.stdin); workspace=pathlib.Path(os.environ.get(\"GITHUB_WORKSPACE\", os.getcwd())).resolve(); tool_input=data.get(\"tool_input\") or {}; paths=[]\n\ndef walk(value, key=\"\"):\n    if isinstance(value, dict):\n        for child_key, child_value in value.items():\n            walk(child_value, child_key)\n    elif isinstance(value, list):\n        for child_value in value:\n            walk(child_value, key)\n    elif isinstance(value, str) and key in {\"file_path\", \"path\", \"dir\", \"directory\", \"root\", \"cwd\"}:\n        paths.append(value)\n\nwalk(tool_input)\nfor raw_path in paths:\n    candidate = pathlib.Path(raw_path)\n    if not candidate.is_absolute():\n        candidate = workspace / candidate\n    try:\n        resolved = candidate.resolve(strict=False)\n        resolved.relative_to(workspace)\n    except Exception:\n        print(f\"Path escapes GITHUB_WORKSPACE: {raw_path}\", file=sys.stderr)\n        sys.exit(2)\nsys.exit(0)'"
+                        "command": "python3 \"$RUNNER_TEMP/claude_workspace_guard.py\""
                       }
                     ]
                   }
