@@ -516,15 +516,18 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [sugarkube](https://github.com/futuroptimist/sugarkube) –  \
   k3s platform for off-grid Raspberry Pi clusters.  \
   See `docs/sugarkube-integration.md`.
-- ✅ [jobbot3000](https://github.com/futuroptimist/jobbot3000) –  \\
-  self-hosted job search copilot.
-- ✅ [Prompt Docs Summary][pds] –  \\
+- ✅ [jobbot3000](https://github.com/futuroptimist/jobbot3000) –  \
+  self-hosted, open-source job search copilot.
+- ✅ [pr-reaper](https://github.com/futuroptimist/pr-reaper) –  \
+  GitHub workflow for safely closing stale pull requests in bulk with dry-run support.
+- ✅ [danielsmith.io](https://github.com/futuroptimist/danielsmith.io) –  \
+  Vite + Three.js playground for an orthographic, keyboard-navigable portfolio scene.
+- ✅ [aquiloop](https://github.com/futuroptimist/aquiloop) –  \
+  parametric aquarium tools in OpenSCAD for makers and 3D printing.
+- ✅ [Prompt Docs Summary][pds] –  \
   index of one-click prompts across repos.
 
 [pds]: https://github.com/futuroptimist/flywheel/blob/main/docs/prompt-docs-summary.md
-
-- ✅ [jobbot3000](https://github.com/futuroptimist/jobbot3000) –  \
-  self-hosted, open-source job search copilot.
 
 A summary of flywheel features adopted across repos lives in [docs/repo-feature-summary.md](docs/repo-feature-summary.md).
 
