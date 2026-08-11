@@ -11,7 +11,7 @@ All prompts are verified with OpenAI Codex. Other coding agents like Claude Code
 
 Prompt docs stored under `docs/prompts/codex/` or `docs/prompts/` are treated as canonical so repositories migrating between layouts keep this summary clean.
 
-**308 one-click prompts verified across 13 repos (240 evergreen, 22 one-off, 32 unknown).**
+**318 one-click prompts verified across 14 repos (240 evergreen, 22 one-off, 32 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
@@ -410,6 +410,23 @@ _❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` o
 | [docs/prompts/codex/polish.md](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/codex/polish.md)               | [Upgrade Prompt](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/codex/polish.md#upgrade-prompt)                                              | evergreen | yes        |
 | [docs/prompts/summary.md](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/summary.md)                         | [Prompt Index](https://github.com/futuroptimist/danielsmith.io/blob/main/docs/prompts/summary.md#prompt-index)                                                       | evergreen | yes        |
 
+## [futuroptimist/aquiloop](https://github.com/futuroptimist/aquiloop)
+
+| Path                                                                                                                         | Prompt                                                                                                                                          | Type          | One-click? |
+| ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ---------- |
+| **[docs/prompts-codex-cad.md](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-cad.md)**               | **[Codex CAD Prompt](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-cad.md#codex-cad-prompt)**                          | **evergreen** | **yes**    |
+| **[docs/prompts-codex-chore.md](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-chore.md)**           | **[Codex Chore Prompt](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-chore.md#codex-chore-prompt)**                    | **evergreen** | **yes**    |
+| **[docs/prompts-codex-ci-fix.md](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-ci-fix.md)**         | **[Codex CI-Failure Fix Prompt](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-ci-fix.md#codex-ci-failure-fix-prompt)** | **evergreen** | **yes**    |
+| **[docs/prompts-codex-docs.md](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-docs.md)**             | **[Codex Docs Update Prompt](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-docs.md#codex-docs-update-prompt)**         | **evergreen** | **yes**    |
+| **[docs/prompts-codex-feature.md](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-feature.md)**       | **[Codex Feature Prompt](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-feature.md#codex-feature-prompt)**              | **evergreen** | **yes**    |
+| **[docs/prompts-codex-fix.md](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-fix.md)**               | **[Codex Bugfix Prompt](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-fix.md#codex-bugfix-prompt)**                    | **evergreen** | **yes**    |
+| **[docs/prompts-codex-refactor.md](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-refactor.md)**     | **[Codex Refactor Prompt](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-refactor.md#codex-refactor-prompt)**           | **evergreen** | **yes**    |
+| **[docs/prompts-codex-spellcheck.md](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-spellcheck.md)** | **[Codex Spellcheck Prompt](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-spellcheck.md#codex-spellcheck-prompt)**     | **evergreen** | **yes**    |
+| **[docs/prompts-codex-tests.md](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-tests.md)**           | **[Codex Test Prompt](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex-tests.md#codex-test-prompt)**                      | **evergreen** | **yes**    |
+| **[docs/prompts-codex.md](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex.md)**                       | **[Codex Automation Prompt](https://github.com/futuroptimist/aquiloop/blob/main/docs/prompts-codex.md#codex-automation-prompt)**                | **evergreen** | **yes**    |
+
+_❌ Note: Prompt docs also found outside canonical locations (`docs/prompts/` or `docs/prompts/codex/`): `docs/`._
+
 ## TODO Prompts for Other Repos
 
 # Prompt Docs TODOs
@@ -493,4 +510,4 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/wove          | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md)                                                                         | unknown   |       |
 | futuroptimist/wove          | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md)                                                                       | unknown   |       |
 
-_Updated automatically: 2026-08-10_
+_Updated automatically: 2026-08-11_
