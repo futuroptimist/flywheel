@@ -45,10 +45,28 @@ jobs:
         run: cat docs/repo-feature-summary.md >> "$GITHUB_STEP_SUMMARY"
       - name: Commit summary
         if: github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/repo-feature-summary.md
-          git commit -m "📝 : update repo feature summary" || exit 0
-          git pull --rebase origin main
-          git push
+          for attempt in 1 2 3 4 5; do
+            git add docs/repo-feature-summary.md
+            if git diff --cached --quiet; then
+              echo "No changes to commit"
+              exit 0
+            fi
+            git commit -m "📝 : update repo feature summary"
+            if git pull --rebase origin main && git push; then
+              echo "Pushed on attempt $attempt"
+              exit 0
+            fi
+            echo "::warning::Push attempt $attempt failed, likely a concurrent update to the same generated file (e.g. a scheduled run landing at the same time as this push-triggered one); regenerating against the latest main and retrying"
+            git rebase --abort 2>/dev/null || true
+            git fetch origin main
+            git reset --hard origin/main
+            python -m flywheel crawl --repos-file docs/repo_list.txt --output docs/repo-feature-summary.md
+            pre-commit run --files docs/repo-feature-summary.md || true
+          done
+          echo "::error::Failed to push repo feature summary after 5 attempts"
+          exit 1
