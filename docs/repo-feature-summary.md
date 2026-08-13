@@ -8,27 +8,27 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `367aaab` | ✅ | 3 | 11 | 2026-08-12 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `8656377` | ❌ | 0 | 0 | 2026-08-12 |
-| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | n/a | n/a | 4 | 68 | n/a |
-| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `4eedf2f` | ✅ | 7 | 68 | 2026-08-12 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `fd20c0a` | ✅ | 3 | 11 | 2026-08-13 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `69e84ab` | n/a | 0 | 0 | 2026-08-13 |
+| [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | n/a | n/a | 4 | 36 | n/a |
+| [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `835b436` | ✅ | 7 | 27 | 2026-08-12 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `45540a1` | ✅ | 1 | 6 | 2026-08-09 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `ac4de0b` | ✅ | 2 | 0 | 2026-08-09 |
-| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `f87ab89` | ✅ | 1 | 7 | 2026-08-11 |
+| [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `f87ab89` | ✅ | 1 | 4 | 2026-08-11 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `a95a9b2` | ✅ | 2 | 0 | 2026-08-09 |
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `086f0a7` | ✅ | 1 | 0 | 2026-08-09 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `5b241ea` | ✅ | 1 | 1 | 2026-08-09 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `4f2f1b8` | ✅ | 0 | 102 | 2026-08-12 |
-| [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `9415d0c` | ✅ | 1 | 3 | 2026-08-09 |
-| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `647049d` | ✅ | 1 | 15 | 2026-08-12 |
-| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `eda8619` | ✅ | 1 | 6 | 2026-08-10 |
-| [futuroptimist/aquiloop](https://github.com/futuroptimist/aquiloop) | main | `42f02f0` | ✅ | 0 | 9 | 2026-08-12 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `b38376c` | ✅ | 0 | 10 | 2026-08-12 |
+| [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `9415d0c` | ✅ | 1 | 0 | 2026-08-09 |
+| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `491dd4e` | ✅ | 1 | 12 | 2026-08-12 |
+| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `eda8619` | ✅ | 1 | 0 | 2026-08-10 |
+| [futuroptimist/aquiloop](https://github.com/futuroptimist/aquiloop) | main | `42f02f0` | ✅ | 0 | 0 | 2026-08-12 |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |
 | ---- | -------- | ----- | ------- | --------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ❌ | — | ✅ | 🔶 partial | 2026-08-12 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ❌ | — | ✅ | 🔶 partial | 2026-08-12 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ❌ | — | ✅ | 🔶 partial | 2026-08-13 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ❌ | — | ✅ | 🔶 partial | 2026-08-13 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ❌ | — | ✅ | ⚪ none | n/a |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ❌ | — | ✅ | pip | 2026-08-12 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ❌ | — | ✅ | 🔶 partial | 2026-08-09 |
@@ -46,8 +46,8 @@ This table tracks which flywheel features each related repository has adopted.
 ## Policies & Automation
 | Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Last-Updated (UTC) |
 | ---- | ------- | -- | --------- | --------- | --------------- | ------------ | ---------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ | ✅ | 19 | ✅ | ✅ | ✅ | ✅ | 2026-08-12 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2026-08-12 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ | ✅ | 19 | ✅ | ✅ | ✅ | ✅ | 2026-08-13 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ | ✅ | 6 | ✅ | ✅ | ✅ | ✅ | 2026-08-13 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✅ | ❌ | 0 | ✅ | ✅ | ✅ | ✅ | n/a |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ | ✅ | 9 | ✅ | ✅ | ✅ | ✅ | 2026-08-12 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ | ✅ | 10 | ✅ | ✅ | ✅ | ✅ | 2026-08-09 |
@@ -65,8 +65,8 @@ This table tracks which flywheel features each related repository has adopted.
 ## Dark & Bright Pattern Scan
 | Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |
 | ---- | ------------- | --------------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | 0 | 0 | 2026-08-12 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | 0 | 1 | 2026-08-12 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | 0 | 0 | 2026-08-13 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | 0 | 1 | 2026-08-13 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | 0 | 0 | n/a |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | 0 | 1 | 2026-08-12 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | 0 | 5 | 2026-08-09 |
