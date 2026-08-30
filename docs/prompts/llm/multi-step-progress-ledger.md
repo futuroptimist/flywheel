@@ -12,7 +12,7 @@ investigation, migration, or deployment request. It uses that preceding request
 and the visible conversation as its task, so no editing or duplicated request
 text is needed.
 
-## Copy-ready prompt
+## Copy-ready workflow
 
 ````text
 Manage the request immediately preceding this message, together with all visible
@@ -90,18 +90,21 @@ concrete next action, not alternatives.
 
 Response contract:
 - During active work, output exactly one fenced code block and no surrounding
-  prose. Begin the block with the regenerated full ledger, then put the single
-  next action immediately after it.
+  prose. Except for an existing-PR comment, begin the block with the regenerated
+  full ledger, then put the single next action immediately after it.
 - Use a `bash` fence for shell work and render every ledger and evidence-note
   line as a shell comment before the commands. Use a `text` fence for a fresh
-  Codex prompt or `@codex` comment, with the ledger before the action.
+  Codex prompt, with the ledger before the action. For an existing-PR comment,
+  use a `text` fence that begins with `@codex`, places the ledger and action
+  instructions after that mention, and ends with the required task phrase.
 - If blocked on a required decision, use one `text` fence containing the ledger
   followed by the one concise question and its distinct options.
 - Continue until every applicable step is `completed` or explicitly
   `superseded`. At final completion, use one `text` fence containing the full
-  ledger with every applicable step at 100% (while superseded entries retain
-  their status and replacement note), a compact evidence summary, and
-  `WORKFLOW_COMPLETE=true`. Emit no additional task prompt.
+  ledger with every completed step at 100%. Superseded entries must retain
+  their status, replacement note, and last evidence-backed percentage. Include
+  a compact evidence summary and `WORKFLOW_COMPLETE=true`. Emit no additional
+  task prompt.
 
 Generic active-work example (illustrative only):
 ```text
