@@ -30,9 +30,14 @@ def test_fetch_repo_status_success(monkeypatch):
             pass
 
         def json(self):
+            if self._conclusion is None:
+                return {"default_branch": "main"}
             return {"workflow_runs": [{"conclusion": self._conclusion}]}
 
     def fake_get(url, headers, timeout):
+        if url == "https://api.github.com/repos/owner/repo":
+            return Resp(None)
+        assert "&branch=main" in url
         return Resp("success")
 
     monkeypatch.setattr(rs.requests, "get", fake_get)
@@ -50,14 +55,49 @@ def test_fetch_repo_status_inconsistent(monkeypatch):
             pass
 
         def json(self):
+            if self._conclusion is None:
+                return {"default_branch": "main"}
             return {"workflow_runs": [{"conclusion": self._conclusion}]}
 
     def fake_get(url, headers, timeout):
+        if url == "https://api.github.com/repos/owner/repo":
+            return Resp(None)
         return Resp(next(conclusions))
 
     monkeypatch.setattr(rs.requests, "get", fake_get)
     with pytest.raises(RuntimeError):
         rs.fetch_repo_status("owner/repo", attempts=2)
+
+
+def test_fetch_repo_status_uses_default_branch(monkeypatch):
+    requested_urls = []
+
+    class Resp:
+        def __init__(self, data):
+            self._data = data
+
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return self._data
+
+    def fake_get(url, headers, timeout):
+        requested_urls.append(url)
+        if url == "https://api.github.com/repos/owner/repo":
+            return Resp({"default_branch": "stable"})
+        # A failed pull-request run may be newer than this run, but must not
+        # affect a repository's default-branch health marker.
+        return Resp({"workflow_runs": [{"conclusion": "success"}]})
+
+    monkeypatch.setattr(rs.requests, "get", fake_get)
+
+    assert rs.fetch_repo_status("owner/repo", attempts=1) == "✅"
+    assert requested_urls == [
+        "https://api.github.com/repos/owner/repo",
+        "https://api.github.com/repos/owner/repo/actions/runs"
+        "?per_page=1&status=completed&branch=stable",
+    ]
 
 
 def test_fetch_repo_status_attempts_zero():

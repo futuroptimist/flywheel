@@ -34,7 +34,7 @@ def fetch_repo_status(
     branch: str | None = None,
     attempts: int = 2,
 ) -> str:
-    """Return an emoji for the latest workflow run conclusion for ``repo``."""
+    """Return an emoji for the latest default-branch workflow run."""
 
     if attempts < 1:
         raise ValueError("attempts must be >= 1")
@@ -42,6 +42,13 @@ def fetch_repo_status(
     headers = {"Accept": "application/vnd.github+json"}
     if token:
         headers["Authorization"] = f"Bearer {token}"
+
+    if branch is None:
+        repo_resp = requests.get(
+            f"https://api.github.com/repos/{repo}", headers=headers, timeout=10
+        )
+        repo_resp.raise_for_status()
+        branch = repo_resp.json().get("default_branch")
 
     url = (
         "https://api.github.com/repos/{repo}/actions/runs"
