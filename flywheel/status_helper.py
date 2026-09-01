@@ -34,7 +34,7 @@ def fetch_repo_status(
     branch: str | None = None,
     attempts: int = 2,
 ) -> str:
-    """Return an emoji for the latest workflow run conclusion for ``repo``."""
+    """Return an emoji for the latest run on a given or default branch."""
 
     if attempts < 1:
         raise ValueError("attempts must be >= 1")
@@ -43,15 +43,21 @@ def fetch_repo_status(
     if token:
         headers["Authorization"] = f"Bearer {token}"
 
-    url = (
-        "https://api.github.com/repos/{repo}/actions/runs"
-        "?per_page=1&status=completed".format(repo=repo)
-    )
-    if branch:
-        url += f"&branch={branch}"
+    if branch is None:
+        repo_resp = requests.get(
+            f"https://api.github.com/repos/{repo}", headers=headers, timeout=10
+        )
+        repo_resp.raise_for_status()
+        branch = repo_resp.json().get("default_branch")
+        if not isinstance(branch, str) or not branch:
+            message = f"Could not resolve the default branch for {repo}"
+            raise RuntimeError(message)
+
+    url = f"https://api.github.com/repos/{repo}/actions/runs"
+    params = {"per_page": 1, "status": "completed", "branch": branch}
 
     def _fetch() -> str | None:
-        resp = requests.get(url, headers=headers, timeout=10)
+        resp = requests.get(url, headers=headers, params=params, timeout=10)
         resp.raise_for_status()
         runs = resp.json().get("workflow_runs", [])
         return runs[0].get("conclusion") if runs else None

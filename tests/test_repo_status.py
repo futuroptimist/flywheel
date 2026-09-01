@@ -30,9 +30,18 @@ def test_fetch_repo_status_success(monkeypatch):
             pass
 
         def json(self):
+            if self._conclusion is None:
+                return {"default_branch": "main"}
             return {"workflow_runs": [{"conclusion": self._conclusion}]}
 
-    def fake_get(url, headers, timeout):
+    def fake_get(url, headers, timeout, params=None):
+        if url == "https://api.github.com/repos/owner/repo":
+            return Resp(None)
+        assert params == {
+            "per_page": 1,
+            "status": "completed",
+            "branch": "main",
+        }
         return Resp("success")
 
     monkeypatch.setattr(rs.requests, "get", fake_get)
@@ -50,14 +59,71 @@ def test_fetch_repo_status_inconsistent(monkeypatch):
             pass
 
         def json(self):
+            if self._conclusion is None:
+                return {"default_branch": "main"}
             return {"workflow_runs": [{"conclusion": self._conclusion}]}
 
-    def fake_get(url, headers, timeout):
+    def fake_get(url, headers, timeout, params=None):
+        if url == "https://api.github.com/repos/owner/repo":
+            return Resp(None)
         return Resp(next(conclusions))
 
     monkeypatch.setattr(rs.requests, "get", fake_get)
     with pytest.raises(RuntimeError):
         rs.fetch_repo_status("owner/repo", attempts=2)
+
+
+def test_fetch_repo_status_uses_default_branch(monkeypatch):
+    requests_made = []
+
+    class Resp:
+        def __init__(self, data):
+            self._data = data
+
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return self._data
+
+    def fake_get(url, headers, timeout, params=None):
+        requests_made.append((url, params))
+        if url == "https://api.github.com/repos/owner/repo":
+            return Resp({"default_branch": "stable"})
+        # A failed pull-request run may be newer than this run, but must not
+        # affect a repository's default-branch health marker.
+        return Resp({"workflow_runs": [{"conclusion": "success"}]})
+
+    monkeypatch.setattr(rs.requests, "get", fake_get)
+
+    assert rs.fetch_repo_status("owner/repo", attempts=1) == "✅"
+    assert requests_made == [
+        ("https://api.github.com/repos/owner/repo", None),
+        (
+            "https://api.github.com/repos/owner/repo/actions/runs",
+            {
+                "per_page": 1,
+                "status": "completed",
+                "branch": "stable",
+            },
+        ),
+    ]
+
+
+@pytest.mark.parametrize("default_branch", [None, ""])
+def test_fetch_requires_default_branch(monkeypatch, default_branch):
+    class Resp:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"default_branch": default_branch}
+
+    monkeypatch.setattr(rs.requests, "get", lambda *args, **kwargs: Resp())
+
+    message = "Could not resolve the default branch"
+    with pytest.raises(RuntimeError, match=message):
+        rs.fetch_repo_status("owner/repo")
 
 
 def test_fetch_repo_status_attempts_zero():
@@ -75,18 +141,25 @@ def test_fetch_repo_status_with_token_and_branch(monkeypatch):
         def json(self):
             return {"workflow_runs": []}
 
-    def fake_get(url, headers, timeout):
+    def fake_get(url, headers, timeout, params=None):
         captured["url"] = url
         captured["headers"] = headers
+        captured["params"] = params
         return Resp()
 
     monkeypatch.setattr(rs.requests, "get", fake_get)
 
-    emoji = rs.fetch_repo_status("owner/repo", token="abc123", branch="main")
+    emoji = rs.fetch_repo_status(
+        "owner/repo", token="abc123", branch="release#1&hot+fix"
+    )
 
     assert emoji == "❓"
     assert captured["headers"]["Authorization"] == "Bearer abc123"
-    assert "&branch=main" in captured["url"]
+    assert captured["params"] == {
+        "per_page": 1,
+        "status": "completed",
+        "branch": "release#1&hot+fix",
+    }
 
 
 def test_update_readme(tmp_path, monkeypatch):
