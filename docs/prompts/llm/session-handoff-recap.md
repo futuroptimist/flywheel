@@ -35,12 +35,17 @@ the last known state, its as-of date, and the need to reverify it.
 
 Preserve exact continuation-critical repository and artifact names, URLs,
 branches, commits, tags, issue/PR identifiers, paths, hashes, versions, sizes,
-runtime identities, validated commands, sentinels, error classifications, and
-acceptance criteria. Preserve authorization grants and their exact scope, but
-never credential or token values. Exclude secrets and unnecessary sensitive
-output; retain only safe identifiers, hashes, sanitized classifications, and
-locations. Condense repeated chatter and logs without losing decisions,
-evidence, failures, corrections, or operational details.
+environment, host, service, timer, deployment, and runtime identities,
+validated commands, sentinels, error classifications, and acceptance criteria.
+Preserve verbatim non-secret user approval markers, authorization grants, their
+exact scope and limits, and consumed or remaining one-shot status. These are
+authorization evidence, not bearer, API, OAuth, session, or other credential
+values, which must never be reproduced. Sensitivity protections override
+exact-string, command, and ledger preservation: exclude embedded secrets while
+preserving safe surrounding evidence. Exclude unnecessary sensitive output;
+retain only safe identifiers, hashes, sanitized classifications, and locations.
+Condense repeated chatter and logs without losing decisions, evidence,
+failures, corrections, or operational details.
 
 If a progress ledger exists, reproduce every row and its stable ID, attempt
 count, percentage, status, and title, including completed, active, blocked,
@@ -93,8 +98,12 @@ Improve the Main Prompt above rather than executing it.
 
 Preserve its reusable, zero-edit, self-contained handoff purpose; single inline
 recap block; cross-LLM portability; evidence precedence; full-ledger retention;
-safe exact identities; authorization and sensitivity boundaries; and one
-immediate next task. Do not overfit it to an incident or environment.
+safe exact identities; verbatim non-secret approval markers, authorization
+grants, their exact scope and limits, and consumed or remaining one-shot status;
+the distinction between that evidence and prohibited credential values; the
+precedence of sensitivity protections over exact-string, command, and ledger
+preservation; and one immediate next task. Do not overfit it to an incident or
+environment.
 
 Improve clarity, completeness, compaction resistance, and concision without
 weakening safety or evidence rules. Keep it copy/paste-ready without
