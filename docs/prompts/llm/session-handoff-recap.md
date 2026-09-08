@@ -13,8 +13,8 @@ This prompt creates a portable continuation handoff from the visible conversatio
 
 ```text
 Create a lossless session-handoff recap from the full visible conversation,
-accessible attachments, available memory or context, and any relevant read-only
-tool results. Do not ask me to restate or summarize the conversation.
+accessible attachments, available context, and relevant read-only tool results.
+Do not ask me to restate the conversation.
 
 Return the recap directly in your response, not as a downloadable file or
 attachment. Emit exactly one outer fenced code block with the `markdown` info
@@ -22,68 +22,44 @@ string and no surrounding prose. Delimit that outer block with exactly four
 backticks. Use triple tildes for every nested command, code, log, or prompt
 block so no nested content can close the outer block.
 
-Produce only the recap. Do not continue the underlying task or mutate any
-repository, service, issue, pull request, environment, or other state. You may
-perform narrowly relevant read-only inspection when tools are available.
+Produce only the recap; do not continue the task or mutate any state. Narrowly
+relevant read-only inspection is allowed. Make the recap understandable without
+the original conversation, hidden state, or tool history, and restate rather
+than indirectly reference prior facts.
 
-Make the recap understandable without the original conversation, prior model
-memory, hidden state, or tool history. Never rely on phrases such as “as
-discussed above,” “the previous output,” or “same as before” without restating
-the referenced fact. Prefer the latest independently verified evidence when
-messages conflict. Record material contradictions or unresolved ambiguity
-instead of silently choosing an unsupported version. Clearly distinguish
-current verified state, historical state, inference, provisional work, and
-facts requiring fresh verification.
+Prefer the latest independently verified evidence. Distinguish verified,
+historical, inferred, provisional, conflicting, and stale information. Never
+invent state, identities, commands, permissions, results, dates, or external
+facts. Verify material current state read-only when possible; otherwise record
+the last known state, its as-of date, and the need to reverify it.
 
-Never fabricate repository state, issue status, commits, branches, paths,
-hashes, commands, authorizations, test results, dates, deployment state, or
-external facts. If current external state can be checked read-only with
-available tools and materially affects continuation, verify it. Otherwise,
-preserve the last known state with an explicit as-of marker and a requirement
-to reverify it.
+Preserve exact continuation-critical repository and artifact names, URLs,
+branches, commits, tags, issue/PR identifiers, paths, hashes, versions, sizes,
+runtime identities, validated commands, sentinels, error classifications, and
+acceptance criteria. Preserve authorization grants and their exact scope, but
+never credential or token values. Exclude secrets and unnecessary sensitive
+output; retain only safe identifiers, hashes, sanitized classifications, and
+locations. Condense repeated chatter and logs without losing decisions,
+evidence, failures, corrections, or operational details.
 
-Preserve exact strings whenever continuation depends on them, including:
-- repository names and URLs;
-- branches, commits, tags, pull requests, and issues;
-- file and evidence paths;
-- artifact identities, hashes, versions, and sizes;
-- environment, host, service, timer, deployment, and runtime identities;
-- authorization tokens and their exact scope;
-- validated commands and required sentinels;
-- error classifications and acceptance criteria.
+If a progress ledger exists, reproduce every row and its stable ID, attempt
+count, percentage, status, and title, including completed, active, blocked,
+superseded, and not-started work. Make only evidence-backed updates and require
+future sessions to propagate the full ledger. Otherwise, create only a
+dependency-ordered remaining-work list.
 
-Do not reproduce secrets, credentials, private tokens, or unnecessary raw
-sensitive output. Record only safe identifiers, hashes, sanitized
-classifications, and locations needed for continuation. Summarize redundant
-chatter and repeated raw logs while retaining decisions, evidence, failed
-approaches, corrections, and operationally significant details.
+Immediately after the title and handoff/as-of date, identify exactly one
+concrete next task. Mark any provisional action as not executable and state its
+missing qualification. For one-shot, stateful, destructive,
+authorization-gated, or evidence-producing actions, include success and failure
+branches. Separate granted from required permissions; authorizations are narrow
+and non-transitive, and spent one-shot actions must not be retried.
 
-If a progress ledger exists, reproduce the complete current ledger. Retain all
-stable step identifiers, attempt counts, percentages, statuses, and titles,
-including completed, active, blocked, superseded, and not-started rows. Apply
-only evidence-backed updates, never silently omit older rows, and explicitly
-instruct the next session to propagate the full ledger in every future attempt.
-If no ledger exists, do not invent a large historical ledger; provide a
-dependency-ordered remaining-work list and only the minimal continuation
-structure needed.
-
-At the beginning of the recap, identify exactly one immediate next task. Make
-it concrete enough for a fresh model to act without rediscovery. If the next
-artifact or command is provisional, prominently state that it must not be
-executed and identify the qualification that remains. Include success and
-failure branches when the next action is one-shot, stateful, destructive,
-authorization-gated, or evidence-producing.
-
-Distinguish permissions already granted from permissions still required.
-Treat authorizations as narrow and non-transitive, and identify spent one-shot
-actions that must not be retried. Identify files or attachments the next
-session must receive, including exact filenames and hashes when known. Tell the
-user to reattach, rather than reconstruct, any missing critical artifact.
-
-When the thread covers repository work, include related open issues or pull
-requests that remain in scope. Separate genuine implementation work from
-duplicate, stale, superseded, closed, or cleanup-only items, and mark
-time-sensitive status for rechecking.
+List required files or attachments with exact names and hashes when known; ask
+the user to reattach, not reconstruct, missing critical artifacts. For
+repository work, include in-scope issues and PRs, distinguishing active work
+from duplicate, stale, superseded, closed, or cleanup-only items and marking
+time-sensitive state for rechecking.
 
 Keep the recap thorough enough for lossless continuation without narrative
 repetition. Use the following section order when applicable, omitting only
@@ -105,10 +81,9 @@ sections that genuinely have no relevant content:
 15. Files or attachments required by the next session
 16. New-session operating instructions
 
-In the final section, explicitly tell the next model what to inspect first; the
-single immediate task to perform; what must not be rerun or mutated; which
-ledger or state record must continue to be propagated; which facts require
-fresh read-only verification; and when new explicit authorization is required.
+In the final section, state what to inspect first, the one immediate task, what
+must not be rerun or mutated, which ledger or state must be propagated, what
+needs fresh read-only verification, and when new authorization is required.
 ```
 
 ## Upgrade Prompt
@@ -116,19 +91,14 @@ fresh read-only verification; and when new explicit authorization is required.
 ```text
 Improve the Main Prompt above rather than executing it.
 
-Preserve its purpose as a reusable, zero-edit prompt that derives a portable,
-self-contained continuation handoff from the visible conversation and
-available context. Preserve its single inline recap code-block response
-contract, cross-LLM portability, evidence precedence, full-ledger retention,
-exact-identity preservation, authorization boundaries, sensitivity
-protections, and requirement for one immediate next task. Do not overfit the
-prompt to any particular incident, repository, platform, or deployment
-environment.
+Preserve its reusable, zero-edit, self-contained handoff purpose; single inline
+recap block; cross-LLM portability; evidence precedence; full-ledger retention;
+safe exact identities; authorization and sensitivity boundaries; and one
+immediate next task. Do not overfit it to an incident or environment.
 
-Improve clarity, completeness, resistance to context compaction, and concision
-without weakening any safety or evidence requirement. The upgraded prompt
-must remain directly copy/paste-ready without placeholders, configuration,
-fill-in fields, or required user edits.
+Improve clarity, completeness, compaction resistance, and concision without
+weakening safety or evidence rules. Keep it copy/paste-ready without
+placeholders, configuration, or user edits.
 
 Return:
 1. The complete revised Main Prompt in one fenced `text` block.
