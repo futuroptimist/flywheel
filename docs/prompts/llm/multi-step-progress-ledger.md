@@ -82,11 +82,15 @@ Instruction-recap rules:
 - Include concise controller-only action-routing guidance in the recap: every
   attempt uses one of the four available action types, and read-only work uses
   OS X commands when possible, then Linux commands, or PowerShell commands when
-  required, rather than a Codex prompt. Label this guidance `Controller only`
-  so a downstream agent does not treat it as its own response contract.
+  required, rather than a Codex prompt. Also record that blocking questions are
+  asked directly, without repeating the ledger or recap, and mark one option
+  `(Recommended)`. Label this guidance `Controller only` so a downstream agent
+  does not treat it as its own response contract.
 - Make the recap self-contained rather than referring readers to the original
   request. Propagate the complete recap with every ledger until final completion,
-  including in existing-PR comments, blocked questions, and shell-work responses.
+  including in existing-PR comments and shell-work responses. A blocking
+  question is the exception: ask it directly without repeating the ledger or
+  recap, then restore both after the user answers.
 - Keep the recap concise, but never shorten it by dropping a still-applicable
   instruction. The ledger records workflow state; the recap records the
   instructions that govern that state. Neither substitutes for the other.
@@ -115,16 +119,20 @@ Choose that one action from context:
   prompt so the action does not waste tokens on agentic work. Prefer OS X
   commands when they can perform the task; otherwise use Linux commands, or
   PowerShell commands when the target environment requires it.
-- Ask one concise blocking question with clearly distinct options only when a
-  missing user decision materially changes the safe next action.
+- Ask one concise blocking question directly, with two or more clearly distinct
+  options, only when a missing user decision materially changes the safe next
+  action. Mark one option `(Recommended)` to provide a useful default. Do not
+  include the ledger or recap and do not use a code block unless an option needs
+  a code snippet to be understood.
 
 Never fabricate tags, digests, versions, dates, check results, or live state.
 Never perform or instruct an unauthorized destructive operation. Choose one
 concrete next action, not alternatives.
 
 Response contract:
-- During active work, output exactly one fenced code block and no surrounding
-  prose. Every attempt for every step must use one of these action types: `Codex
+- During active work other than a blocking question, output exactly one fenced
+  code block and no surrounding prose. Every attempt for every step must use
+  one of these action types: `Codex
   prompt`, `OS X commands`, `Linux commands`, or `PowerShell commands`. Except
   for an existing-PR comment, begin the block with the regenerated full ledger,
   then the complete instruction recap, then an `Action Type:` line naming the
@@ -138,8 +146,11 @@ Response contract:
   `@codex`, followed by the regenerated full ledger, immediately followed by the
   complete instruction recap, then `Action Type: Codex prompt`, then the single
   action instructions, and ends with the required task phrase.
-- If blocked on a required decision, use one `text` fence containing the ledger
-  and recap followed by the one concise question and its distinct options.
+- If blocked on a required decision, ask only the concise question and its two
+  or more distinct options as normal prose, with one option marked
+  `(Recommended)`. Omit the ledger and recap, and use a code block only for a
+  code snippet necessary to explain an option. This question is not an attempt;
+  after the answer, resume the normal ledger-bearing response contract.
 - Continue until every applicable step is `completed` or explicitly
   `superseded`. At final completion, use one `text` fence containing the full
   ledger with every completed step at 100%. Superseded entries must retain
@@ -162,7 +173,7 @@ Instruction Recap:
 - Acceptance: Requested behavior is implemented and focused checks pass.
 - Process: Follow applicable AGENTS.md files, keep the diff minimal, and report evidence and blockers.
 - Response: Summarize changed files, command results, evidence, and exact blockers.
-- Controller only: Route each attempt as a Codex prompt, OS X commands, Linux commands, or PowerShell commands; prefer terminal commands for read-only work.
+- Controller only: Route each attempt as a Codex prompt, OS X commands, Linux commands, or PowerShell commands; prefer terminal commands for read-only work. Ask blocking questions directly without the ledger or recap, and mark one option `(Recommended)`.
 
 Action Type: Codex prompt
 Repository: example/project
