@@ -15,15 +15,24 @@ Resolve the merge conflict in the code snippet below.
 - Remove the conflict markers.
 - Preserve existing formatting, imports, and surrounding code.
 - Do not modify lines outside the conflict.
-- When resolving, prefer the version consistent with naming conventions and other docs in this repo.
-- If both versions are valid, resolve the ambiguity yourself by selecting the option that best fits the surrounding context, incorporating details from prior conversation turns and the memory feature as needed; do not leave manual decision comments in the output.
-- Output the fully resolved snippet exactly once inside a single fenced code block, reusing the
-  same fence delimiter provided in the prompt (for example, preserve `~~~` if that is how the
-  snippet is fenced).
+- When resolving, prefer the version consistent with naming conventions and
+  other documentation in this repository.
+- If both versions are valid, resolve the ambiguity yourself by selecting the
+  option that best fits the explicit instructions and visible conversation
+  context. Do not invent implied requests or leave manual-decision comments in
+  the output.
+- Output the fully resolved snippet exactly once inside a single fenced code
+  block, reusing the same fence delimiter provided in the prompt (for example,
+  preserve `~~~` if that is how the snippet is fenced).
 - Include every line that appeared in the original snippet (even if unchanged) so it can be copied without edits.
 - After the code, summarize the differences between the two sides and explain why you resolved them this way.
-- Immediately after the summary, append the propagation block below verbatim so
-  future turns retain the core instructions:
+- Immediately after the summary, append the current, complete propagation block
+  below, outside the snippet's fence, so future turns retain the active core
+  instructions. In every later response about this conflict, update the block
+  to incorporate later explicit user instructions and remove or supersede any
+  requirements they replace. Append the updated block again and continue to
+  follow its active instructions even if the original request has left the
+  context window:
 
 Instruction Recap:
 - Remove conflict markers.
@@ -31,7 +40,7 @@ Instruction Recap:
 - Do not modify lines outside the conflict.
 - Resolve ambiguity yourself and explain the rationale.
 - Output the resolved snippet once inside the original fence.
-- Propagate this instruction recap again if the session exceeds the context window.
+- Append the current, complete instruction recap to every response about this conflict.
 - Assume implied requests do not exist; follow only explicit instructions.
 ```
 
