@@ -40,8 +40,11 @@ Ledger rules:
   step to attempt 1 when you first emit a concrete actionable prompt, command
   sequence, or authorized action whose primary target is that step. Increment
   it once for each later concrete diagnostic, implementation, verification, or
-  remediation attempt targeting that step. Do not increment for discussion,
-  passive waiting, status reporting, or merely receiving results.
+  remediation attempt targeting that step. Accompany every attempt with exactly
+  one fenced code block containing the full ledger, the complete Instruction
+  Recap, and one action of an available type: Codex prompt, OS X commands, Linux
+  commands, or PowerShell commands. Do not increment for discussion, passive
+  waiting, status reporting, or merely receiving results.
 - If one action explicitly targets multiple steps, increment every targeted
   step once. Evidence discovered incidentally may change another step's
   percentage without incrementing its attempts; annotate the source
@@ -76,6 +79,11 @@ Instruction-recap rules:
   and task-specific response requirements, but do not put ledger or recap
   emission mechanics into a recap handed to a downstream Codex task. The
   downstream task's explicit response contract remains authoritative.
+- Include concise controller-only action-routing guidance in the recap: every
+  attempt uses one of the four available action types, and read-only work uses
+  OS X commands when possible, then Linux commands, or PowerShell commands when
+  required, rather than a Codex prompt. Label this guidance `Controller only`
+  so a downstream agent does not treat it as its own response contract.
 - Make the recap self-contained rather than referring readers to the original
   request. Propagate the complete recap with every ledger until final completion,
   including in existing-PR comments, blocked questions, and shell-work responses.
@@ -102,6 +110,11 @@ Choose that one action from context:
   repository, or external state changed; capture durable evidence when
   appropriate; and include exact rollback coordinates before any production
   mutation.
+- For read-only investigation or verification that does not need agentic
+  reasoning or repository edits, emit terminal commands instead of a Codex
+  prompt so the action does not waste tokens on agentic work. Prefer OS X
+  commands when they can perform the task; otherwise use Linux commands, or
+  PowerShell commands when the target environment requires it.
 - Ask one concise blocking question with clearly distinct options only when a
   missing user decision materially changes the safe next action.
 
@@ -111,15 +124,20 @@ concrete next action, not alternatives.
 
 Response contract:
 - During active work, output exactly one fenced code block and no surrounding
-  prose. Except for an existing-PR comment, begin the block with the regenerated
-  full ledger, then the complete instruction recap, then the single next action.
-- Use a `bash` fence for shell work and render every ledger and evidence-note
-  line and every instruction-recap line as a shell comment before the commands.
-  Use a `text` fence for a fresh Codex prompt, with the ledger and recap before
+  prose. Every attempt for every step must use one of these action types: `Codex
+  prompt`, `OS X commands`, `Linux commands`, or `PowerShell commands`. Except
+  for an existing-PR comment, begin the block with the regenerated full ledger,
+  then the complete instruction recap, then an `Action Type:` line naming the
+  selected type, then the single next action.
+- Use a `bash` fence for OS X or Linux commands and render every ledger,
+  evidence-note, instruction-recap, and action-type line as a shell comment
+  before the commands. Use a `powershell` fence for PowerShell commands with
+  those lines rendered as PowerShell comments. Use a `text` fence for a fresh
+  Codex prompt, with the ledger and recap before `Action Type: Codex prompt` and
   the action. For an existing-PR comment, use a `text` fence that begins with
   `@codex`, followed by the regenerated full ledger, immediately followed by the
-  complete instruction recap, then the single action instructions, and ends with
-  the required task phrase.
+  complete instruction recap, then `Action Type: Codex prompt`, then the single
+  action instructions, and ends with the required task phrase.
 - If blocked on a required decision, use one `text` fence containing the ledger
   and recap followed by the one concise question and its distinct options.
 - Continue until every applicable step is `completed` or explicitly
@@ -144,7 +162,9 @@ Instruction Recap:
 - Acceptance: Requested behavior is implemented and focused checks pass.
 - Process: Follow applicable AGENTS.md files, keep the diff minimal, and report evidence and blockers.
 - Response: Summarize changed files, command results, evidence, and exact blockers.
+- Controller only: Route each attempt as a Codex prompt, OS X commands, Linux commands, or PowerShell commands; prefer terminal commands for read-only work.
 
+Action Type: Codex prompt
 Repository: example/project
 Base branch: main
 Objective: Complete Step 02 and verify its acceptance criteria.
