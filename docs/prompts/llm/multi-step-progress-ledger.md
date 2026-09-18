@@ -62,6 +62,22 @@ Ledger rules:
   successful action merely to gather more evidence unless a named verification
   gap remains.
 
+Instruction-recap rules:
+- Immediately after the ledger, regenerate a compact `Instruction Recap` that
+  preserves the primary task, scope constraints, acceptance criteria, applicable
+  repository or operator instructions, and response requirements needed to
+  continue safely if earlier conversation leaves the context window.
+- Derive the recap faithfully from explicit instructions and verified decisions;
+  do not invent requirements or treat tentative discussion as settled. Update it
+  when the user changes the task or an evidence-backed decision changes the
+  workflow.
+- Make the recap self-contained rather than referring readers to the original
+  request. Propagate the complete recap with every ledger until final completion,
+  including in existing-PR comments, blocked questions, and shell-work responses.
+- Keep the recap concise, but never shorten it by dropping a still-applicable
+  instruction. The ledger records workflow state; the recap records the
+  instructions that govern that state. Neither substitutes for the other.
+
 After I return output from the prior action: (1) validate and classify the
 evidence; (2) update attempts, statuses, and percentages; (3) decide whether to
 retry or advance; (4) regenerate the entire ledger; and (5) emit exactly one
@@ -91,20 +107,21 @@ concrete next action, not alternatives.
 Response contract:
 - During active work, output exactly one fenced code block and no surrounding
   prose. Except for an existing-PR comment, begin the block with the regenerated
-  full ledger, then put the single next action immediately after it.
+  full ledger, then the complete instruction recap, then the single next action.
 - Use a `bash` fence for shell work and render every ledger and evidence-note
-  line as a shell comment before the commands. Use a `text` fence for a fresh
-  Codex prompt, with the ledger before the action. For an existing-PR comment,
-  use a `text` fence that begins with `@codex`, places the ledger and action
-  instructions after that mention, and ends with the required task phrase.
+  line and every instruction-recap line as a shell comment before the commands.
+  Use a `text` fence for a fresh Codex prompt, with the ledger and recap before
+  the action. For an existing-PR comment, use a `text` fence that begins with
+  `@codex`, places the ledger, recap, and action instructions after that mention,
+  and ends with the required task phrase.
 - If blocked on a required decision, use one `text` fence containing the ledger
-  followed by the one concise question and its distinct options.
+  and recap followed by the one concise question and its distinct options.
 - Continue until every applicable step is `completed` or explicitly
   `superseded`. At final completion, use one `text` fence containing the full
   ledger with every completed step at 100%. Superseded entries must retain
-  their status, replacement note, and last evidence-backed percentage. Include
-  a compact evidence summary and `WORKFLOW_COMPLETE=true`. Emit no additional
-  task prompt.
+  their status, replacement note, and last evidence-backed percentage. Follow
+  the ledger with the final instruction recap, a compact evidence summary, and
+  `WORKFLOW_COMPLETE=true`. Emit no additional task prompt.
 
 Generic active-work example (illustrative only):
 ```text
@@ -114,6 +131,13 @@ Step 03 | attempts=0 | estimated_complete=25% | status=blocked | Obtain required
 Step 04 | attempts=0 | estimated_complete=0% | status=not_started | Prepare the release
 Step 05 | attempts=0 | estimated_complete=100% | status=completed | Verify compatibility
 Evidence note: Step 05 completed incidentally from Step 02's multi-step verification; its attempt count remains 0. Step 03 is blocked but is not the current dependency gate.
+
+Instruction Recap:
+- Primary task: Implement and verify the requested change in example/project.
+- Scope: Change only required files and preserve unrelated behavior.
+- Acceptance: Requested behavior is implemented and focused checks pass.
+- Process: Follow applicable AGENTS.md files, keep the diff minimal, and report evidence and blockers.
+- Response: Regenerate this complete recap with the full ledger on every response.
 
 Repository: example/project
 Base branch: main
