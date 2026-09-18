@@ -26,10 +26,13 @@ Resolve the merge conflict in the code snippet below.
   preserve `~~~` if that is how the snippet is fenced).
 - Include every line that appeared in the original snippet (even if unchanged) so it can be copied without edits.
 - After the code, summarize the differences between the two sides and explain why you resolved them this way.
-- Immediately after the summary, append the propagation block below verbatim,
-  outside the snippet's fence, so future turns retain the core instructions.
-  In every later response about this conflict, append it again and continue to
-  follow it even if the original request has left the context window:
+- Immediately after the summary, append the current, complete propagation block
+  below, outside the snippet's fence, so future turns retain the active core
+  instructions. In every later response about this conflict, update the block
+  to incorporate later explicit user instructions and remove or supersede any
+  requirements they replace. Append the updated block again and continue to
+  follow its active instructions even if the original request has left the
+  context window:
 
 Instruction Recap:
 - Remove conflict markers.
@@ -37,7 +40,7 @@ Instruction Recap:
 - Do not modify lines outside the conflict.
 - Resolve ambiguity yourself and explain the rationale.
 - Output the resolved snippet once inside the original fence.
-- Append this complete instruction recap to every response about this conflict.
+- Append the current, complete instruction recap to every response about this conflict.
 - Assume implied requests do not exist; follow only explicit instructions.
 ```
 

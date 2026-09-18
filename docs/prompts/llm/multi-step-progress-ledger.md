@@ -71,6 +71,11 @@ Instruction-recap rules:
   do not invent requirements or treat tentative discussion as settled. Update it
   when the user changes the task or an evidence-backed decision changes the
   workflow.
+- Separate durable task instructions from controller-only workflow protocol.
+  Preserve task scope, acceptance criteria, repository or operator constraints,
+  and task-specific response requirements, but do not put ledger or recap
+  emission mechanics into a recap handed to a downstream Codex task. The
+  downstream task's explicit response contract remains authoritative.
 - Make the recap self-contained rather than referring readers to the original
   request. Propagate the complete recap with every ledger until final completion,
   including in existing-PR comments, blocked questions, and shell-work responses.
@@ -112,8 +117,9 @@ Response contract:
   line and every instruction-recap line as a shell comment before the commands.
   Use a `text` fence for a fresh Codex prompt, with the ledger and recap before
   the action. For an existing-PR comment, use a `text` fence that begins with
-  `@codex`, places the ledger, recap, and action instructions after that mention,
-  and ends with the required task phrase.
+  `@codex`, followed by the regenerated full ledger, immediately followed by the
+  complete instruction recap, then the single action instructions, and ends with
+  the required task phrase.
 - If blocked on a required decision, use one `text` fence containing the ledger
   and recap followed by the one concise question and its distinct options.
 - Continue until every applicable step is `completed` or explicitly
@@ -137,7 +143,7 @@ Instruction Recap:
 - Scope: Change only required files and preserve unrelated behavior.
 - Acceptance: Requested behavior is implemented and focused checks pass.
 - Process: Follow applicable AGENTS.md files, keep the diff minimal, and report evidence and blockers.
-- Response: Regenerate this complete recap with the full ledger on every response.
+- Response: Summarize changed files, command results, evidence, and exact blockers.
 
 Repository: example/project
 Base branch: main
