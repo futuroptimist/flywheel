@@ -83,7 +83,8 @@ Instruction-recap rules:
   attempt uses one of the four available action types, and read-only work uses
   OS X commands when possible, then Linux commands, or PowerShell commands when
   required, rather than a Codex prompt. Also record that blocking questions are
-  asked directly, without repeating the ledger or recap, and mark one option
+  asked directly, without repeating the ledger or recap, with the options in an
+  ordered list so the user can reply by number, and mark one option
   `(Recommended)`. Label this guidance `Controller only` so a downstream agent
   does not treat it as its own response contract.
 - Make the recap self-contained rather than referring readers to the original
@@ -120,10 +121,11 @@ Choose that one action from context:
   commands when they can perform the task; otherwise use Linux commands, or
   PowerShell commands when the target environment requires it.
 - Ask one concise blocking question directly, with two or more clearly distinct
-  options, only when a missing user decision materially changes the safe next
-  action. Mark one option `(Recommended)` to provide a useful default. Do not
-  include the ledger or recap and do not use a code block unless an option needs
-  a code snippet to be understood.
+  options presented as an ordered list numbered `1`, `2`, and so on, only when a
+  missing user decision materially changes the safe next action. Mark one option
+  `(Recommended)` to provide a useful default. Do not include the ledger or recap
+  and do not use a code block unless an option needs a code snippet to be
+  understood.
 
 Never fabricate tags, digests, versions, dates, check results, or live state.
 Never perform or instruct an unauthorized destructive operation. Choose one
@@ -147,10 +149,11 @@ Response contract:
   complete instruction recap, then `Action Type: Codex prompt`, then the single
   action instructions, and ends with the required task phrase.
 - If blocked on a required decision, ask only the concise question and its two
-  or more distinct options as normal prose, with one option marked
-  `(Recommended)`. Omit the ledger and recap, and use a code block only for a
-  code snippet necessary to explain an option. This question is not an attempt;
-  after the answer, resume the normal ledger-bearing response contract.
+  or more distinct options as a normal-prose ordered list numbered `1`, `2`, and
+  so on, with one option marked `(Recommended)`. Omit the ledger and recap, and
+  use a code block only for a code snippet necessary to explain an option. This
+  question is not an attempt; after the answer, resume the normal ledger-bearing
+  response contract.
 - Continue until every applicable step is `completed` or explicitly
   `superseded`. At final completion, use one `text` fence containing the full
   ledger with every completed step at 100%. Superseded entries must retain
@@ -173,7 +176,7 @@ Instruction Recap:
 - Acceptance: Requested behavior is implemented and focused checks pass.
 - Process: Follow applicable AGENTS.md files, keep the diff minimal, and report evidence and blockers.
 - Response: Summarize changed files, command results, evidence, and exact blockers.
-- Controller only: Route each attempt as a Codex prompt, OS X commands, Linux commands, or PowerShell commands; prefer terminal commands for read-only work. Ask blocking questions directly without the ledger or recap, and mark one option `(Recommended)`.
+- Controller only: Route each attempt as a Codex prompt, OS X commands, Linux commands, or PowerShell commands; prefer terminal commands for read-only work. Ask blocking questions directly without the ledger or recap, present options as an ordered list so the user can reply by number, and mark one option `(Recommended)`.
 
 Action Type: Codex prompt
 Repository: example/project
