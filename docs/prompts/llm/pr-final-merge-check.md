@@ -12,6 +12,8 @@ Type: evergreen
 ```text
 Is <PR-URL> ready to merge?
 
+This review concerns only `<PR-URL>`. Every agent remediation instruction must keep all work on that PR's existing head branch, including in the head repository when the PR comes from a fork. Never ask an agent to create, open, publish, or switch to a separate branch or PR, or to move required work into a replacement, stacked, docs-only, or follow-up PR. This invariant applies everywhere in the response, including the Scope Lock, tally entries, implementation instructions, verification, and recommendations. Use the verified head-branch name when available; otherwise say “the referenced PR's existing head branch.” Never invent a branch name or require a particular local checkout alias.
+
 Assume I am asking for a final merge-readiness check after reviewer comments appear resolved and CI appears green, but verify that assumption from the PR itself before answering.
 
 Review the PR using the available GitHub context:
@@ -67,6 +69,7 @@ Category 2: repository changes needed
 - Put the complete `Merge-readiness tally:` inside the generated `@codex` comment. Do not emit any tally, caveat, summary, or explanation outside the fence.
 - Include only work Codex can perform in the repository as targeted implementation instructions. Never ask Codex to edit, rewrite, or update the PR title or description, or to click, mark, or otherwise resolve a review thread.
 - The `@codex` comment should target one small, coherent, reliably executable group of currently unchecked repository-work items. Group multiple tightly related items when safe to reduce unnecessary commits, but do not overload one Codex task with unrelated work.
+- Every generated Scope Lock must explicitly require work to remain on the same referenced PR and its existing head branch. Multiple bounded remediation batches are successive tasks or commits on that same branch and PR; untargeted blockers remain context-only until selected for a later batch.
 - The in-comment tally remains the authoritative record of all known blockers, including blockers not selected for the current task.
 - The generated `@codex` comment must be fully self-contained and must not rely on phrases such as “the item above.”
 
@@ -99,6 +102,7 @@ Category 2 merge-readiness tally lifecycle:
 - Identify every item selected for the current Codex task directly in the tally with the suffix `— targeted by this Codex task`. Selected items must remain `⬜️` until a later invocation independently verifies their implementation.
 - Identify unresolved items not selected for the current bounded batch with the suffix `— context only; not targeted by this Codex task`. These entries are diagnostic context only, not implementation instructions.
 - On subsequent invocations, retain every prior tally entry, reconcile its status, and apply the targeted suffix only to the current bounded batch. Previously targeted but still unresolved entries become context-only unless selected again.
+- If a prior tally prescribed another branch or PR, correct that invalid routing to the referenced PR's existing head branch while retaining the unmet repository requirement as `⬜️`. Superseding an invalid workflow does not prove the underlying defect fixed.
 - Treat a fully checked tally as supporting evidence, not a substitute for a fresh merge-readiness review of the current PR state.
 - If a material PR-description correction is already known while repository work remains, track it as one distinct `⬜️` item inside the complete merge-readiness tally with the suffix `— context only; not targeted by this Codex task`. Keep it permanently last; insert newly discovered repository blockers before it. Treat it solely as a manual maintainer action: defer generating the replacement PR description, keep assessing and tracking the known description problem, and never include it in Reviewer comment resolution or Concrete implementation instructions.
 - Emit category 3 only when every repository-work tally item has been verified complete and the PR-description correction is the sole remaining blocker. This should be the final remediation response before category 1 when the user applies the replacement and no new blocker appears.
@@ -144,9 +148,15 @@ Treat these as merge blockers that require category 2 when they need repository 
 - The PR appears to include unrelated scope creep, broad churn, accidental formatting, generated artifacts, secrets, debug code, or temporary scaffolding.
 - The branch is not mergeable or appears out of date in a way that could invalidate tests or approvals.
 
+Scope management:
+- Minimal-diff guidance and default or LLM-invented file-count limits must not remove or relocate required implementation, tests, or documentation. If necessary work is too large for one coherent batch, divide it into bounded successive batches on the referenced PR's existing head branch; never recommend “stop and split” into another branch or PR.
+- Address unrelated churn by removing the unnecessary changes from the referenced PR. Do not ask an agent to preserve or move that churn elsewhere.
+- If an explicit hard user constraint or access limitation prevents completion, identify the conflict and leave the underlying blocker unresolved under the existing category precedence. Do not silently override the constraint, claim readiness, or propose another branch or PR.
+
 Demonstrably unrelated CI exception:
 - A completed adverse check may be treated as non-blocking only after independently comparing its failure output, affected files, affected code paths, and timing with the PR title, description, final diff, and current base branch, and verifying that the current PR could not reasonably have caused the failure and no change in this PR is needed to correct it.
 - Require a specific relevant GitHub issue or separate pull request that documents or addresses the same underlying root cause. An author assertion, unsupported flakiness claim, different filenames alone, or the mere existence of an unrelated issue or pull request is not sufficient.
+- An already-existing external issue or pull request may serve only as read-only evidence under this exception. Never instruct the agent to create a tracking PR or perform the separate fix there.
 - Keep the check blocking when attribution is ambiguous, the changed code could affect the failure, the tracking issue or pull request does not cover the same root cause, the failure invalidates testing relevant to this PR, mergeability or branch protection still mechanically prevents merging, or the branch is materially out of date in a way that could invalidate checks.
 - When all other readiness conditions are satisfied, every relevant required latest-head check is complete, and each check succeeded, was verified intentionally non-applicable under the skipped/neutral rule and permitted by required-check policy, or had an adverse result verified under this exception, category 1 may use the unconditional `yes, it can be merged` response. An unrelated completed adverse check must not mask another relevant check that is pending, missing, stale, attached only to an older commit, or otherwise unresolved. Do not use the pending-CI response for an already-completed unrelated failure.
 
@@ -168,8 +178,8 @@ When recurring AI review comments are present:
 - Do not ask Codex to blindly placate a bot by weakening correct code.
 
 The category 2 `@codex` comment must:
-- Be concise but complete enough for a fresh Codex task.
-- Start with a brief Scope Lock stating allowed files/areas, do-not-touch areas if known, and that the diff should stay minimal.
+- Be concise but complete enough for a self-contained agent task in the existing PR context.
+- Start with a brief Scope Lock stating the referenced PR and its verified existing head branch (or “the referenced PR's existing head branch” when its identity is unavailable), allowed files/areas, do-not-touch areas if known, and that the diff should stay minimal without excluding required implementation, tests, or documentation.
 - Include a "Reviewer comment resolution" section covering only entries marked `— targeted by this Codex task`.
 - For each targeted concern, state the evidence from the current PR state; the underlying contract, risk, or user-visible failure; the required outcome; a suggested implementation only when the evidence supports it; and verification that directly proves the outcome.
 - Require Codex to inspect the current code before applying a reviewer’s suggested patch. If a smaller or different change correctly satisfies the underlying contract, Codex should prefer that over blindly implementing a stale or speculative suggestion.
@@ -180,6 +190,7 @@ The category 2 `@codex` comment must:
 - Preserve existing conventions and tests.
 - Use an outer three-backtick `text` fence for the category 2 response, leaving triple tildes (`~~~`) available for any nested code fences inside the comment because nested triple backticks can break formatting.
 - Append `new codex task, not a r/e/v/i/e/w task` as the final line of the generated `@codex` comment, after all other comment text.
+- Treat that required closing sentinel only as a task-mode marker; it does not authorize a new branch or PR.
 
 Before answering, be strict: unconditional category 1 requires every relevant required latest-head check to be complete and individually successful, intentionally non-applicable under the skipped/neutral rule, or verified unrelated under the demonstrably unrelated CI exception; all exposed coverage evidence must satisfy the Codecov rules above. Conditional category 1 is available only under the narrow pending-CI rule. Both category 1 responses also require acceptable mergeability and branch protection, repository readiness, addressed or safely non-blocking substantive reviewer concerns, and a materially accurate PR description. Apply the four-category precedence exactly; never convert absent optional evidence or an external limitation into invented repository work.
 ```
@@ -191,6 +202,7 @@ Improve the main PR final merge-check prompt above while preserving its purpose 
 
 Goals:
 - Keep the main prompt copy/paste-ready with a `<PR-URL>` placeholder.
+- Preserve the invariant that the review and every remediation batch concern only `<PR-URL>` and its existing head branch, including its fork head repository. Require every Scope Lock, tally entry, instruction, verification step, and recommendation to stay there; never create, open, publish, switch to, or move work into another branch or replacement, stacked, docs-only, tracking, or follow-up PR. Use the verified branch name or “the referenced PR's existing head branch,” never an invented name or required local alias; the closing sentinel does not relax this rule.
 - Preserve exactly four mutually exclusive output categories with deterministic, unnumbered precedence labels:
   - Highest priority: repository changes needed to make the PR merge-ready return category 2, one outer three-backtick `text` fenced code block containing the complete generated `@codex` PR comment, including the self-contained merge-readiness tally
   - Next: PR description-only corrections return category 3, a concise manual instruction followed by one fenced `markdown` block containing the complete replacement PR description
@@ -208,6 +220,8 @@ Goals:
 - Preserve the requirement that the `@codex` comment concretely maps only currently targeted substantive concerns to repository changes or durable in-code justification, not thread-resolution bookkeeping.
 - Preserve root-cause-oriented reviewer-resolution instructions: inspect current code, identify evidence and the underlying contract/risk/user-visible failure, require the outcome, suggest implementations only when evidence supports them, and verify the outcome directly.
 - Preserve bounded task scope: only one small coherent batch is targeted, context-only and completed tally entries are not work requests, and PR-description corrections are manual maintainer actions.
+- Preserve same-PR scope management: successive bounded batches remain on the same head branch and PR; minimal-diff or invented file-count heuristics cannot omit or relocate required code, tests, or documentation; unrelated churn is removed from this PR without being preserved elsewhere; and “stop and split” is replaced by reducing unrelated changes or batching necessary work on the same branch and PR.
+- Preserve constraints and tally truth: report hard user-constraint or access conflicts without overriding them, claiming readiness, or proposing another branch or PR. Correct invalid prior routing while leaving its unmet requirement unresolved until independently verified.
 - Preserve the requirement that category 2 emits no text outside its single outer three-backtick `text` fenced `@codex` comment.
 - Preserve the ban on asking Codex to edit the PR title or description or to click, mark, or otherwise resolve review threads.
 - Preserve the requirement to use an outer three-backtick `text` fence for the category 2 `@codex` comment, leaving triple tildes (`~~~`) available for nested code fences inside that comment.
@@ -216,7 +230,8 @@ Goals:
 - Preserve the requirement that category 3 contains a complete replacement PR description, with no placeholders, TODOs, partial patches, suggested fragments, `@codex`, or Codex sentinel line.
 - Make the prompt better at distinguishing true merge blockers from low-value nits.
 - Make the prompt better at handling recurring AI review comments without blindly reverting correct code.
-- Make the prompt better at producing followups that let maintainers confidently address every remaining substantive concern.
+- Preserve already-existing external issues or PRs as permissible read-only evidence for the unrelated-CI exception without instructing creation of a tracker or implementation elsewhere.
+- Make the prompt better at producing remediation tasks that let maintainers confidently address every remaining substantive concern.
 - Keep the wording compact enough to use as a Streamdeck action.
 
 Return:
@@ -241,3 +256,10 @@ were read through all available pages.
 | A neutral result is unexplained, or evidence retrieval fails | Category 4; do not invent remediation |
 | A prior failed result is superseded by a successful current-head rerun | No stale-failure blocker |
 | An external publication problem persists without new repository evidence | Category 4; do not repeat a speculative Codex task |
+| Required documentation exceeds a default file-count heuristic | Retain the documentation work in the referenced PR on its existing head branch |
+| Several valid blockers require multiple bounded batches | Make successive tasks or commits target the same existing head branch and PR; keep later batches context-only until selected |
+| The diff contains unrelated churn | Remove the churn from the referenced PR without requesting another branch or PR |
+| An earlier tally requested a docs-only PR and the documentation is still missing | Correct the routing to this PR's existing head branch and retain the documentation blocker as unresolved until independently verified complete |
+| An existing external PR proves the same unrelated CI root cause | It may remain read-only evidence for the exception; do not request a tracking PR or separate implementation |
+| Branch identity is unavailable | Say “the referenced PR's existing head branch”; do not invent a name or local checkout alias |
+| A hard constraint prevents completion | Report the conflict and keep the underlying blocker unresolved under existing category precedence; do not propose another branch or PR |
