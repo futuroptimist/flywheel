@@ -11,7 +11,7 @@ All prompts are verified with OpenAI Codex. Other coding agents like Claude Code
 
 Prompt docs stored under `docs/prompts/codex/` or `docs/prompts/` are treated as canonical so repositories migrating between layouts keep this summary clean.
 
-**321 one-click prompts verified across 14 repos (243 evergreen, 22 one-off, 32 unknown).**
+**320 one-click prompts verified across 14 repos (242 evergreen, 22 one-off, 32 unknown).**
 
 One-off prompts are temporary—copy them into issues or PRs, implement, and then remove them from source docs.
 
@@ -78,7 +78,6 @@ python scripts/update_prompt_docs_summary.py --repos-from docs/repo_list.txt --o
 | [docs/prompts/llm/pr-candidate-picker.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/pr-candidate-picker.md)               | [Optional: “tighten my @codex comment” mini-prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/pr-candidate-picker.md#optional-tighten-my-codex-comment-mini-prompt)                                                           | evergreen | yes        |
 | [docs/prompts/llm/pr-final-merge-check.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/pr-final-merge-check.md)             | [PR Final Merge-Readiness Check Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/pr-final-merge-check.md#pr-final-merge-readiness-check-prompt)                                                                              | evergreen | yes        |
 | [docs/prompts/llm/pr-final-merge-check.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/pr-final-merge-check.md)             | [Main Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/pr-final-merge-check.md#main-prompt)                                                                                                                                  | evergreen | yes        |
-| [docs/prompts/llm/pr-final-merge-check.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/pr-final-merge-check.md)             | [Upgrade Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/pr-final-merge-check.md#upgrade-prompt)                                                                                                                            | evergreen | yes        |
 | [docs/prompts/llm/session-handoff-recap.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/session-handoff-recap.md)           | [Session Handoff Recap Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/session-handoff-recap.md#session-handoff-recap-prompt)                                                                                               | evergreen | yes        |
 | [docs/prompts/llm/session-handoff-recap.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/session-handoff-recap.md)           | [Main Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/session-handoff-recap.md#main-prompt)                                                                                                                                 | evergreen | yes        |
 | [docs/prompts/llm/session-handoff-recap.md](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/session-handoff-recap.md)           | [Upgrade Prompt](https://github.com/futuroptimist/flywheel/blob/main/docs/prompts/llm/session-handoff-recap.md#upgrade-prompt)                                                                                                                           | evergreen | yes        |
@@ -513,4 +512,4 @@ Track outstanding prompt documentation work across repositories. Add rows below 
 | futuroptimist/wove          | [docs/prompts-docs.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-docs.md)                                                                         | unknown   |       |
 | futuroptimist/wove          | [docs/prompts-tests.md](https://github.com/futuroptimist/wove/blob/main/docs/prompts-tests.md)                                                                       | unknown   |       |
 
-_Updated automatically: 2026-09-29_
+_Updated automatically: 2026-09-30_
