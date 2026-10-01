@@ -85,8 +85,9 @@ def validate_contract(document: str) -> None:
         assert re.search(
             r"(?:title, body, or enough of the diff|title, body, or enough "
             r"of the diff is) unreadable.*access-limitation report.*"
-            r"(?:preserv\w* (?:of )?the existing description|"
-            r"the existing description.*preserv\w*).*"
+            r"(?:(?:preserve|preserved|preserving|preservation) "
+            r"(?:of )?the existing description|the existing description.*"
+            r"(?:preserve|preserved|preserving|preservation)).*"
             r"(?:restore|restored) access.*rerun",
             section,
             re.DOTALL,
