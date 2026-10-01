@@ -174,7 +174,7 @@ When recurring AI review comments are present:
 
 The category 2 `@codex` comment must:
 - Be concise but complete enough for a self-contained agent task in the existing PR context.
-- Start with a brief Scope Lock stating allowed files/areas, do-not-touch areas if known, that the diff should stay minimal, and that all work must remain on the referenced PR's existing head branch and PR.
+- Start with a brief Scope Lock stating allowed files/areas, do-not-touch areas if known, that the diff should stay minimal, and that all work must remain on the referenced PR, its existing head branch, and its head repository (including when that repository is a fork).
 - Include a "Reviewer comment resolution" section covering only entries marked `— targeted by this Codex task`.
 - For each targeted concern, state the evidence from the current PR state; the underlying contract, risk, or user-visible failure; the required outcome; a suggested implementation only when the evidence supports it; and verification that directly proves the outcome.
 - Require Codex to inspect the current code before applying a reviewer’s suggested patch. If a smaller or different change correctly satisfies the underlying contract, Codex should prefer that over blindly implementing a stale or speculative suggestion.
@@ -251,8 +251,8 @@ were read through all available pages.
 | A neutral result is unexplained, or evidence retrieval fails | Category 4; do not invent remediation |
 | A prior failed result is superseded by a successful current-head rerun | No stale-failure blocker |
 | An external publication problem persists without new repository evidence | Category 4; do not repeat a speculative Codex task |
-| Required documentation exceeds a default file-count heuristic | Retain all required documentation work on the referenced PR's existing head branch |
-| Several valid blockers require multiple bounded batches | Target every successive batch to the same existing head branch and PR; keep later blockers context-only until selected |
+| Required documentation exceeds a default file-count heuristic | Retain all required documentation work on the referenced PR, its existing head branch, and its head repository |
+| Several valid blockers require multiple bounded batches | Target every successive batch to the referenced PR, its existing head branch, and its head repository; keep later blockers context-only until selected |
 | The diff contains unrelated churn | Remove the churn from the referenced PR; do not request another branch or PR to preserve it |
 | An earlier tally requested a docs-only PR, and the documentation is still missing | Correct the routing and retain the documentation blocker until independently verified complete on the referenced PR |
 | An existing external PR proves the root cause of an unrelated adverse CI result | Permit it as read-only evidence under the unrelated-CI exception; do not request a new or separate fix |
