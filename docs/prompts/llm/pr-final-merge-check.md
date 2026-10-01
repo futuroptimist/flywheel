@@ -41,9 +41,10 @@ Use three decision categories, evaluated in this order:
 
 Canonical allowed final response forms (exactly four):
 1. One outer three-backtick `text` fenced block containing the complete generated `@codex` comment.
-2. One outer `markdown` fenced block containing the complete replacement PR description.
+2. One outer `markdown` fenced block containing the complete replacement PR description, or the complete access-limitation report when the PR content needed to write that description is unreadable.
 3. Exactly `yes, it can be merged assuming the pending CI checks succeed`.
 4. Exactly `yes, it can be merged`.
+End canonical allowed final response forms.
 
 The two fenced forms and the two exact sentences are the only permitted final responses. Emit no introductory text, diagnosis, conclusion, tally outside the `@codex` block, or offer to draft a description before or after the selected form.
 
@@ -128,6 +129,7 @@ Category 3: complete PR description required
 ~~~~
 
 - Generate the entire usable description from the actual PR title, body, linked issue, final diff, tests, and discussion. Do not require another user request and do not invent inaccessible PR contents.
+- If the PR title, body, or enough of the diff is unreadable, do not attempt a replacement description. Instead, still use form 2 to provide a complete access-limitation report that identifies exactly which PR content could not be read, records any verified status without inference, states that the existing description must be preserved, and asks the maintainer to restore access and rerun the merge check. This report is the only exception to form 2's replacement-description requirement; it must not resemble or be presented as a replacement description.
 - Preserve useful links and all accurate existing content. Change only inaccurate claims and missing material limitations, including stale branch, commit, scope, and verification claims.
 - Record pending checks and material limitations accurately. For remaining external/manual/evidence blockers with readable PR content, include a concise factual verification-status section; a branch-protection 403 proves only an access limitation, not that a rule failed or that approvals are satisfied.
 - Do not emit a partial patch, suggested fragments, placeholders, TODOs, user instructions, or a merge-readiness tally inside the replacement description.
@@ -200,13 +202,14 @@ Goals:
   - Otherwise: ready-to-merge PRs return category 1, selecting the applicable exact success sentence
 Canonical allowed final response forms (exactly four):
 1. One outer three-backtick `text` fenced block containing the complete generated `@codex` comment.
-2. One outer `markdown` fenced block containing the complete replacement PR description.
+2. One outer `markdown` fenced block containing the complete replacement PR description, or the complete access-limitation report when the PR content needed to write that description is unreadable.
 3. Exactly `yes, it can be merged assuming the pending CI checks succeed`.
 4. Exactly `yes, it can be merged`.
+End canonical allowed final response forms.
 - Require the selected form to be the entire final response: no introductory or concluding prose, diagnosis, or offer to draft surrounds either fenced deliverable, and nothing surrounds either exact sentence.
 - Preserve the rule that established repository work takes precedence when both repository changes and PR-description corrections are needed, so the existing bounded category 2 `@codex` comment is emitted and description assessment is retained as non-targeted manual-maintainer context in its tally.
 - When no concrete repository fix remains established, require category 3 to supply the entire usable replacement description immediately whenever a material correction or external/manual/evidence blocker remains. Pending CI, outstanding approvals, or unavailable branch-protection evidence cannot defer the deliverable into prose; record those limitations factually in the description, because a draft is not merge approval.
-- Require the replacement description to derive from the actual title, body, diff, tests, and discussion; preserve accurate content and useful links; correct stale branch, commit, scope, and verification claims; change only inaccuracies or missing material limitations; and contain no placeholders, partial patches, user instructions, tally, `@codex`, or Codex sentinel. Never invent inaccessible content or require another request for the draft. Use an outer fence longer than nested examples.
+- Require the replacement description to derive from the actual title, body, diff, tests, and discussion; preserve accurate content and useful links; correct stale branch, commit, scope, and verification claims; change only inaccuracies or missing material limitations; and contain no placeholders, partial patches, user instructions, tally, `@codex`, or Codex sentinel. Never invent inaccessible content or require another request for the draft. If the title, body, or enough of the diff is unreadable, form 2 instead contains a complete access-limitation report naming the unreadable inputs and verified status, requiring preservation of the existing description, and requesting restored access plus a rerun; this narrow fallback must not be presented as a replacement description. Use an outer fence longer than nested examples.
 - Preserve the requirement that the LLM only says yes when every substantive reviewer comment is addressed or safely non-blocking and the PR description does not require a material correction.
 - Preserve the demonstrably unrelated CI exception: adverse completed checks are non-blocking only when every relevant required latest-head check is complete, the LLM independently compares the failure with the PR description, final diff, and base branch; verifies the PR could not reasonably have caused it and needs no corrective change; identifies a specific relevant GitHub issue or separate pull request owning the same root cause; and confirms mergeability or branch protection does not still prevent merging.
 - Preserve strict CI evidence requirements: do not waive failures based only on author assertions, generic flakiness claims, different filenames, or unrelated tracking records; keep failures blocking when attribution is ambiguous, changed code could affect them, the tracker does not cover the same root cause, or relevant testing is invalidated.
@@ -253,6 +256,7 @@ were read through all available pages.
 | The description is accurate and only legitimate current-head CI is pending | Exactly `yes, it can be merged assuming the pending CI checks succeed` |
 | The description is accurate and all readiness conditions are satisfied | Exactly `yes, it can be merged` |
 | An external/manual blocker remains without established repository work | Form 2, a complete description with factual verification status; do not invent a task or approval |
+| PR content needed for a replacement description is unreadable | Form 2, a complete access-limitation report naming the unreadable inputs and verified status; preserve the existing description and request restored access plus a rerun rather than inventing content |
 | Patch coverage passes; optional project coverage is absent after complete inspection; no other blocker | No invented coverage blocker; select the applicable success form |
 | Visible coverage evidence is adverse | No approval; form 1 only for established repository work, otherwise form 2 with factual verification status |
 | GitHub explicitly requires a missing project check | No approval; do not assume a repository defect; use form 1 only for established repository work and otherwise form 2 |

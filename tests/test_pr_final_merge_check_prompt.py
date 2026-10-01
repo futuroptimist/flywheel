@@ -11,6 +11,7 @@ PROMPT_FILE = (
     / "pr-final-merge-check.md"
 )
 LIST_LABEL = "Canonical allowed final response forms (exactly four):"
+LIST_END = "End canonical allowed final response forms."
 CONDITIONAL_SUCCESS = (
     "yes, it can be merged assuming the pending CI checks succeed"  # noqa: E501
 )
@@ -29,16 +30,15 @@ def prompt_sections(document: str) -> dict[str, str]:
 
 def canonical_forms(section: str) -> list[str]:
     assert section.count(LIST_LABEL) == 1
-    after_label = section.split(LIST_LABEL, 1)[1]
+    assert section.count(LIST_END) == 1
+    after_label = section.split(LIST_LABEL, 1)[1].split(LIST_END, 1)[0]
     entries: list[tuple[int, list[str]]] = []
 
     for line in after_label.splitlines()[1:]:
         match = re.match(r"^\s{0,2}(\d+)\.\s+(.*)$", line)
         if match:
             entries.append((int(match.group(1)), [match.group(2)]))
-        elif entries and (not line.strip() or re.match(r"^\s*-\s+", line)):
-            break
-        elif entries:
+        elif entries and line.strip():
             entries[-1][1].append(line.strip())
 
     numbers = [number for number, _ in entries]
@@ -82,6 +82,15 @@ def validate_contract(document: str) -> None:
             r"(?:sentinel|new codex task)",
             section,
         )
+        assert re.search(
+            r"(?:title, body, or enough of the diff|title, body, or enough "
+            r"of the diff is) unreadable.*access-limitation report.*"
+            r"(?:preserv\w* (?:of )?the existing description|"
+            r"the existing description.*preserv\w*).*"
+            r"(?:restore|restored) access.*rerun",
+            section,
+            re.DOTALL,
+        ), "unreadable-content fallback changed"
 
 
 def test_prompt_has_exactly_four_allowed_final_response_forms():
@@ -96,6 +105,15 @@ def test_prompt_has_exactly_four_allowed_final_response_forms():
                 "4. Exactly `yes, it can be merged`.",
                 "4. Exactly `yes, it can be merged`.\n"
                 "5. A diagnostic paragraph.",  # noqa: E501
+                1,
+            ),
+            "[1, 2, 3, 4]",
+        ),
+        (
+            lambda text: text.replace(
+                "4. Exactly `yes, it can be merged`.",
+                "4. Exactly `yes, it can be merged`.\n\n"
+                "5. A separated diagnostic paragraph.",
                 1,
             ),
             "[1, 2, 3, 4]",
@@ -125,7 +143,13 @@ def test_prompt_has_exactly_four_allowed_final_response_forms():
             "Category 4",
         ),
     ],
-    ids=["fifth-form", "missing-duplicate", "altered-success", "category-4"],
+    ids=[
+        "fifth-form",
+        "separated-fifth-form",
+        "missing-duplicate",
+        "altered-success",
+        "category-4",
+    ],
 )
 def test_contract_validator_rejects_regressions(mutation, expected_message):
     mutated = mutation(PROMPT_FILE.read_text())
