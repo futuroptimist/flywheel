@@ -34,12 +34,12 @@ def canonical_forms(section: str) -> list[str]:
     after_label = section.split(LIST_LABEL, 1)[1].split(LIST_END, 1)[0]
     entries: list[tuple[int, list[str]]] = []
 
-    for line in after_label.splitlines()[1:]:
-        match = re.match(r"^\s{0,2}(\d+)\.\s+(.*)$", line)
-        if match:
-            entries.append((int(match.group(1)), [match.group(2)]))
-        elif entries and line.strip():
-            entries[-1][1].append(line.strip())
+    for line in after_label.splitlines():
+        if not line.strip():
+            continue
+        match = re.fullmatch(r"\s{0,2}(\d+)\.\s+(.*)", line)
+        assert match, f"unexpected canonical-form line: {line.strip()}"
+        entries.append((int(match.group(1)), [match.group(2)]))
 
     numbers = [number for number, _ in entries]
     assert numbers == [1, 2, 3, 4]
@@ -121,6 +121,38 @@ def test_prompt_has_exactly_four_allowed_final_response_forms():
         ),
         (
             lambda text: text.replace(
+                LIST_LABEL,
+                f"{LIST_LABEL}\nA diagnostic paragraph is also allowed.",
+                1,
+            ),
+            "unexpected canonical-form line",
+        ),
+        (
+            lambda text: text.replace(
+                LIST_LABEL,
+                f"{LIST_LABEL}\n- A diagnostic bullet is also allowed.",
+            ),
+            "unexpected canonical-form line",
+        ),
+        (
+            lambda text: text.replace(
+                "2. One outer `markdown` fenced block",
+                "A diagnostic paragraph is also allowed.\n"
+                "2. One outer `markdown` fenced block",
+                1,
+            ),
+            "unexpected canonical-form line",
+        ),
+        (
+            lambda text: text.replace(
+                "2. One outer `markdown` fenced block",
+                "- A diagnostic bullet is also allowed.\n"
+                "2. One outer `markdown` fenced block",
+            ),
+            "unexpected canonical-form line",
+        ),
+        (
+            lambda text: text.replace(
                 "3. Exactly `yes, it can be merged assuming the pending "
                 "CI checks succeed`.",
                 "2. Exactly `yes, it can be merged assuming the pending "
@@ -147,6 +179,10 @@ def test_prompt_has_exactly_four_allowed_final_response_forms():
     ids=[
         "fifth-form",
         "separated-fifth-form",
+        "unnumbered-before-first",
+        "bullet-before-first-both-sections",
+        "unnumbered-between-entries",
+        "bullet-between-entries-both-sections",
         "missing-duplicate",
         "altered-success",
         "category-4",
