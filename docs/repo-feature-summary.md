@@ -8,8 +8,8 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `4499e32` | n/a | 3 | 15 | 2026-10-03 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `968a60c` | n/a | 0 | 0 | 2026-10-03 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `9e5a961` | n/a | 3 | 14 | 2026-10-03 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `d335d31` | n/a | 0 | 0 | 2026-10-03 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | n/a | n/a | 4 | 36 | n/a |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `4fdc779` | ✅ | 7 | 51 | 2026-10-01 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `45540a1` | ✅ | 1 | 6 | 2026-08-09 |
@@ -19,7 +19,7 @@ This table tracks which flywheel features each related repository has adopted.
 | [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `2125943` | ✅ | 1 | 0 | 2026-08-20 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `5b241ea` | ✅ | 1 | 1 | 2026-08-09 |
 | [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `093b2cc` | ✅ | 1 | 31 | 2026-09-27 |
-| [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `9415d0c` | n/a | 1 | 0 | 2026-08-09 |
+| [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `9415d0c` | ✅ | 1 | 0 | 2026-08-09 |
 | [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `491dd4e` | ✅ | 1 | 8 | 2026-08-12 |
 | [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `1ee6fcf` | ✅ | 1 | 18 | 2026-10-02 |
 | [futuroptimist/aquiloop](https://github.com/futuroptimist/aquiloop) | main | `94b8857` | ✅ | 0 | 28 | 2026-09-27 |
