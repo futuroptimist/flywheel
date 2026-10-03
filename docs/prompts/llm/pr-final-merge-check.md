@@ -34,20 +34,23 @@ A concern is addressed only if at least one of these is clearly true:
 - The comment is purely non-blocking praise, bookkeeping, duplication, or a low-value nit that does not affect merge readiness.
 
 Decision rule:
-Respond with exactly one of these four mutually exclusive categories, evaluated in this order:
+Use three decision categories, evaluated in this order:
 - Highest priority: if code, tests, configuration, generated artifacts, documentation in the repository, or any other repository changes are still needed for merge readiness, return category 2, even when a hard user constraint or lack of access makes every remaining repository-work item currently unperformable. If a material PR-description correction is also already known, track it in the category 2 tally as described below, but do not ask Codex to perform PR metadata work.
-- Next: otherwise, if the PR is technically merge-ready but its description is materially inaccurate, incomplete, stale, misleading, or missing information necessary for a responsible merge record, return category 3.
-- Next: otherwise, if an external/manual blocker or material evidence limitation remains and no concrete repository change is established, return category 4.
+- Next: otherwise, return category 3 if the description needs a material correction or if an external/manual blocker or material evidence limitation remains. Do this immediately even when CI is pending, approvals are outstanding, or branch-protection evidence is unavailable. A description draft records status; it does not grant merge approval.
 - Otherwise: return category 1.
 
-Category 1: exact conditional-success response
-- If the PR is ready to merge and the PR description is merge-ready, select exactly one of these two responses.
-- Respond with exactly:
-  yes, it can be merged
-  only when every relevant required check on the latest head is complete and each such check completed successfully, was verified intentionally non-applicable under the skipped/neutral rule and permitted by required-check policy, or, if adverse, was independently verified as unrelated under the exception below; all exposed Codecov evidence satisfies the Codecov rules; mergeability is acceptable; required approvals are satisfied or no longer needed; every substantive reviewer comment is addressed or safely non-blocking; and the PR description does not require a material correction.
-- Respond with exactly:
-  yes, it can be merged assuming the pending CI checks succeed
-  only when every non-CI readiness condition is satisfied and the only remaining uncertainty is one or more expected, relevant checks on the latest head that are legitimately queued or in progress.
+Canonical allowed final response forms (exactly four):
+1. One outer three-backtick `text` fenced block containing the complete generated `@codex` comment.
+2. One outer `markdown` fenced block containing the complete replacement PR description, or the complete access-limitation report when the PR content needed to write that description is unreadable.
+3. Exactly `yes, it can be merged assuming the pending CI checks succeed`.
+4. Exactly `yes, it can be merged`.
+End canonical allowed final response forms.
+
+The two fenced forms and the two exact sentences are the only permitted final responses. Emit no introductory text, diagnosis, conclusion, tally outside the `@codex` block, or offer to draft a description before or after the selected form.
+
+Category 1: exact success response
+- If the PR is ready to merge and the PR description is merge-ready, select form 3 only when every non-CI readiness condition is satisfied and the only remaining uncertainty is one or more expected, relevant checks on the latest head that are legitimately queued or in progress.
+- Select form 4 only when every relevant required check on the latest head is complete and each such check completed successfully, was verified intentionally non-applicable under the skipped/neutral rule and permitted by required-check policy, or, if adverse, was independently verified as unrelated under the exception below; all exposed Codecov evidence satisfies the Codecov rules; mergeability is acceptable; required approvals are satisfied or no longer needed; every substantive reviewer comment is addressed or safely non-blocking; and the PR description does not require a material correction.
 - Do not use the conditional response when any relevant check failed, was cancelled, timed out, requires action, or otherwise produced an adverse conclusion; when checks are stale, missing, attached only to an older commit, incomplete outside the narrow pending-CI case, or ambiguous in a way that matters; when the branch is unmergeable or materially out of date; when approvals, substantive reviewer concerns, repository changes, or a material PR-description correction remain; when there is evidence that pending CI requires repository work rather than merely time to complete; or when a completed adverse check is verified as unrelated under the exception below and no relevant latest-head checks are pending.
 - Emit only the selected category 1 sentence, with no tally, caveats, summaries, bullets, or extra commentary.
 - Do not include a merge-readiness tally in category 1.
@@ -55,11 +58,11 @@ Category 1: exact conditional-success response
 Codecov requirements:
 - Patch coverage measures changed coverable code; project coverage measures the repository's whole configured coverage scope. Inspect both when the available GitHub context exposes them, but do not require a project result merely because a patch result exists.
 - Treat every Codecov check or status on the latest head that the available GitHub context exposes as relevant evidence, including `codecov/patch`, `codecov/project`, and flag or component checks. A passing patch result must not conceal a visible adverse project, flag, or component result, even when GitHub does not label it required or the overall summary appears green.
-- Classify results consistently. `success` is a successful measurement. `queued` or `in_progress` is legitimately pending only when it is a current, applicable latest-head run. Failed, errored, cancelled, timed-out, stale, or action-required results are adverse and block approval; exposed adverse Codecov results cannot use the demonstrably unrelated CI exception. A skipped or neutral result is not a successful coverage measurement: treat it as non-blocking only when available evidence establishes intentional non-applicability and required-check policy permits it; otherwise it is unresolved evidence for category 4 unless concrete repository work establishes category 2.
+- Classify results consistently. `success` is a successful measurement. `queued` or `in_progress` is legitimately pending only when it is a current, applicable latest-head run. Failed, errored, cancelled, timed-out, stale, or action-required results are adverse and block approval; exposed adverse Codecov results cannot use the demonstrably unrelated CI exception. A skipped or neutral result is not a successful coverage measurement: treat it as non-blocking only when available evidence establishes intentional non-applicability and required-check policy permits it; otherwise record it as unresolved verification status in category 3 unless concrete repository work establishes category 2.
 - Do not infer a Codecov failure, pending result, or publication defect from an absent `codecov/project`, `codecov/patch`, flag, or component context. A successful, complete read of both check runs and commit statuses showing no optional project context is absence, not incomplete inspection. API errors, permission failures, truncated responses, and partial screenshots are evidence limitations and must not be certified as passing.
 - Repository workflow or Codecov configuration may explain intended targets, scope, and publication, but does not prove that an unexposed result failed, should have been published, or requires repository changes. Preserve actual required-check and explicit maintainer requirements, but never invent targets, require 100% coverage, or ask Codex to add or strengthen a coverage gate during readiness review. Configuration alone must not trigger repeated publication-setting tasks.
-- An absent optional context alone must not block category 1, create a category 2 item, trigger a configuration task, or delay category 3. If a prior tally treated absence alone as a blocker, retain it but mark it `✅` as “non-blocking under the revised policy,” never as passed. Do not close a previously observed failure merely because it can no longer be retrieved; verify a current successful superseding result or use category 4 for the evidence limitation.
-- Do not require inaccessible external Codecov diagnostics, account settings, API results, or dashboard state. If branch protection exposes an expected required check as pending or missing, approval remains blocked; diagnose the exact visible condition without assuming a repository defect, using category 2 only for established repository work and otherwise category 4.
+- An absent optional context alone must not block category 1, create a category 2 item, trigger a configuration task, or delay category 3. If a prior tally treated absence alone as a blocker, retain it but mark it `✅` as “non-blocking under the revised policy,” never as passed. Do not close a previously observed failure merely because it can no longer be retrieved; verify a current successful superseding result or record the evidence limitation in category 3.
+- Do not require inaccessible external Codecov diagnostics, account settings, API results, or dashboard state. If branch protection exposes an expected required check as pending or missing, approval remains blocked; diagnose the exact visible condition without assuming a repository defect, using category 2 only for established repository work and otherwise category 3.
 - For an exposed queued or in-progress Codecov check, use the conditional category 1 response only when it satisfies the same narrow pending-CI rule as every other check.
 - Read the applicable coverage target from the Codecov result, comment, or repository configuration. Never assume a universal percentage, and never substitute a remembered target from another repository. A passing project or overall coverage result does not override a failing patch, flag, or component result.
 
@@ -108,8 +111,8 @@ Category 2 merge-readiness tally lifecycle:
 - On subsequent invocations, retain every prior tally entry, reconcile its status, and apply the targeted suffix only to the current bounded batch. Previously targeted but still unresolved entries become context-only unless selected again.
 - Treat a fully checked tally as supporting evidence, not a substitute for a fresh merge-readiness review of the current PR state.
 - If a material PR-description correction is already known while repository work remains, track it as one distinct `⬜️` item inside the complete merge-readiness tally with the suffix `— context only; not targeted by this Codex task`. Keep it permanently last; insert newly discovered repository blockers before it. Treat it solely as a manual maintainer action: defer generating the replacement PR description, keep assessing and tracking the known description problem, and never include it in Reviewer comment resolution or Concrete implementation instructions.
-- Emit category 3 only when every repository-work tally item has been verified complete and the PR-description correction is the sole remaining blocker. This should be the final remediation response before category 1 when the user applies the replacement and no new blocker appears.
-- If the PR description is the only blocker on the first invocation, return category 3 immediately without creating a tally.
+- Emit category 3 once every repository-work tally item has been verified complete and a material description correction or external/manual/evidence blocker remains. This should be the final remediation response before category 1 when the user applies any needed replacement and no new blocker appears.
+- If no repository work is established and the PR description or factual verification status requires an update on the first invocation, return category 3 immediately without creating a tally.
 - If the PR is ready immediately, return category 1 immediately without creating a tally.
 
 Category 2 tally entry quality:
@@ -117,30 +120,22 @@ Category 2 tally entry quality:
 - Avoid vague entries that contain only a proposed solution.
 - Do not imply that context-only or PR-description tally entries are implementation instructions.
 
-Category 3: PR description-only correction needed
-- Use this category only when no repository changes remain and the description update is a real merge-readiness requirement rather than optional polish.
-- Respond with a concise manual instruction followed by exactly one fenced `markdown` block containing the entire replacement PR description, for example:
-
-Update the PR description manually to the following:
+Category 3: complete PR description required
+- Use this category when no concrete repository fix remains established and either the description needs a material correction or an external/manual/evidence blocker remains. Pending CI, outstanding approvals, or unavailable branch-protection evidence must not defer a known description correction into prose.
+- Respond with form 2 only, for example:
 
 ~~~~markdown
 <complete replacement PR description>
 ~~~~
 
-- Generate the complete description from the PR title, linked issue, current description, final diff, tests, and discussion.
-- Preserve useful and accurate material from the existing description.
-- Correct stale or misleading claims and include the relevant summary, behavior, testing, compatibility, migration, or issue-linking details supported by the PR.
-- Do not emit a partial patch, suggested fragments, placeholders, TODOs, or instructions inside the replacement description.
+- Generate the entire usable description from the actual PR title, body, linked issue, final diff, tests, and discussion. Do not require another user request and do not invent inaccessible PR contents.
+- If the PR title, body, or enough of the diff is unreadable, do not attempt a replacement description. Instead, still use form 2 to provide a complete access-limitation report that identifies exactly which PR content could not be read, records any verified status without inference, states that the existing description must be preserved, and asks the maintainer to restore access and rerun the merge check. This report is the only exception to form 2's replacement-description requirement; it must not resemble or be presented as a replacement description.
+- Preserve useful links and all accurate existing content. Change only inaccurate claims and missing material limitations, including stale branch, commit, scope, and verification claims.
+- Record pending checks and material limitations accurately. For remaining external/manual/evidence blockers with readable PR content, include a concise factual verification-status section; a branch-protection 403 proves only an access limitation, not that a rule failed or that approvals are satisfied.
+- Do not emit a partial patch, suggested fragments, placeholders, TODOs, user instructions, or a merge-readiness tally inside the replacement description.
 - Keep all replacement-description Markdown inside the outer fence. Use an outer fence longer than any nested fence, and use `~~~` for any nested fences required within the generated description.
-- Do not include `@codex` or the Codex sentinel line in category 3.
-- Do not include a merge-readiness tally in category 3.
-
-Category 4: external/manual blocker or insufficient evidence
-- Use this category only when merge approval cannot be justified because an external/manual condition or material evidence limitation remains and no concrete repository change is established. Examples include missing permissions without an established repository fix, an external service publication problem, an outstanding approval, unexplained skipped/neutral evidence, a required-but-missing context, or incomplete check/status retrieval.
-- Respond concisely with the exact check or context and latest-head SHA, or the exact unavailable evidence; what was successfully verified; and the smallest maintainer action or read-only verification needed next.
-- Do not claim merge readiness, emit a tally, or include a speculative `@codex` task. Do not prescribe repository or publication-setting edits without evidence that they are needed.
-- Category 2 takes precedence whenever concrete repository work remains; record external blockers there as context only, not as targeted work. When every repository item is blocked by a hard constraint or unavailable access, use the blocked category 2 response with zero targeted items rather than category 4. Category 3 applies only when description correction is the sole blocker. Ordinary legitimately pending CI still uses the conditional category 1 sentence when every other condition is satisfied.
-- Repeating the same unresolved external diagnosis without new evidence must not generate a new configuration-change task.
+- Do not include `@codex` or `new codex task, not a r/e/v/i/e/w task` in the replacement description.
+- Never invent repository work or verification, claim approval, or disguise a diagnostic paragraph as a complete description. Repeating an unresolved external diagnosis without new evidence must not generate a configuration-change task.
 
 Treat these as merge blockers that require category 2 when they need repository changes:
 - CI is failing, cancelled, timed out, requires action, stale, missing, attached only to an older commit, ambiguous in a way that matters, or otherwise reveals or requires repository changes, except for completed adverse checks that qualify for the demonstrably unrelated CI exception below and unexposed Codecov contexts covered by the Codecov requirements above; ordinary expected latest-head checks that are merely queued or in progress do not create or continue category 2 by themselves when no repository work is needed.
@@ -190,7 +185,7 @@ The category 2 `@codex` comment must:
 - Append `new codex task, not a r/e/v/i/e/w task` as the final line of the generated `@codex` comment, after all other comment text.
 - Treat that required closing sentinel only as a task-mode marker; it never authorizes a new branch or pull request.
 
-Before answering, be strict: unconditional category 1 requires every relevant required latest-head check to be complete and individually successful, intentionally non-applicable under the skipped/neutral rule, or verified unrelated under the demonstrably unrelated CI exception; all exposed coverage evidence must satisfy the Codecov rules above. Conditional category 1 is available only under the narrow pending-CI rule. Both category 1 responses also require acceptable mergeability and branch protection, repository readiness, addressed or safely non-blocking substantive reviewer concerns, and a materially accurate PR description. Apply the four-category precedence exactly; never convert absent optional evidence or an external limitation into invented repository work.
+Before answering, be strict: unconditional category 1 requires every relevant required latest-head check to be complete and individually successful, intentionally non-applicable under the skipped/neutral rule, or verified unrelated under the demonstrably unrelated CI exception; all exposed coverage evidence must satisfy the Codecov rules above. Conditional category 1 is available only under the narrow pending-CI rule. Both category 1 responses also require acceptable mergeability and branch protection, repository readiness, addressed or safely non-blocking substantive reviewer concerns, and a materially accurate PR description. Apply the three-category precedence exactly; never convert absent optional evidence, pending reruns, or an external limitation into invented repository work. A pending rerun does not prove that a prior failure is fixed or by itself establish more repository work.
 ```
 
 ## Upgrade Prompt
@@ -201,16 +196,25 @@ Improve the main PR final merge-check prompt above while preserving its purpose 
 Goals:
 - Keep the main prompt copy/paste-ready with a `<PR-URL>` placeholder.
 - Preserve the invariant that the review and all remediation concern only `<PR-URL>` and its existing head branch and head repository, including forks. Require every Scope Lock, tally target, implementation step, verification command, and recommendation to stay there; use the verified branch name or “the referenced PR's existing head branch,” never an invented name or required checkout alias; and never request a separate, replacement, stacked, docs-only, tracking, or follow-up branch or pull request. The closing sentinel does not relax this rule.
-- Preserve exactly four mutually exclusive output categories with deterministic, unnumbered precedence labels:
+- Preserve three decision categories with deterministic, unnumbered precedence labels:
   - Highest priority: repository changes needed to make the PR merge-ready return category 2, with one outer three-backtick `text` fenced code block containing the complete generated `@codex` PR comment, including the self-contained merge-readiness tally; if a hard constraint or unavailable access blocks every repository item, allow zero targeted items while retaining all blockers unchecked and context-only
-  - Next: PR description-only corrections return category 3, a concise manual instruction followed by one fenced `markdown` block containing the complete replacement PR description
-  - Next: external/manual blockers or insufficient evidence with no established repository fix return category 4, a concise diagnosis naming the exact latest-head context or unavailable evidence, completed verification, and smallest maintainer action or read-only verification; it must not claim readiness or emit a speculative `@codex` task
-  - Otherwise: ready-to-merge PRs return category 1, the exact success output `yes, it can be merged`, including when all other readiness conditions are satisfied, every relevant required latest-head check is complete, and each check succeeded, was verified intentionally non-applicable under the skipped/neutral rule, or was verified under the demonstrably unrelated CI exception rather than still pending
-- Preserve the rule that category 2 takes precedence when both repository changes and PR-description corrections are needed, so description-only assessment is tracked as non-targeted maintainer context in the category 2 tally and replacement-description generation is deferred until repository work is complete.
+  - Next: material description corrections or external/manual/evidence blockers without established repository work return category 3, the complete replacement description form with factual verification status
+  - Otherwise: ready-to-merge PRs return category 1, selecting the applicable exact success sentence
+Canonical allowed final response forms (exactly four):
+1. One outer three-backtick `text` fenced block containing the complete generated `@codex` comment.
+2. One outer `markdown` fenced block containing the complete replacement PR description, or the complete access-limitation report when the PR content needed to write that description is unreadable.
+3. Exactly `yes, it can be merged assuming the pending CI checks succeed`.
+4. Exactly `yes, it can be merged`.
+End canonical allowed final response forms.
+- Require the selected form to be the entire final response: no introductory or concluding prose, diagnosis, or offer to draft surrounds either fenced deliverable, and nothing surrounds either exact sentence.
+- Preserve the rule that established repository work takes precedence when both repository changes and PR-description corrections are needed, so the existing bounded category 2 `@codex` comment is emitted and description assessment is retained as non-targeted manual-maintainer context in its tally.
+- When no concrete repository fix remains established, require category 3 to supply the entire usable replacement description immediately whenever a material correction or external/manual/evidence blocker remains. Pending CI, outstanding approvals, or unavailable branch-protection evidence cannot defer the deliverable into prose; record those limitations factually in the description, because a draft is not merge approval.
+- Require the replacement description to derive from the actual title, body, diff, tests, and discussion; preserve accurate content and useful links; correct stale branch, commit, scope, and verification claims; change only inaccuracies or missing material limitations; and contain no placeholders, partial patches, user instructions, tally, `@codex`, or Codex sentinel. Never invent inaccessible content or require another request for the draft. If the title, body, or enough of the diff is unreadable, form 2 instead contains a complete access-limitation report naming the unreadable inputs and verified status, requiring preservation of the existing description, and requesting restored access plus a rerun; this narrow fallback must not be presented as a replacement description. Use an outer fence longer than nested examples.
 - Preserve the requirement that the LLM only says yes when every substantive reviewer comment is addressed or safely non-blocking and the PR description does not require a material correction.
 - Preserve the demonstrably unrelated CI exception: adverse completed checks are non-blocking only when every relevant required latest-head check is complete, the LLM independently compares the failure with the PR description, final diff, and base branch; verifies the PR could not reasonably have caused it and needs no corrective change; identifies a specific relevant GitHub issue or separate pull request owning the same root cause; and confirms mergeability or branch protection does not still prevent merging.
 - Preserve strict CI evidence requirements: do not waive failures based only on author assertions, generic flakiness claims, different filenames, or unrelated tracking records; keep failures blocking when attribution is ambiguous, changed code could affect them, the tracker does not cover the same root cause, or relevant testing is invalidated.
-- Preserve evidence-based Codecov handling: explain patch versus project scope; inspect both check runs and commit statuses with pagination and reconcile current results per context; inspect every exposed patch, project, flag, and component result without requiring an optional project context merely because patch exists. Define success, legitimate queued/in-progress, adverse, and skipped/neutral separately. Skipped/neutral is non-blocking only when verified intentionally non-applicable and policy permits it; otherwise use category 4 unless repository work is established. Never waive an exposed adverse Codecov result, hide it behind a passing result, invent a target or 100% requirement, or add/strengthen a gate. Distinguish complete absence from failed/incomplete retrieval; configuration may explain intent but cannot prove failure or required remediation. Preserve actual required checks, and use category 4 for external or evidence blockers without an established repository fix.
+- Preserve evidence-based Codecov handling: explain patch versus project scope; inspect both check runs and commit statuses with pagination and reconcile current results per context; inspect every exposed patch, project, flag, and component result without requiring an optional project context merely because patch exists. Define success, legitimate queued/in-progress, adverse, and skipped/neutral separately. Skipped/neutral is non-blocking only when verified intentionally non-applicable and policy permits it; otherwise use category 3 unless repository work is established. Never waive an exposed adverse Codecov result, hide it behind a passing result, invent a target or 100% requirement, or add/strengthen a gate. Distinguish complete absence from failed/incomplete retrieval; configuration may explain intent but cannot prove failure or required remediation. Preserve actual required checks, and use the complete-description form with factual verification status for external or evidence blockers without an established repository fix. A 403 proves an access limitation, not a failed protection rule or satisfied approval requirement.
+- Preserve latest-head inspection and successful-rerun reconciliation. Pending reruns neither prove prior failures fixed nor automatically establish repository work.
 - Preserve tally history accurately: retain absence-only entries as completed and “non-blocking under the revised policy,” never as passed; do not close a previously visible failure solely because it is no longer retrievable.
 - Preserve unmet requirements when correcting a prior tally's invalid branch/PR routing; workflow correction alone does not prove the defect fixed.
 - Preserve the requirement that unresolved GitHub thread UI state alone is not a blocker when the latest code, tests, comments, or discussion adequately address the underlying concern.
@@ -227,7 +231,7 @@ Goals:
 - Preserve the requirement to use an outer three-backtick `text` fence for the category 2 `@codex` comment, leaving triple tildes (`~~~`) available for nested code fences inside that comment.
 - Preserve the requirement to use triple tildes (`~~~`) for nested code fences inside the replacement PR description, and to wrap category 3's replacement-description block in a longer outer fence such as `~~~~markdown` so nested fences cannot close it early.
 - Preserve the requirement that generated `@codex` comments end with `new codex task, not a r/e/v/i/e/w task`, while ensuring the main prompt itself does not end with that sentinel line.
-- Preserve the requirement that category 3 contains a complete replacement PR description, with no placeholders, TODOs, partial patches, suggested fragments, `@codex`, or Codex sentinel line.
+- Preserve the requirement that category 3 contains a complete replacement PR description, with no placeholders, TODOs, partial patches, suggested fragments, user instructions, tally, `@codex`, or Codex sentinel line.
 - Make the prompt better at distinguishing true merge blockers from low-value nits.
 - Make the prompt better at handling recurring AI review comments without blindly reverting correct code.
 - Make the prompt better at producing followups that let maintainers confidently address every remaining substantive concern.
@@ -246,15 +250,20 @@ were read through all available pages.
 
 | Scenario | Required outcome |
 | --- | --- |
-| Patch passes; optional project context is absent after complete inspection; no other blocker | Category 1 |
-| Same coverage evidence, but the PR description is materially stale | Category 3 |
-| Patch passes; a project result visibly fails | No approval; category 2 only for established repository work, otherwise category 4 |
-| GitHub explicitly requires a missing project check | No approval; diagnose without assuming a repository defect, using category 2 only for established repository work and otherwise category 4 |
-| Applicable coverage is legitimately running; everything else is ready | Conditional category 1 |
+| Repository work remains and the description is stale | Form 1, the `@codex` block; the description correction is context-only |
+| No established repository work; the description is stale, CI is pending, and branch-protection retrieval returns 403 | Form 2, the complete replacement description recording pending CI and unverified branch-protection status |
+| The description is stale and checks otherwise succeeded | Form 2, the complete replacement description |
+| The description is accurate and only legitimate current-head CI is pending | Exactly `yes, it can be merged assuming the pending CI checks succeed` |
+| The description is accurate and all readiness conditions are satisfied | Exactly `yes, it can be merged` |
+| An external/manual blocker remains without established repository work | Form 2, a complete description with factual verification status; do not invent a task or approval |
+| PR content needed for a replacement description is unreadable | Form 2, a complete access-limitation report naming the unreadable inputs and verified status; preserve the existing description and request restored access plus a rerun rather than inventing content |
+| Patch coverage passes; optional project coverage is absent after complete inspection; no other blocker | No invented coverage blocker; select the applicable success form |
+| Visible coverage evidence is adverse | No approval; form 1 only for established repository work, otherwise form 2 with factual verification status |
+| GitHub explicitly requires a missing project check | No approval; do not assume a repository defect; use form 1 only for established repository work and otherwise form 2 |
 | A skipped/neutral result is verified intentionally non-applicable and policy permits it | Non-blocking |
-| A neutral result is unexplained, or evidence retrieval fails | Category 4; do not invent remediation |
+| A neutral result is unexplained, or evidence retrieval fails | Form 2 with factual verification status; do not invent remediation |
 | A prior failed result is superseded by a successful current-head rerun | No stale-failure blocker |
-| An external publication problem persists without new repository evidence | Category 4; do not repeat a speculative Codex task |
+| An external publication problem persists without new repository evidence | Form 2 with factual verification status; do not repeat a speculative Codex task |
 | Required documentation exceeds a default file-count heuristic | Retain the documentation work in the same PR; the heuristic cannot narrow required scope |
 | Several valid blockers require multiple bounded batches | Target successive tasks or commits on the same existing head branch and PR; keep untargeted blockers context-only |
 | The diff contains unrelated churn | Remove the churn from this PR without requesting another branch or PR to preserve it |
