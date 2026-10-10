@@ -23,9 +23,9 @@ permissions:
 
 jobs:
   advisory:
-    uses: futuroptimist/flywheel/.github/workflows/commit-identity-reusable.yml@6b9b346ac50ee7d752d3df2ce53310751f303777
+    uses: futuroptimist/flywheel/.github/workflows/commit-identity-reusable.yml@3f774b21b7ce18e503087ebd09a7942c93e17078
     with:
-      checker_sha: '6b9b346ac50ee7d752d3df2ce53310751f303777'
+      checker_sha: '3f774b21b7ce18e503087ebd09a7942c93e17078'
       slack_enabled: ${{ vars.COMMIT_IDENTITY_SLACK_ENABLED == 'true' }}
       slack_channel: ${{ vars.COMMIT_IDENTITY_SLACK_CHANNEL }}
     secrets:

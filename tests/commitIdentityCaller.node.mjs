@@ -2,6 +2,20 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
+test('regression workflow explicitly checks out the PR head without credentials', () => {
+  const workflow = readFileSync(
+    new URL('../.github/workflows/commit-identity-tests.yml', import.meta.url),
+    'utf8'
+  );
+  assert.ok(
+    workflow.includes(
+      'ref: ${{ github.event.pull_request.head.sha || github.sha }}'
+    )
+  );
+  assert.ok(workflow.includes('persist-credentials: false'));
+  assert.ok(!workflow.includes('secrets.'));
+});
+
 test('thin caller pins workflow and checker to the same immutable revision with opt-in delivery', () => {
   const caller = readFileSync(
     new URL('../.github/workflows/commit-identity.yml', import.meta.url),
