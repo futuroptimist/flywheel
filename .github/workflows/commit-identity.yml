@@ -1,0 +1,32 @@
+name: Commit identity advisory
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: ['**']
+  workflow_dispatch:
+    inputs:
+      test_case:
+        description: In-memory TEST fixture; no Git commit is created
+        type: choice
+        options: [mismatch, benign]
+        default: benign
+      notify:
+        description: Send the TEST mismatch only if repository Slack opt-in is also enabled
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  advisory:
+    uses: futuroptimist/flywheel/.github/workflows/commit-identity-reusable.yml@6b9b346ac50ee7d752d3df2ce53310751f303777
+    with:
+      checker_sha: '6b9b346ac50ee7d752d3df2ce53310751f303777'
+      slack_enabled: ${{ vars.COMMIT_IDENTITY_SLACK_ENABLED == 'true' }}
+      slack_channel: ${{ vars.COMMIT_IDENTITY_SLACK_CHANNEL }}
+    secrets:
+      slack_token: ${{ secrets.COMMIT_IDENTITY_SLACK_TOKEN }}
