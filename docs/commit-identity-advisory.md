@@ -31,7 +31,9 @@ A bootstrap coverage warning during rollout does not mean the checker ran.
 `emailSha256`. The Flywheel entry carries forward Daniel's reviewed DSPACE policy.
 Digests compare exact UTF-8 strings; hashing minimizes output, not disclosure or
 identity authentication. Do not infer an email from a login or membership list.
-No relationship between `danielsmith4483` and any email is asserted or configured.
+Only the reviewed `futuroptimist` entry is configured. The login
+`danielsmith4483` is not configured, and its relationship to Daniel's identity
+or email remains unverified. Do not infer or add that relationship to the policy.
 
 A committer is in scope if its GitHub account ID, raw name digest, or raw email
 digest matches a reviewed entry. A conflicting pair or API account ID produces
