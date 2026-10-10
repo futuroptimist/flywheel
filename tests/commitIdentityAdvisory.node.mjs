@@ -118,6 +118,37 @@ const prGet = async (path) =>
 test('expected identity; arbitrary authors are preserved', () => {
   assert.ok(has(inspect(commit()), 'EXPECTED_COMMITTER'));
 });
+
+test('shared reviewed names or emails prefer a coherent entry independent of policy order', () => {
+  for (const collision of [
+    {
+      ...identity,
+      accountId: 43,
+      emailSha256: digest('other@example.invalid'),
+    },
+    { ...identity, accountId: 43, nameSha256: digest('Other reviewed') },
+    { ...identity, accountId: 43 },
+  ]) {
+    for (const entries of [
+      [collision, identity],
+      [identity, collision],
+    ]) {
+      const { lines, emit } = capture();
+      inspectCommit(commit(), entries, emit);
+      privateOutput(lines);
+      assert.ok(has(lines, 'EXPECTED_COMMITTER'));
+      assert.ok(!has(lines, 'COMMITTER_IDENTITY_MISMATCH'));
+      const conflict = capture();
+      inspectCommit(
+        commit({ committer: { id: 44, type: 'User' } }),
+        entries,
+        conflict.emit
+      );
+      privateOutput(conflict.lines);
+      assert.ok(has(conflict.lines, 'COMMITTER_IDENTITY_MISMATCH'));
+    }
+  }
+});
 test('expected account, name or email anchors detect mismatches', () => {
   for (const value of [
     commit({ commit: { committer: { name: poison, email: poison } } }),

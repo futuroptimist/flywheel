@@ -115,21 +115,26 @@ export function inspectCommit(commit, entries, emit) {
   const account = commit.committer;
   // Authors are deliberately not compared: imports/cherry-picks retain authorship.
   // API attribution is evidence for review, not authentication or authorization.
-  const entry = entries.find(
+  const matches = entries.filter(
     (candidate) =>
       candidate.accountId === account?.id ||
       candidate.nameSha256 === name ||
       candidate.emailSha256 === email
   );
-  if (entry) {
+  if (matches.length) {
+    // Shared names/emails are not unique keys. Prefer any coherent reviewed pair
+    // and account before treating a partial anchor match as a conflict.
     if (
-      name !== entry.nameSha256 ||
-      email !== entry.emailSha256 ||
-      (account !== null && account?.id !== entry.accountId)
+      matches.some(
+        (entry) =>
+          name === entry.nameSha256 &&
+          email === entry.emailSha256 &&
+          (account === null || account?.id === entry.accountId)
+      )
     ) {
-      emit('COMMITTER_IDENTITY_MISMATCH', sha);
-    } else {
       emit('EXPECTED_COMMITTER', sha);
+    } else {
+      emit('COMMITTER_IDENTITY_MISMATCH', sha);
     }
   } else if (account?.type === 'Bot' && positive(account.id)) {
     // A self-declared Git name ending in [bot] never selects this category.
