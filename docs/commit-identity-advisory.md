@@ -59,8 +59,8 @@ Do not create or transmit credentials through chat or commit them. This change
 creates no secrets and changes no permissions or channel membership.
 
 Slack channel `#github` was resolved and its history read on 2026-10-10:
-[C0C81UWJE5B](https://kepler-dqx2375.slack.com/archives/C0C81UWJE5B), created by
-Daniel. This verifies the destination, not workflow credential availability or
+`C0C81UWJE5B`, created by Daniel. Its authenticated Slack history was readable.
+This verifies the destination, not workflow credential availability or
 successful delivery. Repository configuration remains opt-in. Slack requests go
 only to `https://slack.com/api/chat.postMessage`, reject redirects, disable markup
 and unfurling, and never print response bodies. Delivery requires HTTP success,
