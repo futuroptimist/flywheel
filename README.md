@@ -6,7 +6,7 @@
 [![Coverage](https://codecov.io/gh/futuroptimist/flywheel/branch/main/graph/badge.svg)](https://codecov.io/gh/futuroptimist/flywheel)
 [![Docs](https://img.shields.io/github/actions/workflow/status/futuroptimist/flywheel/.github/workflows/03-docs.yml?label=docs)](https://github.com/futuroptimist/flywheel/actions/workflows/03-docs.yml)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](#license)
-[![Viewer](https://img.shields.io/badge/view-assembly-blue)](https://github.com/futuroptimist/flywheel/blob/main/viewer/index.html)
+[![Viewer](https://img.shields.io/badge/view-assembly-blue)](viewer/index.html)
 
 **flywheel** is a GitHub template for rapid project bootstrapping. It bundles linting, testing, documentation checks, and LLM-powered agents to keep your repo healthy.
 
@@ -527,7 +527,7 @@ We aim for a positive-sum, empathetic community. The flywheel embraces regenerat
 - ✅ [Prompt Docs Summary][pds] –  \
   index of one-click prompts across repos.
 
-[pds]: https://github.com/futuroptimist/flywheel/blob/main/docs/prompt-docs-summary.md
+[pds]: docs/prompt-docs-summary.md
 
 A summary of flywheel features adopted across repos lives in [docs/repo-feature-summary.md](docs/repo-feature-summary.md).
 
