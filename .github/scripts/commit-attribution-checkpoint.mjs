@@ -26,6 +26,16 @@ export async function privateCheckpoint(path) {
   )
     throw new Error();
   for (let ancestor = parent; ; ancestor = dirname(ancestor)) {
+    // A private leaf can still be replaced through an attacker-writable ancestor.
+    // Trust only this uid/root; shared ancestors require sticky deletion protection.
+    const info = await lstat(ancestor);
+    if (
+      !info.isDirectory() ||
+      info.isSymbolicLink() ||
+      ![0, process.getuid()].includes(info.uid) ||
+      ((info.mode & 0o022) !== 0 && (info.mode & 0o1000) === 0)
+    )
+      throw new Error();
     try {
       await lstat(join(ancestor, '.git'));
       throw new Error();

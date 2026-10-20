@@ -227,6 +227,116 @@ test('explicit repository renames retain state while replacement IDs start unsca
   assert.deepEqual(f.state.repositories['7'].seen, [sha(2), sha(3)]);
 });
 
+test('equivalent policy ordering and logins retain state; effective identity changes fail closed', async () => {
+  const f = fixture();
+  const extra = {
+    accountId: 77,
+    login: 'synthetic',
+    nameSha256: digest('other'),
+    emailSha256: digest('other@example.invalid'),
+  };
+  let policy = [{ ...entries[0], login: 'original' }, extra];
+  let obsolete = [34114096, 123];
+  f.run = () =>
+    scan({
+      get: f.get,
+      entries: policy,
+      config: { ...config, obsoleteAccountIds: obsolete },
+      store: f.store,
+      emit: (code) => f.codes.push(code),
+    });
+  await f.run();
+  policy = [extra, { ...entries[0], login: 'renamed' }];
+  obsolete = [123, 34114096, 123];
+  f.head = 2;
+  await f.run();
+  assert.ok(!f.codes.includes('COVERAGE_CHECKPOINT_FAILURE'));
+  assert.deepEqual(f.state.repositories['7'].seen, [sha(2)]);
+  const baseline = structuredClone(f.state);
+  policy = [
+    { ...entries[0], emailSha256: digest('changed@example.invalid') },
+    extra,
+  ];
+  f.codes = [];
+  await f.run();
+  assert.ok(f.codes.includes('COVERAGE_CHECKPOINT_FAILURE'));
+  assert.deepEqual(f.state, baseline);
+  policy = [{ ...entries[0], nameSha256: `${entries[0].nameSha256}\n` }, extra];
+  f.codes = [];
+  await f.run();
+  assert.ok(f.codes.includes('COVERAGE_INVALID_POLICY'));
+  assert.deepEqual(f.state, baseline);
+});
+
+test('one repository failure retains its state while another advances', async () => {
+  const f = fixture();
+  let failed = false;
+  f.override = async (path) => {
+    if (path.startsWith('/user/repos?'))
+      return {
+        data: [
+          { id: 6, full_name: 'sample/blocked', owner: { id: 42 } },
+          { id: 7, full_name: f.name, owner: { id: 42 } },
+        ],
+      };
+    if (failed && path.startsWith('/repos/sample/blocked/'))
+      throw new Error('synthetic inaccessible');
+  };
+  await f.run();
+  const blocked = structuredClone(f.state.repositories['6']);
+  failed = true;
+  f.head = 2;
+  await f.run();
+  assert.deepEqual(f.state.repositories['6'], blocked);
+  assert.equal(f.state.repositories['7'].refs['branch:main'].head, sha(2));
+  assert.deepEqual(f.state.repositories['7'].seen, [sha(2)]);
+  assert.ok(f.codes.includes('COVERAGE_UNEXPECTED_ERROR'));
+});
+
+test('invalid transport limits never issue a request and valid limits cannot be mutated away', async () => {
+  let requests = 0;
+  const fetcher = async () => {
+    requests++;
+    return new Response('[]');
+  };
+  for (const key of ['maxRequests', 'timeoutMs', 'runTimeoutMs']) {
+    for (const value of [
+      undefined,
+      null,
+      0,
+      -1,
+      0.5,
+      NaN,
+      Infinity,
+      '50',
+      Number.MAX_SAFE_INTEGER + 1,
+      ...(key === 'maxRequests' ? [] : [2147483648]),
+    ]) {
+      const get = metadataClient(
+        'synthetic',
+        { ...config, [key]: value },
+        fetcher
+      );
+      const output = [];
+      await scan({
+        get,
+        entries,
+        config,
+        store: { load: async () => null, save: async () => {} },
+        emit: (code) => output.push(code),
+      });
+      assert.ok(output.includes('COVERAGE_INVALID_POLICY'), `${key}: ${value}`);
+    }
+  }
+  assert.equal(requests, 0);
+  const limits = { ...config, maxRequests: 1 };
+  const get = metadataClient('synthetic', limits, fetcher);
+  limits.maxRequests = Infinity;
+  await get('/user/repos');
+  await assert.rejects(get('/user/repos'));
+  assert.equal(requests, 1);
+});
+
 test('compare pagination checks terminal page, counts, overlaps and missing heads', async () => {
   for (const mode of ['valid', 'duplicate', 'count', 'head', 'cap']) {
     const f = fixture();
@@ -523,6 +633,29 @@ test('private checkpoint rejects unsupported hosts; POSIX atomically replaces an
       await assert.rejects(store.load());
     } finally {
       await store.close();
+    }
+    const shared = join(directory, 'shared');
+    const protectedDirectory = join(shared, 'private');
+    await mkdir(shared);
+    await mkdir(protectedDirectory, { mode: 0o700 });
+    const protectedPath = join(protectedDirectory, 'state.json');
+    for (const mode of [0o770, 0o777]) {
+      await chmod(shared, mode);
+      await assert.rejects(privateCheckpoint(protectedPath));
+      await assert.rejects(
+        stat(join(protectedDirectory, '.attribution-scan.lock')),
+        { code: 'ENOENT' }
+      );
+    }
+    await chmod(shared, 0o1777);
+    const protectedStore = await privateCheckpoint(protectedPath);
+    try {
+      await protectedStore.save({ test: 'sticky ancestor is safe' });
+      assert.deepEqual(await protectedStore.load(), {
+        test: 'sticky ancestor is safe',
+      });
+    } finally {
+      await protectedStore.close();
     }
     await mkdir(join(directory, '.git'));
     await assert.rejects(privateCheckpoint(path));

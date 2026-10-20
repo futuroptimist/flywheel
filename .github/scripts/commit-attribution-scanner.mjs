@@ -100,21 +100,31 @@ const category = (error) => failures.get(error) || 'COVERAGE_UNEXPECTED_ERROR';
 
 // Fixed origin, GET only, no URL following and bounded memory/time/request budgets.
 export function metadataClient(token, config, fetcher = fetch) {
+  // Snapshot validated limits so a caller cannot mutate an active client's bounds.
+  const { maxRequests, timeoutMs, runTimeoutMs } = config || {};
+  const validLimits =
+    positive(maxRequests) &&
+    positive(timeoutMs) &&
+    positive(runTimeoutMs) &&
+    timeoutMs <= 2147483647 &&
+    runTimeoutMs <= 2147483647;
   let requests = 0;
-  const deadline = Date.now() + config.runTimeoutMs;
+  const deadline = validLimits ? Date.now() + runTimeoutMs : 0;
   return async (path) => {
-    if (++requests > config.maxRequests) fail('COVERAGE_REQUEST_LIMIT');
+    if (!validLimits) fail('COVERAGE_INVALID_POLICY');
+    if (++requests > maxRequests) fail('COVERAGE_REQUEST_LIMIT');
     const remaining = deadline - Date.now();
     if (remaining <= 0) fail('COVERAGE_TIMEOUT');
     if (
       typeof token !== 'string' ||
       !token ||
+      typeof path !== 'string' ||
       !path.startsWith('/') ||
       path.startsWith('//')
     ) {
       fail('COVERAGE_API_ERROR');
     }
-    const signal = AbortSignal.timeout(Math.min(config.timeoutMs, remaining));
+    const signal = AbortSignal.timeout(Math.min(timeoutMs, remaining));
     try {
       const response = await fetcher(`https://api.github.com${path}`, {
         method: 'GET',
@@ -313,19 +323,27 @@ export async function scan({
       !entries.every(
         (e) =>
           positive(e?.accountId) &&
-          /^[a-f0-9]{64}$/.test(e?.nameSha256) &&
-          /^[a-f0-9]{64}$/.test(e?.emailSha256)
+          typeof e?.nameSha256 === 'string' &&
+          typeof e?.emailSha256 === 'string' &&
+          /^[a-f0-9]{64}$(?![\s\S])/.test(e.nameSha256) &&
+          /^[a-f0-9]{64}$(?![\s\S])/.test(e.emailSha256)
       )
     ) {
       fail('COVERAGE_INVALID_POLICY');
     }
     const fingerprint = digest(
       JSON.stringify({
-        entries,
+        entries: entries
+          .map(({ accountId, nameSha256, emailSha256 }) => ({
+            accountId,
+            nameSha256,
+            emailSha256,
+          }))
+          .sort((a, b) => a.accountId - b.accountId),
         ownerId: config.ownerId,
         // Mutable lookup names do not define identity policy. Inventory resolves
         // explicit repositories to stable IDs before selecting their saved state.
-        obsolete: config.obsoleteAccountIds,
+        obsolete: [...new Set(config.obsoleteAccountIds)].sort((a, b) => a - b),
       })
     );
     let previous;

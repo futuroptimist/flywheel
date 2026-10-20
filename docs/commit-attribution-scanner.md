@@ -74,9 +74,17 @@ There is no notification or delivery adapter in this scanner.
 
 The JSON checkpoint contains repository IDs, refs, head/base SHAs, inspected SHAs,
 an identity-policy fingerprint and an explicit `historical: "unscanned"` marker.
+The fingerprint canonicalizes the effective account-ID/name-digest/email-digest
+triples and obsolete-account set. Entry ordering and mutable login labels do not
+invalidate state; an effective identity-policy change still fails closed.
 Treat the entire file as private. `privateCheckpoint(path)` requires a dedicated,
 existing, owner-only POSIX directory (0700), outside Git checkouts, with no symlink
 ancestors. It rejects nonprivate files, symlinks, hard links and oversized state.
+Every ancestor must be owned by the current user or root; group/world-writable
+ancestors also require the sticky bit, preventing another user from replacing a
+checked private directory through an unsafe shared parent. These checks run before
+creating a lock or reading state. Trusted owners (including root) remain outside
+this protection boundary.
 Windows is deliberately unsupported for persistence because POSIX mode bits do
 not establish Windows ACL privacy; it fails closed without modifying permissions.
 
@@ -123,6 +131,9 @@ and does not inspect historical commits. It is not proof of prospective coverage
 The defaults cap each list at 30 pages, the whole run at 500 requests and two
 minutes, each HTTP request at 20 seconds, and each response at 8 MiB. Larger
 inventories can legitimately hit these bounds and must report the gap.
+Library transport callers must supply positive safe-integer request/time limits;
+time limits must fit Node's timer range. Missing or invalid limits emit a fixed
+policy warning without a request. Each client snapshots its limits at construction.
 Errors and findings remain warning-only; the CLI never converts them into a
 failing exit status or invokes an enforcement API.
 
