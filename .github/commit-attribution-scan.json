@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "ownerId": 80668851,
+  "extraRepositories": ["democratizedspace/dspace"],
+  "reviewedPolicyRepository": "futuroptimist/flywheel",
+  "obsoleteAccountIds": [34114096],
+  "maxPages": 30,
+  "maxRequests": 500,
+  "timeoutMs": 20000,
+  "runTimeoutMs": 120000,
+  "maxSeen": 100000
+}
