@@ -4,6 +4,10 @@ Flywheel provides a dependency-free, warning-only committer metadata checker,
 reused from DSPACE. It does not authenticate people, block merges, rewrite history,
 or alter repository permissions. Authors are never compared or changed.
 
+The separate, inactive [central attribution scanner](commit-attribution-scanner.md)
+reuses this classifier independently for authors and committers. The existing
+committer-only workflows, immutable pins, and DSPACE duplication remain unchanged.
+
 ## Reuse and trust
 
 The reusable workflow is `.github/workflows/commit-identity-reusable.yml`.
