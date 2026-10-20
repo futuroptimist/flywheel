@@ -181,6 +181,52 @@ test('renames retain repository-ID checkpoints; overlapping PR and branch SHAs i
   assert.ok(!f.codes.includes('AUTHOR_EXPECTED'));
 });
 
+test('explicit repository renames retain state while replacement IDs start unscanned', async () => {
+  const f = fixture();
+  let repositoryId = 7;
+  f.override = async (path) => {
+    if (path.startsWith('/user/repos?')) return { data: [] };
+    if (path === `/repos/${f.name}`)
+      return {
+        data: {
+          id: repositoryId,
+          full_name: f.name,
+          owner: { id: 99 },
+        },
+      };
+  };
+  f.run = () =>
+    scan({
+      get: f.get,
+      entries,
+      config: { ...config, extraRepositories: [f.name] },
+      store: f.store,
+      emit: (code) => f.codes.push(code),
+    });
+  await f.run();
+  f.head = 2;
+  await f.run();
+  const checkpoint = structuredClone(f.state.repositories['7']);
+  f.name = 'renamed/explicit';
+  f.codes = [];
+  await f.run();
+  assert.ok(!f.codes.includes('COVERAGE_CHECKPOINT_FAILURE'));
+  assert.deepEqual(f.state.repositories['7'], checkpoint);
+  f.head = 3;
+  await f.run();
+  assert.deepEqual(f.state.repositories['7'].seen, [sha(2), sha(3)]);
+  assert.equal(f.codes.filter((code) => code === 'AUTHOR_EXPECTED').length, 1);
+
+  repositoryId = 8;
+  f.codes = [];
+  await f.run();
+  assert.ok(f.codes.includes('COVERAGE_ACCESS_GAP'));
+  assert.ok(f.codes.includes('COVERAGE_NEW_REF'));
+  assert.ok(!f.codes.includes('AUTHOR_EXPECTED'));
+  assert.deepEqual(f.state.repositories['8'].seen, []);
+  assert.deepEqual(f.state.repositories['7'].seen, [sha(2), sha(3)]);
+});
+
 test('compare pagination checks terminal page, counts, overlaps and missing heads', async () => {
   for (const mode of ['valid', 'duplicate', 'count', 'head', 'cap']) {
     const f = fixture();

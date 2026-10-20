@@ -323,7 +323,8 @@ export async function scan({
       JSON.stringify({
         entries,
         ownerId: config.ownerId,
-        extraRepositories: config.extraRepositories,
+        // Mutable lookup names do not define identity policy. Inventory resolves
+        // explicit repositories to stable IDs before selecting their saved state.
         obsolete: config.obsoleteAccountIds,
       })
     );

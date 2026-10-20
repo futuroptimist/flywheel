@@ -30,6 +30,10 @@ Inventory uses paginated authenticated repository metadata and selects by stable
 owner ID, not login spelling. Repository IDs key checkpoints; repository ID plus
 SHA deduplicates observations across branches and open PRs. Renames retain state.
 Explicit additional repositories resolve through their canonical API metadata.
+Their mutable lookup names are excluded from the identity-policy fingerprint:
+updating a configured name after a rename retains that repository ID's checkpoint.
+If the name instead resolves to a different ID, that ID receives its own unscanned
+baseline; the old ID's state is retained with an access-gap warning.
 The token's visibility is always reported as limited: invisible private
 repositories cannot be discovered or counted by this scanner. Previously visible
 repositories that disappear retain their state and report an access gap.
