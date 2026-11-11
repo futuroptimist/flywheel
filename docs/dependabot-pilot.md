@@ -5,7 +5,7 @@ the pilot. At its conclusion, record the outcome, finish review and checks, then
 owner to merge the document. Neither this document nor a green check authorizes a dependency merge,
 broader rollout, repository setting change, deployment or automatic merging.
 
-Last evidence refresh: November 11, 2026 at 07:22 UTC (November 10 at 23:22 PST).
+Last evidence refresh: November 11, 2026 at 07:35 UTC (November 10 at 23:35 PST).
 
 ## Purpose
 
@@ -68,11 +68,11 @@ PRs. The last column records the later disposition at the current evidence refre
 | Ecosystem | PR | Update | Review disposition in this record |
 | --- | --- | --- | --- |
 | GitHub Actions | [#169][pr169] | `actions/checkout` 3 to 7 | Owner merged; see log below |
-| GitHub Actions | [#170][pr170] | `actions/setup-python` 4 to 7 | Repair and final checks in progress |
+| GitHub Actions | [#170][pr170] | `actions/setup-python` 4 to 7 | Owner merged; see log below |
 | GitHub Actions | [#171][pr171] | `anthropics/claude-code-action` 1.0.180 to 1.0.269 | Owner merged; see log below |
 | GitHub Actions | [#172][pr172] | `codecov/codecov-action` 5 to 7 | Owner merged; see log below |
-| Python | [#173][pr173] | `flake8` 7.3.0 to 7.4.1 | Repair and final checks in progress |
-| Python | [#174][pr174] | `isort` 8.0.1 to 9.0.2 | Repair and final checks in progress |
+| Python | [#173][pr173] | `flake8` 7.3.0 to 7.4.1 | Owner merged; see log below |
+| Python | [#174][pr174] | `isort` 8.0.1 to 9.0.2 | Owner merged; see log below |
 
 Four Actions version-update PRs initially exceeded the intended limit of two. All four startup
 job definitions report `command: version`, `security-updates-only: false` and
@@ -86,18 +86,21 @@ job timing, request results and subsequent scheduled behavior before declaring t
 No speculative configuration fix, PR closure or rerun is part of documenting this finding.
 
 The initial queue is a dated snapshot. Owner merges reduced the outstanding queue, but do not
-explain the startup excess or demonstrate normal scheduled cap behavior. The unmerged updates
-are not ready-to-merge claims; their final heads, checks and review threads still need verification.
+explain the startup excess or demonstrate normal scheduled cap behavior. All six initial updates
+are now owner-merged; the recorded validation and its limits appear below.
 
 ### Owner merge and review log: November 11 UTC
 
-GitHub records `futuroptimist` as the merging owner for these three Actions updates:
+GitHub records `futuroptimist` as the merging owner for these updates:
 
 | PR | Merged, November 11 UTC | Merge commit | PR head at merge |
 | --- | --- | --- | --- |
 | [#169 checkout][pr169] | 07:14:21 | [56c9184][merge169] | `4aca211e067c4be2cecc27d84866daf2eeb3d0bd` |
 | [#172 Codecov][pr172] | 07:14:34 | [06b8354][merge172] | `d8ac82c4a41a64aa2189059f9a1a8992d63e4ba5` |
 | [#171 Claude action][pr171] | 07:20:31 | [60d29b9][merge171] | `5e0cf79b342d34bbae5424b2c99bfb30172a8659` |
+| [#173 Flake8][pr173] | 07:25:44 | [e3314a5][merge173] | `d467f11a98ada089fea227024c44ca6a17514a27` |
+| [#174 isort][pr174] | 07:34:31 | [407c18b][merge174] | `bb2dfd76762472c2291865c1e3d764398ba9853f` |
+| [#170 setup-python][pr170] | 07:35:00 | [203296a][merge170] | `a5e9039e9326ad1d07b2a992e519ca5140d9b322` |
 
 The #171 assessment included assistant-performed local validation of the exact
 [upstream candidate 61a9c27][claude-candidate]: **302 focused offline tests passed**, using
@@ -110,11 +113,41 @@ and upstream CI do not establish that repository-specific live behavior. No bloc
 the completed assessment, but retain this coverage limit rather than treating the merge as proof
 of every behavior or of the pilot's success.
 
-At 07:22 UTC, the complete open-PR listing contained #170, #173 and #174: one Actions update and
-two Python updates. Repairs and final-head checks/review follow-up were in progress. The #170
-repair preserves the public `action.yml` setup-python v4 reference while upgrading hosted workflows;
-the #173/#174 repairs align duplicate hard pins. Final repair evidence and owner dispositions are
-pending. The smaller queue resulted from owner merges and does not resolve the startup cap finding.
+### Repair findings and recorded validation
+
+The first round required three repairs to address review feedback:
+
+- **#170:** preserve the public composite action's existing `setup-python@v4`. Upgrading it to v7
+  would change downstream runner compatibility. The reviewed repair upgrades only five hosted
+  workflows to v7; it does not silently raise the public action's runner requirement.
+- **#173 and #174:** align duplicate Flake8/isort pins in the development dependencies, pre-commit
+  hooks and direct CI workflows. Otherwise green checks could still exercise the old versions.
+- **Shared-line conflict:** the Flake8 and isort repairs touched the same install line. After the
+  owner merged #173, #174 was synchronized with main and retested/re-reviewed on its new head,
+  retaining Flake8 7.4.1 and isort 9.0.2. #170 was also synchronized with the new main.
+
+Local validation passed pre-commit, the applicable full lint checks and all **147 Python tests**
+on the repaired trees. Coverage runs for the Flake8/isort repairs reported **75% package coverage**.
+Remote trees matched the validated local trees. The final reviewed heads and public evidence are:
+
+| PR | Reviewed head | Final PR CI | Fresh reviews | Disposition at refresh |
+| --- | --- | --- | --- | --- |
+| [#173][pr173] | `d467f11a98ada089fea227024c44ca6a17514a27` | [test][173-test], [lint-and-test][173-build], [lint][173-lint] passed | [Codex][173-codex], [Greptile][173-greptile] clean | Owner merged |
+| [#174][pr174] | `bb2dfd76762472c2291865c1e3d764398ba9853f` | [test][174-test], [lint-and-test][174-build], [lint][174-lint] passed | [Codex][174-codex], [Greptile][174-greptile] clean | Owner merged |
+| [#170][pr170] | `a5e9039e9326ad1d07b2a992e519ca5140d9b322` | [test][170-test], [lint-and-test][170-build], [lint][170-lint] passed | [Codex][170-codex], [Greptile][170-greptile] clean | Owner merged |
+
+All three repaired PRs had zero unresolved review threads at their final pre-merge checks. The
+#170 and #174 heads included main `e3314a5`; a local merge-tree check found they combined cleanly,
+and the owner merged those exact reviewed heads. A complete open-PR listing after the final merge
+returned no open PRs. Owner merges explain that reduction; it does not resolve the startup cap finding.
+
+**Remaining review-evidence gap:** the retained #173/#174 records substantiate duplicate-pin repair,
+local tests and final-head CI/reviews, but do not establish a separate upstream source,
+release-note and runtime-compatibility inspection. Keep the full representative Python-review
+checkbox pending. Bot summaries and owner merge are not substitutes for the missing assessment.
+
+Review effort included compatibility scoping, duplicate-pin repairs, conflict resolution and repeated
+checks/reviews. Elapsed review time has not been measured, so a workload conclusion remains pending.
 
 These merges add no scheduled weekly cycles. Counters remain **Python 0/2; GitHub Actions 0/2**,
 and the full representative-review checklist and proposed conclusion gate remain open.
@@ -227,7 +260,8 @@ dependency edits, messages to other reviewers or automatic merges.
 - [ ] Record Python weekly cycle 1 and cycle 2.
 - [ ] Record Actions weekly cycle 1 and cycle 2.
 - [ ] Reconcile the Actions PR-limit discrepancy and verify subsequent cap behavior.
-- [ ] Complete and record a representative Python update review and owner disposition.
+- [ ] Complete the upstream/source/runtime assessment for a representative Python update;
+      repair checks and owner dispositions are recorded above.
 - [ ] Complete and record a representative Actions update review and owner disposition.
 - [ ] Deliver the two-cycle findings update, with remaining blockers if any.
 - [ ] Summarize review effort, updater reliability and regression/recovery experience.
@@ -238,8 +272,8 @@ Conclusion date: pending.
 
 Evidence window and successful scheduled cycles: pending.
 
-Reviewed updates and dispositions: three owner-performed Actions merges recorded above; Python
-updates and the complete representative-review evidence remain pending.
+Reviewed updates and dispositions: all six initial updates owner-merged. Repair validation is
+recorded above; the broader Python review-evidence gap and live Claude coverage limit remain explicit.
 
 Cap finding and unresolved risks: open, as described above.
 
@@ -266,3 +300,21 @@ Owner decision, exact next scope and approval reference: pending.
 [claude-candidate]: https://github.com/anthropics/claude-code-action/commit/61a9c274fa7110a66dfafc1bbbced03833eb25fe
 [claude-ci]: https://github.com/anthropics/claude-code-action/actions/runs/42258364367
 [claude-review]: https://github.com/futuroptimist/f2clipboard/pull/171#issuecomment-6789245411
+[merge173]: https://github.com/futuroptimist/f2clipboard/commit/e3314a5e6d9b29e414ca7320927503f2c1a29841
+[173-test]: https://github.com/futuroptimist/f2clipboard/actions/runs/42978788992
+[173-build]: https://github.com/futuroptimist/f2clipboard/actions/runs/42978788960
+[173-lint]: https://github.com/futuroptimist/f2clipboard/actions/runs/42978789058
+[173-codex]: https://github.com/futuroptimist/f2clipboard/pull/173#issuecomment-6789721905
+[173-greptile]: https://github.com/futuroptimist/f2clipboard/pull/173#issuecomment-6789283533
+[174-test]: https://github.com/futuroptimist/f2clipboard/actions/runs/42979682753
+[174-build]: https://github.com/futuroptimist/f2clipboard/actions/runs/42979682699
+[174-lint]: https://github.com/futuroptimist/f2clipboard/actions/runs/42979682672
+[174-codex]: https://github.com/futuroptimist/f2clipboard/pull/174#issuecomment-6789859182
+[174-greptile]: https://github.com/futuroptimist/f2clipboard/pull/174#issuecomment-6789277754
+[170-test]: https://github.com/futuroptimist/f2clipboard/actions/runs/42979763762
+[170-build]: https://github.com/futuroptimist/f2clipboard/actions/runs/42979763760
+[170-lint]: https://github.com/futuroptimist/f2clipboard/actions/runs/42979763758
+[170-codex]: https://github.com/futuroptimist/f2clipboard/pull/170#issuecomment-6789245291
+[170-greptile]: https://github.com/futuroptimist/f2clipboard/pull/170#issuecomment-6789273891
+[merge174]: https://github.com/futuroptimist/f2clipboard/commit/407c18b48f8b5bf73ff9029237b45e3eb33ddb32
+[merge170]: https://github.com/futuroptimist/f2clipboard/commit/203296a0928903474e804632e84553f7ed166a5f
