@@ -101,6 +101,7 @@ Refresh this table whenever you add or rename project-level scripts so the short
 
 - CI workflows for linting, tests, and docs
 - DEPENDABOT for automated dependency updates
+- [Dependabot pilot and staged adoption](docs/dependabot-pilot.md), with findings and conclusion gates
 - CodeQL workflow for security scanning
 - Style guides for Python and JavaScript
 - README status script handles mixed-case GitHub workflow conclusions and validates attempt counts
