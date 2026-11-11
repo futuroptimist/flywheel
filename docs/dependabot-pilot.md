@@ -5,7 +5,7 @@ the pilot. At its conclusion, record the outcome, finish review and checks, then
 owner to merge the document. Neither this document nor a green check authorizes a dependency merge,
 broader rollout, repository setting change, deployment or automatic merging.
 
-Last evidence refresh: November 11, 2026 UTC (November 10 in America/Los_Angeles).
+Last evidence refresh: November 11, 2026 at 07:22 UTC (November 10 at 23:22 PST).
 
 ## Purpose
 
@@ -60,21 +60,23 @@ Verified successful scheduled weekly cycles: **Python 0/2; GitHub Actions 0/2**.
 GitHub reports these updater runs as dynamic events. A run's success or event name alone does not
 prove that it represents a new scheduled weekly cycle. Record the schedule/cycle evidence as well.
 
-### Open finding: Actions PR volume exceeds the configured limit
+### Open finding: startup Actions PR volume exceeded the configured limit
 
-A complete open-PR enumeration at the evidence refresh returned six Dependabot PRs:
+The initial complete open-PR enumeration, before the owner merges below, returned six Dependabot
+PRs. The last column records the later disposition at the current evidence refresh:
 
 | Ecosystem | PR | Update | Review disposition in this record |
 | --- | --- | --- | --- |
-| GitHub Actions | [#169][pr169] | `actions/checkout` 3 to 7 | Pending manual review |
-| GitHub Actions | [#170][pr170] | `actions/setup-python` 4 to 7 | Pending manual review |
-| GitHub Actions | [#171][pr171] | `anthropics/claude-code-action` 1.0.180 to 1.0.269 | Pending manual review |
-| GitHub Actions | [#172][pr172] | `codecov/codecov-action` 5 to 7 | Pending manual review |
-| Python | [#173][pr173] | `flake8` 7.3.0 to 7.4.1 | Pending manual review |
-| Python | [#174][pr174] | `isort` 8.0.1 to 9.0.2 | Pending manual review |
+| GitHub Actions | [#169][pr169] | `actions/checkout` 3 to 7 | Owner merged; see log below |
+| GitHub Actions | [#170][pr170] | `actions/setup-python` 4 to 7 | Repair and final checks in progress |
+| GitHub Actions | [#171][pr171] | `anthropics/claude-code-action` 1.0.180 to 1.0.269 | Owner merged; see log below |
+| GitHub Actions | [#172][pr172] | `codecov/codecov-action` 5 to 7 | Owner merged; see log below |
+| Python | [#173][pr173] | `flake8` 7.3.0 to 7.4.1 | Repair and final checks in progress |
+| Python | [#174][pr174] | `isort` 8.0.1 to 9.0.2 | Repair and final checks in progress |
 
-Four Actions version-update PRs exceed the intended limit of two. All four startup job definitions
-report `command: version`, `security-updates-only: false` and `existing-pull-requests: []`.
+Four Actions version-update PRs initially exceeded the intended limit of two. All four startup
+job definitions report `command: version`, `security-updates-only: false` and
+`existing-pull-requests: []`.
 The observed jobs do not support a security-update explanation for the excess.
 
 Concurrent initialization is a plausible contributor, **not an established root cause**. The updater
@@ -83,8 +85,39 @@ verified PR records for queue counts; a log summary is not proof of distinct PR 
 job timing, request results and subsequent scheduled behavior before declaring the cap effective.
 No speculative configuration fix, PR closure or rerun is part of documenting this finding.
 
-These six updates are not declared compatible or ready to merge. Their current heads, checks and
-review threads must be inspected when reviewed; the initial queue is a dated snapshot.
+The initial queue is a dated snapshot. Owner merges reduced the outstanding queue, but do not
+explain the startup excess or demonstrate normal scheduled cap behavior. The unmerged updates
+are not ready-to-merge claims; their final heads, checks and review threads still need verification.
+
+### Owner merge and review log: November 11 UTC
+
+GitHub records `futuroptimist` as the merging owner for these three Actions updates:
+
+| PR | Merged, November 11 UTC | Merge commit | PR head at merge |
+| --- | --- | --- | --- |
+| [#169 checkout][pr169] | 07:14:21 | [56c9184][merge169] | `4aca211e067c4be2cecc27d84866daf2eeb3d0bd` |
+| [#172 Codecov][pr172] | 07:14:34 | [06b8354][merge172] | `d8ac82c4a41a64aa2189059f9a1a8992d63e4ba5` |
+| [#171 Claude action][pr171] | 07:20:31 | [60d29b9][merge171] | `5e0cf79b342d34bbae5424b2c99bfb30172a8659` |
+
+The #171 assessment included assistant-performed local validation of the exact
+[upstream candidate 61a9c27][claude-candidate]: **302 focused offline tests passed**, using
+Bun 1.4.4 and its frozen lockfile, and TypeScript checking passed. Separately, the candidate's
+[upstream CI run][claude-ci] completed successfully. The 302-test count comes from the local
+assessment, not that upstream CI run. A [Codex review summary][claude-review] reported no issues.
+
+The exact f2clipboard live Claude sandbox/signed-write smoke test was **not run**. Offline tests
+and upstream CI do not establish that repository-specific live behavior. No blocker was found in
+the completed assessment, but retain this coverage limit rather than treating the merge as proof
+of every behavior or of the pilot's success.
+
+At 07:22 UTC, the complete open-PR listing contained #170, #173 and #174: one Actions update and
+two Python updates. Repairs and final-head checks/review follow-up were in progress. The #170
+repair preserves the public `action.yml` setup-python v4 reference while upgrading hosted workflows;
+the #173/#174 repairs align duplicate hard pins. Final repair evidence and owner dispositions are
+pending. The smaller queue resulted from owner merges and does not resolve the startup cap finding.
+
+These merges add no scheduled weekly cycles. Counters remain **Python 0/2; GitHub Actions 0/2**,
+and the full representative-review checklist and proposed conclusion gate remain open.
 
 ## Observation and review procedure
 
@@ -205,7 +238,8 @@ Conclusion date: pending.
 
 Evidence window and successful scheduled cycles: pending.
 
-Reviewed updates and dispositions: pending.
+Reviewed updates and dispositions: three owner-performed Actions merges recorded above; Python
+updates and the complete representative-review evidence remain pending.
 
 Cap finding and unresolved risks: open, as described above.
 
@@ -226,3 +260,9 @@ Owner decision, exact next scope and approval reference: pending.
 [pr172]: https://github.com/futuroptimist/f2clipboard/pull/172
 [pr173]: https://github.com/futuroptimist/f2clipboard/pull/173
 [pr174]: https://github.com/futuroptimist/f2clipboard/pull/174
+[merge169]: https://github.com/futuroptimist/f2clipboard/commit/56c91841442bc744ec6beabad48cc03c6fa1bdeb
+[merge172]: https://github.com/futuroptimist/f2clipboard/commit/06b8354ac1f50241a7bd36c0991d9c979f1a7577
+[merge171]: https://github.com/futuroptimist/f2clipboard/commit/60d29b911e5764d19e1144617fdc9c3f3d838c32
+[claude-candidate]: https://github.com/anthropics/claude-code-action/commit/61a9c274fa7110a66dfafc1bbbced03833eb25fe
+[claude-ci]: https://github.com/anthropics/claude-code-action/actions/runs/42258364367
+[claude-review]: https://github.com/futuroptimist/f2clipboard/pull/171#issuecomment-6789245411
