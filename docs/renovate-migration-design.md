@@ -94,7 +94,13 @@ This document intentionally installs no executable configuration. The desired po
   GitHub alert/security-update settings and owners.
 - Explicitly disable automerge. Use a low ordinary PR limit, manual review and required CI.
 - Schedule ordinary update creation outside weekday work hours in `America/Los_Angeles`; verify
-  hosted scheduling semantics. A schedule is not a precise wall-clock guarantee or a merge approval.
+  hosted scheduling semantics, including existing-branch updates/rebases. Require
+  `updateNotScheduled: false` in the pilot and test both new and existing PR behavior; the default
+  can update existing PRs outside the schedule. Security updates need separate review because they
+  bypass ordinary scheduling. A schedule is not a strict execution-time boundary or merge approval.
+  If the hosted app cannot enforce the required work-hours boundary, do not enable writes under
+  that model; propose an owner-approved pause mechanism or controlled self-hosted execution instead.
+  See [updateNotScheduled][outside-schedule].
 - Prove extraction and candidate diffs in a no-write dry run on an isolated fixture. Include literal
   runner labels, action refs, reusable workflows, container refs and an intentionally hidden variable.
   Assert that only runner labels are eligible, no action/container update is proposed, and the hidden
@@ -183,3 +189,4 @@ wide access merely for convenience; review the app's current requested permissio
 [npm]: https://docs.renovatebot.com/modules/manager/npm/
 [dependabot-actions]: https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/secure-your-dependencies/auto-update-actions
 [vulnerabilities]: https://docs.renovatebot.com/configuration-options/#vulnerabilityalerts
+[outside-schedule]: https://docs.renovatebot.com/configuration-options/#updatenotscheduled
