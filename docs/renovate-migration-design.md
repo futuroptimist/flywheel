@@ -155,7 +155,11 @@ incompatible generated changes, persistent queue delays, or unacceptable cost/re
 
 Pause the new writer for the affected scope using the approved operational path; retain logs and
 open-PR state. Restore the snapshot of the prior version-update configuration, verify a successful
-scheduled run and expected coverage, and reconcile each pending PR. Confirm alerts remained active.
+scheduled run and expected coverage, and reconcile each pending PR. If security-fix ownership
+changed, also restore the prior security-update writer and settings from the snapshot, with the
+required owner approval. Verify its fix-PR route using an authorized controlled fixture before
+calling rollback complete; active alerts and an ordinary scheduled run alone do not prove this.
+Confirm alerts remained active and exactly one security-fix writer owns each affected scope.
 Revoke app access only with explicit approval, not as an automatic destructive cleanup step. If the
 scope cannot be proven safe, stop expansion and report the exact gap. Closing this design PR or
 merging its documentation does not itself approve installation, migration or rollback operations.
