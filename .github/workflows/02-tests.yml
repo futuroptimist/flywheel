@@ -2,7 +2,8 @@ name: Test Suite
 on: [push, pull_request]
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # Playwright 1.56 does not support Ubuntu 26.04 (ubuntu-latest).
+    runs-on: ubuntu-24.04
     env:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     strategy:
