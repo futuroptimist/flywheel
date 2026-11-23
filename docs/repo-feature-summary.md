@@ -8,78 +8,78 @@ This table tracks which flywheel features each related repository has adopted.
 ## Basics
 | Repo | Branch | Commit | Trunk | Stars | Open Issues | Last-Updated (UTC) |
 | ---- | ------ | ------ | ----- | ----- | ----------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `c42463d` | ✅ | 3 | 12 | 2026-11-22 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `11a950f` | n/a | 1 | 0 | 2026-11-22 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | main | `b9b45a7` | ✅ | 3 | 12 | 2026-11-23 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | main | `3461c90` | n/a | 1 | 0 | 2026-11-23 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | v3 | n/a | n/a | 4 | 26 | n/a |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | main | `bcb60d3` | ✅ | 7 | 30 | 2026-11-05 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | main | `45540a1` | ✅ | 1 | 8 | 2026-08-09 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | main | `203296a` | ✅ | 2 | 4 | 2026-11-11 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | main | `9fd40be` | ✅ | 1 | 11 | 2026-11-21 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | main | `a95a9b2` | ✅ | 4 | 0 | 2026-08-09 |
-| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `deeb90e` | ✅ | 1 | 0 | 2026-11-21 |
+| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | main | `daa0618` | ✅ | 1 | 0 | 2026-11-22 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | main | `1103086` | ✅ | 1 | 1 | 2026-10-13 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `44e2d05` | ✅ | 1 | 13 | 2026-11-21 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | main | `a4fee22` | n/a | 1 | 13 | 2026-11-22 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | main | `9415d0c` | ✅ | 1 | 0 | 2026-08-09 |
-| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `0ebc21f` | ✅ | 1 | 9 | 2026-10-31 |
-| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `050f8d8` | ✅ | 1 | 9 | 2026-11-21 |
-| [futuroptimist/aquiloop](https://github.com/futuroptimist/aquiloop) | main | `08ac2dd` | ✅ | 0 | 0 | 2026-11-21 |
+| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | main | `ba27ccb` | ✅ | 1 | 8 | 2026-11-22 |
+| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | main | `51c8160` | ✅ | 1 | 9 | 2026-11-22 |
+| [futuroptimist/aquiloop](https://github.com/futuroptimist/aquiloop) | main | `53b1a98` | ✅ | 0 | 0 | 2026-11-22 |
 
 ## Coverage & Installer
 | Repo | Coverage | Patch | Codecov | Installer | Last-Updated (UTC) |
 | ---- | -------- | ----- | ------- | --------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ❌ | — | ✅ | 🔶 partial | 2026-11-22 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ❌ | — | ✅ | 🔶 partial | 2026-11-22 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ❌ | — | ✅ | 🔶 partial | 2026-11-23 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ❌ | — | ✅ | 🔶 partial | 2026-11-23 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ❌ | — | ✅ | ⚪ none | n/a |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ❌ | — | ✅ | pip | 2026-11-05 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ❌ | — | ✅ | 🔶 partial | 2026-08-09 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ❌ | — | ✅ | 🚀 uv | 2026-11-11 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | ❌ | — | ✅ | 🔶 partial | 2026-11-21 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ❌ | — | ✅ | 🔶 partial | 2026-08-09 |
-| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | ❌ | — | ✅ | 🔶 partial | 2026-11-21 |
+| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | ❌ | — | ✅ | 🔶 partial | 2026-11-22 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ❌ | — | ✅ | pip | 2026-10-13 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ❌ | — | ✅ | 🔶 partial | 2026-11-21 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ❌ | — | ✅ | 🔶 partial | 2026-11-22 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | ❌ | — | ❌ | ⚪ none | 2026-08-09 |
-| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | ❌ | — | ❌ | ⚪ none | 2026-10-31 |
-| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | ❌ | — | ❌ | ⚪ none | 2026-11-21 |
-| [futuroptimist/aquiloop](https://github.com/futuroptimist/aquiloop) | ❌ | — | ✅ | pip | 2026-11-21 |
+| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | ❌ | — | ❌ | ⚪ none | 2026-11-22 |
+| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | ❌ | — | ❌ | ⚪ none | 2026-11-22 |
+| [futuroptimist/aquiloop](https://github.com/futuroptimist/aquiloop) | ❌ | — | ✅ | pip | 2026-11-22 |
 
 ## Policies & Automation
 | Repo | License | CI | Workflows | AGENTS.md | Code of Conduct | Contributing | Pre-commit | Last-Updated (UTC) |
 | ---- | ------- | -- | --------- | --------- | --------------- | ------------ | ---------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ | ✅ | 22 | ✅ | ✅ | ✅ | ✅ | 2026-11-22 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ | ✅ | 7 | ✅ | ✅ | ✅ | ✅ | 2026-11-22 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | ✅ | ✅ | 22 | ✅ | ✅ | ✅ | ✅ | 2026-11-23 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | ✅ | ✅ | 7 | ✅ | ✅ | ✅ | ✅ | 2026-11-23 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | ✅ | ❌ | 0 | ✅ | ✅ | ✅ | ✅ | n/a |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | ✅ | ✅ | 12 | ✅ | ✅ | ✅ | ✅ | 2026-11-05 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | ✅ | ✅ | 10 | ✅ | ✅ | ✅ | ✅ | 2026-08-09 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | 2026-11-11 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | ✅ | ✅ | 8 | ✅ | ✅ | ✅ | ✅ | 2026-11-21 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | ✅ | ✅ | 5 | ✅ | ✅ | ✅ | ✅ | 2026-08-09 |
-| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | ✅ | ✅ | 8 | ✅ | ❌ | ❌ | ❌ | 2026-11-21 |
+| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | ✅ | ✅ | 8 | ✅ | ❌ | ❌ | ❌ | 2026-11-22 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | ✅ | ✅ | 8 | ✅ | ✅ | ✅ | ✅ | 2026-10-13 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 15 | ✅ | ✅ | ✅ | ✅ | 2026-11-21 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | ✅ | ✅ | 15 | ✅ | ✅ | ✅ | ✅ | 2026-11-22 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | ✅ | ✅ | 3 | ✅ | ✅ | ✅ | ❌ | 2026-08-09 |
-| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | ✅ | ✅ | 9 | ✅ | ❌ | ❌ | ❌ | 2026-10-31 |
-| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | ✅ | ✅ | 11 | ✅ | ❌ | ❌ | ✅ | 2026-11-21 |
-| [futuroptimist/aquiloop](https://github.com/futuroptimist/aquiloop) | ✅ | ✅ | 6 | ✅ | ❌ | ❌ | ❌ | 2026-11-21 |
+| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | ✅ | ✅ | 9 | ✅ | ❌ | ❌ | ❌ | 2026-11-22 |
+| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | ✅ | ✅ | 12 | ✅ | ❌ | ❌ | ✅ | 2026-11-22 |
+| [futuroptimist/aquiloop](https://github.com/futuroptimist/aquiloop) | ✅ | ✅ | 6 | ✅ | ❌ | ❌ | ❌ | 2026-11-22 |
 
 ## Dark & Bright Pattern Scan
 | Repo | Dark Patterns | Bright Patterns | Last-Updated (UTC) |
 | ---- | ------------- | --------------- | ----------------- |
-| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | 0 | 0 | 2026-11-22 |
-| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | 0 | 1 | 2026-11-22 |
+| **[futuroptimist/flywheel](https://github.com/futuroptimist/flywheel)** | 0 | 0 | 2026-11-23 |
+| [futuroptimist/futuroptimist](https://github.com/futuroptimist/futuroptimist) | 0 | 1 | 2026-11-23 |
 | [democratizedspace/dspace](https://github.com/democratizedspace/dspace) | 0 | 0 | n/a |
 | [futuroptimist/token.place](https://github.com/futuroptimist/token.place) | 0 | 1 | 2026-11-05 |
 | [futuroptimist/gabriel](https://github.com/futuroptimist/gabriel) | 0 | 5 | 2026-08-09 |
 | [futuroptimist/f2clipboard](https://github.com/futuroptimist/f2clipboard) | 0 | 1 | 2026-11-11 |
 | [futuroptimist/axel](https://github.com/futuroptimist/axel) | 0 | 1 | 2026-11-21 |
 | [futuroptimist/sigma](https://github.com/futuroptimist/sigma) | 1 | 2 | 2026-08-09 |
-| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | 0 | 2 | 2026-11-21 |
+| [futuroptimist/gitshelves](https://github.com/futuroptimist/gitshelves) | 0 | 2 | 2026-11-22 |
 | [futuroptimist/wove](https://github.com/futuroptimist/wove) | 0 | 0 | 2026-10-13 |
-| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 0 | 1 | 2026-11-21 |
+| [futuroptimist/sugarkube](https://github.com/futuroptimist/sugarkube) | 0 | 1 | 2026-11-22 |
 | [futuroptimist/pr-reaper](https://github.com/futuroptimist/pr-reaper) | 0 | 1 | 2026-08-09 |
-| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | 0 | 6 | 2026-10-31 |
-| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | 0 | 0 | 2026-11-21 |
-| [futuroptimist/aquiloop](https://github.com/futuroptimist/aquiloop) | 0 | 1 | 2026-11-21 |
+| [futuroptimist/jobbot3000](https://github.com/futuroptimist/jobbot3000) | 0 | 6 | 2026-11-22 |
+| [futuroptimist/danielsmith.io](https://github.com/futuroptimist/danielsmith.io) | 0 | 0 | 2026-11-22 |
+| [futuroptimist/aquiloop](https://github.com/futuroptimist/aquiloop) | 0 | 1 | 2026-11-22 |
 
 Legend: ✅ indicates the repo has adopted that feature from flywheel. 🚀 uv means only uv was found. 🔶 partial signals a mix of uv and pip. ⚪ none indicates no installer keywords were detected.
 Coverage percentages are parsed from their badges where available. Codecov shows ✅ when a Codecov config or badge is present. Patch shows ✅ when diff coverage is at least 90% and ❌ otherwise, with the percentage in parentheses.
